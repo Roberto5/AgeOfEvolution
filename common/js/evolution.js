@@ -598,7 +598,7 @@ map : {
 	    	i=x-ev.map.init[0];
 	    	j=y-ev.map.init[1];
 	    	if ((Math.abs(j)>ev.map.size[1]-6)||(Math.abs(i)>ev.map.size[0]-6)) {
-	    		$('#map img').attr('src',path+'/'+module+'/village/map/zoom/'+ev.map.zoom+'/x/'+x+'/y/'+y);
+	    		/*$('#map img').attr('src',path+'/'+module+'/village/map/zoom/'+ev.map.zoom+'/x/'+x+'/y/'+y);
 	    		$('#minimap').attr('src',path+'/'+module+'/village/map/zoom/'+ev.map.zoom+'/x/'+x+'/y/'+y);
 	    		alert('preload');
 	    		/*ev.flagLoader = true;
@@ -606,7 +606,7 @@ map : {
 	    		    ev.loader();
 	    		}, 1000);
 	    		//$(document).smartpreload({images:[path+'/'+module+'/village/map/zoom/'+ev.map.zoom+'/x/'+x+'/y/'+y],oneachimageload:function(src) {
-	    			$('#map img').attr('src',src);*/
+	    			$('#map img').attr('src',src);*
 	    			ev.map.init=[x,y];
 	    			l=-ev.map.sizeHelper[0]/3;
 	    			t=-ev.map.sizeHelper[1]/3;

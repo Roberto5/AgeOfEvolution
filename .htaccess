@@ -1,29 +1,4 @@
-# # av:Toolbar
-SetEnv AV_TOOLBAR 0
-
-# # av:php5-engine
-AddHandler av-php53 .php
-
-# av:PHP-upload
-php_value upload_max_filesize 10M
-php_value post_max_size 10M
-php_value max_input_time 300
-# PHP-upload
-
-# av:AntiHotlink
-RewriteEngine on
-RewriteBase /
-RewriteCond %{REQUEST_URI} \.(gif|jpe?g|png)$ [NC]
-RewriteCond %{HTTP_REFERER} !^$
-RewriteCond %{HTTP_REFERER} !^http://([a-z0-9\-\.]*)ageofevolution\.altervista\.org
-RewriteCond %{REQUEST_URI} !^\/_altervista_ht\/
-RewriteCond %{HTTP_REFERER} !^http://([a-z0-9\-\.]+)google\.
-RewriteRule .*$ http://hl.altervista.org/split.php?http://%{HTTP_HOST}%{REQUEST_URI} [R,L]
-# AntiHotlink
-
-
-
-SetEnv APPLICATION_ENV production
+SetEnv APPLICATION_ENV development
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} -s [OR]
 RewriteCond %{REQUEST_FILENAME} -l [OR]
@@ -42,9 +17,19 @@ ORDER allow,deny
 deny FROM ALL
 </Files>
 
+########### preveniamo hotlinking ########
+
+RewriteEngine on
+#RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^http(s)?://(www\.)?ageofevolution.it [NC]
+RewriteCond %{HTTP_REFERER} !^http(s)?://localhost/ [NC]
+RewriteRule \.(jpg|jpeg|png|gif)$ http://img689.imageshack.us/img689/1339/bartlavagna.gif [NC,R,L]
+
+
 #########chache immagini #################
 #<FilesMatch "\.(jpg|jpeg|png|gif|ico)$">
 
 #Header set Cache-Control "max-age=1814400, public"
 
 #</FilesMatch>
+

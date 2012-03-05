@@ -1,6 +1,5 @@
 <?php
 /**
- * @property int $ID
  * @method get($k,$dv=FALSE)
  */
 class Sessions implements Zend_Auth_Storage_Interface

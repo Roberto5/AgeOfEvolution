@@ -1,4 +1,0 @@
-<logEntry><timestamp>2012-01-13T13:28:28+01:00</timestamp><message>Last E.P.'s attivity is 04:02:14 13/01/2012</message><priority>0</priority><priorityName>EMERG</priorityName></logEntry>
-
-<logEntry><timestamp>2012-01-13T13:28:32+01:00</timestamp><message>Last E.P.'s attivity is 04:02:14 13/01/2012</message><priority>0</priority><priorityName>EMERG</priorityName></logEntry>
-

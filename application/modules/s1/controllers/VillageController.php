@@ -58,7 +58,9 @@ class S1_VillageController extends Zend_Controller_Action
     	$zo=$size[$zoom];
         $x = $this->getRequest()->getParam('x', 0);
         $y = $this->getRequest()->getParam('y', 0);
-        $base=imagecreatetruecolor(3600,2700);
+        $h=900;
+        $w=1200;
+        $base=imagecreatetruecolor($w,$h);
         $land[0] = imagecreatefromjpeg(APPLICATION_PATH . '/../common/images/map/village-0.jpg');
         $land[1] = imagecreatefromjpeg(APPLICATION_PATH . '/../common/images/map/village-1.jpg');
         $land[2] = imagecreatefromjpeg(APPLICATION_PATH . '/../common/images/map/village-2.jpg');
@@ -66,22 +68,20 @@ class S1_VillageController extends Zend_Controller_Action
         $land[4] = imagecreatefromjpeg(APPLICATION_PATH . '/../common/images/map/village-4.jpg');
         //carico i dati dei villaggi
         $civ=Model_civilta::getInstance();
-        $village=$civ->map->getVillageArray($x,$y,intval($zo['x']*3/2),intval($zo['y']*3/2));
+        $village=$civ->map->getVillageArray($x,$y,intval($zo['x']/2),intval($zo['y']/2));
     	$village=$village['focus'];
     	$mx=min(array_keys($village));
         $my=max(array_keys($village[$mx]));
         $dim=$zo['dim'];
-        $h=$zo['y']*3;
-        $w=$zo['x']*3;
         //@TODO in futuro si potrà "smussare i bordi"
-        for($j=0,$y = $my;$j<=2700;$j+=$dim,$y--) {
-        	for($i=0,$x =$mx;$i<=3600;$i+=$dim,$x++) {
+        $this->_log->debug("x ".$mx." y ".$my);
+        for($j=0,$y = $my;$j<=$h;$j+=$dim,$y--) {
+        	for($i=0,$x =$mx;$i<=$w;$i+=$dim,$x++) {
         		if ($village[$x][$y]['type']) {
         			$vilimg=imagecreatefromjpeg(APPLICATION_PATH . '/../common/images/map/village0.jpg');
         			//controllo proprietà
         			$flag=false;
         			//flag proprietà propria
-        			//print_r($civ->cid);
         			if ($village[$x][$y]['civ_id']==$civ->cid) {
         				$flag = APPLICATION_PATH . '/../common/images/map/own.png';
         			}
@@ -98,9 +98,9 @@ class S1_VillageController extends Zend_Controller_Action
         			imagecopyresized($base,$land[$village[$x][$y]['zone']],$i,$j,0,0,$dim,$dim,200,200);
         	}
         }
+        $this->_log->debug("x ".($x-1)." y ".($y+1));
         imagejpeg($base);
         imagedestroy($base);
-        imagedestroy($vilimg);
         for ($i=0;$i<=4;$i++)
         	imagedestroy($land[$i]);
         

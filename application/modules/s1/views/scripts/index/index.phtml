@@ -112,10 +112,20 @@ $(document).keydown(keyDown);
 	</tbody>
 </table>
 </div>';
-    
-    echo '<div id="map" style="position:absolute;top:-900px;left:-1200px;width: 3600px; height: 2700px;">' .
-    		$this->image('/'.$module.'/village/map/zoom/'.$this->zoom['n'].'/x/'.$this->x.'/y/'.$this->y,'map',null,3600,2700,array('usemap'=>'map'))
-    		.$this->table.'</div>';
+    $h=$this->zoom['y'];
+    $w=$this->zoom['x'];
+    $map=array(
+    	array('x'=>$this->x-$w,'y'=>$this->y+$h),array('x'=>$this->x,'y'=>$this->y+$h),
+    	array('x'=>$this->x+$w,'y'=>$this->y+$h),
+    	array('x'=>$this->x-$w,'y'=>$this->y),array('x'=>$this->x,'y'=>$this->y),
+    	array('x'=>$this->x+$w,'y'=>$this->y),
+    	array('x'=>$this->x-$w,'y'=>$this->y-$h),array('x'=>$this->x,'y'=>$this->y-$h),
+    	array('x'=>$this->x+$w,'y'=>$this->y-$h));
+    $this->log->debug($map);
+    echo '<div id="map" style="position:absolute;top:-900px;left:-1200px;width: 3600px; height: 2700px;">';
+    for ($i=0;$i<9;$i++)
+    	echo $this->image('/'.$module.'/village/map/zoom/'.$this->zoom['n'].'/x/'.$map[$i]['x'].'/y/'.$map[$i]['y'],'map',null,1200,900);
+    echo $this->table.'</div>';
     
 } elseif ($this->hasCivilty == 1) {
     echo '<h1>' . $t->_('sei in attesa') . '</h1>' .

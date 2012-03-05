@@ -182,7 +182,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $acl = Zend_Registry::get("acl");
         $db = $this->getPluginResource('db')->getDbAdapter();
         $log = new Zend_Log();
-        $firebug = new Zend_Log_Writer_Firebug();
+        $firebug = new Zend_Log_Writer_Firelog();
         $file = new Zend_Log_Writer_Stream(
         APPLICATION_PATH . "/log/log" . date("Ymd") . ".txt");
         $file->addFilter(new Zend_Log_Filter_Priority(Zend_Log::DEBUG,"!="));
@@ -191,11 +191,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$file->setFormatter($formatter);
         if ((APPLICATION_ENV != "production") || ($acl->isAllowed($role, "debug"))) {
             $log->addWriter($firebug);
-            //profilazione query
-            $profiler = new Zend_Db_Profiler_Firebug(
+            /*/profilazione query
+            $profiler = new Zend_Db_Profiler_Firelog(
             'All DB Queries');
             $profiler->setEnabled(true);
-            $db->setProfiler($profiler);
+            $db->setProfiler($profiler);//*/
         } /*else {
             $filter = new Zend_Log_Filter_Priority(Zend_Log::INFO);
             $log->addFilter($filter);

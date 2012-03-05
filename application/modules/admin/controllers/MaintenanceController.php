@@ -46,7 +46,7 @@ class Admin_MaintenanceController extends Zend_Controller_Action
     {
     	$list=array();
         $dp = opendir(APPLICATION_PATH . "/log");
-        while ($file = readdir($dp)) {
+        while (($file = readdir($dp))!=false) {
         	if (($file != ".") && ($file != "..")&& !is_dir($file))
         		$list[] =substr($file, 3,-4) ;
         }

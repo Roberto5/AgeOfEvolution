@@ -417,7 +417,7 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
     	$t=Zend_Registry::get("translate");
     	$now=$this->civ->getCurrentVillage();
     	$r='';
-    	if (!is_array($queue)) $queue->toArray();
+    	if (!is_array($queue)&&($queue)) $queue->toArray();
     	if ($order) @usort($queue, compareQueue);
         foreach ($queue as $value) {
             $count = $value['time'] - mktime();
