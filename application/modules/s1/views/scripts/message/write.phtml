@@ -1,0 +1,18 @@
+<?php
+if ($this->mess) {
+    echo $this->mess;
+    $this->headTitle('Success!');
+    $this->layout()->x = 450;
+    $this->layout()->y = 200;
+} else {
+    $this->headTitle($this->data['oggetto']);
+    $this->layout()->x = 450;
+    $this->layout()->y = 550;
+    echo Model_mess::foglio($this->data['destinatario'], $this->data['oggetto'], 
+    $this->data['messaggio'], $this->data['mittente'], $this->write, 
+    $this->action, $this->button);
+    $this->headScript()->captureStart();
+    //echo '$(\'input,textarea\').keydown(function(e) { e.stopPropagation(); });';
+    $this->headScript()->captureEnd();
+}
+?>

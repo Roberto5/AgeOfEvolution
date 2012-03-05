@@ -1,0 +1,269 @@
+<?php
+$t = Zend_Registry::get("translate");
+$div_mercant = '
+<table border="1">
+	<tr>
+		<tr>
+			<td>' . $t->_('mittente') . '</td>
+			<td>' . $t->_('destinatario') . '</td>
+			<td>' . $t->_('risorse') . '</td>
+			<td>' . $t->_('arrivo') . '</td>
+		</tr>';
+for ($i = 0; $this->travel['out'][$i]; $i ++) {
+    $p = unserialize($this->travel['out'][$i]['params']);
+    $des = $this->template()->village($p['destinatario']);
+    $mit = $this->template()->village($p['mittente']);
+    /*$des = '<a href="profile.php?t=village&id=' . $p['destinatario'] .
+             '">' . $this->civ->getVillageName($p['destinatario']) . '</a>';
+            $mit = '<a href="profile.php?t=village&id=' . $p['mittente'] . '">' .
+             $this->civ->getVillageName($p['mittente']) . '</a>';*/
+    $div_mercant .= '
+    	<tr>
+    		<td>' . $mit . '</td>
+			<td>' . $des . '</td><
+			<td>';
+    for ($j = 0; $j < 3; $j ++)
+        $div_mercant .= $p['res'][$j] . ' ' .
+         $this->image()->resource($j, $this->age) . ' &nbsp &nbsp ';
+    $count = $this->travel['out'][$i]['time'] - mktime();
+    /**
+     * IMPORTANTE! la prossima istruzione serve per evitare di bloccare
+     * il browser in un continuo ricaricamento se l'event procesor non
+     * ha processato l'evento.
+     */
+    if ($count <= 0)
+        $count = "00:00:0?";
+    $div_mercant .= '
+    		</td>
+			<td><span class="countDown">' . $count . '</span></td>
+		</tr>';
+}
+$div_mercant .= '
+	</tr>
+</table>';
+$div_mercant = $this->template()->spoiler($div_mercant, false, 
+$t->_("mercanti in arrivo e in uscita"), $t->_("mercanti in arrivo e in uscita")) .
+ "<br />";
+$spoiler = '
+<table border="1">
+<tr>
+<tr><td>' . $t->_('mittente') . '</td>
+	<td>' . $t->_('destinatario') . '</td>
+	<td>' . $t->_('risorse') . '</td>
+	<td>' . $t->_('arrivo') . '</td></tr>';
+for ($i = 0; $this->travel['in'][$i]; $i ++) {
+    $p = unserialize($this->travel['in'][$i]['params']);
+    $des = $this->template()->village($p['destinatario']);
+    $mit = $this->template()->village($p['mittente']);
+    /*$des = '<a href="profile.php?t=village&id=' . $p['destinatario'] . '">' .
+     $this->civ->getVillageName($p['destinatario']) . '</a>';
+    $mit = '<a href="profile.php?t=village&id=' . $p['mittente'] . '">' .
+     $this->civ->getVillageName($p['mittente']) . '</a>';*/
+    $spoiler .= '<tr><td>' . $mit . '</td>
+		<td>' . $des . '</td><td>';
+    for ($j = 0; $j < 3; $j ++)
+        $spoiler .= $p['res'][$j] . ' ' .
+         $this->image()->resource($j, $this->age) . ' &nbsp &nbsp ';
+    $count = $this->travel['in'][$i]['time'] - mktime();
+    /**
+     * IMPORTANTE! la prossima istruzione serve per evitare di bloccare
+     * il browser in un continuo ricaricamento se l'event procesor non
+     * ha processato l'evento.
+     */
+    if ($count <= 0)
+        $count = "00:00:0?";
+    $spoiler .= '</td>
+		<td><span class="countDown">' . $count .
+     '</span></td></tr>';
+}
+//cerco le offerte.
+$spoiler .= '</tr>
+</table>';
+$div_mercant .= $this->template()->spoiler($spoiler, false, 
+$t->_("mercanti in ritorno"), $t->_("mercanti in ritorno"));
+
+switch ($this->section) {
+    default:
+    case 1:
+        $html = '
+<script type="text/javascript">resetinit();</script>
+
+	
+	<div style="height: 20px; font-size: 20px;"><span style="position: relative; left: 60%;">'.$t->_('capacit&aacute;').':'.mercants::$capacity[$this->age].' '.$t->_('disponibilit&aacute;').':' .
+         $this->disp . '/' . $this->liv . '</span></div>
+' . $div_mercant .
+         '
+	<div style="height: 20px;"></div>
+
+	<form name="market" action="'.$this->url(array('controller'=>'market','action'=>'send','tokenM'=>$this->token)).'" method="POST">
+		<table>
+			<tr>
+				<td><span onclick="$(\'#res1bar\').toggle()">
+' .
+         $this->image()->resource(0, $this->age) .
+         '</span><input name="res1" id="res1" onkeyup="$( \'#res1bar\' ).slider(\'value\',parseInt(this.value))" value="0" size="9" class="number" /><br />
+         <div id="res1bar" style="width:200px;display:none;"></div>
+<span onclick="$(\'#res2bar\').toggle()">' .
+         $this->image()->resource(1, $this->age) .
+         '</span><input name="res2" id="res2" onkeyup="$( \'#res2bar\' ).slider(\'value\',parseInt(this.value))" value="0" size="9" class="number" /><br />
+         <div id="res2bar" style="width:200px;display:none;"></div>
+<span onclick="$(\'#res3bar\').toggle()">' .
+         $this->image()->resource(2, $this->age) . 
+         '</span><input name="res3" id="res3" onkeyup="$( \'#res3bar\' ).slider(\'value\',parseInt(this.value))" value="0" size="9" class="number" /><br />
+         <div id="res3bar" style="width:200px;display:none;"></div>
+				</td>
+				<td width="50"></td>
+				<td>
+					<select name="village" onchange="ev.market.getTimeM(this.value)">
+						<option value=""></option>
+						' . $this->villages . '
+					</select><br/>
+					<input type="submit" name="submit" value="invia" />
+				</td>
+			</tr>
+		</table>
+	</form>
+	<script type="text/javascript">
+		$( "#res1bar" ).slider({
+			range: "min",
+			value: 0,
+			min: 0,
+			max: '.intval($this->res[0]).',
+			slide: function( event, ui ) {
+				$( "#res1" ).val( ui.value );
+			}
+		});
+		$( "#res2bar" ).slider({
+			range: "min",
+			value: 0,
+			min: 0,
+			max: '.intval($this->res[1]).',
+			slide: function( event, ui ) {
+				$( "#res2" ).val( ui.value );
+			}
+		});
+		$( "#res3bar" ).slider({
+			range: "min",
+			value: 0,
+			min: 0,
+			max: '.intval($this->res[2]).',
+			slide: function( event, ui ) {
+				$( "#res3" ).val( ui.value );
+			}
+		});
+	$(".number").keyup(function(){
+		ev.ctrlnum(this);
+	});
+	
+	</script>
+	
+	<div id="time"></div>
+';
+        break;
+    case 2:
+        $of1 = '
+<table>
+	<tr>
+		<td>' . $t->_("civiltà") . '</td>
+		<td>' . $t->_("risorse") . '</td>
+		<td>' . $t->_("costo") . '</td>
+		<td></td>
+	</tr>';
+        for ($i = 0; $this->offer1[$i]; $i ++)
+            $of1 .= '
+    <tr>
+		<td>' . $this->offer1[$i]['civ_name'] . '</td>
+		<td>' . $this->offer1[$i]['resource'] .
+             ' ' . $this->image()->resource(1, $this->age) . '</td>
+		<td>' . $this->offer1[$i]['rapport'] .
+             '</td>
+		<td><a href="' .$this->url(array('controller'=>'market','action'=>'buy','id'=>$this->offer1[$i]['id']
+            ,'tokenM'=>$this->token)). '">' .
+             $t->_("compra") . '</a></td>
+	</tr>';
+        $of1 .= '
+</table>';
+        $of2 = '
+<table>
+	<tr>
+	<td>' . $t->_("civiltà") . '</td>
+	<td>' . $t->_("risorse") . '</td>
+	<td>' . $t->_("costo") . '</td>
+	<td></td>
+	</tr>';
+        for ($i = 0; $this->offer2[$i]; $i ++)
+            $of2 .= '
+    <tr>
+		<td>' . $this->offer2[$i]['civ_name'] . '</td>
+		<td>' . $this->offer2[$i]['resource'] .
+             ' ' . $this->image()->resource(2, $this->age) . '</td>
+		<td>' . $this->offer2[$i]['rapport'] .
+             '</td>
+		<td><a href="' .$this->url(array('controller'=>'market','action'=>'buy',
+			'tokenM'=>$this->token,'id'=>$this->offer2[$i]['id'])). '">' .
+             $t->_("compra") . '</a></td>
+	</tr>';
+        $of2 .= '
+</table>';
+        $div_offer = $this->template()->spoiler($of1, false, 
+        $t->_("compra " . $this->image()
+            ->resource(1, $this->age)), 
+        $t->_("compra " . $this->image()
+            ->resource(1, $this->age)));
+        $div_offer .= "<br />" . $this->template()->spoiler($of2, false, 
+        $t->_("compra " . $this->image()
+            ->resource(2, $this->age)), 
+        $t->_("compra " . $this->image()
+            ->resource(2, $this->age)));
+        $html= '
+
+<div style="height: 20px; font-size: 20px;"><span style="position: relative; left: 80%;">' .
+         $this->disp . '/' . $this->liv . '</span></div>
+' . $div_offer ;
+        break;
+    case 3:
+    	$html= '
+<div style="height: 20px; font-size: 20px;"><span style="position: relative; left: 80%;">' .
+ $this->disp . '/' . $this->liv .
+ '</span></div>
+<form name="sell" action="' .$this->url(array('controller'=>'market','action'=>'sell','tokenM'=>$this->token ))
+ . '" method="POST">
+<input class="number" name="res" id="res" value="0" size="9" />
+<select name="type">
+<option value="1">' . $this->name1 . '</option>
+<option value="2">' . $this->name2 . '</option>
+</select> <br />
+<input class="number" id="rap" name="rap" value="1" type="hidden" />
+<div>'.$t->_('rapporto').':<span id="vis">1</span></div>
+<div id="slider" style="width:100px;"></div>
+<script type="text/javascript">
+$( "#slider" ).slider({
+			range: "min",
+			value: 1,
+			min: 0.5,
+			max: 2,
+			step: 0.1,
+			slide: function( event, ui ) {
+				$( "#rap" ).val( ui.value );
+				$( "#vis" ).text( ui.value );
+				$( "#rend" ).text( parseInt(ui.value*$("#res").val()));
+			}
+		});
+</script>
+<div>'.$t->_('guadagno').':<span id="rend">1</span></div>
+<input type="submit" name="submit" value="' .
+ $t->_("vendi") . '" /></form>
+<div id="view" style="height: 20px;"></div>';
+    break;
+    case 4://@todo implementare mercato nero
+    	$html= '<div style="height: 20px;"></div>'.$t->_('in costruzione. col mercato nero avrete modo di scambiare risorse poche volte al giorno a tassi elevati.');
+    break;
+}
+
+/**$this->listv = null;
+for ($i = 0; $this->list[$i]; $i ++)
+    $this->listv[$this->list[$i]['id']] = $this->list[$i];
+    //echo json_encode(array('html' => $form[$_POST['sess']], 'list' => $this->listv));*/
+echo $html;
+
+?>

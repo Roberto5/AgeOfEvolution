@@ -1,0 +1,24 @@
+<?php 
+$t=Zend_Registry::get("translate");
+if ($this->row) {
+	$this->headTitle($this->row['oggetto']);
+	$this->layout()->x=600;
+	$this->layout()->y=480;
+	
+?>
+<table class="report">
+	<thead>
+		<tr>
+			<th><?php echo $this->row['oggetto']; ?> (<?php echo date("d/m/Y H:i:s", $this->row['time']); ?>)</th>
+    	</tr>
+    </thead>
+	<tbody>
+		<tr>
+			<td style="padding: 30px;"><?php echo $this->row['testo']; ?></td>
+    	</tr>
+	</tbody>
+</table>
+<?php 
+}
+else echo $t->_("Report id errato!");
+?>

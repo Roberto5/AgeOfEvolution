@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : quest.xml
+    Created on : 19 gennaio 2011, 1.20
+    Author     : pagliaccio
+    Description:
+        
+-->
+
+<!DOCTYPE root SYSTEM "quest.dtd">
+<root>
+    <age id="0">
+        <quest n="1" master="1">
+            <title><![CDATA[L&apos;inizio di una grande avventura]]></title>
+            <text><![CDATA[<blockquote>In una terra sterile e arida dell&apos;africa
+soltanto le creature piccole o fulminee o feroci potevano prosperare, o appena sperare
+di sopravvivere.
+Gli uomini-scimmia non possedevano alcuna di queste caratteristiche e
+non stavano prosperando; si trovavano anzi già molto avanti sulla via dell’estinzione
+della razza.
+Erano sempre affamati, gli uomini-scimmia, e ora stavano morendo di fame.
+Questi uomini masticavano bacche e frutta e foglie e
+scacciavano le fitte della fame, mentre tutto intorno a loro, esistevano riserve di
+viveri superiori a quanto avrebbero mai potuto sperare di mangiare. In piena abbondanza, essi
+stavano lentamente morendo di fame.
+Al di là del torrente c&apos;erano gli &quot;Altri&quot; uomini scimmia. Vi si
+trovavano la ogni giorno, erano una trentina circa. Vedendoli sopraggiungere,
+incominciarono a danzare, ad agitare le braccia e a strillare, dal loro lato del torrente,
+e loro risposero nello stesso modo.
+Non accadde altro. Sebbene gli uomini-scimmia si battessero e lottassero spesso
+gli uni con gli altri, le loro dispute davano luogo molto di rado a gravi ferite.
+Ma un giorno dal cielo cadde un monolito. Il monolito erà nero, ed iniziò a ipnotizare
+gli uomini scimmia, insegnandogli a lavorare gli oggetti fino a creare rudimentali cortelli con pietre.
+Gli insegno a cacciare con le loro armi.</blockquote>
+<p>Hai appena preso coscienza di te stesso, inizia a modificare il nome del tuo villaggio.
+chicca sul menu il pulsante [city] oppure il nome del tuo villaggio sul pannello a destra.
+Fai un doppio click sul nome del villaggio nella scermata principale del villaggio.<p>]]></text>
+            <condiction type="NE" value="Nuovo Villaggio">village</condiction>
+            <back><![CDATA[<blockquote>Complimenti essere unano. Ho una riconpensa per te.</blockquote><br/>
+            <p>Ricevi 100 [pietra] 100 [cibo] 100 [legno]</p>]]></back>
+            <reward type="RES">100,100,100,0</reward>
+        </quest>
+        <quest n="2" master="1">
+            <title>Illumina la notte</title>
+            <text><![CDATA[<blockquote>Per sopravvivere alla notte devi riscaldarti, costruisci il focolare 
+che diventerà il centro della tua tribù</blockquote>
+
+<p>Clikka col tasto destro nel edificio in alto a destra per aprire il menu contestuale e poi su aumenta. se clicki col tasto sinistro vedrai le informazioni dell&apos;edificio</p>
+            ]]></text>
+            <condiction type="GE" value="1">main</condiction>
+            <back><![CDATA[<blockquote>Il calore del fuoco ti riscalda e ti permette di sconfiggere il buio. Grazie ad esso puoi organizzare la tua tribù. Le tue scelte portano alla tribù ricchezze.</blockquote>
+
+<p>Ricevi 100 [pietra] 100 [cibo] 100 [legno]<p>
+            ]]></back>
+            <reward type="RES">100,100,100,0</reward>
+        </quest>
+        <quest n="3" master="1">
+            <title>Produrre risorse</title>
+            <text><![CDATA[<blockquote>La caccia non è l&apos;unico metodo per sfamare la tribù, e il cibo non è l&apos;unica 
+risorsa di cui hai bisono. Impara a raccogliere pietre nelle cave o nei laghi, prendi il legno dagli alberi 
+e coltiva il cibo o alleva bestie, solo così potrai sopravvivere quando la caccia sarà misera.</blockquote>
+
+<p>Clikka sui tre edifici esterni per aumentare la produzione di risorse.</p>
+            ]]>
+            </text>
+            <condiction type="GE" value="1">prod</condiction>
+            <back><![CDATA[
+<blockquote>Bravo. Ora puoi sopravvivere anche durante la sicità. Ma devi ancora imparare molto, e la tua 
+sopravvivenza non è poi cosi scontata.</blockquote>
+
+<p>Ricevi 100 [pietra]
+100 [cibo]
+100 [legno]<p>
+            ]]></back>
+            <reward type="RES">100,100,100,0</reward>
+        </quest>
+        <quest n="4" master="1">
+            <title>Conserva le risorse</title>
+            <text><![CDATA[<blockquote>Vedo che hai avuto un raccolto e una caccia abbondante, ma tutta questa roba 
+deve trovare una sistemazione adatta. Costruisci dei magazzini per custodirle.</blockquote>
+
+<p>A destra del villaggio troverai un pannello con le costruzioni disponibili, traschina la dispensa su uno spazio vuoto.
+fai la stessa cosa per la caverna dello schamano</p>
+            ]]>
+            </text>
+            <condiction type="EX">storage</condiction>
+            <back><![CDATA[<blockquote>Visto che hai spazio, ti donerò altre risorse.</blockquote>
+
+<p>Ricevi 200 [pietra]
+200 [cibo]
+200 [legno]<p>
+            ]]>
+            </back>
+            <reward type="RES">200,200,200,0</reward>
+        </quest>
+        <quest n="5" master="1">
+            <title>Fuori dalle caverne!</title>
+            <text><![CDATA[<blockquote>È ora di uscire dalle caverne 
+e costruirvi le vostre abitazioni. Le costruirete sull&apos;acqua, e le chiamerete palafitte.</blockquote>
+<p>A destra del villaggio troverai un pannello con le costruzioni disponibili, traschina la palafitta su uno spazio vuoto.</p>
+            ]]></text>
+            <condiction type="EX">house</condiction>
+            <back><![CDATA[<blockquote>Le palafitte ti danno un riparo dalle 
+intemperie, e permettono alla tribù di crescere. Assicurati sempre di avere più 
+abitazioni rispetto alla popolazione</blockquote>
+<p>ricevi: 10 [Clava]</p>
+            ]]></back>
+            <reward type="TR">0,10</reward>
+        </quest>
+        <quest n="6" master="1">
+            <title><![CDATA[Lavora e cresci]]></title>
+            <text><![CDATA[<blockquote>ora devi lavorare sodo per crescere, aumenta la tua produzione di risorse.</blockquote>
+<p>porta a livello 4 l&apos;allevamento, la cava di pietra e la segheria</p>
+            ]]></text>
+            <condiction type="GE" value="4">prod</condiction>
+            <back><![CDATA[<blockquote>il lavoro è stato duro, ma ora hai le risorse per sfamare la tribù.</blockquote>
+<p>ricevi 10 [Fionda]</p>
+            ]]></back>
+            <reward type="TR">1,10</reward>
+        </quest>
+	<quest n="7" master="1">
+            <title><![CDATA[All&apos;attacco!]]></title>
+            <text><![CDATA[<blockquote>In poco più di un anno, la tribù era cresciuta, gli uomini 
+      erano più forti e dotati di armi come clave o sassi da lanciare, quel giorno andarono al fiume 
+      e vi trovarono gli &quot;Altri&quot;. Gli Alri osarono attraversare il fiume, confine naturale del loro territorio... 
+      un affronto che non sarà certo perdonato...</blockquote>
+<p>Vai sulla mappa, clicca su una zona senza villaggi e invia le truppe in raid o attacco.</p>
+            ]]></text>
+            <condiction type="EX">attack</condiction>
+            <back><![CDATA[<blockquote>Gli &quot;Altri&quot; furono uccisi dalla potenza delle nuove armi. 
+questi piccoli uomini non se ne resero conto, ma avevano iniziato la prima guerra della storia. 
+quando tornarono al villaggio non videro più il monolito, il lavoro era concluso, l&apos;umanità aveva un futuro.
+Il monolito sarebbe ritornato un giorno per vedere il risultato...</blockquote>
+<p>Ora puoi evolverti e arrivare all&apos;età antica. vedrai l&apos;apposito pulsante nella pagina principale 
+del villaggio.</p>
+            ]]></back>
+            <reward type="EV"></reward>
+        </quest>
+    </age>
+	<age id="1">
+		<quest n="1" master="1">
+		    <title>Aiuto divino!</title>
+            <text><![CDATA[<blockquote>Sparito il monolito un&apos;altra forza apparve, erano gli dei, esseri immortali. Ogni uomo può chiedere al suo fianco una sola divinità, servendola e donandole tributi si aggiudicherà così i sui favori, diventati ormai cruciali nelle guerre mortali.</blockquote>
+<p><h3>Scegli la tua divinità (clicca l&apos;immagine):</h3>
+
+<p>[Zeus|140|89|ev.choose_god(1)] <b>Bonus:</b>bonus del 25% su tutte e 3 le risorse nelle zone sotto influenza. 5% nelle zone normali. bonus del 5% sugli hp e 5% sui punti attacco, per le truppe che partono dalle/difendono le zone d&apos;influenza.</p><br />
+<p>[Ares|140|89|ev.choose_god(2)] <b>Bonus:</b>bonus del 50% su risorse per l&apos;addestramento truppe nelle zone sotto influenza. 5% nelle zone normali. 10% sui punti attacco per le truppe che attaccano dalle zone d&apos;influenza</p><br />
+<p>[Atena|140|89|ev.choose_god(3)] <b>Bonus:</b>bonus del 50% su risorse per le strutture nelle zone sotto influenza. 5% nelle zone normali. 20% sui hp per le truppe che difendono le zone d&apos;influenza</p><br />
+<p>[Demetra|140|89|ev.choose_god(4)] <b>Bonus:</b>bonus del 50% su la moneta di scambio nelle zone sotto influenza. 5% nelle zone normali. le truppe in difesa guadagnano il 10% di hp.</p><br />
+</p>
+            ]]></text>
+            <condiction type="EX">haveGod</condiction>
+            <back><![CDATA[<blockquote>Ora questa potente divinità si è schierata al tuo fianco, potrai cambiare la divinità alla prossima evoluzione, fino ad allora la tua divinità sarà questa...</blockquote>
+<p>Ricompensa: un nuovo potente alleato.</p>
+            ]]></back>
+			<reward type="RES">0,0,0,0</reward>
+		</quest>
+	</age>
+</root>

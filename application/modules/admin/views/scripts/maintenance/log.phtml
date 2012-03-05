@@ -1,0 +1,40 @@
+<select id="date">
+<?php
+foreach ($this->list as $value) {
+	//yyyymmdd
+	$date=date("d-m-Y",mktime(0,0,0,substr($value, 4,2),
+	substr($value, 6),substr($value, 0,4)));
+	echo '<option value="'.$value.'">'.$date.'</option>';
+}
+?>
+</select><button onclick="d=$('#date').val();location.href='<?php echo $this->baseUrl('admin/maintenance/log/date/');?>'+d;">change</button>
+<div><?php 
+foreach ($this->priority['name'] as $key=>$value) {
+	echo '<button onclick="location.href=\''.$this->baseUrl('admin/maintenance/log/priority/'.$this->priority['n'][$key]).'/page/'.$this->log->getCurrentPageNumber().'/date/'.$this->date.'\';">'.$value.'</button>';
+}
+?></div>
+<table>
+  <tr>
+    <th>Time</th>
+    <th>Message</th>
+    <th>priority</th>
+    <th>type</th>
+  </tr>
+<?php 
+foreach ($this->log as $value) {
+?>
+  <tr>
+    <td><?php echo $value['timestamp'];?></td>
+    <td><?php echo $value['message'];?></td>
+    <td><?php echo $value['priority'];?></td>
+    <td><?php echo $value['priorityName'];?></td>
+  </tr>
+<?php 
+}
+?>
+</table>
+
+
+<?php 
+echo $this->paginationControl($this->log, 'Sliding', 'paginator.phtml');
+?>

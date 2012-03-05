@@ -1,0 +1,84 @@
+<?php
+$help = "";
+$t = Zend_Registry::get("translate");
+global $Building_Array;
+if ($this->id) {
+	$this->headTitle(Model_building::$name[$this->age][$this->id]);
+	//$help .='<a href="#" onclick="ev.help(\'building\')">'.$this->image('/common/images/return.png', $t->_('ritorna all&apos;indice')).'</a>';
+    $id = $this->id - 1;
+    $help .= '<div style="border:1px solid black;"><p><div class="building '.$Building_Array[$id].'"></div></p>';
+    $help .= /*static $capacity = array();
+     static $cost = array();
+     static $require = array();
+     static $multiple_at_level20 = false;
+     static $multiple = false;
+     static $maxliv = Array();
+     static $content = "";
+     static $Description = Array();
+     static $param = Array();
+     static $maxPop = array();
+     static $prod = array();
+     static $rid = array();*/
+    '<div><b>' . $t->_("Descrizione") . ':</b></div>
+        <div>' . $Building_Array[$id]::$Description[$this->age] . '</div>
+    <p><div><b>' . $t->_("Richiede") . ':</b></div>';
+    if (!$Building_Array[$id]::$require) $help.=$t->_('niente').'.';
+    else {
+    	$help.='<ul>';
+    	foreach ($Building_Array[$id]::$require as $key=>$req) {
+    		if (is_array($req)) {
+    			$help.='<li>'.Model_building::$name[$this->age][$req['type']].' liv '.$req['liv'].'</li>';
+    		}
+    		else $help.='<li>'.$t->_('et&aacute;').':'.Model_civilta::getCivAge(($req+1)).'</li>';
+    	}
+    	$help.='<ul>';
+    }
+    $prod=array('th'=>'','prod'=>array());
+    if ($Building_Array[$id]::$rid) $prod=array('th'=>$t->_('Velocit&aacute; (risorse/ora)'),'prod'=>$Building_Array[$id]::$rid);
+    if ($Building_Array[$id]::$capacity) $prod=array('th'=>$t->_('Capacit&aacute;'),'prod'=>$Building_Array[$id]::$capacity);
+    if ($Building_Array[$id]::$prod) $prod=array('th'=>$t->_('Produzione'),'prod'=>$Building_Array[$id]::$prod);
+    
+    $help.='<h5>' . $t->_("Costo") . '</h5>
+    <table>
+    	<thead>
+    		<tr>
+    			<th>liv</th>
+    			<th>'.$this->image()->resource(0,$this->age).'</th>
+    			<th>'.$this->image()->resource(1,$this->age).'</th>
+    			<th>'.$this->image()->resource(2,$this->age).'</th>
+    			<th>tot</th>
+    			<th>'.$this->image()->resource(3,$this->age).'</th>
+    			<th>'.$this->image('/common/images/clock.png','time',$t->_('tempo di costruzione')).'</th>
+    			<th>'.$prod['th'].'</th>
+    		</tr>
+    	<thead>
+    	<tbody>';
+    for ($i = 0; $i <= $Building_Array[$id]::$maxliv[$this->age]; $i++) {
+    	$tot=($Building_Array[$id]::$cost[$i][0]+$Building_Array[$id]::$cost[$i][1]+$Building_Array[$id]::$cost[$i][2]);
+    	$time=intval($tot/main::$rid[1]*3600);
+    	$help.='<tr>
+    			<td>'.$i.'</td>
+    			<td>'.$Building_Array[$id]::$cost[$i][0].'</td>
+    			<td>'.$Building_Array[$id]::$cost[$i][1].'</td>
+    			<td>'.$Building_Array[$id]::$cost[$i][2].'</td>
+    			<td>'.$tot.'</td>
+    			<td>'.$Building_Array[$id]::$cost[$i][3].'</td>
+    			<td>'.timeStampToString($time).'</td>
+    			<td>'.$prod['prod'][$i].'</td>
+    		</tr>';
+    }
+    		
+    	$help.='</tbody>
+    </table>';
+   
+} else {
+	
+    for ($i = 0; $Building_Array[$i]; $i ++) {
+        $help .=$this->image('/common/images/void.png',Model_building::$name[$this->age][$i+1],Model_building::$name[$this->age][$i+1],null,null,
+        	array('class'=>'building ' . $Building_Array[$i],
+        		'onclick'=>'ev.help(\'building/id/' . ($i + 1) . '\')')
+        );  
+    }
+}
+echo $help;
+?>

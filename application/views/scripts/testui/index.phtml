@@ -1,0 +1,13 @@
+<?php
+echo $this->template()->alerts("prova di avviso",null,$this->type);
+?>
+<input class="number" />
+<script type="text/javascript">var ind=1;
+function openw() {
+	c={title:'prova'+ind,text:'questa è una finestra'};
+	ev.windows({x:200,y:300}, 'center', c, false);
+	ind++;
+}
+</script>
+<button onclick="ev.request('/gfdg','post',null,null)">esegui richiesta</button>
+<button onclick="openw()">apri finestra</button>

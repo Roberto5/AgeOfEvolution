@@ -1,0 +1,24 @@
+<?php 
+$t=Zend_Registry::get("translate");
+$module=Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
+if ($this->display=="do"){
+	echo "evoluzione in corso...";
+}
+elseif ($this->display=="err") {
+	echo "errore";
+}
+else {
+	
+
+?>
+<h4><?php echo $t->_('Sei sicuro di voler evolvere?');?></h4>
+        <div><?php echo $t->_('evolvendoti potrai avere strutture e armate pi&ugrave; potenti, ma i costi
+        aumenteranno, e la crescita demografica diminuir&aacute;'); ?></div>
+        <form action="<?php echo $this->url(array('module'=>$module,'controller'=>'ev','action'=>'index')); ?>" method="post">
+        <input type="hidden" name="tokenEv" value="<?php echo $this->token; ?>" />
+        <input type="submit" name="yes" value="<?php echo $t->_("si"); ?>" />
+        <input type="submit" name="no" value="<?php echo $t->_("no"); ?>" />
+        </form>
+<?php 
+}
+?>

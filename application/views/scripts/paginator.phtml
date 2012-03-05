@@ -1,0 +1,70 @@
+<div class="pagination" style="text-align: center;">
+<!-- First page link -->
+
+<?php
+if (isset($this->previous)) {
+?>
+	<a href="<?php echo $this->url(array('page' => $this->first));?>" class="ui-icon ui-icon-seek-first" style="display:inline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> 
+        <?php
+} 
+else {
+?>
+	<span class="ui-state-disabled ui-icon ui-icon-seek-first" style="display:inline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> 
+<?php
+}
+?>
+    
+        <!-- Previous page link -->
+    
+<?php
+if (isset($this->previous)) {
+?>
+	<a href="<?php echo $this->url(array('page' => $this->previous)); ?>" class="ui-icon ui-icon-seek-prev" style="display:inline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> 
+<?php
+} 
+else {
+?>
+	<span class="ui-state-disabled ui-icon ui-icon-seek-prev" style="display:inline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> 
+<?php
+}
+?>
+        <!-- Numbered page links -->
+<?php
+foreach ($this->pagesInRange as $page) {
+	if ($page != $this->current) {
+		?>
+		<a href="<?php echo $this->url(array('page' => $page)); ?>"><?php echo $page;?></a>
+        <?php
+    } 
+    else {
+    	echo "<b>".$page."</b>";
+    }
+}
+?>
+        <!-- Next page link -->
+<?php
+if (isset($this->next)) {
+	?>
+     <a href="<?php echo $this->url(array('page' => $this->next)); ?>" class="ui-icon ui-icon-seek-next" style="display:inline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a> 
+    <?php
+} 
+else {
+    ?>
+	 <span class="ui-state-disabled ui-icon ui-icon-seek-next" style="display:inline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> 
+    <?php
+}
+?>
+        <!-- Last page link -->
+<?php
+if (isset($this->next)) {
+	?>
+	<a href="<?php echo $this->url(array('page' => $this->last)); ?>" class="ui-icon ui-icon-seek-end" style="display:inline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+    <?php
+} 
+else {
+	?>
+	<span class="ui-state-disabled ui-icon ui-icon-seek-end" style="display:inline;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+	<?php
+}
+?>
+</div>

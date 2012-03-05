@@ -1,0 +1,52 @@
+<?php
+$this->headScript()->appendFile($this->baseUrl('common/js/editor/ckeditor.js'));
+$this->headScript()->appendFile($this->baseUrl('common/js/editor/sample.js'));
+$this->headScript()->appendFile($this->baseUrl('common/js/alerts.js'));
+$this->headLink()->appendStylesheet($this->baseUrl('common/js/editor/sample.css'));
+
+echo '<input id="title0" style="display:none;"/><div id="editor"></div>';
+
+//$this->log->debug($this->user);
+// gestione alerts 
+echo '<form action="./" method="post">
+	<center>
+	<input type="button" onclick="editA(\'0\')" value="'.$this->t->_('Aggiungi nuovo avviso').'" >
+    	<br />
+    	<textarea cols="10" rows="20" id="alert0" name="alert0" style="display: none;"></textarea>
+    </center>
+    <div id="alerts">
+    	<table class="admin" style="width:100%;">
+        	<thead>
+        		<tr>
+        			<th colspan="20">'.$this->t->_('Lista avvisi presenti').'</th>
+				<tr>
+				</tr>
+					<th style="width:150px;">'.$this->t->_('Comandi').'</th>
+					<th style="width:200px;">'.$this->t->_('Titolo').'</th>
+					<th>'.$this->t->_('Testo').'</th>
+				</tr>
+			</thead>
+			<tbody>';
+for($i=0;$this->alerts[$i];$i++)
+{
+    echo '      <tr id="conenent'.$this->alerts[$i]['aid'].'">
+    				<td>
+    					'.$this->image('/common/images/edit.gif', $this->t->_('modifica'),null,16,16,array('onclick'=>"editA('".$this->alerts[$i]['aid']."');")).'
+    					'.$this->image('/common/images/del.gif',$this->t->_('cancella'),null,16,16,array('onclick'=>"if (confirm('Eliminare l\'alert?')) del('".$this->alerts[$i]['aid']."');")).'
+                    		letto da '.$this->n[$i].' <abbr title="'.$this->user[$i].'">utenti</abbr>
+                    </td>
+                    <td><span id="titolo'.$this->alerts[$i]['aid'].'">'.$this->alerts[$i]['title'].'</span><input id="title'.$this->alerts[$i]['aid'].'" style="display: none;" /></td>
+                	<td><span id="testo'.$this->alerts[$i]['aid'].'">'.$this->alerts[$i]['text'].'</span><textarea  cols="10" rows="20" name="alert'.$this->alerts[$i]['aid'].'" style="display: none;" id="alert'.$this->alerts[$i]['aid'].'"></textarea></td>
+                </tr>';
+}
+echo '		</tbody>
+		</table>
+	</div>
+</form>';
+
+?>
+    
+    
+    
+    
+    

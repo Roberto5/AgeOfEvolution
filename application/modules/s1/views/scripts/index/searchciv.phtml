@@ -1,0 +1,24 @@
+<?php 
+$t=Zend_Registry::get("translate");
+$text='
+<table>
+	<tr>
+		<td>' . $t->_("nome") . '</td>
+		<td>' . $t->_("et&aacute;") . '</td>
+		<td>' . $t->_("popolazione") . '</td>
+    	<td></td>
+    </tr>';
+foreach ($this->paginator as $value) {
+	$text.='
+	<tr>
+		<td>' . $value['civ_name'] . '</td>
+        <td>' .Model_civilta::getCivAge($value['civ_age']+1)  . '</td>
+        <td>' . $value['civ_pop'] . '</td>
+        <td><a href="javascript:;" onclick="ev.subscrive(' . $value['civ_id'] . ')">' . $t->_(
+							"unisciti") . '</a></td>
+    </tr>';
+}
+$text.="</table>";
+$p=$this->paginationControl($this->paginator,'Sliding','paginatorajax.phtml');
+$text.=str_replace("*", $this->func, $p);
+echo json_encode(array('html'=>false,'data'=>false,'javascript'=>false,'update'=>array('ids'=>array('mess'=>$text))));?>

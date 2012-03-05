@@ -1,0 +1,31 @@
+<?php
+$t = Zend_Registry::get("translate");
+if ($this->mod) {
+    Model_civilta::getInstance()->refresh->addIds('profile', 
+    $t->_('profilo modificato con successo'));
+} else {
+    $this->headScript()->captureStart();
+    echo "function doedit()
+{
+    el=$('#profile input,textarea');
+	data={
+		ajax:1
+	};
+	for (i=0;i<el.length;i++)
+		data[el.eq(i).attr('name')]=el.eq(i).val();
+	ev.request(module+'/profile/edit/tokenP/" .
+     $this->token . "','post',data);
+}";
+    $this->headScript()->captureEnd();
+    Model_civilta::getInstance()->refresh->addIds('profile', 
+    '<h3>' . $t->_("Descizione user") . '</h3>
+<textarea rows="10" cols="20" name="des_user">' .
+     $this->des_user . '</textarea>
+<h3>' . $t->_("Descrizione civiltà") . '</h3>
+<textarea rows="10" cols="20" name="des_civ">' .
+     $this->des_civ .
+     '</textarea>
+<div><button name="do" onclick="doedit();" >' .
+     $t->_("salva") . '</button></div>');
+}
+?>

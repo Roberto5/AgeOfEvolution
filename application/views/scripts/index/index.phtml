@@ -1,0 +1,88 @@
+<?php
+$t = Zend_Registry::get('translate');
+echo $t->_('ciao') . ' ' .
+ ($this->identity ? $this->identity->username : $t->_('visitatore'));
+if ($this->identity) {//******************************** utente connesso
+    ?>
+<h3><?php
+    echo $t->_('Seleziona un server');
+    ?></h3>
+<?php
+    $status = array('senza civiltà', 'in attesa', 'sharer', 'owner');
+    global $server;
+    $s = array();
+    $client = new Zend_Http_Client();
+    if ($this->list) {
+        foreach ($this->list as $value) {
+            $s[] = $value['server'];
+            echo '<div><button id="button' . $value['server'] . '" class="img server" onclick="location.href=\'' .
+             $this->url(array('module' => $value['server'])) . '\'"><div>server ' .
+             $value['server'] . '</div> ' . $t->_('stato: iscritto come') . ' ' .
+             $t->_($status[$value['status']]) . ' <div>'.$t->_('civiltà presenti'). ':<span id="n_civ' . $value['server'] . '"></span></div></button></div>';
+        }
+    }
+    $list = array_diff($server, $s);
+    if ($list) {
+        foreach ($list as $value) {
+            echo '<div><button id="button' . $value . '" class="img server reg" onclick="location.href=\'' .
+             $this->url(array('module' => $value)) . '\'"><div>server ' . $value . '</div> ' .
+             $t->_('stato: non iscritto') .' '.$t->_('civiltà presenti'). ':<span id="n_civ' . $value . '"></span></button></div>';
+        }
+    }
+    $this->headScript()->captureStart();
+    echo '$(function(){ev.statserver('.json_encode($server).');});';
+    $this->headScript()->captureEnd();
+} else { //******************************   visitatore
+	
+$this->headScript()->captureStart();
+echo '$(function() {
+		$( "#tabs" ).tabs({
+			cache: true,
+			ajaxOptions: {
+				error: function( xhr, status, index, anchor ) {
+					$( anchor.hash ).html(
+						"load error" );
+				},
+				cache: true
+			}
+		});
+		$("#tabs").tabs( "rotate" , 5000 );' .
+		'
+	});';
+$this->headScript()->captureEnd();
+?>
+
+
+
+<div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="tabs">
+	<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+		<li><a href="#tabs-1"><?php
+    echo $t->_('Login');
+    ?></a></li>
+    	<li><a href="ideals.html"><?php
+    echo $t->_('ideali del gioco');
+    ?></a></li>
+		<li><a href="propriety.html"><?php
+    echo $t->_('caratteristiche');
+    ?></a></li>
+    	<li><a href="aiuto.html"><?php
+    echo $t->_('come aiutarci');
+    ?></a></li>
+		<li><a href="screen.php"><?php
+    echo $t->_('Screen shoot');
+    ?></a></li>
+    	<li><a href="<?php echo $this->url(array('controller'=>'reg'));?>?nolayout=1"><?php
+    echo $t->_('Registrati');
+    ?></a></li>
+	</ul>
+	<div id="tabs-1">
+		<?php 
+		$login=new Form_LoginForm();
+		$login->setAction($this->url(array('controller'=>'login')));
+		echo $login; 
+		?>
+	</div>
+</div>
+<?php
+}
+?>

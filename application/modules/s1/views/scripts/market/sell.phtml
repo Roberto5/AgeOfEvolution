@@ -1,0 +1,13 @@
+<?php 
+$t=Zend_Registry::get("translate");
+$error=$this->error;
+if (is_array($error)) {
+	foreach ($error as $key => $value) {
+		foreach ($value as $k => $v) {
+			$error=$v;
+		}
+	}
+}
+echo $this->template()->Alerts($error,$this->url(array('t' => MARKET,'controller'=>'building','action'=>'show')),2,5);
+
+?>

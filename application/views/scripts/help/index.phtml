@@ -1,0 +1,42 @@
+<?php
+$this->headTitle("Help");
+$content = 'index';
+if ($this->flag) {
+	Zend_Layout::getMvcInstance()->disableLayout();
+    echo $content;
+} else {
+    echo '
+<div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="helpt">
+<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+	<li><a href="' .
+     $this->url(array('flag' => 'true')) . '">index</a></li>';
+    foreach ($this->link as $key => $value) {
+        echo '<li><a href="' . $value['url'] . '">';
+        if ($value['img'])
+            echo '<img src="' . $this->baseUrl() . $value['img'] . '" alt="' .
+             $key . '" title="' . $key . '"  width="16" height="16" />';
+        else
+            echo $key;
+        echo '</a></li>';
+    }
+    echo '
+</ul>
+</div>';
+    echo '<script type="text/javascript"><!-- 
+    $(function() {
+		$( "#helpt" ).tabs({
+			cache: true,
+			ajaxOptions: {
+				error: function( xhr, status, index, anchor ) {
+					$( anchor.hash ).html(
+						"load error" );
+				},
+				cache: true
+			}
+		});
+	});
+	//-->
+	</script>';
+    $this->layout()->notdetroy = true;
+}
+?>

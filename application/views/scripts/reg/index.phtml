@@ -1,0 +1,21 @@
+<?php
+
+$this->headScript()->captureStart();
+echo '$(document).ready(function() {
+	
+   //$("#recaptcha_switch_audio_btn").remove();
+   Recaptcha.switch_type=function(){ alert("audio disabilitato!");};
+	
+}); ';
+
+$this->headScript()->captureEnd();
+
+if ($this->type == 1) {
+    //$link, $text, $type=1, $sec=5
+    $link = $this->url(
+    array('controller' => 'index', 'action' => 'index'));
+    echo $this->template()->alerts($this->text,$link,$this->type,5);
+} 
+else
+    echo $this->form;
+?>

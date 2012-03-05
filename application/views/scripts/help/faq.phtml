@@ -1,0 +1,21 @@
+<?php 
+$faq='<div id="accordion">';
+for ($i=0;$this->faq[$i];$i++)
+{
+	$faq.='<h3><a href="#faq'.($i+1).'">'.$this->faq[$i]['question'].'</a></h3>
+	<div>'.$this->faq[$i]['reply'].'</div>';
+    
+}
+$faq.='</div>';
+echo $faq;
+?>
+<script type="text/javascript">
+<!--
+	$( "#accordion" ).accordion({
+		active: false ,
+		collapsible: true
+	});
+//-->
+</script>
+
+		

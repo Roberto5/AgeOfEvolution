@@ -1,0 +1,21 @@
+<?php 
+global $NameTroops;
+$t=Zend_Registry::get("translate");
+?>
+<script type="text/javascript">
+var totTroop="<?php
+echo TOT_TYPE_TROOPS;
+?>";
+$('body').ready(function() {ev.troops.init('atk');});
+</script>
+
+
+<form action="<?php echo $this->urlaction?>" method="post">
+	<input type="hidden" name="tokenRit" value="<?php echo $this->token; ?>"/>
+    <h1 style="text-align:center;"><?php echo $this->t->_('Manda a casa');?></h1>
+    <br /><br />
+    <?php 
+    //Zend_Registry::get("log")->log($this->troops,Zend_Log::DEBUG);
+    echo $this->template()->troopcontainer("atk",$this->t->_('Truppe da mandare a casa'),$this->troops); ?>
+	<input type="submit" value="<?php echo $t->_('ritira');?>" />    
+</form>

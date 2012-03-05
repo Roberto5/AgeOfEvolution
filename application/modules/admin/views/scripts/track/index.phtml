@@ -1,0 +1,32 @@
+<table>
+  <tr>
+    <th><?php echo $this->t->_('id');?></th>
+    <th><?php echo $this->t->_('mittente');?></th>
+    <th><?php echo $this->t->_('status');?></th>
+    <th><?php echo $this->t->_('type');?></th>
+    <th><?php echo $this->t->_('categoria');?></th>
+    <th><?php echo $this->t->_('descrizione');?></th>
+    <th><?php echo $this->t->_('screen');?></th>
+  </tr>
+
+
+<?php 
+
+if ($this->track) {
+	foreach ($this->track as $value) {
+		echo '
+	<tr>
+    	<td><a href="'.$this->url(array('action'=>'delete','id'=>$value['id'])).'">'.$this->image("/common/images/del.gif", $this->t->_('cancella')).'</a></td>
+    	<td>'.$value['uid'].'</td>
+    	<td>'.$value['status'].'</td>
+    	<td>'.$value['type'].'</td>
+    	<td>'.$value['cat'].'</td>
+    	<td><a href="#see" onclick="ev.request(\'admin/track/see/id/'.$value['id'].'\',\'post\',{ajax:1})">'.$this->t->_('clicka per leggere').'</a></td>
+    	<td>'.($value['screen']? 'yes':'no').'</td>
+  	</tr>';
+	}
+}
+
+
+?>
+</table>

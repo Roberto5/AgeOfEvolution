@@ -1,0 +1,35 @@
+<table>
+  <tr>
+    <th><?php echo $this->t->_('id');?></th>
+    <th><?php echo $this->t->_('mittente');?></th>
+    <th><?php echo $this->t->_('status');?></th>
+    <th><?php echo $this->t->_('type');?></th>
+    <th><?php echo $this->t->_('categoria');?></th>
+  </tr>
+
+
+<?php 
+$this->headTitle('track n° '.$this->track['id']);
+echo '
+	<tr>
+    	<td><a href="'.$this->url(array('action'=>'delete','id'=>$this->track['id'])).'">'.$this->image("/common/images/del.gif", $this->t->_('cancella')).'</a></td>
+    	<td>'.$this->track['uid'].'</td>
+    	<td>'.$this->track['status'].'</td>
+    	<td>'.$this->track['type'].'</td>
+    	<td>'.$this->track['cat'].'</td>
+    </tr>
+    <tr><th>'.$this->t->_('descrizione').'</th></tr>
+    <tr>
+    	<td colspan="5">'.$this->track['description'].'</td>
+    </tr>
+    
+    <tr><th>'.$this->t->_('screen').'</th></tr>
+    <tr>
+    	<td colspan="5"><a href="'.$this->track['screen'].'">'.($this->track['screen']? 'yes':'no').'</a></td>
+  	</tr>';
+
+
+
+
+?>
+</table>

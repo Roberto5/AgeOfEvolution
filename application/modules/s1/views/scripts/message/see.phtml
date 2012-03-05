@@ -1,0 +1,7 @@
+<?php 
+$data=$this->data;
+$this->headTitle($data['oggetto']);
+$this->layout()->x=450;
+$this->layout()->y=550;
+echo Model_mess::foglio($data['civ_name'],$data['oggetto'],$data['messaggio'],$data['username'],false,null,$this->b);
+?>

@@ -1,0 +1,40 @@
+<?php
+$t=Zend_Registry::get("translate");
+$this->headTitle($t->_('classifica'));
+$display='';
+if (!$this->ref) $display.='<div id="top">';
+$display.='
+	<table class="top-rank">
+		<thead>
+			<tr>
+				<th>N&deg;</th>
+				<th>'.$t->_('Nome').'</th>
+				<th>'.$t->_('et&agrave;').'</th>
+				<th>'.$t->_('Alleanza').'</th>
+				<th>'.$t->_('Villaggi').'</th>
+				<th>'.$t->_('Popolazione').'</th>
+			</tr>
+		</thead>
+		<tbody>';
+$i=($this->top->getCurrentPageNumber()-1)*$this->top->getItemCountPerPage()+1;
+foreach ($this->top as $value) {
+	$display.='
+			<tr>
+				<td>'.$i.'</td>
+				<td>'.$this->template()->civ($value['civ_id'],$value['civ_name']).'</td>
+				<td>'.Model_civilta::getCivAge($value['civ_age']+1).'</td>
+				<td>'.$this->template()->ally($value['civ_ally']).'</td>
+				<td>'.$value['villages'].'</td>
+				<td>'.$value['civ_pop'].'</td>
+			</tr>';
+	$i++;
+}
+$display.='
+		</tbody>
+	</table>';
+$ind= $this->paginationControl($this->top, 'Sliding', 'paginatorajax.phtml');
+$display.=str_replace("*", "ev.top", $ind);
+
+if ($this->ref) Model_civilta::getInstance()->refresh->addIds('top', $display);
+else echo $display.'</div>';
+?>

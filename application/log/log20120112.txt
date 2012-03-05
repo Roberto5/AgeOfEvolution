@@ -1,0 +1,219 @@
+<logEntry><timestamp>2012-01-12T04:50:42+01:00</timestamp><message>Page not found</message><priority>2</priority><priorityName>CRIT</priorityName></logEntry>
+
+<logEntry><timestamp>2012-01-12T04:50:42+01:00</timestamp><message>Zend_Controller_Dispatcher_Exception Object
+(
+    [_previous:Zend_Exception:private] =&gt; 
+    [message:protected] =&gt; Invalid controller specified (robots.txt)
+    [string:Exception:private] =&gt; 
+    [code:protected] =&gt; 0
+    [file:protected] =&gt; /membri/ageofevolution/library/Zend/Controller/Dispatcher/Standard.php
+    [line:protected] =&gt; 248
+    [trace:Exception:private] =&gt; Array
+        (
+            [0] =&gt; Array
+                (
+                    [file] =&gt; /membri/ageofevolution/library/Zend/Controller/Front.php
+                    [line] =&gt; 954
+                    [function] =&gt; dispatch
+                    [class] =&gt; Zend_Controller_Dispatcher_Standard
+                    [type] =&gt; -&gt;
+                    [args] =&gt; Array
+                        (
+                            [0] =&gt; Zend_Controller_Request_Http Object
+                                (
+                                    [_paramSources:protected] =&gt; Array
+                                        (
+                                            [0] =&gt; _GET
+                                            [1] =&gt; _POST
+                                        )
+
+                                    [_requestUri:protected] =&gt; /robots.txt
+                                    [_baseUrl:protected] =&gt; 
+                                    [_basePath:protected] =&gt; 
+                                    [_pathInfo:protected] =&gt; /robots.txt
+                                    [_params:protected] =&gt; Array
+                                        (
+                                            [controller] =&gt; robots.txt
+                                            [action] =&gt; index
+                                            [module] =&gt; default
+                                            [error_handler] =&gt; ArrayObject Object
+                                                (
+                                                    [storage:ArrayObject:private] =&gt; Array
+                                                        (
+                                                            [exception] =&gt; Zend_Controller_Dispatcher_Exception Object
+ *RECURSION*
+                                                            [type] =&gt; EXCEPTION_NO_CONTROLLER
+                                                            [request] =&gt; Zend_Controller_Request_Http Object
+                                                                (
+                                                                    [_paramSources:protected] =&gt; Array
+                                                                        (
+                                                                            [0] =&gt; _GET
+                                                                            [1] =&gt; _POST
+                                                                        )
+
+                                                                    [_requestUri:protected] =&gt; /robots.txt
+                                                                    [_baseUrl:protected] =&gt; 
+                                                                    [_basePath:protected] =&gt; 
+                                                                    [_pathInfo:protected] =&gt; /robots.txt
+                                                                    [_params:protected] =&gt; Array
+                                                                        (
+                                                                            [controller] =&gt; robots.txt
+                                                                            [action] =&gt; index
+                                                                            [module] =&gt; default
+                                                                        )
+
+                                                                    [_rawBody:protected] =&gt; 
+                                                                    [_aliases:protected] =&gt; Array
+                                                                        (
+                                                                        )
+
+                                                                    [_dispatched:protected] =&gt; 1
+                                                                    [_module:protected] =&gt; default
+                                                                    [_moduleKey:protected] =&gt; module
+                                                                    [_controller:protected] =&gt; robots.txt
+                                                                    [_controllerKey:protected] =&gt; controller
+                                                                    [_action:protected] =&gt; index
+                                                                    [_actionKey:protected] =&gt; action
+                                                                )
+
+                                                        )
+
+                                                )
+
+                                        )
+
+                                    [_rawBody:protected] =&gt; 
+                                    [_aliases:protected] =&gt; Array
+                                        (
+                                        )
+
+                                    [_dispatched:protected] =&gt; 1
+                                    [_module:protected] =&gt; default
+                                    [_moduleKey:protected] =&gt; module
+                                    [_controller:protected] =&gt; error
+                                    [_controllerKey:protected] =&gt; controller
+                                    [_action:protected] =&gt; error
+                                    [_actionKey:protected] =&gt; action
+                                )
+
+                            [1] =&gt; Zend_Controller_Response_Http Object
+                                (
+                                    [_body:protected] =&gt; Array
+                                        (
+                                        )
+
+                                    [_exceptions:protected] =&gt; Array
+                                        (
+                                            [0] =&gt; Zend_Controller_Dispatcher_Exception Object
+ *RECURSION*
+                                        )
+
+                                    [_headers:protected] =&gt; Array
+                                        (
+                                        )
+
+                                    [_headersRaw:protected] =&gt; Array
+                                        (
+                                        )
+
+                                    [_httpResponseCode:protected] =&gt; 404
+                                    [_isRedirect:protected] =&gt; 
+                                    [_renderExceptions:protected] =&gt; 
+                                    [headersSentThrowsException] =&gt; 1
+                                )
+
+                        )
+
+                )
+
+            [1] =&gt; Array
+                (
+                    [file] =&gt; /membri/ageofevolution/library/Zend/Application/Bootstrap/Bootstrap.php
+                    [line] =&gt; 97
+                    [function] =&gt; dispatch
+                    [class] =&gt; Zend_Controller_Front
+                    [type] =&gt; -&gt;
+                    [args] =&gt; Array
+                        (
+                        )
+
+                )
+
+            [2] =&gt; Array
+                (
+                    [file] =&gt; /membri/ageofevolution/library/Zend/Application.php
+                    [line] =&gt; 366
+                    [function] =&gt; run
+                    [class] =&gt; Zend_Application_Bootstrap_Bootstrap
+                    [type] =&gt; -&gt;
+                    [args] =&gt; Array
+                        (
+                        )
+
+                )
+
+            [3] =&gt; Array
+                (
+                    [file] =&gt; /membri/ageofevolution/index.php
+                    [line] =&gt; 39
+                    [function] =&gt; run
+                    [class] =&gt; Zend_Application
+                    [type] =&gt; -&gt;
+                    [args] =&gt; Array
+                        (
+                        )
+
+                )
+
+        )
+
+    [previous:Exception:private] =&gt; 
+)
+</message><priority>2</priority><priorityName>CRIT</priorityName></logEntry>
+
+<logEntry><timestamp>2012-01-12T15:42:33+01:00</timestamp><message>Last E.P.'s attivity is 04:02:42 12/01/2012</message><priority>0</priority><priorityName>EMERG</priorityName></logEntry>
+
+<logEntry><timestamp>2012-01-12T15:42:35+01:00</timestamp><message>Last E.P.'s attivity is 04:02:42 12/01/2012</message><priority>0</priority><priorityName>EMERG</priorityName></logEntry>
+
+<logEntry><timestamp>2012-01-12T15:44:37+01:00</timestamp><message>errore condizione parametro sconosciuta!Array
+(
+)
+</message><priority>4</priority><priorityName>WARN</priorityName></logEntry>
+
+<logEntry><timestamp>2012-01-12T15:44:37+01:00</timestamp><message>errore condizione sconosciuta!Array
+(
+)
+</message><priority>4</priority><priorityName>WARN</priorityName></logEntry>
+
+<logEntry><timestamp>2012-01-12T15:44:37+01:00</timestamp><message>access deny for guest on s1/index/index</message><priority>4</priority><priorityName>WARN</priorityName></logEntry>
+
+<logEntry><timestamp>2012-01-12T15:44:38+01:00</timestamp><message>errore condizione parametro sconosciuta!Array
+(
+)
+</message><priority>4</priority><priorityName>WARN</priorityName></logEntry>
+
+<logEntry><timestamp>2012-01-12T15:44:38+01:00</timestamp><message>errore condizione sconosciuta!Array
+(
+)
+</message><priority>4</priority><priorityName>WARN</priorityName></logEntry>
+
+<logEntry><timestamp>2012-01-12T15:44:38+01:00</timestamp><message>access deny for guest on s1/index/index</message><priority>4</priority><priorityName>WARN</priorityName></logEntry>
+
+<logEntry><timestamp>2012-01-12T15:47:44+01:00</timestamp><message>processo eventi in corso...</message><priority>6</priority><priorityName>INFO</priorityName></logEntry>
+
+<logEntry><timestamp>2012-01-12T15:47:44+01:00</timestamp><message>l'azione è avvenuta alle 15:47:44 12/01/2012</message><priority>6</priority><priorityName>INFO</priorityName></logEntry>
+
+<logEntry><timestamp>2012-01-12T15:47:44+01:00</timestamp><message>costruzione in posizione 2 aumentata nel villaggio 74793</message><priority>9</priority><priorityName>BUILD</priorityName></logEntry>
+
+<logEntry><timestamp>2012-01-12T15:48:44+01:00</timestamp><message>processo eventi in corso...</message><priority>6</priority><priorityName>INFO</priorityName></logEntry>
+
+<logEntry><timestamp>2012-01-12T15:48:44+01:00</timestamp><message>l'azione è avvenuta alle 15:48:44 12/01/2012</message><priority>6</priority><priorityName>INFO</priorityName></logEntry>
+
+<logEntry><timestamp>2012-01-12T15:48:44+01:00</timestamp><message>costruzione in posizione 4 aumentata nel villaggio 74793</message><priority>9</priority><priorityName>BUILD</priorityName></logEntry>
+
+<logEntry><timestamp>2012-01-12T15:48:47+01:00</timestamp><message>processo eventi in corso...</message><priority>6</priority><priorityName>INFO</priorityName></logEntry>
+
+<logEntry><timestamp>2012-01-12T15:48:47+01:00</timestamp><message>l'azione è avvenuta alle 15:48:47 12/01/2012</message><priority>6</priority><priorityName>INFO</priorityName></logEntry>
+
+<logEntry><timestamp>2012-01-12T15:48:47+01:00</timestamp><message>costruzione in posizione 5 aumentata nel villaggio 74793</message><priority>9</priority><priorityName>BUILD</priorityName></logEntry>
+

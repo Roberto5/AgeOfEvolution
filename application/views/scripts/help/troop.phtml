@@ -1,0 +1,103 @@
+<?php
+$help = "";
+$t = Zend_Registry::get("translate");
+global $Troops_Array;
+if ($this->id) {
+    $id = $this->id - 1;
+    $time = intval(
+    ($Troops_Array[$id]::$cost[0] + $Troops_Array[$id]::$cost[1] +
+     $Troops_Array[$id]::$cost[2]) / barrack::$rid[1] * 3600);
+    $help .= '<div style="border:1px solid black;"><p>' .
+     $this->image()->troop($id) . "</p>";
+    $help .= '<table>
+    <tr>
+        <td><b>' . $t->_("Età") . ':</b></td>
+        <td>' . $Troops_Array[$id]::$age . '</td>
+    </tr>
+    <tr>
+        <td><b>' . $t->_("Attacco") . ':</b></td>
+        <td>' . $Troops_Array[$id]::$atk . '</td>
+    </tr>
+    <tr>
+        <td><b>' . $t->_("Hp") . ':</b></td>
+        <td>' . $Troops_Array[$id]::$hp . '</td>
+    </tr>
+    <tr>
+        <td><b>' . $t->_("Difesa1") . ':</b></td>
+        <td>' . $Troops_Array[$id]::$def1 . '</td>
+    </tr>
+    <tr>
+        <td><b>' . $t->_("Difesa2") . ':</b></td>
+        <td>' . $Troops_Array[$id]::$def2 . '</td>
+    </tr>
+    <tr>
+        <td><b>' . $t->_("Gittata") . ':</b></td>
+        <td>' . $Troops_Array[$id]::$git . '</td>
+    </tr>
+    <tr>
+        <td><b>' . $t->_("Velocità") . ':</b></td>
+        <td>' . $Troops_Array[$id]::$speed . '</td>
+    </tr>
+    <tr>
+        <td><b>' . $t->_("Costo") . ':</b></td>
+        <td>';
+    for ($i = 0; $i < 3; $i ++) {
+        $help .= $Troops_Array[$id]::$cost[$i] . ' ' .
+         $this->image()->resource($i, $Troops_Array[$id]::$age) .
+         ' &nbsp &nbsp &nbsp ';
+    }
+    $help .= '   </td>
+    </tr>
+    <tr>
+        <td><b>' .
+     $t->_("Tempo di addestramento") . ':</b></td>
+        <td>' . timeStampToString($time) . '</td>
+    </tr>
+    <tr>
+    <tr>
+        <td><b>' . $t->_("Capacità") . ':</b></td>
+        <td>' .
+     $Troops_Array[$id]::$capacity . '</td>
+    </tr>
+    <tr>
+    <tr>
+        <td><b>' . $t->_("Popolazione") .
+     ':</b></td>
+        <td>' .
+     $Troops_Array[$id]::$cost[3] . '' .
+     $this->image()->resource(3, $Troops_Array[$id]::$age) . '</td>
+    </tr>
+    <tr>
+    <tr>
+        <td><b>' . $t->_("Descrizione") . ':</b></td>
+        <td>' .
+     $Troops_Array[$id]::$description . '</td>
+    </tr>
+    <tr>
+</table></div>';
+    echo $help;
+} else {
+    echo '<div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="troops">
+<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">';
+    for ($i = 0; $Troops_Array[$i]; $i ++) {
+        echo '<li><a href="' . $this->url(array('id' => ($i + 1))) . '">' .
+         $this->image()->troop($i) . '</a></li>';
+    }
+    echo '</ul></div>';
+    echo '<script type="text/javascript"><!-- 
+    $(function() {
+		$( "#troops" ).tabs({
+			cache: true,
+			ajaxOptions: {
+				error: function( xhr, status, index, anchor ) {
+					$( anchor.hash ).html(
+						"load error" );
+				},
+				cache: true
+			}
+		});
+	});
+	//-->
+	</script>';
+}
+?>

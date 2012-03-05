@@ -1,0 +1,137 @@
+<?php
+$this->layout()->x=400;
+$this->layout()->y=400;
+$t=Zend_Registry::get("translate"); 
+$log=Zend_Registry::get("log");
+switch ($this->type) {
+	case 1://profilo principale
+		$this->headTitle($t->_('il tuo profilo'));
+		?>
+<div id="profile" style="text-align:center;">
+	<table>
+		<tr>
+			<td><strong><?php echo $t->_("Username");?> </strong></td>
+			<td><?php echo $this->user->data['username']; ?></td>
+			<td><strong><?php echo $t->_("descrizione civilt&agrave;") ;?>:</strong></td>
+		</tr>
+		<tr>
+			<td><strong><?php echo $t->_("Civilt&agrave;");?> </strong></td>
+			<td><?php echo $this->civ->data['civ_name'] ;?></td>
+			<td width="70%" rowspan="8"><?php echo $this->civ->data['des_civ'];?></td>
+		</tr>
+		<tr>
+			<td><strong><?php echo $t->_("Et&agrave;");?></strong></td>
+			<td><?php echo $t->_($this->civ->getCivAge());?></td>
+		</tr>
+		<?php 
+		if ($this->civ->data['civ_ally']) {
+			echo '
+		<tr>
+			<td><strong>' . $t->_("Alleanza") . '</strong></td>
+			<td>'.$this->template($this->civ->data['civ_ally']).'</td>
+		</tr>';
+		}
+		?>
+		<tr>
+			<td colspan="2"><strong><?php echo $t->_("descrizione utente:");?></strong></td>
+		</tr>
+		<tr>
+			<td colspan="2"><?php echo $this->user->data['des_user'];?></td>
+		</tr>
+	</table>
+	<table>
+		<thead>
+    		<tr>
+      			<th><?php echo $t->_("Nome");?></th>
+      			<th><?php echo $t->_("Coordinate");?></th>
+      			<th><?php echo $t->_("popolazione");?></th>
+      			<th><?php echo $t->_("Ordine personalizzato");?></th>
+    		</tr>
+<?php 
+$list = $this->civ->village_list;
+foreach ($list as $key=>$value) {
+    echo '<tr><td>'.$this->template()->village($key,$value['name']) . "</td>
+	<td>(" . $value['x'] . "|" . $value['y'] . ')</td>
+        <td>'.$value['busy_pop'].'</td>
+	<td>' . $value['order_n'] .  '</td></tr>';
+}
+?></table>
+
+<button onclick="ev.request(module+'/profile/edit','post',{ajax:1});"><?php echo $t->_("Modifica");?></button>
+</div>
+<?php 
+		break;
+	case 2: //user
+		$this->headTitle($t->_('Profilo di '.$this->user['username']));
+		?>
+<center>
+	<table>
+		<tr>
+			<td><strong><?php echo $t->_("Username");?> </strong></td>
+			<td><?php echo $this->user['username']; ?></td>
+			
+		</tr>
+		<tr>
+			<td><strong><?php echo $t->_("descrizione") ;?> :</strong></td>
+			<td><?php echo $this->user['des_user'];?></td>
+		</tr>
+
+	</table>
+</center>
+	<?php 
+		break;
+	case 3: //civ
+		$this->headTitle($t->_('Profilo di '.$this->civ['civ_name']));
+		$civ=Zend_Registry::get("civ");
+		?>
+<center>
+	<table>
+		<tr>
+			<td><strong><?php echo $t->_("Civilt&agrave;");?> </strong></td>
+			<td><?php echo $this->civ['civ_name'] ;?></td>
+			
+		</tr>
+		<tr>
+			<td><strong><?php echo $t->_("descrizione civilt&agrave;") ;?>:</strong></td>
+			<td><?php echo $this->civ['des_civ'];?></td>
+		</tr>
+		<tr>
+			<td><strong><?php echo $t->_("Et&agrave;");?></strong></td>
+			<td><?php echo $t->_($civ->getCivAge($this->civ['civ_age']+1));?></td>
+		</tr>
+		<?php 
+		if ($this->civ['civ_ally']) {
+			echo '
+		<tr>
+			<td><strong>' . $t->_("Alleanza") . '</strong></td>
+			<td>'.$this->template()->ally($this->civ['civ_ally']).'</td>
+		</tr>';
+		}
+		?>
+		<tr>
+			<td><strong><?php echo $t->_("User iscritti");?> :</strong></td>
+			<td><?php foreach ($this->sharer as $key => $value) {
+					echo $this->template()->user($key,$value['username']).' ';
+			} ?></td>
+		</tr>
+	</table>
+	<table>
+		<thead>
+    		<tr>
+      			<th><?php echo $t->_("Nome");?></th>
+      			<th><?php echo $t->_("Coordinate");?></th>
+      			<th><?php echo $t->_("popolazione");?></th>
+    		</tr>
+<?php 
+$list = $this->village_list;
+foreach ($list as $key=>$value) {
+    echo '<tr><td>' .$this->template()->village($key,$value['name'])."</td>
+	<td>(" . $value['x'] . "|" . $value['y'] . ')</td>
+        <td>'.$value['busy_pop'].'</td></tr>';
+}
+?></table></center><?php 
+		break;
+}
+?>
+
+

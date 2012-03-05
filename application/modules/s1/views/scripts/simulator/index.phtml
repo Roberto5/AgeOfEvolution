@@ -1,0 +1,47 @@
+<?php $this->headScript()->captureStart() ?>
+
+var totTroop="<?php
+echo TOT_TYPE_TROOPS;
+?>";
+function togleraid(value)
+{
+    if (value == 2) {
+        $('#raid_round').show();
+    }
+    else {
+        $('#raid_round').hide();
+    }
+}
+<?php $this->headScript()->captureEnd() ?>
+<?php 
+$t=Zend_Registry::get("translate");
+$this->headScript()->appendFile($this->baseUrl('common/js/sim.js'));
+$troops=array();
+for ($i=0;$i<TOT_TYPE_TROOPS;$i++) 
+	$troops[$i]=1;
+$log=Zend_Registry::get("log");
+
+
+echo '<form action="'.$this->url(array('controller'=>'simulator')).'" method="post">';
+echo $this->template()->troopcontainer("atk",$t->_("Attaccante"),$troops,true,true,$this->atk).$this->template()->troopcontainer("def",$t->_("Difensore"),$troops,false,true,$this->def);
+?>
+<div style="width: 50%;">
+    <div style="text-align:center;"><input onchange="togleraid(this.value);" type="radio" name="type" value="1" checked="checked" /> <?php echo $t->_("Attacco");?> </div>
+    <div style="text-align:center;">
+    <input type="radio" name="type" value="2" id="raid" onchange="togleraid(this.value);" /> Raid
+    <span id="raid_round" style="display:none;"> (Round max: <input type="text" value="5" name="round" style="width: 20px;" />)</span></div>
+	<h4>bonus</h4>
+    <div>
+    <b><?php echo $t->_('Attaccante');?></b>:
+    <div>hp:<input size="3" maxlength="3" name="bonushpa" /></div>
+    <div><?php echo $t->_('Forza');?>:<input size="3" maxlength="3" name="bonusfa" /></div>
+    </div>
+    <div><b><?php echo $t->_('Difensore');?></b>:
+    <div>hp:<input size="3" maxlength="3" name="bonushpd" /></div>
+    <div><?php echo $t->_('Forza');?>:<input size="3" maxlength="3" name="bonusfd" /></div>
+    </div>
+</div>
+<?php 
+echo '<center><input type="submit" name="sim" value="'.$t->_('simula').'"/></center></form>';
+?>
+

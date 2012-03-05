@@ -1,0 +1,14 @@
+<?php
+if ($this->type == 1) {
+    //$link, $text, $type=1, $sec=5
+    $link = $this->url(array('controller' => 'index', 
+    'action' => 'index'));
+    echo $this->template()->alerts($this->text,$link,$this->type,5);
+} else {
+	if ($this->type==2) {
+    //$link, $text, $type=1, $sec=5
+    echo $this->template()->alerts($this->text,null,$this->type,0);
+	}
+    echo $this->form;
+}
+?>

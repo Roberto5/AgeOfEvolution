@@ -1,0 +1,43 @@
+<?php 
+$this->headScript()->appendFile($this->baseUrl('common/js/editor/ckeditor.js'));
+$this->headScript()->appendFile($this->baseUrl('common/js/editor/sample.js'));
+$this->headScript()->appendFile($this->baseUrl('common/js/faq.js'));
+$this->headLink()->appendStylesheet($this->baseUrl('common/js/editor/sample.css'));
+
+echo '<input id="question0" style="display:none;"/><div id="editor"></div>';
+
+echo '<form action="./" method="post">
+	<center>
+	<input type="button" onclick="editA(\'0\')" value="'.$this->t->_('Aggiungi una nuova domanda').'" >
+    	<br />
+    	<textarea cols="10" rows="20" id="reply0" name="reply0" style="display: none;"></textarea>
+    </center>
+    <div id="alerts">
+    	<table class="admin" style="width:100%;">
+        	<thead>
+        		<tr>
+        			<th colspan="20">'.$this->t->_('Lista domade presenti').'</th>
+				<tr>
+				</tr>
+					<th style="width:150px;">'.$this->t->_('Comandi').'</th>
+					<th style="width:200px;">'.$this->t->_('Domanda').'</th>
+					<th>'.$this->t->_('Risposta').'</th>
+				</tr>
+			</thead>
+			<tbody>';
+foreach ($this->faq as $faq) 
+{
+    echo '      <tr id="conenent'.$faq['id'].'">
+    				<td>
+    					'.$this->image('/common/images/edit.gif', $this->t->_('modifica'),null,16,16,array('onclick'=>"editA('".$faq['id']."');")).'
+    					'.$this->image('/common/images/del.gif',$this->t->_('cancella'),null,16,16,array('onclick'=>"if (confirm('Eliminare l\'alert?')) del('".$faq['id']."');")).'
+                    </td>
+                    <td><span id="domanda'.$faq['id'].'">'.$faq['question'].'</span><input id="question'.$faq['id'].'" style="display: none;" /></td>
+                	<td><span id="risposta'.$faq['id'].'">'.$faq['reply'].'</span><textarea  cols="10" rows="20" name="reply'.$faq['id'].'" style="display: none;" id="reply'.$faq['id'].'"></textarea></td>
+                </tr>';
+}
+echo '		</tbody>
+		</table>
+	</div>
+</form>';
+?>

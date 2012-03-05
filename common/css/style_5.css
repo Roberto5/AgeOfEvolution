@@ -1,0 +1,164 @@
+/* 
+    Document   : futura.css
+    Created on : 15-gen-2011, 11.08.09
+    Author     : pagliaccio
+    Description:
+        foglio di style per l'età futura
+*/
+/*layout*/
+body{
+    font-family: arial,sans-serif;
+    background-color: #2f6206;
+    background-image: url('../images/Mimetica2.jpg');
+    color: white;
+}
+div#header{
+    background-image: url('../images/title_moderna.png');
+}
+div#container{
+    border-left: 4px solid white;
+    border-right: 4px solid white;
+}
+div#navigation{
+    background-color: #6c8939;
+    color: #68541f;
+    border-top: 3px solid white;
+    border-bottom: 3px solid white;
+}
+div#navigation a{
+    color: #68541f;
+    font: normal bold 1.2em/2.5em arial,sans-serif;
+}
+div#navigation a:hover{
+    color: black;
+}
+div#footer{
+    background-color: #68541f;
+    color: #6c8939;
+}
+div#footer a{
+    color: black;
+    font-weight: bold;
+}
+div#footer a:hover{
+    color: white;
+}
+div#destra{
+    background-color: #6c8939;
+    color: black;
+}
+div#sinistra{
+
+}
+div#content{
+
+}
+/*tag*/
+
+/*link decoration */
+a:link 	{color: #68541f;}
+a:visited {color: #68541f;}
+a:hover {color: black;}
+button {
+    font: normal bold 1.2em/2.5em arial,sans-serif;
+    color: #68541f;
+}
+
+/* immagini strutture */
+
+.village_view{
+    background-image: url('../images/Moderna/ground.gif');
+}
+
+.main {
+    background-image: url('../images/Moderna/main.png');
+}
+.storage1 {
+    background-image: url('../images/Moderna/storage1.png');
+}
+.storage2 {
+    background-image: url('../images/Moderna/storage2.png');
+}
+.prod1 {
+    background-image: url('../images/Moderna/prod1.png');
+}
+.prod2 {
+    background-image: url('../images/Moderna/prod2.png');
+}
+.prod3 {
+    background-image: url('../images/Moderna/prod3.png');
+}
+.house {
+    background-image: url('../images/Moderna/house.png');
+}
+.market {
+    background-image: url('../images/Moderna/market.png');
+}
+.barrack {
+    background-image: url('../images/Moderna/barrack.png');
+}
+.command {
+    background-image: url('../images/Moderna/command.png');
+}
+.research {
+    background-image: url('../images/Moderna/research.png');
+}
+
+.mainbn {
+    background-image: url('../images/Moderna/mainbn.png');
+}
+.storage1bn {
+    background-image: url('../images/Moderna/storage1bn.png');
+}
+.storage2bn {
+    background-image: url('../images/Moderna/storage2bn.png');
+}
+.prod1bn {
+    background-image: url('../images/Moderna/prod1bn.png');
+}
+.prod2bn {
+    background-image: url('../images/Moderna/prod2bn.png');
+}
+.prod3bn {
+    background-image: url('../images/Moderna/prod3bn.png');
+}
+.housebn {
+    background-image: url('../images/Moderna/housebn.png');
+}
+.marketbn {
+    background-image: url('../images/Moderna/marketbn.png');
+}
+.barrackbn {
+    background-image: url('../images/Moderna/barrackbn.png');
+}
+.commandbn {
+    background-image: url('../images/Moderna/commandbn.png');
+}
+.researchbn {
+    background-image: url('../images/Moderna/researchbn.png');
+}
+/*navpad*/
+.arrow_up {
+    background-image: url('../images/Moderna/up.png');
+}
+.arrow_sx {
+    background-image: url('../images/Moderna/sx.png');
+}
+.arrow_dx {
+    background-image: url('../images/Moderna/dx.png');
+}
+.arrow_down {
+    background-image: url('../images/Moderna/down.png');
+}
+.arrow_up:hover {
+    border: 1px dotted white;
+}
+.arrow_sx:hover {
+    border: 1px dotted white;
+}
+.arrow_dx:hover {
+    border: 1px dotted white;
+}
+.arrow_down:hover {
+    border: 1px dotted white;
+}

@@ -1,0 +1,173 @@
+/* 
+    Document   : medievale
+    Created on : 15-gen-2011, 12.07.58
+    Author     : pagliaccio
+    Description:
+        foglio di style per l'età medievale
+*/
+
+/*layout*/
+body{
+    font-family: arial,sans-serif;
+    background-color: white;
+    color: black;
+}
+div#header{
+    background-image: url('../images/title_medievale.jpg');
+}
+div#container{
+    background-color: white;
+    background-image: url('../images/sfondo_foglio.jpg');
+    /*border-left: 4px solid black;
+    border-right: 4px solid black;*/
+}
+div#content{
+    padding: 30px;
+}
+div#navigation{
+    color: black;
+    padding: 0px 30px;
+    /*border-top: 3px solid black;
+    border-bottom: 3px solid black;*/
+}
+div#navigation a{
+    color: #32334e;
+    font: normal bold 1.2em/2.5em arial,sans-serif;
+}
+div#navigation a:hover{
+    color: #53536f;
+}
+div#footer{
+    border: 2px solid black;
+    width: 640px; margin-left: 25px;
+}
+div#footer a{
+    color: black;
+    font-weight: bold;
+}
+div#destra{
+    background-color: white;
+    background-image: url('../images/sfondo_foglio.jpg');
+    background-position: -20px;
+    border: 1px black;
+    border-style: solid;
+}
+div#sinistra{
+    background-color: white;
+}
+#movemap {
+    background-color: white;
+    background-image: url('../images/sfondo_foglio.jpg');
+    background-position: -20px;
+    border: 1px black;
+    border-style: solid;
+}
+/*tag*/
+
+/*link decoration */
+a:link 	{color: #32334e;}
+a:visited {color: #32334e;}
+a:hover {color: #53536f;}
+button {
+    font: normal bold 1.2em/2.5em arial,sans-serif;
+    color: #32334e;
+}
+
+/* immagini strutture */
+
+.village_view{
+    background-image: url('../images/Medievale/ground.gif');
+}
+
+.main {
+    background-image: url('../images/Medievale/main.png');
+}
+.storage1 {
+    background-image: url('../images/Medievale/storage1.png');
+}
+.storage2 {
+    background-image: url('../images/Medievale/storage2.png');
+}
+.prod1 {
+    background-image: url('../images/Medievale/prod1.png');
+}
+.prod2 {
+    background-image: url('../images/Medievale/prod2.png');
+}
+.prod3 {
+    background-image: url('../images/Medievale/prod3.png');
+}
+.house {
+    background-image: url('../images/Medievale/house.png');
+}
+.market {
+    background-image: url('../images/Medievale/market.png');
+}
+.barrack {
+    background-image: url('../images/Medievale/barrack.png');
+}
+.command {
+    background-image: url('../images/Medievale/command.png');
+}
+.research {
+    background-image: url('../images/Medievale/research.png');
+}
+
+.mainbn {
+    background-image: url('../images/Medievale/mainbn.png');
+}
+.storage1bn {
+    background-image: url('../images/Medievale/storage1bn.png');
+}
+.storage2bn {
+    background-image: url('../images/Medievale/storage2bn.png');
+}
+.prod1bn {
+    background-image: url('../images/Medievale/prod1bn.png');
+}
+.prod2bn {
+    background-image: url('../images/Medievale/prod2bn.png');
+}
+.prod3bn {
+    background-image: url('../images/Medievale/prod3bn.png');
+}
+.housebn {
+    background-image: url('../images/Medievale/housebn.png');
+}
+.marketbn {
+    background-image: url('../images/Medievale/marketbn.png');
+}
+.barrackbn {
+    background-image: url('../images/Medievale/barrackbn.png');
+}
+.commandbn {
+    background-image: url('../images/Medievale/commandbn.png');
+}
+.researchbn {
+    background-image: url('../images/Medievale/researchbn.png');
+}
+/*navpad*/
+.arrow_up {
+    background-image: url('../images/Medievale/up.png');
+}
+.arrow_sx {
+    background-image: url('../images/Medievale/sx.png');
+}
+.arrow_dx {
+    background-image: url('../images/Medievale/dx.png');
+}
+.arrow_down {
+    background-image: url('../images/Medievale/down.png');
+}
+.arrow_up:hover {
+    border: 1px dotted black;
+}
+.arrow_sx:hover {
+    border: 1px dotted black;
+}
+.arrow_dx:hover {
+    border: 1px dotted black;
+}
+.arrow_down:hover {
+    border: 1px dotted black;
+}

@@ -1,0 +1,77 @@
+<?php
+Header("Content-Type: image/png");
+header('Cache-Control: no-cache');
+$im = @imagecreate(800, 800) or die("Cannot Initialize new GD image stream");
+$white = imagecolorallocate($im, 255, 255, 255);
+$black = imagecolorallocate($im, 0, 0, 0);
+$red = imagecolorallocate($im, 200, 0, 0);
+$blu = imagecolorallocate($im, 0, 0, 200);
+$yellow = imagecolorallocate($im, 0, 200, 0);
+$nnso=imagecolorallocate($im, 200, 0, 200);
+//griglia
+imageline($im, 400, 0, 400, 800, $red);
+
+imageline($im, 0, 400, 800, 400, $red);
+imageline($im, 0, 0, 800, 0, $red);
+imageline($im, 0, 0, 0, 800, $red);
+imageline($im, 799, 799, 0, 799, $red);
+imageline($im, 799, 799, 799, 0, $red);
+
+imageline($im, 0, 200, 800, 200, $red);
+imageline($im, 0, 600, 800, 600, $red);
+imageline($im, 200, 0, 200, 800, $red);
+imageline($im, 600, 0, 600, 800, $red);
+$resize = $this->resize;
+$coord = $this->coord;
+//print_r($coord);
+$maxx = - MAX_X;
+$maxy = - MAX_Y;
+$minx = MAX_X;
+$miny = MAX_Y;
+$i = 0;
+if (is_array($coord)) {
+    $gr = 2;
+    //$max-=$min;
+    if ($resize) {
+        foreach ($coord as $x => $value) {
+            foreach ($value as $y => $v) {
+                $minx = $x < $minx ? $x : $minx;
+                $miny = $y < $miny ? $y : $miny;
+                $maxx = $x > $maxx ? $x : $maxx;
+                $maxy = $y > $maxy ? $y : $maxy;
+                $i ++;
+            }
+        }
+        if (! $i) {
+            imagestring($im, 5, 10, 10, 'i "' . $i . '" ', $red);
+            imagepng($im);
+            imagedestroy($im);
+            exit();
+        }
+        $maxx ++;
+        $maxy ++;
+        $minx --;
+        $miny --;
+        $size = ($maxx - $minx) > ($maxy - $miny) ? ($maxx - $minx) : ($maxy -
+         $miny);
+        $scale = intval(400 / abs(intval($size / 2)));
+        $gr = $scale + 1;
+        $offx = intval((($maxx - $minx) / 2) + $minx);
+        $offy = intval((($maxy - $miny) / 2) + $miny);
+    } else {
+        $scale = 1;
+    }
+    $color = array($nnso, $black, $red, $blu, $yellow);
+    foreach ($coord as $x => $value) {
+        foreach ($value as $y => $v) {
+            $x1 = intval(($x - $offx)) * $scale;
+            $y1 = intval(($y - $offy)) * $scale;
+            $off = 400;
+            imagefilledarc($im, $off + $x1, $off - $y1, $gr, $gr, 0, 360, 
+            $color[$v], 0);
+        }
+    }
+}
+imagepng($im);
+imagedestroy($im);
+?>

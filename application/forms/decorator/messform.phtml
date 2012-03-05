@@ -1,0 +1,60 @@
+<style type="text/css">
+		  
+		  #foglio{
+			  background-image: url(\''.$base.'/common/images/foglio.jpg\'); 
+			  height: 500px; 
+			  width: 400px;
+			  color: black;
+		  }
+		  #contenitore{
+			  width: 310px;
+			  color: black;
+		  }
+		  
+		  input.testo{
+			  background-color: transparent; 
+			  border-color: black; 
+			  width: 250px; 
+			  border-width: 0px 0px 2px;
+		  }
+		  textarea{
+			  background-color: transparent; 
+			  height: 250px; 
+			  width: 300px; 
+			  border-width: 0px; 
+			  margin-top: 10px; 
+			  margin-left: 0px;
+			  color: black;
+		  }
+		  </style>
+<?php
+$t=$this->form->getDefaultTranslator();
+$mittente=Zend_Auth::getInstance()->getIdentity()->username;
+?>
+
+<form action="<?php echo $this->escape($this->form->getAction()); ?>" method="<?php echo $this->escape($this->form->getMethod()); ?>">
+<center><div id="foglio">
+		  <div id="contenitore">
+		  <br /><br />
+		  <table style="width: 300px;">
+        <tr>
+		  <td>a:</td><td style="text-align: right;">
+<?php echo $this->form->dest; ?>
+</td></tr>
+		  <tr>
+		  <td><?php $t->_('da')?>:</td><td style="text-align: right;"><strong>'.$mittente.'</strong></td>
+		  </tr>
+		  <tr>
+		  <td><?php $t->_('oggetto')?>:</td><td style="text-align: right;">';
+<?php echo $this->form->ogg; ?>
+</td>
+		  </tr>
+		  </table>
+		   <br />
+		  <?php $t->_('testo')?>:<br /><div style="text-align:left; height: 300px;">
+		  <?php echo $this->form->text;?>
+		  
+		  </div>
+		  <?php echo $this->form->$submit;?>
+		 </div></div></center></form>
+     

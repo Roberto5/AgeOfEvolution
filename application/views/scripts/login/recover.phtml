@@ -1,0 +1,35 @@
+<?php 
+$t=Zend_Registry::get("translate");
+
+switch ($this->selector) {
+	case "send_mail" :
+		echo $t->_("email inviata a ").$_POST['email'];
+	break;
+	case "change_pass" :
+		echo $t->_("inserire la password");
+?>
+<form action="<?php echo $this->action;?>" method="post">
+
+<div><input name="password" type="password" class=".password" /></div>
+<div><?php echo $t->_("rinserire la password");?></div>
+<div><input name="password" type="password" class=".password" /></div>
+</form>
+<?php 
+	break;
+	case "done" :
+		echo $t->_("password cambiata con successo")."!!!";
+	break;
+	case "errorpass":
+		echo $t->_("la password non è valida")."!!!";
+	break;
+	case "get_mail" :
+		echo $t->_("inserire l'email di registrazione");
+?>
+: 
+<form method="post" action="./">
+<input name="email" size="10" /> 
+<input name="submit" type="submit"/>
+</form>
+<?php 
+	break;
+}

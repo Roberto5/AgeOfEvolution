@@ -1,0 +1,9 @@
+<div id="footer">
+<?php
+$t=Zend_Registry::get("translate");
+$auth=Zend_Auth::getInstance()->getInstance();
+if ($auth->hasIdentity()) echo 'user '.$auth->getIdentity()->username.'(id:'.$auth->getIdentity()->user_id.') ';
+echo $t->_("Versione");
+$ev =$config = Zend_Registry::get('config');
+echo " ".$ev->version;  ?> <a href="index/credits">credits</a>
+</div>

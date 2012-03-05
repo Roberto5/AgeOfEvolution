@@ -1,0 +1,172 @@
+/* 
+    Document   : antica.css
+    Created on : 15-gen-2011, 11.08.09
+    Author     : pagliaccio
+    Description:
+        foglio di style per l'età antica
+*/
+/*layout*/
+body{
+    font-family: arial,sans-serif;
+    background-image: url('../images/sfondo1.jpg');
+    color: #872a13;
+}
+div#header{
+    background-image: url('../images/title_preistorica.png');
+}
+div#container{
+    background-color: trasparent;
+    border-left: 4px solid #872a13;
+    border-right: 4px solid #872a13;
+}
+div#navigation{
+    background-image: url('../images/sfondo2.jpg');
+	border-radius: 0 0 7px 7px;
+}
+div#navigation a{
+    font: normal bold 1.2em/2.5em arial,sans-serif;
+}
+div#footer{
+    border-radius: 7px 7px 0 0;
+	background-image: url('../images/sfondo2.jpg');
+}
+div#footer a{
+    font-weight: bold;
+}
+div#destra{
+    background-image: url('../images/sfondo2.jpg');
+	border-radius: 0 0 7px 7px;
+}
+/*div#sinistra{
+
+}
+div#content{
+    
+}*/
+/*
+.ui-dialog-content{
+	background: none;
+}
+.ui-widget-content {
+	background: url('../images/sfondo1.jpg') !important;
+	border:0 !important;
+}
+.ui-widget-header {
+	background: url('../images/header.png') !important;
+}
+.ui-accordion-header{
+	background: url('../images/header.png') !important;
+	border:0 !important;
+}
+.ui-accordion-header a {
+	color:white !important;
+}*/
+
+#info{
+	background-image: url('../images/sfondo2.jpg');
+	border-radius: 7px;
+}
+
+/*tag*/
+
+/*link decoration */
+a:link 	{color: #872a13;}
+a:visited {color: #872a13;}
+a:hover {color: #d56447;}
+button {
+    color: #872a13;
+    font: normal bold 1.2em/2.5em arial,sans-serif;
+}
+/* immagini strutture */
+
+.gray{
+    color: red;
+}
+
+/*.village_view{
+    background-image: url('../images/Preistorica/ground.gif');
+}*/
+
+.main {
+    background-image: url('../images/Preistorica/main.png');
+}
+.storage1 {
+    background-image: url('../images/Preistorica/storage1.png');
+}
+.storage2 {
+    background-image: url('../images/Preistorica/storage2.png');
+}
+.prod1 {
+    background-image: url('../images/Preistorica/prod1.png');
+}
+.prod2 {
+    background-image: url('../images/Preistorica/prod2.png');
+}
+.prod3 {
+    background-image: url('../images/Preistorica/prod3.png');
+}
+.house {
+    background-image: url('../images/Preistorica/house.png');
+}
+.market {
+    background-image: url('../images/Preistorica/market.png');
+}
+.barrack {
+    background-image: url('../images/Preistorica/barrack.png');
+}
+.mainbn {
+    background-image: url('../images/Preistorica/mainbn.png');
+}
+.storage1bn {
+    background-image: url('../images/Preistorica/storage1bn.png');
+}
+.storage2bn {
+    background-image: url('../images/Preistorica/storage2bn.png');
+}
+.prod1bn {
+    background-image: url('../images/Preistorica/prod1bn.png');
+}
+.prod2bn {
+    background-image: url('../images/Preistorica/prod2bn.png');
+}
+.prod3bn {
+    background-image: url('../images/Preistorica/prod3bn.png');
+}
+.housebn {
+    background-image: url('../images/Preistorica/housebn.png');
+}
+.marketbn {
+    background-image: url('../images/Preistorica/marketbn.png');
+}
+.barrackbn {
+    background-image: url('../images/Preistorica/barrackbn.png');
+}
+/*navpad*/
+.arrow_up {
+    background-image: url('../images/Preistorica/up.png');
+}
+.arrow_sx {
+    background-image: url('../images/Preistorica/sx.png');
+}
+.arrow_dx {
+    background-image: url('../images/Preistorica/dx.png');
+}
+.arrow_down {
+    background-image: url('../images/Preistorica/down.png');
+}
+.arrow_up:hover {
+    border: 1px dotted #872a13;
+}
+.arrow_sx:hover {
+    border: 1px dotted #872a13;
+}
+.arrow_dx:hover {
+    border: 1px dotted #872a13;
+}
+.arrow_down:hover {
+    border: 1px dotted #872a13;
+}
+#movemap {
+	background-image: url('../images/sfondo2.jpg');
+	border-radius: 0 0 7px 7px;
+}

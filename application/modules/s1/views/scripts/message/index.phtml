@@ -1,0 +1,51 @@
+<?php 
+$t=Zend_Registry::get("translate");
+$this->headTitle($t->_('Messaggi'));
+$module=Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
+/*/<?php echo $t->_("");?><div id="messagemodule">*/
+$display='
+	<table style="text-align:center;">
+		<thead>
+			<tr>
+				<th><input type="checkbox" name="all" onclick="seltt(this)" /></th>
+				<th style="width:60%;text-align:left;"><'.$t->_("Oggetto").'</th>
+                <th>'.$t->_("Mittente").'</th>
+                <th>'.$t->_("Ora Invio").'</th>
+            </tr>
+        </thead>
+			<tbody>';
+
+if (count($this->mess) > 0) {
+    foreach ($this->mess as $rows) {
+    	$display.='<tr>
+                <td><input type="checkbox" value="'.$rows['id'].'" name="c'.$rows['id'].'" /><img src="'.$this->baseUrl().'/common/images/mess_read' . $rows["read"] . '.gif"  alt="read" /></td>
+		<td style="width:60%;text-align:left;">'.(!$rows["read"] ? '<b>' : '').'<a href="#mess' . $rows['id'] . '" onclick="ev.request(\''.$module.'/message/see/type/0/message_id/' . $rows['id'] . '\',\'post\',{ajax:1});">' . $rows['oggetto'] . '</a>'.(!$rows["read"] ? '</b>' : '').'</td>
+		<td>'.(!$rows["read"] ? '<b>' : '') . $rows['username'] . (!$rows["read"] ? '</b>' : '').'</td>
+		<td>'.(!$rows["read"] ? '<b>' : '') . $rows['ora'] . (!$rows["read"] ? '</b>' : '').'</td>
+		</tr>';
+    }
+}
+else {
+	$display.= '<tr><td colspan="4" style="text-align: center;">'.$t->_('Non ci sono messaggi').'...</td></tr>';
+}
+$display.='
+		</tbody>
+	</table>
+	<button onclick="ev.message.delmess();">'.$t->_("cancella").'</button>
+	<button onclick="ev.message.readmess();">'.$t->_("segna come letti").'</button>'.str_replace("*", "ev.message.mess", $this->paginationControl($this->mess, 'Sliding', 'paginatorajax.phtml'));
+
+if ($this->refresh) {
+	Model_civilta::getInstance()->refresh->addIds("messmodule", $display);
+}
+else {
+	echo '<div>
+		<a href="#inbox" onclick="ev.request(module+\'/message/index/ref/1\',\'post\',{ajax:1});">'.$t->_('messaggi in arrivo').'</a>
+		<a href="#outbox" onclick="ev.request(module+\'/message/outbox/ref/1\',\'post\',{ajax:1});">'.$t->_('mesasggi in uscita').'</a>
+		<a href="#write" onclick="ev.request(module+\'/message/write\',\'post\',{ajax:1});">'.$t->_('scrivi').'</a>
+	</div><div id="messmodule">'.$display.'</div>';
+}
+
+$this->headScript()->captureStart();
+echo "$('input:submit,input:button,button:not(.img)').button();";
+$this->headScript()->captureEnd();
+?>

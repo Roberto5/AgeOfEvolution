@@ -1,0 +1,6 @@
+<?php 
+$view = new Zend_View();
+//$link, $text, $type=1, $sec=5
+
+echo $this->template()->alerts("logout avvenuto con successo",$this->url(array('controller'=>'index','action'=>'index')),1,5);
+?>

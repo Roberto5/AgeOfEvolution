@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!ELEMENT root (age)*>
+
+<!ELEMENT age (quest)+>
+<!ATTLIST age
+    id (0|1|2|3|4|5) #REQUIRED
+  >
+
+
+<!ELEMENT quest (title,text,condiction,back,reward)+>
+<!ATTLIST quest n CDATA #REQUIRED >
+<!ATTLIST quest master (1|2|3|4) #REQUIRED>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT title (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT text (#PCDATA)>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT condiction (#PCDATA)>
+<!ATTLIST condiction type (EQ|L|G|LE|GE|EX|NE) #REQUIRED>
+<!ATTLIST condiction value CDATA #IMPLIED>
+
+<!ELEMENT back (#PCDATA)>
+<!ELEMENT reward ANY >
+<!ATTLIST reward type (RES|EV|TR|C) #REQUIRED>

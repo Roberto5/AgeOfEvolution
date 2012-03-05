@@ -1,0 +1,83 @@
+
+<?php $this->headScript()->captureStart(); ?>
+
+var totTroop="<?php
+echo TOT_TYPE_TROOPS;
+?>";
+/*$('input').keydown(function(e) {
+	e.stopPropagation();
+});*/
+
+<?php 
+
+if ($_POST['ajax']) echo "ev.troops.init('atk');";
+else echo "$('body').ready(function (){ev.troops.init('atk');});";
+echo "\n$('#".$this->type."').attr('checked','checked');";
+$this->headScript()->captureEnd();
+$this->headTitle($this->t->_('Invia Truppe')); 
+if (!$_POST['ajax']) 
+	echo '<form action="'.$this->baseUrl().'/'.$this->module.'/movements/dosend" method="post">'; ?>
+
+
+	<input type="hidden" name="tokenMov" value="<?php echo $this->token;?>"/>
+    <h1 style="text-align:center;"><?php echo $this->t->_("Invia truppe");?></h1>
+    <?php echo $this->t->_("Inserisci le coordinate del villaggio");?>
+    :&nbsp;&nbsp;&nbsp;
+    <input name="x" onchange="ev.troops.getcoord();" value="<?php echo $this->coord['x'];?>" size="1" id="x" /> | <input onchange="ev.troops.getcoord();" name="y" value="<?php echo $this->coord['y'];?>" size="1" id="y" /><br />
+    <h2 style="text-align:left; margin-left:30px;">o</h2>
+    <?php echo $this->t->_("seleziona un tuo villaggio");?>:&nbsp;&nbsp;&nbsp;<select name="village" onchange="ev.troops.insert_village(this);" >
+    <option value="0"></option><?php echo $this->villages;?>
+    </select><br/>
+    <br /><br />
+
+    <div id="timeDisp" style="float: right;width: 50%;">
+    <table>
+    	<thead>
+            <tr>
+            	<th colspan="2" id="village_name">-</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+            	<td><?php echo $this->t->_("Civilt&aacute;");?></td>
+                <td id="village_player">-</td>
+            </tr>
+            <tr>
+            	<td><?php echo $this->t->_("Alleanza");?>:</td>
+                <td id="village_ally">-</td>
+            </tr>
+	    <tr>
+                <td><?php echo $this->t->_("Durata");?>:</td>
+                <td id="time">-</td>
+            </tr>
+            <tr>
+                <td><?php echo $this->t->_("Arrivo");?>:</td>
+                <td><span id="ETA" class="time" style="display:none;"><?php echo mktime();?></span>
+                 <span id="ETAdisp"></span></td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+    <div style="width: 50%;">
+    <div style="text-align:center;"><input onchange="togleraid(this.value);" type="radio" id="attack" name="type" value="1" /> <?php echo $this->t->_("Attacco");?> </div>
+    <div style="text-align:center;">
+    <input type="radio" name="type" value="2" id="raid" onchange="togleraid(this.value);" /> Raid
+    <span id="raid_round" <?php if ($this->type!='raid') echo ' style="display:none;"';?>> (Round max: <input type="text" value="5" id="round" name="round" style="width: 20px;" />)</span></div>
+    <div style="text-align:center;"><input onchange="togleraid(this.value);" type="radio" name="type" id="sup" value="3" /> <?php echo $this->t->_("Rinforzo");?></div><p style="text-align:center;">
+    <?php 
+    if ($_POST['ajax']) {
+    	echo '<button onclick="ev.troops.sendajax();$(\'#windows{wid}\').dialog(\'close\');">'.$this->t->_("Invia").'</button>';
+    }
+    else echo '<input type="submit" id="send" value="'.$this->t->_("Invia").'" />';
+    ?>
+    </div>
+    
+    <br /><br />
+    
+    <?php 
+    // troop container
+    echo $this->template()->troopcontainer("atk",$this->t->_('Truppe da inviare'),$this->troops);
+    if (!$_POST['ajax']) echo '</form>';
+    ?>
+    
+    

@@ -1,0 +1,146 @@
+<?php
+$this->headTitle("s1");
+$this->headTitle("index");
+$t = Zend_Registry::get("translate");
+$module = Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
+if ($this->hasCivilty > 1) {
+    //lascia spazio alla mappa 24x18
+    
+    $village=$this->village['focus'];
+    $cache=$village;
+    /*foreach ($this->village['cache'] as $x => $value) {
+    	foreach ($value as $y => $v) {
+    		$cache[$x][$y]=$v;
+    	}
+    }*/
+    $x=$this->x;
+    $y=$this->y;
+    $this->headScript()->captureStart();
+    
+    echo 'function keyDown(event) {
+    if (event.which == null)
+        key= (event.keyCode);    // IE
+    else key=event.which;
+    x=ev.map.centre[0];
+    y=ev.map.centre[1];
+    bool=true;
+    switch (key) {
+        case 37:x--;
+        break;
+        case 38:y++;
+        break;
+        case 39:x++;
+        break;
+        case 40:y--;
+        break;
+        default:bool=false;
+    }
+    if (bool) {ev.map.position(x,y);return false;}
+	}
+$(document).keydown(keyDown);
+	ev.map.centre=['.intval($x).','.intval($y).'];
+	ev.map.init=['.intval($x).','.intval($y).'];
+    ev.map.village='.json_encode($cache).';
+    ev.map.size=['.intval($this->zoom['x']).','.intval($this->zoom['y']).','.$this->zoom['dim'].'];
+    var menu=[{"'.$t->_('rinforza').'":{onclick:ev.support,icon:"'.$this->baseUrl('/common/images/inrinfo.png').'"}},
+		{"'.$t->_('raid').'":{onclick:ev.raid,icon:"'.$this->baseUrl('/common/images/outattack.png').'"}},
+		{"'.$t->_('attacca').'":{onclick:ev.atk,icon:"'.$this->baseUrl('/common/images/inattack.png').'"}},
+		{"'.$t->_('colonizza').'":{onclick:ev.colony,icon:"'.$this->baseUrl('/common/images/pop.gif').'"}},
+		{"'.$t->_('invia mercanti (non implementato)').'":{onclick:ev.market,icon:"'.$this->baseUrl('/common/images/market.png').'"}}	
+	];
+	$(function () {' .
+		'$("#minimap").attr("src","'.$this->baseUrl().'/'.$module.'/village/map/zoom/'.$this->zoom['n'].'/x/'.$this->x.'/y/'.$this->y.'");
+		$("#map").draggable({ grid: [ 50,50 ],
+			containment:[-2400,-1800,50,0] ,
+			start:function(){ev.drag=true;},
+			stop:function(){
+				l=parseInt($("#map").css("left"));
+				t=parseInt($("#map").css("top"));
+				x=l/(-'.$this->zoom['dim'].')+('.$x.')-'.$this->zoom['x'].';
+				y=t/'.$this->zoom['dim'].'+('.$y.')+'.$this->zoom['y'].';
+				ev.map.centre=[x,y];
+				location.hash=x+"|"+y;
+				ev.map.position(x,y);
+				setTimeout(function(){ev.drag=false;},1000);
+			},
+			cursor:"move"
+		});
+		$(".map_village").contextMenu(menu,{theme:"human"});
+		if (location.hash!="") {
+        // #2|2-dsf
+        i=location.hash.indexOf("|");
+        j=location.hash.indexOf("@");
+	x = location.hash.substr(1,i-1);
+        if (j>0) {
+            y = location.hash.substr(i+1,j-i-1);
+            ev.map.position(x,y,ev.map.load_detail);
+        }
+        else {
+            y = location.hash.substr(i+1);}
+        	ev.map.position(x,y);
+	}
+	'.($this->vid ? 'location.hash = "#'.$this->x.'|'.$this->y.'";ev.map.load_detail();':'').'
+	});';
+    $this->headScript()->captureEnd();
+    echo '<div id="map_details" style="display: none; position:absolute;z-index:200;">
+<table>
+	<thead>
+		<tr>
+			<th colspan="2" id="village_name">'.$t->_("Valle Inabitata").'</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>'.$t->_("Civilt&aacute;").':</td>
+			<td id="village_player">-</td>
+		</tr>
+		<tr>
+			<td>'.$t->_("Alleanza").':</td>
+			<td id="village_ally">-</td>
+		</tr>
+		<tr>
+			<td>'.$t->_("Popolazione").':</td>
+			<td id="village_popol">-</td>
+		</tr>
+		<tr>
+			<td>'.$t->_("Bonus").':</td>
+			<td id="village_bonus"></td>
+		</tr>
+		<tr>
+			<td colspan="2"><a href="#" id="send_link">'.$t->_("Invia truppe").'</a></td>
+		</tr>
+	</tbody>
+</table>
+</div>';
+    
+    echo '<div id="map" style="position:absolute;top:-900px;left:-1200px;width: 3600px; height: 2700px;">' .
+    		$this->image('/'.$module.'/village/map/zoom/'.$this->zoom['n'].'/x/'.$this->x.'/y/'.$this->y,'map',null,3600,2700,array('usemap'=>'map'))
+    		.$this->table.'</div>';
+    
+} elseif ($this->hasCivilty == 1) {
+    echo '<h1>' . $t->_('sei in attesa') . '</h1>' .
+     $t->_('la civilt&aacute; a cui ti sei iscritto non ti ha ancora attivato');
+} else {
+    ?>
+non hai civilt&agrave;
+<p><strong>unisciti ad una civilt&agrave;</strong> <br />
+<input type="hidden" value="0" id="start" /> <input id="civ_name"
+	size="20" maxlength="30" />
+<button onclick="ev.SearchCiv(0)"><?php
+    echo $t->_("Cerca");
+    ?></button>
+</p>
+<div id="result"></div>
+
+<h2>crea una nuova civilt&agrave;</h2>
+<span id="load"></span>
+<center>
+<div id="mess">
+	<?php
+    echo $this->form;
+    ?>
+</div>
+</center>
+<?php
+}
+?>   

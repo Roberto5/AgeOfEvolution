@@ -1,0 +1,11 @@
+<?php 
+
+echo '<h2>mode maintenance</h2>
+<a href="'.$this->baseUrl("admin/maintenance/index/mode/on").'" class="switch '.($this->on? "on":"").'">on</a>'.
+'<a href="'.$this->baseUrl("admin/maintenance/index/mode/off").'" class="switch '.($this->on? "":"on").'">off</a>
+<p>
+<button onclick="location.href=\''.$this->baseUrl("admin/maintenance/restartep").'\'">restart event processor</button>
+</p>
+last E.P.\'s activity is: '.date("H:i:s d/m/Y",$this->last);
+
+?>

@@ -1,0 +1,121 @@
+<?php
+$this->headTitle("Debug tool");
+if ($this->display) {
+	$tipe=($this->error ? 2 : 1);
+	echo $this->template()->alerts($this->text,null,$tipe,0);
+}
+
+if (!$_POST['ajax']) {
+?>
+<h2>completa eventi</h2>
+<?php
+$t=Zend_Registry::get("translate");
+$module=Zend_Controller_Front::getInstance()->getRequest()
+	->getModuleName();
+echo $this->complete;
+echo "<br/><br/>";
+echo $this->rid;
+?>
+
+<h2>villaggio</h2>
+
+<p><a
+	href="<?php
+	echo $this->url(
+			array('module'=>$module,'controller'=>'debug','action'=>'fill'));
+	?>"><?php
+	echo $t->_("riempi i magazzini");
+	?></a>
+	<br />
+	<a href="<?php
+	echo $this->url(
+			array('module'=>$module,'controller'=>'debug','action'=>'addpop'));
+	?>">aggiungi 100 pop</a>
+	
+</p>
+
+<p>
+	<b>genera truppe</b>
+	<?php echo $this->gentroops;?>
+</p>
+
+<p><a
+	href="<?php
+	echo $this->url(
+			array('module'=>$module,'controller'=>'debug','action'=>'resetvil'));
+	?>"><?php
+	echo $t->_("resetta il villaggio");
+	?></a><br />
+	<a href="<?php
+	echo $this->url(
+			array('module'=>$module,'controller'=>'debug','action'=>'aggprod'));?>"><?php
+	echo $t->_("aggiorna produzione");
+	?></a><br/>
+<a
+	href="<?php
+	echo $this->url(
+			array('module'=>$module,'controller'=>'debug','action'=>'all20'));
+	?>"><?php
+	echo $t->_("porta il villaggio a liv 20");
+	?></a>
+</p>
+<p><a
+	href="<?php
+	echo $this->url(
+			array('module'=>$module,'controller'=>'debug','action'=>'randomVil'));
+	?>"><?php
+	echo $t->_("crea villaggio a coordinate casuali");
+	?></a><br />
+<br />
+<a
+	href="<?php
+	echo $this->url(
+			array('module'=>$module,'controller'=>'debug','action'=>'randomVil','sector'=>'1'));
+	?>"><?php
+	echo $t->_("crea villaggio a coordinate casuali in ++");
+	?></a><br />
+<br />
+<a
+	href="<?php
+	echo $this->url(
+			array('module'=>$module,'controller'=>'debug','action'=>'randomVil','sector'=>'2'));
+	?>"><?php
+	echo $t->_("crea villaggio a coordinate casuali in --");
+	?></a><br />
+<br />
+<a
+	href="<?php
+	echo $this->url(
+			array('module'=>$module,'controller'=>'debug','action'=>'randomVil','sector'=>'3'));
+	?>"><?php
+	echo $t->_("crea villaggio a coordinate casuali in +-");
+	?></a><br />
+<br />
+<a
+	href="<?php
+	echo $this->url(
+			array('module'=>$module,'controller'=>'debug','action'=>'randomVil','sector'=>'4'));
+	?>"><?php
+	echo $t->_("crea villaggio a coordinate casuali in -+");
+	?></a><br />
+<br />
+    
+    <?php
+				echo $this->addvillage;
+				?>
+    
+    
+<p>
+<p><a
+	href="<?php
+	echo $this->url(
+			array('module'=>'admin','controller'=>'mkdata'));
+	?>">make
+data</a></p>
+
+<p><a
+	href="<?php
+	echo $this->url(
+			array('module'=>$module,'controller'=>'debug','action'=>'deletelog'));
+	?>">delete
+log</a></p><?php } else $this->civ->refresh(array('queue'=>true));?>

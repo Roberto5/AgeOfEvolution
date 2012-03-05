@@ -1,0 +1,227 @@
+<?php $this->headScript()->captureStart();?>
+var totTroop="<?php
+echo TOT_TYPE_TROOPS;
+?>";
+
+reload();
+<?php
+$this->headScript()->captureEnd();
+$log = Zend_Registry::get("log");
+if ($this->troupper_now) {
+    echo $this->template()->tabletroops($this->troupper_now, 
+    $this->t->_('truppe') . " " . ($this->age < 3 ? $this->t->_("nel villaggio") : $this->t->_(
+    "nella citt&aacute;")));
+} else
+    echo $this->t->_("non ci sono truppe") . " " . ($this->age < 3 ? $this->t->_(
+    "nel villaggio") : $this->t->_("nella citt&aacute;")) . "<br/>";
+echo "<br/>";
+if ($this->inAttack) {
+	echo '<a name="inAttack"></a>';
+    $troop = $this->inAttack;
+    for ($i = 0; $troop[$i]; $i ++) {
+        $param = unserialize($troop[$i]['params']);
+        $dif = $troop[$i]['time'] - mktime();
+        $timedetect = 3600; //@todo aumentare con la ricerca
+        if ($dif < $timedetect) {
+            if ($dif <= 0)
+                $dif = "00:00:0?";
+            $title = $this->t->_("attaccco in arrivo da") . " " .$this->template()->village($param['village_A']);
+            $tr = null;
+            foreach ($param['troopers'] as $key => $value) {
+                $tr[$key] = array('numbers' => $value);
+            }
+            $timedetect = $timedetect * 5 / 100;
+            $tot = 0;
+            $info = "";
+            $s = "";
+            if ($dif < $timedetect) {
+                $info = $this->t->_("L'esercito è composto da") . " ";
+                foreach ($tr as $value)
+                    $tot += $value['numbers'];
+                    // 23424 =>10000
+                for ($s = 10; $tot / $s > 10; $s *= 10);
+                switch ($s) {
+                    case 10:
+                        $s = $this->t->_("decine");
+                        break;
+                    case 100:
+                        $s = $this->t->_("centinaia");
+                        break;
+                    case 1000:
+                        $s = $this->t->_("migliaia");
+                        break;
+                    case 10000:
+                        $s = $this->t->_("decine di migliaia");
+                        break;
+                    case 100000:
+                        $s = $this->t->_("centinaia di migliaia");
+                        break;
+                    default:
+                        $s = $this->t->_("un numero enorme");
+                        break;
+                }
+            }
+            // 18000:900=100:x
+            $timedetect = $timedetect * 25 / 1000;
+            if ($dif < $timedetect) {
+                $s = $tot;
+            }
+            $info = $info . $s . $this->t->_("di truppe") .
+             $this->t->_("arrivo tra:") . ' <span class="countDown">' . $dif .
+             '</span> ' . $this->t->_("alle") . ' ' .
+             date("d-m-Y H:i:s", $troop[$i]['time']);
+            $show = ($param['civ_id'] == $this->cid ? true : false);
+            echo $this->template()->tabletroops($tr, $title, $info, $show) .
+             "<br/>";
+        }
+    }
+}
+echo "<br/>";
+if ($this->inReinf) {
+	echo '<a name="inReinf"></a>';
+    $troop = $this->inReinf;
+    for ($i = 0; $troop[$i]; $i ++) {
+        $param = unserialize($troop[$i]['params']);
+        $dif = $troop[$i]['time'] - mktime();
+        if ($dif <= 0)
+            $dif = "00:00:0?";
+        $title = ($param['type'] == RETURN_T ? $this->t->_("in ritorno da") : $this->t->_(
+        "in arrivo da")) . " " .$this->template()->village($param['village_A']);
+        if ($param['resource']) {
+            $bottino = '';
+            $tot = 0;
+            for ($j = 0; $param['resource'][$j]; $j ++) {
+                $bottino .= ' ' . $param['resource'][$j] . ' ' .
+                 $this->image()->resource($j, Zend_Registry::get("age")) .
+                 ($j == 2 ? '' : ' + ');
+                $tot += $param['resource'][$j];
+            }
+            $bottino .= ' = ' . $tot;
+        }
+        $tr = null;
+        foreach ($param['troopers'] as $key => $value) {
+            $tr[$key] = array('numbers' => $value);
+        }
+        $info = $bottino . ' ' . $this->t->_("arrivo tra:") .
+         ' <span class="countDown">' . $dif . '</span> ' . $this->t->_("alle") .
+         ' ' . date("d-m-Y H:i:s", $troop[$i]['time']);
+        echo $this->template()->tabletroops($tr, $title, $info) . "<br/>";
+    }
+}
+echo "<br/>";
+if ($this->outAttack) {
+	echo '<a name="outAttack"></a>';
+    $troop = $this->outAttack;
+    for ($i = 0; $troop[$i]; $i ++) {
+        $param = unserialize($troop[$i]['params']);
+        $dif = $troop[$i]['time'] - mktime();
+        if ($dif <= 0)
+            $dif = "00:00:0?";
+        $title = ($param['type'] == ATTACK ? $this->t->_("attacco a") : $this->t->_(
+        "raid a")) . " " . $this->template()->village($param['village_B']);
+        if ((mktime() - $param['time']) < 120)
+            $rit = ' <a href="' . $this->baseUrl() . '/' . $this->module .
+             '/movements/r/id/' . $troop[$i]['id'] . '">(' . $this->t->_(
+            "ritira") . ')</a>';
+        else
+            $rit = "";
+        $tr = null;
+        foreach ($param['troopers'] as $key => $value) {
+            $tr[$key] = array('numbers' => $value);
+        }
+        $info = $this->t->_("arrivo tra:") . ' <span class="countDown">' . $dif .
+         '</span> ' . $this->t->_("alle") . ' ' .
+         date("d-m-Y H:i:s", $troop[$i]['time']) . $rit;
+        echo $this->template()->tabletroops($tr, $title, $info) . "<br/>";
+    }
+}
+//
+echo "<br/>";
+if ($this->outReinf) {
+	echo '<a name="outReinf"></a>';
+    $troop = $this->outReinf;
+    for ($i = 0; $troop[$i]; $i ++) {
+        $param = unserialize($troop[$i]['params']);
+        $dif = $troop[$i]['time'] - mktime();
+        if ($dif <= 0)
+            $dif = "00:00:0?";
+        $title = $this->t->_("in viaggio per") . " " . $this->template->village(
+        $param['village_B']);
+        if ((mktime() - $param['time']) < 120)
+            $rit = ' <a href="' . $this->baseUrl() . '/' . $this->module .
+             '/movements/r/id/' . $troop[$i]['id'] . '">(' .
+             $this->t->_("ritira") . ')</a>';
+        else
+            $rit = "";
+        $tr = null;
+        foreach ($param['troopers'] as $key => $value) {
+            $tr[$key] = array('numbers' => $value);
+        }
+        $info = $this->t->_("arrivo tra:") . ' <span class="countDown">' . $dif .
+         '</span> ' . $this->t->_("alle") . ' ' .
+         date("d-m-Y H:i:s", $troop[$i]['time']) . $rit;
+        echo $this->template()->tabletroops($tr, $title, $info) . "<br/>";
+    }
+}
+//
+echo "<br/>";
+if ($this->my_troopers) {
+	echo '<a name="my_troopers"></a>';
+    $troop = $this->my_troopers;
+    echo '<h2>' . $this->t->_('rinforzi di') . ' ' . ($this->age < 3 ? $this->t->_(
+    "altri villaggi") : $this->t->_("altre citt&aacute;")) . '</h2>';
+    $j = 0;
+    $v = $troop[0]['village_now'];
+    $name = $troop[0]['name'];
+    do {
+        $title = $this->t->_('rinforzi a ') . ' ' . $this->template()->village($v,$name);
+        for ($temp = array(); ($troop[$j]) && ($v == $troop[$j]['village_now']); $j ++)
+            $temp[$troop[$j]['trooper_id']] = $troop[$j];
+        $info = '<a href="' . $this->baseUrl() . '/' . $this->module .
+         '/movements/ritpart/vid/' . $v . '/type/0">' . $this->t->_(
+        'ritira una parte') . '</a>
+                <a href="' . $this->baseUrl() . '/' . $this->module .
+         '/movements/rit/vid/' . $v . '/type/0">' . $this->t->_('ritira') .
+         '</a>';
+        echo $this->template()->tabletroops($temp, $title, $info) . "<br/>";
+        $v = $troop[$j]['village_now'];
+        $name = $troop[$j]['name'];
+    } while ($troop[$j]);
+}
+//
+echo "<br/>";
+//$log->log("other_troopers " . print_r($this->other_troopers, true), Zend_Log::DEBUG);
+if ($this->other_troopers) {
+	echo '<a name="other_troopers"></a>';
+    $troop = $this->other_troopers;
+    echo '<h2>' . $this->t->_('rinforzi da') . ' ' . ($this->age < 3 ? $this->t->_(
+    "altri villaggi") : $this->t->_("altre citt&aacute;")) . '</h2>';
+    $tropV = array();
+    $vid = 0;
+    for ($i = 0; $troop[$i]; $i ++) {
+        if ($vid != $troop[$i]['village_prev']) {
+            $vid = $troop[$i]['village_prev'];
+            $j = 0;
+        }
+        $name[$vid] = $troop[$i]['name'];
+        $tropV[$vid][$troop[$i]['trooper_id']] = $troop[$i];
+    }
+    //$log->log($tropV, Zend_Log::DEBUG);
+    foreach ($tropV as $key => $value) {
+        $title = $this->t->_('rinforzi da') . ' ' . $this->template()->village($key,$name[$key]);
+        $other = "";
+        $info = '<a href="' . $this->baseUrl() . '/' . $this->module .
+         '/movements/ritpart/vid/' . $key . '/type/1">' . $this->t->_(
+        'manda a casa una parte') . '</a>
+                        <a href="' . $this->baseUrl() . '/' . $this->module .
+         '/movements/rit=' . $key . '/type/1">' . $this->t->_('manda a casa') .
+         '</a>';
+        $keys=array_keys($value);
+        if ($value[$keys[0 ]]['civ_id'] == $this->civ_id)
+            $info .= ' <a href="' . $this->baseUrl() . '/' . $this->module .
+             '/movements/changeHome/vid/' . $key . '">' . $this->t->_(
+            'schiera qua') . '</a>';
+        echo $this->template()->tabletroops($value, $title, $info) . "<br/>";
+    }
+}
+?>

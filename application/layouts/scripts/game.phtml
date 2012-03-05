@@ -1,0 +1,380 @@
+<?php
+//risuluzione ottimale 1280x1024
+//init
+header('Content-Type:text/html; charset=UTF-8');
+$this->headTitle()->setSeparator(' - ');
+$this->headTitle('Age of Evolution');
+$auth = Zend_Auth::getInstance();
+$t=Zend_Registry::get("translate");
+$req=Zend_Controller_Front::getInstance()->getRequest();
+$module=$req->getModuleName();
+$action=$req->getActionName();
+$controller=$req->getControllerName();
+$acl=Zend_Registry::get("acl");
+$log=Zend_Registry::get("log");
+$x="0";$y="0";
+if ($auth->hasIdentity()) {
+	$age=Zend_Registry::get("age");
+    $par = "?s=" . ($age + 1);
+	$civ=Model_civilta::getInstance();
+	$x=$civ->village->data[$civ->getCurrentVillage()]['x'];
+	$y=$civ->village->data[$civ->getCurrentVillage()]['y'];
+	$alerts=Zend_Db_Table::getDefaultAdapter()->fetchAll("SELECT * 
+	FROM `" . ALERTS_TABLE . "` 
+	WHERE `aid`!=ALL (
+        SELECT `id` FROM `" . ALERTS_READ . "` WHERE `user`='" . $auth->getIdentity()->user_id . "'
+    )");
+} else {
+    if (($_COOKIE['skin'] > 0) && ($_COOKIE['skin'] < 7))
+        $par = "?s=" . $_COOKIE['skin'];
+    if (($_GET['skin'] > 0) && ($_GET['skin'] < 7)) {
+        $par = "?s=" . $_GET['skin'];
+        setcookie("skin", $_GET['skin'], mktime() + 86400);
+    }
+    $civ=false;
+}
+$par.='&l=g';
+$alerts=false;
+if (!$alerts) $alerts[0]=false;
+
+$canshow=true;
+if ((!$civ)||($civ->status <= 1)) $canshow=false;
+$nav = array(
+        'Home' => array('url' => '', 'img' => '/common/images/home.png'),
+        'Forum' =>array('url'=>'forum/','img'=>'/common/images/forum.ico'),
+        'Wiki' =>array('url'=>'wiki/','img'=>'/common/images/wiki-icon.png'));
+if ($auth->hasIdentity()) {
+	$nav['account'] =array('url'=>'account','img' => '/common/images/modacc.png');
+    $nav['logout'] = array('url' => 'login/logout','img' => '/common/images/logout.png');
+    $profile=$t->_("Profilo");
+    // @todo mettere alcuni link in ajax
+    $nav[$profile]=array('url'=>"ev.request('".$module."/profile','post',{ajax:1});",'img'=>'/common/images/pannello_utente.png','js'=>true);
+    $nav['City']= array('url'=>"ev.request('".$module."/index/village','post',{ajax:1});",'img'=>'/common/images/city.png','js'=>true);
+    $map=$t->_("Mappa");
+    $nav[$map]= array('url'=>$module,'img'=>'/common/images/mappa.gif');
+    $n=Model_report::ThereAreReport();
+    $nav['Report'.($n?" ($n)":"")]= array('url'=>"ev.request('".$module."/report','post',{ajax:1});",'js'=>true,'img'=>'/common/images/report'.($n?'0':'1').'.gif','id'=>'Report');
+    $nmess=Model_mess::ThereAreMess();
+    $mess=$t->_("Messaggi").($nmess ? " [$nmess]" : "");
+    $nav[$mess]= array('id'=>'Message','js'=>true,'url'=>"ev.request('".$module."/message','post',{ajax:1});",'img'=>'/common/images/mess_read'.($nmess?"1":"0").'.gif');
+    $top=$t->_('Classifiche');
+    $nav[$top]=array('url'=>"ev.request('".$module."/top','post',{ajax:1});",'img'=>'/common/images/top.png','js'=>true);
+    $bug=$t->_('Segnalaci un bug o un tuo parere');
+    $nav[$bug]=array('url'=>'ev.bugreport();','img'=>'/common/images/bug.png','js'=>true);
+}
+else {
+	$nav['Login'] = array('url' => 'login', 'img' => '/common/images/login.gif');
+    $reg=$t->_('registrati');
+    $nav[$reg]=array('url'=> 'reg','img'=>'/common/images/add.png');
+}
+if (is_array($this->layout()->nav)) {
+    $nav = array_merge($nav, $this->layout()->nav);
+}
+$nav['Help']=array('url'=> 'ev.help(\'index\');','img'=>'/common/images/help.png','js'=>true);
+if ($acl->isAllowed(Model_role::getRole(),'debug')) {
+    $nav['Debug']=array('url'=> $module.'/debug','img'=>'/common/images/tool.gif');
+}
+if ($acl->isAllowed(Model_role::getRole(),'admin')) {
+	$nav['Admin']=array('url'=>'admin','img'=>'/common/images/village/corona.gif');
+}
+ $width=count($nav)*30;
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta name="DESCRIPTION" content="browser game gratuito, gestionale in cui i giocatori comandano civiltà, portandole ad evolversi dalla preistoria fino al futuro" />
+		<meta name="KEYWORDS" content="browsergame,strategia,gestionale,evoluzione,gratis" />
+		<link rel="shortcut icon" href="<?php echo $this->baseUrl();?>/favicon.ico" />	
+<?php
+	echo $this->headLink()->prependStylesheet($this->baseUrl('/common/css/css.php' . $par) );
+	$complete=new Form_Complete();
+	$ev=$complete->getElement("ev");
+	$select='<select>';
+	foreach ($ev->getMultiOptions() as $key => $value) {
+		$select.='<option value="'.$key.'">'.$value.'</value>';
+	}
+	$select.='</select>';
+	$this->headScript()->captureStart();
+	?>
+function togleraid(value)
+{
+    if (value == 2) {
+        $('#raid_round').show();
+    }
+    else {
+        $('#raid_round').hide();
+    }
+}
+ev.totpos=<?php echo TOTBUILDING; ?>;
+ev.classbuilding=<?php 
+global $Building_Array;
+echo json_encode($Building_Array);
+?>;
+ev.menubuilding=[{'<?php
+	echo $t->_('aumenta');
+	?>':{onclick:ev.build.upgrade,icon:'<?php
+	    echo $this->baseUrl();
+	    ?>/common/images/add.png'}},
+		          {'<?php
+	        echo $t->_('demolisci');
+	        ?>':{onclick:ev.build.destroy,icon:'<?php
+	    echo $this->baseUrl();
+	    ?>/common/images/del.gif'}}];
+$(document).bind('quest',ev.quest.questhandler);
+$(document).ready(function(){
+	<?php
+	global $epflag;
+	if ($epflag) echo "$.ajax({url:path+'/'+module+'/processing',timeout:5000});";
+	?>
+    //*****************************controllo aggiornamento script
+    if (ev.revision<67) {
+	    if (confirm('<?php echo $t->_('alcuni file (.js /.css) sono stati aggiornati, ma nel suo pc è presente una versione vecchia. la pagina verrà ricaricata per aggiornare la cache.');?>'))
+	    location.reload();
+    }
+	$("[title]:not(.context-menu div)").tooltip({
+		   offset: [-10, 0],
+		   delay:1,
+		   predelay:400
+		}).dynamic({ bottom: { direction: 'down'} });
+	$( "#sharer" ).accordion({
+		active: false ,
+		collapsible: true
+	});
+	$( "#troopers" ).accordion({
+		active: false ,
+		collapsible: true
+	});
+	$( "#vlist" ).sortable({
+		stop:function(event,ui) {
+			list=$(this).sortable("toArray");
+			ev.request(module+'/index/sort','post',{ajax:1,'list':list});	
+		}
+	});
+	var debugmenu=[
+		{'riempi magazzini':{
+				onclick:function(){
+					ev.request(module+"/debug/fill","post",{ajax:1});
+		    	}
+			}
+		},
+		{'aggiorna produzione':{
+				onclick:function (){
+					ev.request(module+"/debug/aggprod","post",{ajax:1});
+				}
+			}
+		},
+		{'completa evento <?php echo $select;?> <button>OK</button>':function(menuItem,cmenu,e) {
+				$t=$(e.target);
+				if ($t.is('button')) {
+					$event=$(menuItem).find('select');
+					ev.request(module+"/debug/complete","post",{ajax:1,ev:$event.val(),vid:'this'})
+		            return true;
+		        }
+		        else return false;
+			}
+		},
+		{'aggiungi 100 abitanti':{
+				onclick:function (){
+					ev.request(module+"/debug/addpop","post",{ajax:1});
+				}
+			}
+		}];
+    var reportmenu=[{'segna come letti':{
+        	onclick:function () {
+    			ev.request(module+"/report/read/all/1","post",{ajax:1});
+    		}
+		}
+	}];
+    var messagemenu=[{'segna come letti':{
+    	onclick:function () {
+			ev.request(module+"/message/read/all/1","post",{ajax:1});
+		}
+	}
+	}];
+    $('#link-Report').contextMenu(reportmenu,{theme:'human'});
+    $('#link-Message').contextMenu(messagemenu,{theme:'human'});
+	$('#link-Debug').contextMenu(debugmenu,{theme:'human'});
+	counter();
+	$('input:submit,input:button,button:not(.img)').button();
+	$(".password").keyup(function(){
+		ev.ctrlpass();
+	});
+	$(".email").change(function() {
+		ev.ctrlemail(this);
+	});
+	$(".number").keyup(function(){
+		ev.ctrlnum(this);
+	});
+	setTimeout(ev.showalert,3000);
+	ev.alertstak=<?php echo json_encode($alerts);?>;
+	<?php 
+	$log->log("read ".print_r($civ->quest->read,true)." canshow ".print_r($canshow,true),Zend_Log::DEBUG);
+	if ((!$civ->quest->read)&&$canshow) {
+		echo 'setTimeout(ev.quest.showquest,4000);';
+	}
+	if ($auth->hasIdentity()) {
+		$cat=Zend_Db_Table::getDefaultAdapter()->fetchAll("SELECT * FROM `site_track_cat`");
+		foreach ($cat as $value) {
+			$cate.='<option value="'.$value['id'].'" title="'.$value['description'].'">'.$value['name'].'</option>';
+		}
+		$content=array('title'=>$t->_('bugreport'),'text'=>('
+<div id="report"></div>
+<div id="form">
+	<div id="type">
+		<input type="radio" id="type1" name="type" checked="checked" value="bug" /><label for="type1">'.$this->image('/common/images/bug.png', 'bug',null,32,32).'</label>
+		<input type="radio" id="type2" name="type"  value="idea" /><label for="type2">'.$this->image('/common/images/idea.gif',$t->_('idee') ,null,32,32).'</label>
+		<input type="radio" id="type3" name="type" value="notlike" /><label for="type3">'.$this->image('/common/images/notlike.gif',$t->_('lamentele') ,null,32,32).'</label>
+	</div>
+	<div>
+		<select id="category">'.$cate.'</select>
+	</div>
+	<div>tags : <span id="itag"></span> <input id="tag" />
+	<button onclick="ev.addtag($(\'#tag\').val());">'.$t->_('inserisci/elimina').'</button></div>
+	<textarea cols="42" rows="14" style="border:1px solid black;" id="description">'.$t->_('descrivi qui il bug che hai trovato, un idea per migliorare il gioco o quello che non ti piace.
+	cerca di essere chiaro e di compilare bene il form').'</textarea>
+	<div>'.$t->_('se vuoi inviarci immagini caricale su un host online e metti qui l&apos;indirizzo').'</div>
+	<div><input id="link" /></div>
+	<div style="float: right;"><button onclick="ev.sendbug()">'.$t->_('invia').'</button></div>
+</div><script type="text/javascript">$("#type").buttonset();$("button").button();
+$(function() {
+var cache = {},
+lastXhr;
+$( "#tag" ).autocomplete({
+minLength: 1,
+source: function( request, response ) {
+var term = request.term;
+if ( term in cache ) {
+response( cache[ term ] );
+return;
+}
+lastXhr = $.getJSON( path+"/track/auto", request, function( data, status, xhr ) {
+cache[ term ] = data;
+if ( xhr === lastXhr ) {
+response( data );
+}
+});
+}
+});
+});
+	</'.'script>'));
+		echo 'ev.bugcontent='.json_encode($content).';'; 
+	}
+	?>
+});
+ev.age=<?php echo intval(( $civ ? $civ->getAge() : '0'));?>;
+var path='<?php echo $this->baseUrl();?>';
+var module='<?php echo $module;?>';
+ev.parsedata({ alertstak:'<?php echo json_encode($alerts);?>'});
+<?php if ($civ) {?>ev.focus.x=<?php echo intval($civ->village->data[$civ->getCurrentVillage()]['x']);?>;
+ev.focus.y=<?php echo intval($civ->village->data[$civ->getCurrentVillage()]['y']);?>;
+ev.focus.id=<?php echo intval($civ->getCurrentVillage());?>;
+ev.max=[<?php echo MAX_X;?>,<?php echo MAX_Y;?>];
+ev.civ=<?php echo json_encode($civ->data);?>;
+<?php //ev.map.size=[];
+}
+/*if ($canshow) {
+	echo "/*ev.parsedata({
+quest:{
+questcache:'".json_encode($dataquest['html'])."'
+}
+});
+	ev.quest.questn=".intval($quest->n).";
+	ev.quest.state=".intval($quest->state).";";
+} */
+?>
+
+ev.quest.flagquest=<?php echo ($canshow? "true" : "false");?>;
+
+    <?php
+    $this->headScript()->captureEnd();
+	echo $this->headScript()->prependFile($this->baseUrl('/common/js/js.php'));
+	
+    echo $this->headTitle();
+    ?>
+	</head>
+	<body>
+		<div id="sinistra">
+<?php
+//banner
+$ev = $config = Zend_Registry::get('config');
+if (!$ev->local) {
+/*/ adsense
+    echo '<script type="text/javascript"><!--
+google_ad_client = "ca-pub-2668371131665980";
+// header game 
+google_ad_slot = "8866943812";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>';
+// av */
+echo "<script type=\"text/javascript\">
+/* <![CDATA[ */
+document.write('<s'+'cript type=\"text/javascript\" src=\"http://ad.altervista.org/js.ad/size=728X90/r='+new Date().getTime()+'\"><\/s'+'cript>');
+/* ]]> */
+</script>";
+}
+?>
+
+		</div>
+		<div id="container">
+			<div id="movemap" <?php 
+if ($_COOKIE['right_pannel']=='true') {
+	echo 'style="display:none;"';
+}?> >
+				<center style="padding:4px;" class="ui-state-default" onmouseover="$(this).removeClass('ui-state-default').addClass('ui-state-hover');" 
+				onmouseout="$(this).removeClass('ui-state-hover').addClass('ui-state-default');" 
+				onmousedown="$(this).removeClass('ui-state-hover').addClass('ui-state-active');" 
+				onmouseup="$(this).removeClass('ui-state-active').addClass('ui-state-default');"><img src="<?php echo $this->baseUrl();?>/common/images/void.png" onclick="$('#nav_pannel').toggle('blind', null,500);p=$.cookie('nav_pannel')=='true';$.cookie('nav_pannel',!p,{path:'/',expires:1});" class="ui-state-default ui-icon ui-icon-grip-dotted-horizontal ui-corner-all" /></center>
+				<div id="nav_pannel"><div id="navpad">
+					<center>
+					<img id="minimap" height="100" width="100" alt="minimap" src="" />
+					</center>
+					<div id="freccia_su" class="arrow_up" onclick="ev.map.arrow('up')"></div>
+					<div id="freccia_sx" class="arrow_sx" onclick="ev.map.arrow('left')"></div>
+					<div id="freccia_giu" class="arrow_down" onclick="ev.map.arrow('down')"></div>
+					<div id="freccia_dx" class="arrow_dx" onclick="ev.map.arrow('right')"></div>
+				</div>
+				<input id="x" class="number" size="3" maxlength="4" /> | <input id="y" class="number" size="3" maxlength="4" /> <button onclick="ev.map.position($('#x').val(),$('#y').val() );">OK</button>
+				</div>
+			</div>
+			<div id="destra">
+				
+				<div id="right" <?php 
+if ($_COOKIE['right_pannel']=='true') {
+	echo 'style="display:none;"';
+}
+$log->debug($_COOKIE);
+?>><?php echo $this->partial('right.phtml');?></div>
+				<center class="ui-state-default" onmouseover="$(this).removeClass('ui-state-default').addClass('ui-state-hover');" 
+				onmouseout="$(this).removeClass('ui-state-hover').addClass('ui-state-default');" 
+				onmousedown="$(this).removeClass('ui-state-hover').addClass('ui-state-active');" 
+				onmouseup="$(this).removeClass('ui-state-active').addClass('ui-state-default');"><img src="<?php echo $this->baseUrl();?>/common/images/void.png" onclick="$('#right').toggle('blind',null,500);p=$.cookie('right_pannel')=='true';$.cookie('right_pannel',!p,{path:'/',expires:1});" class="ui-state-default ui-icon ui-icon-grip-dotted-horizontal ui-corner-all" /></center>
+			</div>
+			
+			<div id="load"></div>
+        	<div id="navigation" style="width:<?php echo $width;?>px;">
+<?php 		echo $this->myMenu($nav); ?>	
+			</div>
+			<div id="content">
+<?php 		echo $this->layout()->content;?>
+			</div>
+			<br />
+			<br />
+ 			<div id="footer">
+<?php
+$t=Zend_Registry::get("translate");
+// ora del server
+echo '<span id="timestamp" style="display:none">' . mktime() . '000</span>
+	'.$t->_("Ora del server").': <span id="timedisp">' . date("d/m/Y H:i:s") .
+ '</span> user '.$auth->getIdentity()->username.'(id:'.$auth->getIdentity()->user_id.') '.($civ ? 
+$t->_('civiltà').' '.$civ->data['civ_name'].'(id:'.$civ->cid.') ': ' ');
+ echo $t->_("Versione"); $ev =$config = Zend_Registry::get('config');
+echo " ".$ev->version;  ?> <a href="index/credits">credits</a>
+			</div>
+    	</div>
+	</body>
+</html>

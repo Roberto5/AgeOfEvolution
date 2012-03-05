@@ -1,0 +1,50 @@
+# # av:Toolbar
+SetEnv AV_TOOLBAR 0
+
+# # av:php5-engine
+AddHandler av-php53 .php
+
+# av:PHP-upload
+php_value upload_max_filesize 10M
+php_value post_max_size 10M
+php_value max_input_time 300
+# PHP-upload
+
+# av:AntiHotlink
+RewriteEngine on
+RewriteBase /
+RewriteCond %{REQUEST_URI} \.(gif|jpe?g|png)$ [NC]
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^http://([a-z0-9\-\.]*)ageofevolution\.altervista\.org
+RewriteCond %{REQUEST_URI} !^\/_altervista_ht\/
+RewriteCond %{HTTP_REFERER} !^http://([a-z0-9\-\.]+)google\.
+RewriteRule .*$ http://hl.altervista.org/split.php?http://%{HTTP_HOST}%{REQUEST_URI} [R,L]
+# AntiHotlink
+
+
+
+SetEnv APPLICATION_ENV production
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} -s [OR]
+RewriteCond %{REQUEST_FILENAME} -l [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^.*$ - [NC,L]
+RewriteRule ^.*$ index.php [NC,L]
+
+
+######## Blocchiamo i files di log #############
+<Files *_log.txt>
+ORDER allow,deny
+deny FROM ALL
+</Files>
+<Files *.sqlite>
+ORDER allow,deny
+deny FROM ALL
+</Files>
+
+#########chache immagini #################
+#<FilesMatch "\.(jpg|jpeg|png|gif|ico)$">
+
+#Header set Cache-Control "max-age=1814400, public"
+
+#</FilesMatch>

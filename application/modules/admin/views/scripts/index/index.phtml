@@ -1,0 +1,60 @@
+<?php 
+$t=Zend_Registry::get("translate");
+if ($this->sel) {
+	//selezione server
+	$msg=$t->_('seleziona un server da amministrare');
+}
+else {
+	$msg=$t->_('cambia server');
+	?>
+	<table>
+  <tr>
+    <th><?php echo $t->_('parametro');?></th>
+    <th><?php echo $t->_('valore');?></th>
+  </tr>
+  <tr>
+    <td><?php echo $t->_('risorse iniziali');?></td>
+    <td><?php echo START_RES;?></td>
+  </tr>
+  <tr>
+  	<td><?php echo $t->_('popolazione iniziale');?></td>
+  	<td><?php echo START_POP;?></td>
+  </tr>
+  <tr>
+  	<td><?php echo $t->_('server tag');?></td>
+  	<td><?php echo SERVER;?></td>
+  </tr>
+  <tr>
+  	<td><?php echo $t->_('massimo bottino');?></td>
+  	<td><?php echo MAX_BOTTINO;?></td>
+  </tr>
+  <tr>
+  	<td><?php echo $t->_('massimo x');?></td>
+  	<td><?php echo MAX_X;?></td>
+  </tr>
+  <tr>
+  	<td><?php echo $t->_('massimo y');?></td>
+  	<td><?php echo MAX_Y;?></td>
+  </tr>
+  <tr>
+  	<td><?php echo $t->_('APPLICATION ENV');?></td>
+  	<td><?php echo APPLICATION_ENV;?></td>
+  </tr>
+  <?php 
+  foreach ($this->params as $value) {
+  	echo '<tr><td>'.$value['name'].'</td><td>'.$value['value'].'</td></tr>';
+  }
+  
+  ?>
+</table>
+
+	<?php 
+}
+
+	global $server;
+	$list=null;
+	foreach ($server as $value)
+		$list[$value]=$value;	
+	echo '<form action="'.$this->baseUrl().'/admin/index/sel" method="post"><h3>'.$msg.'</h3>'.$this->formSelect("server",null,array('onchange'=>"$('form').submit()"),$list).'<input type="submit"/></form>';
+
+?>

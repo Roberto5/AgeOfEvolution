@@ -1,0 +1,47 @@
+<?php 
+$t=Zend_Registry::get("translate");
+$module=Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
+$this->headTitle("Report");
+
+$display='
+<table id="reportmodule" style="text-align: center;">
+	<thead>
+		<tr>
+			<th><input type="checkbox" name="all" onclick="seltt(this)" /></th>
+			<th>Oggetto</th>
+			<th>Ora</th>
+		</tr>
+	</thead>
+	<tbody>';
+if ($this->row) {
+	foreach ($this->row as $value) {
+		$display.= '
+		<tr>
+			<td>
+				<input type="checkbox" value="'.$value['id'].'" name="c'.$value['id'].'" />'.$this->image('/common/images/report' . $value["read"] . '.gif','read').'</td>
+			<td><a href="#report' .$value['id'] . '" onclick="ev.request(\''.$module.'/report/see/id/' .$value['id'] . '\',\'post\',{ajax:1});">' . $value['oggetto'] . '</a></td>
+			<td>' . date("d/m/Y H:i:s", $value['time']) . '</td>
+		</tr>';
+     }
+}
+else {
+	$display.= '<tr><td colspan="4" style="text-align: center;">'.$t->_("Non ci sono report...").'</td></tr>';
+}
+$display.='
+	</tbody>
+</table>
+<button onclick="ev.report.delreport();" >'.$t->_("cancella").'</button>
+<button onclick="ev.report.readreport();" >'.$t->_("segna come letti").'</button>'.str_replace('*', 'ev.report.report', $this->paginationControl($this->row, 'Sliding', 'paginatorajax.phtml'));
+
+if ($this->refresh) {
+	Model_civilta::getInstance()->refresh->addIds("reportmodule", $display);
+}
+else {
+	echo '<div id="reportmodule">'.$display.'</div>';
+}
+
+
+$this->headScript()->captureStart();
+echo "$('input:submit,input:button,button:not(.img)').button();";
+$this->headScript()->captureEnd();
+?>

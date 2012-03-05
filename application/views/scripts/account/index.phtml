@@ -1,0 +1,57 @@
+<?php 
+$t=Zend_Registry::get("translate");
+?>
+<form name="account" action="<?php echo $this->baseUrl(); ?>/account/index/tokenP/<?php echo $this->token;?>" method="post">
+<?php 
+	//echo $this->pass->render();
+	echo $this->pass->getElement("password")->render();
+	echo $this->pass->getElement("newpass")->render();
+	echo $this->pass->getElement("newpass2")->render();
+	/*<h3><?php echo $t->_("Cambia password");?></h3>
+<div><?php echo $t->_("Vecchia password");?>:<input name="pass"  size="10" type="password" /></div>
+<div><?php echo $t->_("Nuova password");?>:<input name="newpass" class="password" size="10" type="password" /></div>
+<?php echo $t->_("Ripeti");?>:<input name="newpass2" class="password" size="10" type="password" />*/
+?>
+<h3><?php echo $t->_("Cambia email");?></h3>
+<div><input disabled="disabled" name="email" size="10"/></div>
+<?php
+$sel = array('1' => '', '', '','');
+    $selt = $sel;
+    $sel[$this->order] = 'selected="selected"';
+    $selt[$this->orderT] = 'checked="checked"';
+echo '<h3>' . $t->_('ordinamento dei villaggi') . '</h3>
+        ordine
+        <select name="order" onchange="ev.hideopt(this.value)">
+        <option value="1" ' . $sel[1] . '>'.$t->_("di fondazione").'</option>
+        <option value="2" ' . $sel[2] . '>'.$t->_("alfabetico").'</option>
+        <option value="3" ' . $sel[3] . '>'.$t->_("distanza").'</option>
+		<option value="4" ' . $sel[4] . '>'.$t->_("personalizzato").'</option>
+        <option value="5" ' . $sel[5] . '>'.$t->_("popolazione").'</option>
+        </select>
+	<span id="opt1" '.($sel[3] ? 'style="display:none"' : '').'>
+        <input name="orderT" class="opt1" type="radio" value="0" ' . $selt[0] . ' />' . $t->_('ascendente') . '
+        <input name="orderT" class="opt1" type="radio" value="1" ' . $selt[1] . ' />' . $t->_('descendente').'
+	</span>
+	<span id="opt2" '.(!$sel[3] ? 'style="display:none"' : '').'>
+	<input onchange="ev.disableinput(this.checked)" type="checkbox" name="coordB" value="1" '.($this->coordB ? 'checked="checked"' : '').' />
+	<input class="opt2" '.(!$this->coordB ? 'disabled="disabled"' : '').' size="3" name="x" maxlength="3" value="'.$this->x.'" /> |
+	<input class="opt2" '.(!$this->coordB ? 'disabled="disabled"' : '').' size="3" name="y" maxlength="3" value="'.$this->y.'" />
+	</span>';
+
+    //news letter
+    echo '<h3>' . $t->_('News letter') . '</h3>
+        voglio ricevere informazioni sugli aggiornamenti di evolution per email
+        <input name="news" type="checkbox" value="1" '.($this->news ? 'checked="checked"' : '' ).'/>';
+
+?>
+
+<h3><?php echo $t->_('cancella account');?></h3>
+        <p><input disabled="disabled" name="del_user" value="true" type="checkbox" onclick="if (this.checked) this.checked=confirm('<?php 
+            echo $t->_('sei sicuro');
+            ?>?')" /></p>
+        <?php echo $t->_("inserisci password");?>
+	<input disabled="disabled" name="pass" size="7" type="password" />
+	<center>
+	<input type="submit" value="<?php echo $t->_("salva");?>" name="submit" />
+	</center>
+</form>

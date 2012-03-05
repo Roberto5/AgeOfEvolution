@@ -1,0 +1,208 @@
+<?php
+$auth = Zend_Auth::getInstance();
+$t = Zend_Registry::get("translate");
+$db = Zend_Db_Table::getDefaultAdapter();
+$log = Zend_Registry::get("log");
+/**
+ * civiltà
+ * @var Model_civilta
+ */
+//$civ=Zend_Registry::get("civ");
+$module = Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
+$civ = Model_civilta::getInstance();
+$state = ($civ ? $civ->status : FALSE);
+if ($auth->hasIdentity() && ($module != "default") && ($module != "admin") &&
+ ($state > 1)) {
+    $list = $civ->village_list;
+    $age = $civ->getAge();
+    $master = $civ->data['master'];
+    $sharer = $civ->sharer;
+    //quest master
+    echo '<button onclick="ev.quest.showquest()" class="img" title="Quest Master '.$t->_('Clicca qui per vedere gli obbiettivi').'">
+	<img id="master" width="140" height="89" 
+	src="' . $this->baseUrl() . '/common/images/master' . $age . '_' . $master . '.png" 
+			 alt="QuestMaster"  />
+			 </button>';
+    //movimenti truppa
+    $item = array(
+    array('array' => $civ->inAttack, 'url' => $module . '/movements#inAttack', 
+    'img' => 'inAttack', 'title' => $t->_(
+    'Attacchi in arrivo')), 
+    array('array' => $civ->outAttack, 'url' => $module . '/movements#outAttack', 
+    'img' => 'outAttack', 
+    'title' => $t->_('Attacchi in uscita')), 
+    array('array' => $civ->getMercantsTravel(), 'url' => $module . '/building/index/t/'.MARKET, 
+    'img' => 'marketM', 
+    'title' => $t->_('mercanti in viaggio')),
+    array('array' => $civ->inReinf, 'url' => $module . '/movements#inReinf', 
+    'img' => 'inReinf', 'title' => $t->_(
+    'Rinforzi in arrivo')), 
+    array('array' => $civ->outReinf, 'url' => $module . '/movements#outReinf', 
+    'img' => 'outReinf', 'title' => $t->_(
+    'Rinforzi in uscita')), 
+    array('array' => $civ->troopers->my_troopers, 
+    'url' => $module . '/movements#my_troopers', 
+    'img' => 'reinf', 
+    'title' => $t->_('Rinforzi schierati altrove')));
+    echo '<div id="evpan"><div style="padding-left: 20px; background-color: white;">';
+    $info = "";
+    for ($i = 0; $i < 6; $i ++) {
+        $onmouse =/* $item[$i]['array'] ?*/ array(
+        'onmouseover' => "$('#info').show();$('#info" . ($i + 1) . "').show();", 
+        'onmouseout' => "$('#info').hide();$('#info" . ($i + 1) . "').hide();") /*: array()*/;
+        if ($i < 2) {
+            $bn = 'attackbn';
+        }
+        elseif($i==2){
+        	$bn = 'marketMbn';
+        } else {
+            $bn = 'rinfobn';
+        }
+        $n = count($item[$i]['array']);
+        if ($i==2) {
+        	$in=$item[$i]['array']['in'];
+        	$out=$item[$i]['array']['out'];
+        	$n1=count($in);
+        	$n2=count($out);
+        	$n=$n1+$n2;
+        }
+        $onmouse=array_merge($onmouse,array('id'=>'ev'.($i+1),'class'=>'icon '.($n ? $item[$i]['img'] : $bn)));
+        echo '<a href="' . $this->baseUrl($item[$i]['url']) . '">'.$this->image("/common/images/void.png", $item[$i]['title'],null,16,16,$onmouse ).'</a>';
+        if ($i == 2)
+            echo '</div><div style="padding-left: 20px; background-color: white;">';
+        $info .= '<div id="info' . ($i + 1) . '" style="display:none;">';
+        
+        $info .= '<div>'.$n . ' ' . $item[$i]['title'].'</div><div>';
+        if ($n && ($i < 5)&&($i!=2)) {
+            foreach ($item[$i]['array'] as $value) {
+                $param = unserialize($value['params']);
+                //$log->debug($param);
+                $time = $value['time'] - mktime();
+                $info .= '<div> ' . $t->_('da') . ' ' .
+                 $this->template()->village($param['village_A']) . ' ' .
+                 $t->_('a') . ' ' . $this->template()->village(
+                $param['village_B']) . ' <span class="countDown">' . $time .
+                 '</span></div>';
+            }
+        }
+        elseif (($i==2)&&($n))  {
+        	$log->debug($item[$i]['array']);
+        	foreach ($in as $value) {
+        		$param = unserialize($value['params']);
+        		$time = $value['time'] - mktime();
+                $info .= '<div> ' . $t->_('in ritorno da') . ' ' .
+                 $this->template()->village($param['destinatario']) . ' ' .
+                 $t->_('a') . ' ' . $this->template()->village(
+                $param['mittente']) . ' <span class="countDown">' . $time .
+                 '</span></div>';
+        	}
+        foreach ($out as $value) {
+        		$param = unserialize($value['params']);
+        		$time = $value['time'] - mktime();
+                $info .= '<div> ' . $t->_('da') . ' ' .
+                 $this->template()->village($param['mittente']) . ' ' .
+                 $t->_('a') . ' ' . $this->template()->village(
+                $param['destinatario']) . ' <span class="countDown">' . $time .
+                 '</span></div>';
+        	}
+        }
+         elseif ($n) {
+            $troop =is_array( $item[$i]['array']) ? $item[$i]['array'] : $item[$i]['array']->toArray();
+            $log->debug($troop);
+            $j = 0;
+            $v = $troop[0]['village_now'];
+            $name = $troop[0]['name'];
+            do {
+                $info.= '<div>'.$t->_('rinforzi a ') . ' ' . $this->template()->village($v,$name).'</div>';
+                for ($temp = array(); ($troop[$j]) &&
+                 ($v == $troop[$j]['village_now']); $j ++)
+                    $temp[$troop[$j]['trooper_id']] = $troop[$j];
+                $v = $troop[$j]['village_now'];
+                $name = $troop[$j]['name'];
+            } while ($troop[$j]);
+        }
+        $info .= '</div></div>';
+    }
+    echo '</div></div>
+    <div id="info">' . $info . '
+    </div>';
+    // **********************************************sharer online
+    $color=array('1'=>'blu','green','yellow','red','silver');
+    echo '<div id="sharer"> <h3><a href="#">
+	' . $t->_('SHARER ONLINE') . '</a>
+	 </h3>
+	 <div style="padding-left: 10px;padding-right: 10px;"><ul style="padding-left: 0px;">';
+    for ($i = 0; $sharer[$i]; $i ++) {
+        if ($sharer[$i]['last_activity'] > strtotime("-15 minutes"))
+            $act = 1;
+        elseif ($sharer[$i]['last_activity'] > strtotime("-1 days"))
+            $act = 2;
+        elseif ($sharer[$i]['last_activity'] > strtotime("-3 days"))
+            $act = 3;
+        elseif ($sharer[$i]['last_activity'] > strtotime("-7 days"))
+            $act = 4;
+        else
+            $act = 5;
+        if ($sharer[$i]['status'] == 1)
+            $accetta = '<img src="' . $this->baseUrl() .
+             '/common/images/delok.gif" width="16" height="16" />';
+        echo '<li style="list-style-type:none;"> 
+		<img class="icon '.$color[$act].'" src="' . $this->baseUrl() . '/common/images/void.png" 
+				 alt="last" title="' .
+         $t->_('ultima attività') . ': ' . date("d-m-Y H:i", 
+        $sharer[$i]['last_activity']) . '" 
+				 width="16" height="16" /> 
+				 <a href="' . $this->baseUrl() . '/' . $module . '/sharer">
+				 ' . $accetta . $sharer[$i]['username'] . '
+				 </a>
+				 </li>';
+    }
+    echo '</ul></div></div>';
+    $now = $civ->getCurrentVillage();
+    
+    //*********************truppe nel villaggio
+    $troops = $civ->displaytroop; /*$db->fetchAll(
+			"SELECT sum(`numbers`) as `numbers`,`trooper_id` 
+	FROM `s1_troopers` 
+	WHERE `village_now`='" . $now . "' 
+	GROUP BY `trooper_id`");*/
+    echo '<div id="troopers">';
+    if ($troops) {
+        global $NameTroops;
+        echo '<h3><a href="' . $this->baseUrl() .
+         '/' . $module . '/movements">
+		' . $t->_('TRUPPE PRESENTI') . '</a>
+		</h3><div style="padding-left: 10px;padding-right: 10px;">
+                <ul style="padding-left: 0px;">';
+        for ($i = 0; $troops[$i]; $i ++) {
+            echo '<li style="list-style-type:none;">
+			' . $this->image()->troop($troops[$i]['trooper_id']) . '
+					 ' . $troops[$i]['numbers'] . '</li>';
+        }
+        echo '</ul></div>';
+    }
+    echo '</div>';
+    //******************lista villaggi***************
+    //$log->log("now $now",Zend_Log::DEBUG);
+    foreach ($list as $key => $value) {
+        $display .= '<li class="village_list" id="v' . $value['id'] . '" '.($now==$key? 'style="font-weight:bold;"':'').'><a id="vid' . $value['id'] . '" href="#'.
+             $value['x'] . '|'.$value['y'].'@" onclick="ev.map.get_village_info(\''.$value['x'] . '|'.$value['y'].'\')">' . $value['name'] . "(" . $value['x'] . "|" . $value['y'] .
+             ")</a></li>";
+    }
+    echo '<ol id="vlist">' . $display . '</ol>';
+    
+} else {
+    echo '<div style="padding-left: 20px;" ><b>' . $t->_("Utenti totali") . "</b>
+                    " . $db->fetchOne(
+    "SELECT count(*) FROM `" . USERS_TABLE . "`") . "<br/>
+                        <b>" .
+     $t->_("Utenti online") . '</b> ' . intval(
+    $db->fetchOne(
+    "SELECT count(*) 
+			FROM `" . SESSIONS_TABLE . "` 
+			 WHERE `validate`='1' 
+			 AND `last_activity`>'" . (mktime() - 900) . "' 
+			 AND `user_id` != '0'")) . '</div>';
+    
+}
+?>
