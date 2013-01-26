@@ -26,10 +26,10 @@ class Sessions implements Zend_Auth_Storage_Interface
         	Zend_Db_Table::setDefaultAdapter($db);
         	$ev=Model_config::get("lastckid",1);
         	Model_config::set("lastckid", $ev+1);
-        	setcookie("ev_login",$ev,mktime()+604800,"/");
+        	setcookie("ev_login",$ev,time()+604800,"/");
         	$_COOKIE['ev_login']=$ev;
         }
-        else setcookie("ev_login",$_COOKIE['ev_login'],mktime()+604800,"/");
+        else setcookie("ev_login",$_COOKIE['ev_login'],time()+604800,"/");
         if ($ID == false) {
             $this->ID = md5(
             $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] .
@@ -45,15 +45,15 @@ class Sessions implements Zend_Auth_Storage_Interface
             $where = array("`ID`='" . $this->ID . "'", "`validate`='1'");
             $this->db->update(SESSIONS_TABLE, $data, $where);
             for ($i = 0; $row[$i]; $i ++) { //      	
-                $data = array('last_activity' => mktime(), 
+                $data = array('last_activity' => time(), 
                 'ID' => $row[$i]['ID'], 'var_name' => $row[$i]['var_name'], 
-                'var_value' => $row[$i]['var_value'], 'create' => mktime(), 
+                'var_value' => $row[$i]['var_value'], 'create' => time(), 
                 'user_id' => $row[$i]['user_id']);
                 $this->db->insert(SESSIONS_TABLE, $data);
             }
         } else
             $this->db->update(SESSIONS_TABLE, 
-            array('last_activity' => mktime()), 
+            array('last_activity' => time()), 
             array("`ID`='" . $this->ID . "'", "`validate`='1'"));
         foreach ($row as $value) {
             $this->$value['var_name'] = unserialize($value['var_value']);
@@ -104,7 +104,7 @@ class Sessions implements Zend_Auth_Storage_Interface
         if (! isset($this->$k)) {
             $uid = ($k == "user_id" ? $v : "" );
             $data = array('var_name' => $k, 'var_value' => serialize($v), 
-            'ID' => $this->ID, 'create' => mktime(), 'last_activity' => mktime(), 
+            'ID' => $this->ID, 'create' => time(), 'last_activity' => time(), 
             'user_id' => $uid);
             $this->db->insert(SESSIONS_TABLE, $data);
             $this->$k = $v;
@@ -114,7 +114,7 @@ class Sessions implements Zend_Auth_Storage_Interface
             if ($k == "user_id")
                 $where = array_merge($where, array("`user_id`='" . $v . "'"));
             $this->db->update(SESSIONS_TABLE, 
-            array('var_value' => serialize($v), 'last_activity' => mktime()), 
+            array('var_value' => serialize($v), 'last_activity' => time()), 
             $where);
             $this->$k = $v;
         }
@@ -136,7 +136,7 @@ class Sessions implements Zend_Auth_Storage_Interface
     {
         $this->db->query(
         "UPDATE `" . SESSIONS_TABLE . "` SET `validate`='0' , `last_activity`='" .
-         mktime() . "' WHERE `ID`='" . $this->ID . "' AND `validate`='1'");
+         time() . "' WHERE `ID`='" . $this->ID . "' AND `validate`='1'");
     }
     /**
      * distrugge le sessioni di un user account

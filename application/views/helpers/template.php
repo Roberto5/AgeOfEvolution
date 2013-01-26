@@ -31,7 +31,7 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
         $this->view = new Zend_View();
         $config=Zend_Registry::get("config");
         
-        if ($config->local) $this->baseUrl ="/evolution";
+        if ($config->local) $this->baseUrl =$config->path;
         else {
         	$baseurl = new Zend_View_Helper_BaseUrl();
         	$this->baseUrl = $baseurl->baseUrl();

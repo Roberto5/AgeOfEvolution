@@ -32,7 +32,7 @@ if ($this->identity) {//******************************** utente connesso
     $this->headScript()->captureStart();
     echo '$(function(){ev.statserver('.json_encode($server).');});';
     $this->headScript()->captureEnd();
-} else { //******************************   visitatore
+} 
 	
 $this->headScript()->captureStart();
 echo '$(function() {
@@ -51,9 +51,7 @@ echo '$(function() {
 	});';
 $this->headScript()->captureEnd();
 ?>
-
-
-
+<p>
 <div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="tabs">
 	<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
 		<li><a href="#tabs-1"><?php
@@ -83,6 +81,4 @@ $this->headScript()->captureEnd();
 		?>
 	</div>
 </div>
-<?php
-}
-?>
+</p>
