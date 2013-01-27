@@ -26,24 +26,23 @@ class Model_user extends Zend_Db_Table_Abstract
     public $data = null;
     public $ID;
     /**
-     * @param int $ID
+     * @param mixed $option
      */
-    function __construct ($ID = 1)
+    function __construct ($option)
     {
+    	//$this->_name=PREFIX.'user';
     	parent::__construct();
-        $ID = intval($ID);
-        $this->ID=$ID;
-        $this->db=Zend_Db_Table::getDefaultAdapter();
-        //$this->setDefaultAdapter($db);
-        //$this->db=$db;
-        //$row = $db->fetchRow("SELECT * FROM `".$this->_name."` WHERE `ID`='$ID'");
-        //$w=$this->select()->where("`ID`='$ID'");
-        $row= $this->fetchRow("`ID`='$ID'");
-        if (! $row) {
-            throw new Exception("Could not find row $ID");
-        }
-        $this->data = $row;
-        $this->option=new Model_option($ID);
+    	if (is_int($option)) $query="`ID`='$option'";
+    	elseif (is_array($option)) $query=$option;
+    	else throw new Zend_Db_Table_Exception(' $option params is not int or array');
+    	$this->data= $this->fetchRow($query);
+    	$id=intval($this->data['id']);
+    	self::$instance=$this;
+    	$this->option=new Model_option($ID);
+    }
+    static function getInstance($option=0) {
+    	if (self::$instance) return self::$instance;
+    	else return new Model_User($option);
     }
     /**
      * registra un utente, ritorna true se la registrazione &egrave; andata bene.

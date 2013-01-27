@@ -1,3 +1,40 @@
 Value is required and can't be empty@Il campo deve essere pieno
 The two given tokens do not match@I due campi non coincidono
 Missing captcha fields@Compilare il campo captcha
+DESCRIPTION@descrizione del sito
+USERNAME@Nome utente :
+ALNUM@Questo campo deve contenere solo lettere e numeri
+PASS_LENG@La password deve contenere 8 caratteri
+ENTER@Entra
+SUCCESS@login eseguito con successo
+LOGOUT@Logout eseguito con successo
+FAILURE@login fallito
+PASS_ERR@Password errata
+LOST_PASS@Hai dimenticato la password?
+USER_NOT_FOUND@Username inesistente
+GUEST@Visitatore
+CREATE@Crea
+EDIT@Modifica
+REG@Registrati
+E_FATAL@Fatal Error, contattare l'admin
+LOGorEMAIL@lasciaci un email per essere ricontattato oppure fai
+OBJECT@oggetto
+WRITE@Scrivi il tuo messaggio qui
+CONTACT@Contattaci
+EMAIL_CONTACT@Contattaci per email
+FORM_CONTACT@Oppure compila questo modulo
+CTRL_MAIL@Email inviata con successo, controlla la casella di posta
+RECOVER@Inserisci l'email dell'account da recuperare
+RESEND@Il tuo account non è attivo, puoi reinviare l'email di attivazione tramite il modulo qua sotto
+NAME@Nome
+DESCRIPTION2@Descrizione
+ADD@Aggiungi
+DELETE@Cancella
+TARGET@Obbiettivo
+DATA_ERROR@Errore nei dati
+PROFILE@Profilo
+CHANGEPASS@Cambia password
+OLD_PASS@Vecchia password
+HOSTED@i sorgenti si possono trovare su
+CLOSE@Chiudi
+LANGUAGE@Il tuo linguaggio non è supportato, puoi aggiungere una traguzione andando su

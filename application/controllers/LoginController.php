@@ -13,16 +13,15 @@ class LoginController extends Zend_Controller_Action
             //Se il form è valido, lo processiamo   
             if ($form->isValid($_POST)) {
                 //recuperiamo i dati così .....
-                $user = $this->getRequest()->getParam(
-                'username');
+                $user = $this->getRequest()->getParam('username');
                 $password = $this->getRequest()->getParam('password');
                 $auth = Zend_Auth::getInstance();
                 $adapter = new Zend_Auth_Adapter_DbTable(
                 Zend_Db_Table::getDefaultAdapter());
                 $adapter->setTableName("site_users")
                     ->setIdentityColumn('username')
-                    ->setCredentialColumn('user_pass')
-                    ->setCredentialTreatment('md5(?)');
+                    ->setCredentialColumn('password')
+                    ->setCredentialTreatment('sha1(?)');
                 $adapter->setIdentity($user);
                 $adapter->setCredential($password);
                 $result = $adapter->authenticate();
@@ -32,19 +31,18 @@ class LoginController extends Zend_Controller_Action
                     $auth->getStorage()->write(
                     $user);
                     $this->view->type = 1;
-                    $this->view->text = "login eseguito con successo";
+                    $this->view->text = "SUCCESS";
                 } else {
                 	$this->view->type = 2;
                     switch ($result->getCode()) {
                         case Zend_Auth_Result::FAILURE:
-                            $this->view->text = "login fallito";
+                            $this->view->text = "FAILURE";
                             break;
                         case Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID:
-                            $this->view->text = "password errata";
+                            $this->view->text = "PASS_ERR";
                             break;
                         case Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND:
-                            $this->view->text = "Username '" .
-                             $result->getIdentity() . "' inesistente";
+                            $this->view->text = "USER_NOT_FOUND";
                             break;
                         case Zend_Auth_Result::FAILURE_UNCATEGORIZED:
                             $this->view->text = $result->getMessages();
@@ -62,42 +60,81 @@ class LoginController extends Zend_Controller_Action
         if ($auth->hasIdentity())
             $auth->clearIdentity();
     }
-    function recoverAction()
-    {
-    	$uid=Zend_Auth::getInstance()->getIdentity()->user_id;
-    	$dbval=new Zend_Validate_Db_RecordExists(array('table' => USERS_TABLE, 'field' => 'user_mail'));
-    	$alnum=new Zend_Validate_Alnum();
-    	$strval=new Zend_Validate_StringLength(array('min' => 8));
-    	$code=Zend_Db_Table::getDefaultAdapter()->fetchOne("SELECT `user_code` FROM `".USERS_TABLE."` WHERE `ID`='$uid'");
-    	if ($_POST['submit']) {
-    		if ($dbval->isValid($_POST['email'])) {
-    			$auth=auth();
-    			Zend_Db_Table::getDefaultAdapter()->update(USERS_TABLE, array('user_code'=>$auth),array('ID'=>$uid));
-    			$sender = new Zend_Mail();
-                $sender->addTo($_POST['email'])
-                	->setFrom(WEBMAIL, SITO)
-                    ->setBodyHtml('per cambiare la password clicca su <a href="'.URLSITO.$this->_helper->url("recover","login","default",array('code'=>$auth)).'">questo link</a>')
-                    ->setBodyText('per cambiare la password clicca su questo link ('.URLSITO.$this->_helper->url("recover","login","default",array('code'=>$auth)).')')
-                    ->setSubject($this->t->_("Recupero password"))
-                    ->send();
-                $this->view->selector="send_mail";
-    		}
-    	}
-    	elseif ($this->getRequest()->getParam("code")==$code) {
-    		$this->view->selector="change_pass";
-    		$this->view->action=$this->_helper->url("recover","login","default",array('changepass'=>'true','code'=>$code));
-    	}
-    	elseif ($this->getRequest()->getParam("changepass")&&($this->getRequest()->getParam("code")==$code)) {
-    		if (($alnum->isValid($_POST['password']))&&($strval->isValid($_POST['password']))&&($_POST['password']==$_POST['password2'])) {
-    			Zend_Db_Table::getDefaultAdapter()->update(USERS_TABLE, array('user_pass'=>$_POST['password'],'user_code'=>''),array('ID'=>$uid));
-    			$this->view->selector="done";
-    		}
-    		else
-    			$this->view->selector="errorpass";
-    	}
-    	else {
-    		$this->view->selector="get_mail";
-    	}
-    }
+public function recoverAction() {
+		$conf=Zend_Registry::get('config');
+		$code=$this->_getParam('code');
+		if ($this->getRequest()->isPost()) {
+			$v=new Zend_Validate();
+			$v->addValidator(new Zend_Validate_EmailAddress());
+			$v->addValidator(new Zend_Validate_Db_RecordExists(array('table'=>PREFIX.'user','field'=>'email')));
+			$this->view->type=2;
+			if ($v->isValid($_POST['email'])) {
+				$user=new Model_User(array('email'=>$_POST['email']));
+				$code=$this->genrandpass();
+				$user->updateU(array('code'=>sha1($code)));
+				$this->view->type=1;
+				if (!$conf->local) {
+					include_once APPLICATION_PATH.'/language/email.php';
+					$locale=$this->_t->getLocale();
+					$sender = new Zend_Mail();
+					$sender->addTo($_POST['email'])
+					->setFrom($conf->webmail, $conf->site)
+					->setBodyHtml(
+							str_replace('{link}', $conf->url.$this->view->baseUrl('login/recover/code/'.$code),
+									$message[$locale]['rec']['html']))
+									->setBodyText(
+											str_replace('{link}', $conf->url.$this->view->baseUrl('login/recover/code/'.$code),
+													$message[$locale]['rec']['text']))
+													->setSubject($message[$locale]['rec']['obj'])
+													->send();
+					$this->view->text=$this->_t->_('CTRL_MAIL');
+
+				}
+				else $this->view->text=str_replace('{link}', $conf->url.$this->view->baseUrl('login/recover/code/'.$code),
+						$message[$locale]['rec']['html']);
+			}
+			else {
+				$this->view->text=$v->getMessages();
+
+			}
+		}
+		elseif ($code) {
+			$code=sha1($code);
+			$this->view->type=1;
+			$user=new Model_User(array('code'=>$code));
+			if ($user->data && ($user->data['code_time']+86400)<time()) {
+				$pass=$this->genrandpass();
+				$user->updateU(array('code'=>'','password'=>sha1($pass)));
+				if (!$conf->local) {
+					include_once APPLICATION_PATH.'/language/email.php';
+					$locale=$this->_t->getLocale();
+					$sender = new Zend_Mail();
+					$sender->addTo($user->data['email'])
+					->setFrom($conf->webmail,$conf->site)
+					->setBodyHtml(
+							str_replace(array('{pass}','{user}'), array($pass,$user->data['username']),
+									$message[$locale]['pass']['html']))
+									->setBodyText(
+											str_replace(array('{pass}','{user}'), array($pass,$user->data['username']),$message[$locale]['pass']['text']))
+											->setSubject($message[$locale]['pass']['obj'])
+											->send();
+					$this->view->text=$this->_t->_('CTRL_MAIL');
+				}
+				else $this->view->text=str_replace(array('{pass}','{user}'), array($pass,$user->data['username']),
+						$message[$locale]['pass']['html']);
+			}
+		}
+	}
+	/**
+	 * generate random string 8 char lenght
+	 * @return string
+	 */
+	private function genrandpass() {
+		$code = "";
+		for ($i = 0; $i < 8; $i ++) {
+			$code .= (rand(0, 1) ? chr(rand(65, 122)) : rand(0, 9));
+		}
+		return $code;
+	}
 }
 

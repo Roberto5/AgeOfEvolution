@@ -63,7 +63,7 @@ class Application_Form_Register extends Zend_Form
             ->addFilter("StringTrim")
             ->addValidator("EmailAddress")
             ->addValidator("Db_NoRecordExists", null, 
-        array('table' => USERS_TABLE, 'field' => 'user_mail'));
+        array('table' => USERS_TABLE, 'field' => 'email'));
         $mail->getValidator("EmailAddress")->setMessage("Email non valida");
         $mail->getValidator("Db_NoRecordExists")->setMessage("Email in uso");
         $attribs = array('id' => 'email', 'onchange' => 'controlRegister()', 
