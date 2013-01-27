@@ -142,7 +142,7 @@ class S1_MovementsController extends Zend_Controller_Action
     {
         $vid = $this->getRequest()->getParam("vid");
         $type = ($this->getRequest()->getParam("type") == 1 ? 1 : 0);
-        $token = md5(auth());
+        $token = sha1(auth());
         Zend_Auth::getInstance()->getStorage()->set("tokenRit", $token);
         if ($type == 1) {
             $troop = $this->civ->troopers->other_troopers;
@@ -232,7 +232,7 @@ class S1_MovementsController extends Zend_Controller_Action
     public function sendAction ()
     {
         $this->view->type = $this->getRequest()->getParam("type", "attack");
-        $this->view->token = md5(auth());
+        $this->view->token = sha1(auth());
         Zend_Auth::getInstance()->getStorage()->set("tokenMov", 
         $this->view->token);
         $villages = null;

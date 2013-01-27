@@ -66,7 +66,7 @@ public function recoverAction() {
 		if ($this->getRequest()->isPost()) {
 			$v=new Zend_Validate();
 			$v->addValidator(new Zend_Validate_EmailAddress());
-			$v->addValidator(new Zend_Validate_Db_RecordExists(array('table'=>PREFIX.'user','field'=>'email')));
+			$v->addValidator(new Zend_Validate_Db_RecordExists(array('table'=>USERS_TABLE,'field'=>'email')));
 			$this->view->type=2;
 			if ($v->isValid($_POST['email'])) {
 				$user=new Model_User(array('email'=>$_POST['email']));

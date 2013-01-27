@@ -30,7 +30,7 @@ class S1_EvController extends Zend_Controller_Action {
 		
 		}
 		else {
-			$auth=md5(auth());
+			$auth=sha1(auth());
 			$session->set("tokenEv", $auth);
 			$this->view->token=$auth;
 		}

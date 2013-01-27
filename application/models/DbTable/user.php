@@ -52,7 +52,8 @@ class Model_user extends Zend_Db_Table_Abstract
     function register ($data)
     {
         if ($data) {
-        	$this->getDefaultAdapter()->insert(USERS_TABLE,$data);
+        	$data['code_time']=time();
+        	$this->insert($data);
             return true;
         } else {
             return false;
@@ -66,8 +67,10 @@ class Model_user extends Zend_Db_Table_Abstract
     function updateU ($data)
     {
         if ($data) {
-        	$this->update($data,"`ID`='$this->ID'");
-            return true;
+        	if (isset($data['code'])) {
+        		$data['code_time']=time();
+        	}
+            return $this->update($data,"`ID`='$this->ID'");
         }
         return false;
     }
