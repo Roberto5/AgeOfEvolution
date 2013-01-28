@@ -87,8 +87,18 @@ else{
 		echo $this->headLink()->prependStylesheet(
 		$this->baseUrl() . '/common/css/css.php');
 		$this->headScript()->captureStart();
+//log
+		if ($this->logger) {
+			$text="";
+			foreach ($this->logger as $value) {
+				$text.="console.log(".($value['info'] ? "'".$value['info']."'," : "")."'".$value['timestamp']."',".$value['message'].",'".$value['priorityName']."');";
+			}
+			//$text.="</ol>";
+		}
 		?>
+
 $(document).ready(function(){
+	<?php echo $text;?>
     //***************************controllo aggiornamento script
     if (ev.revision<67) {
 	    if (confirm('<?php echo $t->_('alcuni file (.js /.css) sono stati aggiornati, ma nel suo pc è presente una versione vecchia. la pagina verrà ricaricata per aggiornare la cache.');?>'))
@@ -192,6 +202,16 @@ echo $this->headTitle();
 ?>
 	</head>
 	<body>
+		<!-- SELECT LOCALE -->
+		<div id="locale">
+			language
+			<form action="<?php echo $this->url();?>">
+			<?php 
+			$list=array_merge(array('browser'=>'auto'),$this->t->getList());
+			echo $this->formSelect('locale',$_COOKIE['locale'],array('onchange'=>'submit();','id'=>'loc'),$list);
+			?>
+			</form>
+		</div>
 		<div id="container">
 			<div id="load"></div>
 			<div id="top">
@@ -204,7 +224,60 @@ echo $this->headTitle();
  						</td>
 						<td style="width: 30%;">
 							<div id="navigation">
-<?php 							echo $this->myMenu($nav);?>							
+<?php 					
+/*
+$page=array(
+			array('label'=>'Home'
+				,'module'=>'default'
+				,'controller' => 'index'
+				,'action'=>'index'
+				,'order'=>0
+			)
+			,array('label'=>'Login'
+				,'module'=>'default'
+				,'controller' => 'login'
+				,'action'=>'index'
+				,'order'=>1
+				,'resource'=>'login'
+				,'privilege'=>'index'
+			)
+			,array('label'=>'Logout'
+				,'module'=>'default'
+				,'controller' => 'login'
+				,'action'=>'logout'
+				,'order'=>2
+				,'resource'=>'login'
+				,'privilege'=>'logout'
+			)
+			,array('label'=>'[REG]'
+				,'module'=>'default'
+				,'controller' => 'reg'
+				,'action'=>'index'
+				,'order'=>3
+				,'resource'=>'reg'
+				,'privilege'=>'index'
+			)
+			,array('label'=>'[PROFILE]'
+					,'module'=>'default'
+					,'controller' => 'profile'
+					,'action'=>'index'
+					,'order'=>4
+					,'resource'=>'profile'
+			)
+			,array('label'=>'Credits'
+				,'module'=>'default'
+				,'controller' => 'index'
+				,'action'=>'credits'
+				,'order'=>100
+			)
+		);
+		$menu=new Zend_Navigation($page);
+		$acl = Zend_Registry::get("acl");
+		
+		$this->navigation($menu)->setAcl($acl)->setRole(Model_Role::getRole());
+		echo $this->navigation();//->menu();*/		
+
+echo $this->myMenu($nav);?>							
 							</div>
 						</td>
 						<td style="width: 30%;"> <?php echo '<ul id="news"><li><span>AGE OF EVOLUTION</span><a href="http://blogpagliaccio.wordpress.com/category/progetti/age-of-evolution/">News</a></li>'.$news.'</ul>';?> </td>

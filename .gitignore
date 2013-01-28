@@ -1,4 +1,7 @@
-log*.txt
+﻿*~
 .buildpath
 .project
 .settings/
+.zfproject.xml
+log*.txt
+*.cache

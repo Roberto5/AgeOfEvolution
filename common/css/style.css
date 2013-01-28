@@ -1,3 +1,9 @@
+#locale {
+	top:0px;
+	right:0px;
+	position:absolute;
+}
+
 /*toltip*/
 .tooltip {
 	display:none;

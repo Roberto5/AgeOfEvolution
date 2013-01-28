@@ -3,7 +3,7 @@
 $acl=new Zend_Acl();
 //creazione ruoli
 $acl->addRole(new Zend_Acl_Role("guest"));// naviga solo nella parte principale del sito
-$acl->addRole(new Zend_Acl_Role("user"),"guest");//può acedere al server
+$acl->addRole(new Zend_Acl_Role("user"));//può acedere al server
 $acl->addRole(new Zend_Acl_Role("staff"),"user");
 $acl->addRole(new Zend_Acl_Role("owner"),"user");// proprietario account
 $acl->addRole(new Zend_Acl_Role("sharer"),"owner");// sharer

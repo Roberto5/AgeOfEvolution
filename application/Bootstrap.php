@@ -14,43 +14,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		return $config;
 	}
 	/**
-	 * impostazione del traduttore
-	 */
-	protected function _initLanguage ()
-	{
-		$t = new Zend_Translate_Adapter_Csv(
-				array('content' => APPLICATION_PATH . '/language/en.csv',
-						'locale' => 'en', 'delimiter' => '@'));
-		$t->addTranslation(
-				array('content' => APPLICATION_PATH . '/language/it.csv',
-						'locale' => 'it', 'delimiter' => '@'));
-		if ($_GET['locale']) {
-	 	setcookie('locale',$_GET['locale'],time()+604800,'/');$_COOKIE['locale']=$_GET['locale'];
-	 }
-	 Zend_Registry::set('langnotsup', false);
-	 try {
-	 	if (($_COOKIE['locale']=='browser')||!$_COOKIE['locale'])
-	 		$t->setLocale("browser");
-	 	elseif (in_array($_COOKIE['locale'], $t->getList())) $t->setLocale($_COOKIE['locale']);
-	 	else {
-	 		$t->setLocale("en");
-	 		Zend_Registry::set('langnotsup', true);
-	 	}
-
-	 }
-	 catch (Zend_Translate_Exception $e)
-	 {
-	 	$t->setLocale("en");
-	 }
-		Zend_Validate_Abstract::setDefaultTranslator($t);
-		Zend_Form::setDefaultTranslator($t);
-		Zend_Registry::set('translate', $t);
-		return $t;
-	}
-	/**
 	 * caricamento modelli, form, plugin
-	 */
-	protected function _initAutoload ()
+	*/
+	protected function _initAutoload()
 	{
 		// Add autoloader empty namespace
 		$autoLoader = Zend_Loader_Autoloader::getInstance();
@@ -69,25 +35,105 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	protected function _initAuth ()
 	{
 		$this->bootstrap("db");
-
 		$db = $this->getPluginResource('db')->getDbAdapter();
 		$adp = new Zend_Auth_Adapter_DbTable($db);
 		$adp->setTableName(USERS_TABLE)
 		->setIdentityColumn('username')
-		->setCredentialColumn('user_pass')
-		->setCredentialTreatment('s(?)');
+		->setCredentialColumn('password')
+		->setCredentialTreatment('sha1(?)');
 		require_once APPLICATION_PATH . '/models/session.php';
-
 		$storage = new Sessions(false, $db);
 		$auth = Zend_Auth::getInstance();
 		$auth->setStorage($storage);
-		$this->bootstrap("log");
+		//$this->bootstrap('log');$log=$this->getResource('log');
 		if ($auth->hasIdentity()) {
 			$identity = $auth->getIdentity();
 			$user = $identity->user_id;
 		} else
 			$user = 1;
 		$user = new Model_user($user);
+	}
+
+	/**
+	 * impostazione del traduttore
+	 */
+	protected function _initLanguage ()
+	{
+		$t = new Zend_Translate_Adapter_Csv(array('content' => APPLICATION_PATH . '/language/en.csv','locale' => 'en', 'delimiter' => '@'));
+		$t->addTranslation(
+	 		array('content' => APPLICATION_PATH . '/language/it.csv',
+	 				'locale' => 'it', 'delimiter' => '@'
+	 				,'disableNotices'=>true
+	 				));
+		if ($_GET['locale']) {
+	 		setcookie('locale',$_GET['locale'],time()+604800,'/');$_COOKIE['locale']=$_GET['locale'];
+	 	}
+	 	Zend_Registry::set('langnotsup', false);
+	 	try {
+	 		if (($_COOKIE['locale']=='browser')||!$_COOKIE['locale'])
+	 			$t->setLocale("browser");
+	 		elseif (in_array($_COOKIE['locale'], $t->getList())) $t->setLocale($_COOKIE['locale']);
+	 		else {
+	 			$t->setLocale("en");
+	 			Zend_Registry::set('langnotsup', true);
+	 		}
+	 		
+	 	}
+	 	catch (Zend_Translate_Exception $e)
+	 	{
+	 		$t->setLocale("en");
+	 		Zend_Registry::set('langnotsup', true);
+	 	}
+	 	Zend_Validate_Abstract::setDefaultTranslator($t);
+	 	Zend_Form::setDefaultTranslator($t);
+	 	Zend_Registry::set('translate', $t);
+	 	return $t;
+	}
+
+	/**
+	 * log
+	 */
+	protected function _initLog ()
+	{
+		$this->bootstrap('db');
+		$this->bootstrap("Controller");
+		$acl = Zend_Registry::get("acl");
+		$db = $this->getPluginResource('db')->getDbAdapter();
+		$log = new Zend_Log();
+		$web=new Plugin_Logweb();
+		$formatter = new Zend_Log_Formatter_Xml();
+		$file = new Zend_Log_Writer_Stream(
+				APPLICATION_PATH . "/log/log" . date("Ymd") . ".txt");
+		if ($this->getResource('config')->debug) {
+			$file2 = new Zend_Log_Writer_Stream(
+				APPLICATION_PATH . "/log/debug" . date("Ymd") . ".txt");
+			$file2->addFilter(new Zend_Log_Filter_Priority(Zend_Log::DEBUG,"=="));
+			$file2->setFormatter($formatter);
+			$log->addWriter($file2);
+		}
+		$file->addFilter(new Zend_Log_Filter_Priority(Zend_Log::DEBUG,"!="));
+		$role = Model_role::getRole();
+		$file->setFormatter($formatter);
+		if ((APPLICATION_ENV != "production") || ($acl->isAllowed($role, "debug"))) {
+			$log->addWriter($web);
+			//@todo add profilazione query
+		} /*else {
+		$filter = new Zend_Log_Filter_Priority(Zend_Log::INFO);
+		$log->addFilter($filter);
+		}*/
+		$log->addWriter($file);
+		$log->addPriority("movement", 8);
+		$log->addPriority("build", 9);
+		$log->addPriority("market", 10);
+		$log->addPriority("train", 11);
+		$log->addPriority("startMovement", 12);
+		Zend_Registry::set('log', $log);
+		$view=$this->getResource('view');
+		$viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper(
+				'ViewRenderer');
+		$view->log=$log;
+		$viewRenderer->setView($view);
+		return $log;
 	}
 	/**
 	 * inizializza il server di gioco
@@ -155,13 +201,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	 */
 	protected function _initController ()
 	{
-		require_once 'application/plugin/acl_controller.php';
+		require_once APPLICATION_PATH.'/plugin/acl_controller.php';
 		require_once APPLICATION_PATH.'/plugin/myTmpEng.php';
 		$acl = null;
 		include_once (APPLICATION_PATH . "/models/acl.php");
 		$front = Zend_Controller_Front::getInstance();
 		$front->registerPlugin(new plugin_acl_controller($acl))->registerPlugin(new plugin_myTmpEng(Zend_Controller_Action_HelperBroker::getStaticHelper(
-				'ViewRenderer')));
+	'ViewRenderer')));
 		Zend_Registry::set("acl", $acl);
 	}
 	/**
@@ -183,44 +229,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		elseif ($module!='default') $layout->setLayout("game");
 		return $layout;
 	}
-	/**
-	 * init log
-	 */
-	protected function _initLog ()
-	{
-		$this->bootstrap('db');
-		$this->bootstrap("Controller");
-		//$this->bootstrap("Auth");
-		$acl = Zend_Registry::get("acl");
-		$db = $this->getPluginResource('db')->getDbAdapter();
-		$log = new Zend_Log();
-		$firebug = new Zend_Log_Writer_Firelog();
-		$file = new Zend_Log_Writer_Stream(
-				APPLICATION_PATH . "/log/log" . date("Ymd") . ".txt");
-		$file->addFilter(new Zend_Log_Filter_Priority(Zend_Log::DEBUG,"!="));
-		$role = Model_role::getRole();
-		$formatter = new Zend_Log_Formatter_Xml();
-		$file->setFormatter($formatter);
-		if ((APPLICATION_ENV != "production") || ($acl->isAllowed($role, "debug"))) {
-			$log->addWriter($firebug);
-			/*/profilazione query
-			 $profiler = new Zend_Db_Profiler_Firelog(
-			 		'All DB Queries');
-			$profiler->setEnabled(true);
-			$db->setProfiler($profiler);//*/
-		} /*else {
-		$filter = new Zend_Log_Filter_Priority(Zend_Log::INFO);
-		$log->addFilter($filter);
-		}*/
-		$log->addWriter($file);
-		$log->addPriority("movement", 8);
-		$log->addPriority("build", 9);
-		$log->addPriority("market", 10);
-		$log->addPriority("train", 11);
-		$log->addPriority("startMovement", 12);
-		Zend_Registry::set('log', $log);
-		return $log;
-	}
+	
 	/**
 	 * inizializza helper
 	 */
@@ -253,3 +262,4 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	}
 }
 
+?>

@@ -49,16 +49,16 @@ class Model_user extends Zend_Db_Table_Abstract
      * @param Array $vect indice per il campo e valore come valore 
      * @return bool
      */
-    function register ($data)
-    {
-        if ($data) {
-        	$data['code_time']=time();
-        	$this->insert($data);
-            return true;
-        } else {
-            return false;
-        }
-    }
+    static function register ($data)
+	{
+		if ($data) {
+			$data['code_time']=time();
+			self::getDefaultAdapter()->insert(PREFIX.'user',$data);
+			return true;
+		} else {
+			return false;
+		}
+	}
     /**
      * modifica i valori dell'utente
      * @param Array $data indice per il campo e valore come valore 
