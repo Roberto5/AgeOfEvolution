@@ -1,0 +1,20 @@
+<?php 
+$this->log->debug($this->error,'error');
+$this->log->debug($this->success,'success');
+$this->log->debug($this->text,'text');
+if ($this->error) {
+	echo $this->template('Alerts',array('text'=>print_r($this->text,true),'link'=>$this->url(),'type'=>2));
+}
+elseif ($this->success) {
+	echo $this->template()->Alerts(print_r($this->text,true),$this->url(),1);
+}
+else {
+echo $this->t->_('RESEND');
+?>
+<form action="<?php echo $this->url(array('controller'=>'reg','action'=>'resend')); ?>" method="post">
+	<input type="email" size="10" name="email" value="<?php echo $this->email;?>" />
+	<input type="submit" value="<?php echo $this->t->_('SEND');?>" />
+</form>
+<?php 
+}
+?>

@@ -5,13 +5,11 @@
  * @return string
  */
 function auth() {
-    $auth = null;
-    $char = explode(" ", "qwertyuiopasdfghjklzxcvbnm1234567890", 1);
-    for ($l = 0; $char[$l]; $l++)
-        ;
-    for ($i = 0; $i < 16; $i++)
-        $auth .= $char[rand(0, $l)];
-    return md5($auth);
+	$code = "";
+	for ($i = 0; $i < 8; $i ++) {
+		$code .= (rand(0, 1) ? chr(rand(65, 122)) : rand(0, 9));
+	}
+	return sha1($code);
 }
 
 /**
@@ -20,16 +18,16 @@ function auth() {
  * @return int
  */
 function getTimestamp($data) {
-    // yyyy-mm-dd HH:ii:ss
-    // 0123456789012345678
-    $h = substr($data, 11, 2);
-    $i = substr($data, 14, 2);
-    $s = substr($data, 17, 2);
-    $m = substr($data, 5, 2);
-    $d = substr($data, 8, 2);
-    $y = substr($data, 0, 4);
-    //**************
-    return mktime($h, $i, $s, $m, $d, $y);
+	// yyyy-mm-dd HH:ii:ss
+	// 0123456789012345678
+	$h = substr($data, 11, 2);
+	$i = substr($data, 14, 2);
+	$s = substr($data, 17, 2);
+	$m = substr($data, 5, 2);
+	$d = substr($data, 8, 2);
+	$y = substr($data, 0, 4);
+	//**************
+	return mktime($h, $i, $s, $m, $d, $y);
 }
 
 /**
@@ -38,33 +36,33 @@ function getTimestamp($data) {
  * @return String
  */
 function timeStampToString($time) {
-    $time = intval($time);
-    $h = "0";
-    $min = "0";
-    $sec = "0";
-    if ($time < 60)
-        $sec = $time;
-    elseif ($time < 3600) {
-        $min = intval($time / 60);
-        $sec = $time - $min * 60;
-    }
-    if ($time > 3600) {
-        $h = intval($time / 3600);
-        $time2 = $time - $h * 3600;
-        if ($time2 > 60) {
-            $min = intval($time2 / 60);
-            $sec = $time2 - $min * 60;
-        }
-        else
-            $sec=$time2;
-    }
-    if ($h < 10)
-        $h = "0" . $h;
-    if ($min < 10)
-        $min = "0" . $min;
-    if ($sec < 10)
-        $sec = "0" . $sec;
-    return $h . ":" . $min . ":" . $sec;
+	$time = intval($time);
+	$h = "0";
+	$min = "0";
+	$sec = "0";
+	if ($time < 60)
+		$sec = $time;
+	elseif ($time < 3600) {
+		$min = intval($time / 60);
+		$sec = $time - $min * 60;
+	}
+	if ($time > 3600) {
+		$h = intval($time / 3600);
+		$time2 = $time - $h * 3600;
+		if ($time2 > 60) {
+			$min = intval($time2 / 60);
+			$sec = $time2 - $min * 60;
+		}
+		else
+			$sec=$time2;
+	}
+	if ($h < 10)
+		$h = "0" . $h;
+	if ($min < 10)
+		$min = "0" . $min;
+	if ($sec < 10)
+		$sec = "0" . $sec;
+	return $h . ":" . $min . ":" . $sec;
 }
 /**
  * ritorna la distanza tra le coordinate
@@ -90,7 +88,7 @@ function getTime($distance,$speed) {
 			}
 		}
 		if ($min==0) {
-			
+				
 			$log=Zend_Registry::get("log");
 			$log->log("velocità 0!!!!",Zend_Log::CRIT);
 			return -1;
@@ -102,7 +100,7 @@ function getTime($distance,$speed) {
 /**
  * controlla i token passati come array key=>value
  * @param array $token ['token'.$nome]=>value
- * @return array 
+ * @return array
  * [$key]= bool risultato della comparazione di key
  * ['or']= or di tutte le comparazioni
  * ['and']= di tutte le comparazioni
@@ -132,7 +130,7 @@ function token_set($name) {
 	$session=Zend_Auth::getInstance()->getStorage();
 	$token=auth();
 	$session->set($name,$token);
-	
+
 	return $token;
 }
 
@@ -145,34 +143,34 @@ function token_set($name) {
  * foglio in stile carta ingiallita per le lettere
  */
 function foglio($destinatario = "", $oggetto = "", $messaggio = "", $mittente = "") {
-    return '
-<style type="text/css">
+	return '
+	<style type="text/css">
 
-#foglio{
-    background-image: url(\'common/images/foglio.jpg\'); 
-    height: 500px; 
-    width: 400px;
-    color: black;
+	#foglio{
+	background-image: url(\'common/images/foglio.jpg\');
+	height: 500px;
+	width: 400px;
+	color: black;
 }
 #contenitore{
-    width: 310px;
-    color: black;
+width: 310px;
+color: black;
 }
 
 input.testo{
-    background-color: transparent; 
-    border-color: black; 
-    width: 250px; 
-    border-width: 0px 0px 2px;
+background-color: transparent;
+border-color: black;
+width: 250px;
+border-width: 0px 0px 2px;
 }
 textarea{
-    background-color: transparent; 
-    height: 250px; 
-    width: 300px; 
-    border-width: 0px; 
-    margin-top: 10px; 
-    margin-left: 0px;
-    color: black;
+background-color: transparent;
+height: 250px;
+width: 300px;
+border-width: 0px;
+margin-top: 10px;
+margin-left: 0px;
+color: black;
 }
 </style>
 
@@ -183,18 +181,18 @@ textarea{
 <table>
 <tr>
 <td>a:</td><td style="text-align: right;"><input class="testo" name="destinatario" value="' . $destinatario .
-    '" /></td>
+'" /></td>
 </tr>
 <tr>
 <td>da:</td><td style="text-align: right;"><input class="testo" name="mittente" value="' . $mittente .
-    '" /></td>
+'" /></td>
 </tr>
 <tr>
 <td>oggetto:</td><td style="text-align: right;"><input class="testo" name="oggetto" value="' . $oggetto .
-    '" /> </td>
+'" /> </td>
 </tr>
 </table>
- <br />
+<br />
 testo:<br />
 <textarea id="area" name="messaggio">' . $messaggio . '</textarea><br />
 <center>

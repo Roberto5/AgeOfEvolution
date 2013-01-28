@@ -16,7 +16,7 @@ class AccountController extends Zend_Controller_Action
     public function indexAction()
     {
     	$bool=token_ctrl($this->getRequest()->getParams());
-    	$_POST['password']=md5($_POST['password']);
+    	$_POST['password']=sha1($_POST['password']);
     	$this->view->token=auth();
     	Zend_Auth::getInstance()->getStorage()->set("tokenP",$this->view->token);
     	$t=Zend_Registry::get("translate");
@@ -31,7 +31,7 @@ class AccountController extends Zend_Controller_Action
 					//$this->log->debug("fallito");
 				}
 				else {
-					$this->user->updateU(array('user_pass'=>md5($pass->getValue('newpass'))));
+					$this->user->updateU(array('user_pass'=>sha1($pass->getValue('newpass'))));
 					$session=Zend_Auth::getInstance()->getStorage();
 					$uid=$this->user->ID;
 					$session->destroyAll($uid);

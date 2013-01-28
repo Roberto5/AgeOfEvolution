@@ -21,7 +21,7 @@ class S1_SharerController extends Zend_Controller_Action
     }
     public function indexAction ()
     {
-        $this->view->token = md5(auth());
+        $this->view->token = sha1(auth());
         Zend_Auth::getInstance()->getStorage()->set("tokenSh", 
         $this->view->token);
         $this->view->sharer = $this->civ->sharer;

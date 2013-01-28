@@ -1,0 +1,8 @@
+<?php 
+$link=$this->url(
+			array('controller'=>'index',
+					'action'=>'index'
+			));
+echo $this->template()
+	->Alerts($this->text,$link,$this->type,5);
+?>

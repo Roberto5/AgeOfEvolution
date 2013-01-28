@@ -31,7 +31,7 @@ class Sessions implements Zend_Auth_Storage_Interface
         }
         else setcookie("ev_login",$_COOKIE['ev_login'],time()+604800,"/");
         if ($ID == false) {
-            $this->ID = md5(
+            $this->ID = sha1(
             $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'] .
              $_COOKIE['ev_login']);
         } else {
