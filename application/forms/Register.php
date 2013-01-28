@@ -1,5 +1,5 @@
 <?php
-class Application_Form_Register extends Zend_Form
+class Form_Register extends Zend_Form
 {
     public function init ()
     {
@@ -22,8 +22,10 @@ class Application_Form_Register extends Zend_Form
             ->addValidator("Db_NoRecordExists", null, 
         array('table' => USERS_TABLE, 'field' => 'username'));
         
-        $attribs = array('id' => 'user', 'onchange' => 'controlRegister()', 
-        'size' => '20', 'maxlength' => '30');
+        $attribs = array('size' => '16'
+        		,'maxlength' => '30'
+        		,'required'=>'required'
+        );
         $user->setAttribs($attribs);
         $user->getValidator("alnum")->setMessage(
         'Il nome utente deve contenere solo lettere e numeri');
@@ -41,8 +43,7 @@ class Application_Form_Register extends Zend_Form
         $pass->getValidator("alnum")->setMessage(
         'La password deve contenere solo lettere e numeri');
         $pass->getValidator("StringLength")->setMessage("la password deve essere di almeno 8 caratteri");
-        $attribs = array('id' => 'pass',/* 'onchange' => 'controlRegister()', */
-        'size' => '16','class'=>'password');
+        $attribs = array('size' => '16','class'=>'password','required'=>'required');
         $pass->setAttribs($attribs);
         $this->addElement($pass);
         //conferma
@@ -51,23 +52,20 @@ class Application_Form_Register extends Zend_Form
         $pass2->setRequired(true)
             ->addFilter('StringTrim')
             ->addValidator(new Zend_Validate_Identical($_POST['password']));
-        //$pass2->getValidator("Identical")->setMessage("i campi passord non sono uguali");
-        $attribs = array('id' => 'pass2',/* 'onchange' => 'controlRegister()', */
-        'size' => '16','class'=>'password');
+        $attribs = array('size' => '16','class'=>'password','required'=>'required');
         $pass2->setAttribs($attribs);
         $this->addElement($pass2);
         //email
-        $mail = $this->createElement("text", "email");
+        $mail = $this->createElement("email", "email");
         $mail->setLabel($t->_("Email"));
         $mail->setRequired(true)
             ->addFilter("StringTrim")
             ->addValidator("EmailAddress")
             ->addValidator("Db_NoRecordExists", null, 
-        array('table' => USERS_TABLE, 'field' => 'user_mail'));
+        array('table' => USERS_TABLE, 'field' => 'email'));
         $mail->getValidator("EmailAddress")->setMessage("Email non valida");
         $mail->getValidator("Db_NoRecordExists")->setMessage("Email in uso");
-        $attribs = array('id' => 'email', 'onchange' => 'controlRegister()', 
-        'size' => '16');
+        $attribs = array('size' => '16','required'=>'required');
         $mail->setAttribs($attribs);
         $this->addElement($mail);
         $conf=Zend_Registry::get("config");
@@ -82,8 +80,9 @@ class Application_Form_Register extends Zend_Form
         
         //submit
         $this->addElement('submit', 'submit', 
-        array('label' => $t->_('Registra'), 
-        'onclick' => "if (controlRegister()) $('#registration_form').submit();"));
+        	array('label' => $t->_('Registra')
+        	)
+        );
     }
 }
 

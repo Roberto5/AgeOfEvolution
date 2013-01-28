@@ -11,13 +11,13 @@ class Form_LoginForm extends Zend_Form {
         $user = $this->createElement('text', 'username');
  
                 //...gli associamo una etichetta
-        $user->setLabel('Nome utente:');
+        $user->setLabel('USERNAME');
                  
                 // (3) impostiamo i filtri e i validatori per questo elemento HTML
         $user->setRequired(TRUE)->addFilter('StringTrim')->addValidator('alnum');
                  
                 //Impostiamo un messaggio di errore personalizzato
-        $user->getValidator('alnum')->setMessage('Il nome utente deve contenere solo lettere e numeri');
+        $user->getValidator('alnum')->setMessage('ALNUM');
  
         $user->setAttrib('size', 10);
                  
@@ -32,12 +32,12 @@ class Form_LoginForm extends Zend_Form {
         ->addValidator("alnum")
         ->addFilter('StringTrim');
         $password->setAttrib('size', 10);
-        $password->getValidator('stringLength')->setMessage('La password deve contenere 8 caratteri');
-        
+        $password->getValidator('stringLength')->setMessage('PASS_LENG');
+        $password->getValidator('alnum')->setMessage('ALNUM');
         $this->addElement($password);
                  
                 //Aggiungiamo al form il pulsante di invio
-        $this->addElement('submit', 'submit', array('label' => 'Entra'));
+        $this->addElement('submit', 'submit', array('label' => 'ENTER'));
  
 	}
 }
