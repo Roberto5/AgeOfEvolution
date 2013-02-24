@@ -4,30 +4,31 @@ header('Content-Type:text/html; charset=UTF-8');
 $this->headTitle()->setSeparator(' - ');
 $this->headTitle('Age of Evolution');
 $auth = Zend_Auth::getInstance();
-$t = Zend_Registry::get("translate");
 $req = Zend_Controller_Front::getInstance()->getRequest();
 $module = $req->getModuleName();
 $action = $req->getActionName();
 $controller = $req->getControllerName();
-$acl = Zend_Registry::get("acl");
-$log = Zend_Registry::get("log");
 $alerts = false;
 if ($auth->hasIdentity()) {
-    $alerts = Zend_Db_Table::getDefaultAdapter()->fetchAll(
-    "SELECT * 
-	FROM `" . ALERTS_TABLE .
-     "` 
-	WHERE `aid`!=ALL (
-        SELECT `id` FROM `" .
-     ALERTS_READ . "` WHERE `user`='" . $auth->getIdentity()->user_id . "'
-    )");
+    $alerts=Model_alerts::getAlerts();
 }
 if (! $alerts)
     $alerts[0] = false;
-$nav = array('Home' => array('url' => '', 'img' => '/common/images/home.png'), 
-'Forum' => array('url' => 'forum/', 'img' => '/common/images/forum.ico'), 
-'Wiki' => array('url' => 'wiki/', 'img' => '/common/images/wiki-icon.png'));
-if ($auth->hasIdentity()) {
+//$menu=new Zend_View_Helper_MyMenu();
+$iconSize=16;
+$path=$this->baseUrl();
+$this->myMenu()
+	->add('Home','default','index','index',1,null,null,$path.'/common/images/home.png',$iconSize,false)
+	->add('Forum','forum',null,null,2,null,null,$path.'/common/images/forum.ico',$iconSize,false)
+	->add('Wiki','wiki',null,null,3,null,null,$path.'/common/images/wiki-icon.png',$iconSize,false)
+	->add('Login','default','login','index',4,'login','index',$path.'/common/images/login.gif',$iconSize,false)
+	->add('[REG]','default','reg','index',5,'reg','index',$path.'/common/images/add.png',$iconSize,false)
+	->add('Logout','default','login','logout',6,'login','logout',$path.'/common/images/logout.png',$iconSize,false)
+	->add('[PROFILE]','default','account','logout',7,'account',null,$path.'/common/images/modacc.png',$iconSize,false)
+	->add('[BUG]','javascript:ev.bugreport();',null,null,20,'priv_zone',null,$path.'/common/images/bug.png',$iconSize,false)
+	->add('Admin','admin','index','index',100,'admin',null,$path.'/common/images/village/corona.gif',$iconSize,false)
+	->add('Help',"javascript:ev.help('index');",null,null,99,null,null,$path.'/common/images/help.png',$iconSize,false);
+/*if ($auth->hasIdentity()) {
     $nav['account'] = array('url' => 'account', 
     'img' => '/common/images/modacc.png');
     $nav['logout'] = array('url' => 'login/logout', 
@@ -42,13 +43,11 @@ if ($auth->hasIdentity()) {
 }
 if (is_array($this->layout()->nav)) {
     $nav = array_merge($nav, $this->layout()->nav);
-}
-$nav['Help'] = array('url' => 'ev.help(\'index\');', 
-'img' => '/common/images/help.png', 'js' => true);
-if ($acl->isAllowed(Model_role::getRole(), 'admin')) {
+}*/
+/*if ($acl->isAllowed(Model_role::getRole(), 'admin')) {
     $nav['Admin'] = array('url' => 'admin','img'=>'/common/images/village/corona.gif');
-}
-if ($module == "admin") {
+}*/
+/*if ($module == "admin") {
     $nav['mkdata'] = array('url' => 'admin/mkdata');
     $nav['alerts'] = array('url' => 'admin/alerts');
     $nav['track'] = array('url' => 'admin/track');
@@ -57,7 +56,7 @@ if ($module == "admin") {
     $man = $t->_('manutenzione');
     $nav[$man] = array('url' => 'admin/maintenance');
     $nav['faq'] = array('url' => 'admin/faq');
-}
+}*/
 //feed 
 $ev = $config = Zend_Registry::get('config');
 if ($ev->local) $news='<li>le news non funzionano in locale</li>';
@@ -87,11 +86,18 @@ else{
 		echo $this->headLink()->prependStylesheet(
 		$this->baseUrl() . '/common/css/css.php');
 		$this->headScript()->captureStart();
+		//******************************************logger*******************************************************
+		
+		if ($this->logger) {
+			foreach ($this->logger as $log) {
+				echo 'console.log("'.$log['timestamp'].' - '.$log['priorityName'].' - '.($log['info']? $log[info].': ' : '').'",'.$log['message'].');';
+			}
+		}
 		?>
 $(document).ready(function(){
     //***************************controllo aggiornamento script
     if (ev.revision<67) {
-	    if (confirm('<?php echo $t->_('alcuni file (.js /.css) sono stati aggiornati, ma nel suo pc è presente una versione vecchia. la pagina verrà ricaricata per aggiornare la cache.');?>'))
+	    if (confirm('<?php echo $this->t->_('alcuni file (.js /.css) sono stati aggiornati, ma nel suo pc è presente una versione vecchia. la pagina verrà ricaricata per aggiornare la cache.');?>'))
 	    	location.reload();
     }
 	$("ul#news").liScroll();
@@ -120,7 +126,7 @@ $(document).ready(function(){
         $cate .= '<option value="' . $value['id'] . '" title="' .
          $value['description'] . '">' . $value['name'] . '</option>';
     }
-    $content = array('title' => $t->_('bugreport'), 
+    $content = array('title' => '[bugreport]', 
     'text' => ('
 <div id="report"></div>
 <div id="form">
@@ -129,10 +135,10 @@ $(document).ready(function(){
      $this->image('/common/images/bug.png', 'bug', null, 32, 32) .
      '</label>
 		<input type="radio" id="type2" name="type"  value="idea" /><label for="type2">' .
-     $this->image('/common/images/idea.gif', $t->_('idee'), null, 32, 32) .
+     $this->image('/common/images/idea.gif', '[idee]', null, 32, 32) .
      '</label>
 		<input type="radio" id="type3" name="type" value="notlike" /><label for="type3">' .
-     $this->image('/common/images/notlike.gif', $t->_('lamentele'), null, 32, 
+     $this->image('/common/images/notlike.gif', '[lamentele]', null, 32, 
     32) . '</label>
 	</div>
 	<div>
@@ -141,19 +147,19 @@ $(document).ready(function(){
 	</div>
 	<div>tags : <span id="itag"></span> <input id="tag" />
 	<button onclick="ev.addtag($(\'#tag\').val());">' .
-     $t->_('inserisci/elimina') .
+     '[inserisci/elimina]' .
      '</button></div>
-	<textarea cols="42" rows="14" style="border:1px solid black;" id="description">' . $t->_(
-    'descrivi qui il bug che hai trovato, un idea per migliorare il gioco o quello che non ti piace.
-	cerca di essere chiaro e di compilare bene il form') .
+	<textarea cols="42" rows="14" style="border:1px solid black;" id="description">' . 
+    '[descrivi qui il bug che hai trovato, un idea per migliorare il gioco o quello che non ti piace.
+	cerca di essere chiaro e di compilare bene il form]' .
      '</textarea>
 	<div>' .
-     $t->_(
-    'se vuoi inviarci immagini caricale su un host online e metti qui l&apos;indirizzo') .
+     
+    '[se vuoi inviarci immagini caricale su un host online e metti qui l&apos;indirizzo]' .
      '</div>
 	<div><input id="link" /></div>
 	<div style="float: right;"><button onclick="ev.sendbug()">' .
-     $t->_('invia') . '</button></div>
+     '[invia]' . '</button></div>
 </div><script type="text/javascript">$("#type").buttonset();$("button").button();
 $(function() {
 var cache = {},
@@ -200,11 +206,11 @@ echo $this->headTitle();
 						<td style="width: 20%;"><?php echo $this->partial('right.phtml');?></td>
 						<td style="width: 20%;"> <?php
 							echo '<span id="timestamp" style="display:none">' . mktime() .'000</span>' .
- 								$t->_("Ora del server") . ': <br/><span id="timedisp">' . date("d/m/Y H:i:s") .'</span>';?>
+ 								"[Ora del server]" . ': <br/><span id="timedisp">' . date("d/m/Y H:i:s") .'</span>';?>
  						</td>
 						<td style="width: 30%;">
 							<div id="navigation">
-<?php 							echo $this->myMenu($nav);?>							
+<?php 							echo $this->myMenu();?>							
 							</div>
 						</td>
 						<td style="width: 30%;"> <?php echo '<ul id="news"><li><span>AGE OF EVOLUTION</span><a href="http://blogpagliaccio.wordpress.com/category/progetti/age-of-evolution/">News</a></li>'.$news.'</ul>';?> </td>

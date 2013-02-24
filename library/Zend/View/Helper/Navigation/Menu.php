@@ -221,14 +221,17 @@ class Zend_View_Helper_Navigation_Menu
                 $title = $t->translate($title);
             }
         }
-
+        $text=!$page->__isset('text') ? true : $page->get('text');
+        if (!$text && !$title) $title=$label;
         // get attribs for element
-        $attribs = array(
-            'id'     => $page->getId(),
-            'title'  => $title,
-            'class'  => $page->getClass()
-        );
-
+        $attribs=$page->get('attribs');
+        $attribs['id']=$page->getId();
+        $attribs['title']=$title;
+        $attribs['class']=$page->getClass();
+		$icon=$page->get('icon');
+		$iconSize=$page->get('iconSize')?$page->get('iconSize'):'32';
+		
+		
         // does page have a href?
         if ($href = $page->getHref()) {
             $element = 'a';
@@ -237,10 +240,13 @@ class Zend_View_Helper_Navigation_Menu
         } else {
             $element = 'span';
         }
-
+        
+		$imgattr=$attribs;
+		$imgattr['href']=$imgattr['target']=null;
         return '<' . $element . $this->_htmlAttribs($attribs) . '>'
-             . $this->view->escape($label)
-             . '</' . $element . '>';
+        	.($icon? '<img src="'.$icon.'" alt="'.$label.'" height="'.$iconSize.'" width="'.$iconSize.'" />':'')
+            . ($text ? $this->view->escape($label) : '')
+            . '</' . $element . '>';
     }
 
     /**

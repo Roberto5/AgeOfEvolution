@@ -3,7 +3,7 @@
 $acl=new Zend_Acl();
 //creazione ruoli
 $acl->addRole(new Zend_Acl_Role("guest"));// naviga solo nella parte principale del sito
-$acl->addRole(new Zend_Acl_Role("user"),"guest");//può acedere al server
+$acl->addRole(new Zend_Acl_Role("user"));//può acedere al server
 $acl->addRole(new Zend_Acl_Role("staff"),"user");
 $acl->addRole(new Zend_Acl_Role("owner"),"user");// proprietario account
 $acl->addRole(new Zend_Acl_Role("sharer"),"owner");// sharer
@@ -11,7 +11,7 @@ $acl->addRole(new Zend_Acl_Role("civless"),"user");// senza civiltà
 $acl->addRole(new Zend_Acl_Role("wait"),"civless");// in attesa
 $acl->addRole(new Zend_Acl_Role("debuger"),"staff");//privilegi di debug, visualizzazione log e debug tool
 $acl->addRole(new Zend_Acl_Role("mh"),"staff");// accesso a pannello mh (da implementare)
-$acl->addRole(new Zend_Acl_Role("admin"));//tutti i privilegi
+$acl->addRole(new Zend_Acl_Role("admin"),"staff");//tutti i privilegi
 
 //creazione risorsa
 //	modulo s1
@@ -36,8 +36,11 @@ $acl->addResource("admin");
 //@todo definire risorse admin
 //modulo default
 $acl->addResource("default");
+$acl->addResource("priv_zone",'default');
+$acl->addResource("login",'default');
+$acl->addResource("reg",'default');
+$acl->addResource('account','priv_zone');
 //controller
-$acl->addResource("account","default");
 $acl->addResource("track","default");
 //altro
 $acl->addResource("debug");
@@ -45,13 +48,16 @@ $acl->addResource("debug");
 
 //permessi del guest
 $acl->allow("guest","default");
-$acl->deny("guest","account");
+$acl->deny("guest","priv_zone");
+$acl->deny("guest","login",'logout');
 $acl->deny("guest","track");
 //permetto al guest di avviare l'E.P. e di leggere le stats
 $acl->allow("guest","processing");
 $acl->allow("guest","stats");
 //permessi dell'user
 $acl->allow("user","default");
+$acl->deny('user','login','index');
+$acl->deny('user','reg','index');
 //permessi staff
 //@todo definire permessi staff
 //permessi civless
@@ -74,5 +80,5 @@ $acl->deny("sharer","sharer");
 //permessi debugger
 $acl->allow("debuger","debug");
 //permessi admin
-$acl->allow("admin");// do tutti i poteri all'admin
+$acl->allow("admin",'admin');// do tutti i poteri all'admin
 ?>

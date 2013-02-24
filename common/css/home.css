@@ -28,7 +28,7 @@ div#navigation ul{
 }
 div#navigation li{
     display: inline;
-    margin: 0 0 0 1em;
+    margin: 0 3px;
     padding: 0;
 }
 div#navigation a{

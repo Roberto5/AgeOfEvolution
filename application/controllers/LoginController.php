@@ -1,66 +1,67 @@
 <?php
 class LoginController extends Zend_Controller_Action
 {
-    public function init () {}
-    public function indexAction ()
-    {
-        $form = new Form_LoginForm();
-        $form->setAction($this->view->url(array('controller' => 'login', 
-    'action' => 'index')));
-        $this->view->type = 0;
-        $this->view->form = $form;
-        if ($this->getRequest()->isPost()) {
-            //Se il form è valido, lo processiamo   
-            if ($form->isValid($_POST)) {
-                //recuperiamo i dati così .....
-                $user = $this->getRequest()->getParam('username');
-                $password = $this->getRequest()->getParam('password');
-                $auth = Zend_Auth::getInstance();
-                $adapter = new Zend_Auth_Adapter_DbTable(
-                Zend_Db_Table::getDefaultAdapter());
-                $adapter->setTableName("site_users")
-                    ->setIdentityColumn('username')
-                    ->setCredentialColumn('password')
-                    ->setCredentialTreatment('sha1(?)');
-                $adapter->setIdentity($user);
-                $adapter->setCredential($password);
-                $result = $adapter->authenticate();
-                if ($result->isValid()) {
-                    $user = $adapter->getResultRowObject(array('ID', 
-                    'username'));
-                    $auth->getStorage()->write(
-                    $user);
-                    $this->view->type = 1;
-                    $this->view->text = "SUCCESS";
-                } else {
-                	$this->view->type = 2;
-                    switch ($result->getCode()) {
-                        case Zend_Auth_Result::FAILURE:
-                            $this->view->text = "FAILURE";
-                            break;
-                        case Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID:
-                            $this->view->text = "PASS_ERR";
-                            break;
-                        case Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND:
-                            $this->view->text = "USER_NOT_FOUND";
-                            break;
-                        case Zend_Auth_Result::FAILURE_UNCATEGORIZED:
-                            $this->view->text = $result->getMessages();
-                            break;
-                    }
-                }
-            } 
-            else 
-                $this->view->form->populate($_POST);
-        }
-    }
-    function logoutAction ()
-    {
-        $auth = Zend_Auth::getInstance();
-        if ($auth->hasIdentity())
-            $auth->clearIdentity();
-    }
-public function recoverAction() {
+	public function init () {
+	}
+	public function indexAction ()
+	{
+		$form = new Form_LoginForm();
+		$form->setAction($this->view->url(array('controller' => 'login',
+				'action' => 'index')));
+		$this->view->type = 0;
+		$this->view->form = $form;
+		if ($this->getRequest()->isPost()) {
+			//Se il form è valido, lo processiamo
+			if ($form->isValid($_POST)) {
+				//recuperiamo i dati così .....
+				$user = $this->getRequest()->getParam('username');
+				$password = $this->getRequest()->getParam('password');
+				$auth = Zend_Auth::getInstance();
+				$adapter = new Zend_Auth_Adapter_DbTable(
+						Zend_Db_Table::getDefaultAdapter());
+				$adapter->setTableName("site_users")
+				->setIdentityColumn('username')
+				->setCredentialColumn('password')
+				->setCredentialTreatment('sha1(?)');
+				$adapter->setIdentity($user);
+				$adapter->setCredential($password);
+				$result = $adapter->authenticate();
+				if ($result->isValid()) {
+					$user = $adapter->getResultRowObject(array('ID',
+							'username'));
+					$auth->getStorage()->write(
+							$user);
+					$this->view->type = 1;
+					$this->view->text = "SUCCESS";
+				} else {
+					$this->view->type = 2;
+					switch ($result->getCode()) {
+						case Zend_Auth_Result::FAILURE:
+							$this->view->text = "FAILURE";
+							break;
+						case Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID:
+							$this->view->text = "PASS_ERR";
+							break;
+						case Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND:
+							$this->view->text = "USER_NOT_FOUND";
+							break;
+						case Zend_Auth_Result::FAILURE_UNCATEGORIZED:
+							$this->view->text = $result->getMessages();
+							break;
+					}
+				}
+			}
+			else
+				$this->view->form->populate($_POST);
+		}
+	}
+	function logoutAction ()
+	{
+		$auth = Zend_Auth::getInstance();
+		if ($auth->hasIdentity())
+			$auth->clearIdentity();
+	}
+	public function recoverAction() {
 		$conf=Zend_Registry::get('config');
 		$code=$this->_getParam('code');
 		if ($this->getRequest()->isPost()) {

@@ -1,11 +1,8 @@
 <?php
 //risuluzione ottimale 1280x1024
 //init
-header('Content-Type:text/html; charset=UTF-8');
-$this->headTitle()->setSeparator(' - ');
-$this->headTitle('Age of Evolution');
+$this->layout()->headTitle('Age of Evolution');
 $auth = Zend_Auth::getInstance();
-$t=Zend_Registry::get("translate");
 $req=Zend_Controller_Front::getInstance()->getRequest();
 $module=$req->getModuleName();
 $action=$req->getActionName();

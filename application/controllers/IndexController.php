@@ -1,4 +1,5 @@
 <?php
+
 class IndexController extends Zend_Controller_Action {
 
 	public function init() {
@@ -6,6 +7,7 @@ class IndexController extends Zend_Controller_Action {
 	}
 
 	public function indexAction() {
+		$this->_log->debug(Model_role::getRole());
 		//recuperiamo l'istanza di Zend_Auth
 		$auth=Zend_Auth::getInstance();
 		if ($auth->hasIdentity()) {
@@ -14,7 +16,7 @@ class IndexController extends Zend_Controller_Action {
 			 * user
 			 * @var Model_user
 			 */
-			$user=Zend_Registry::get("user");
+			$user=Model_user::getInstance();
 			$this->view->list=$user->getServerSubscrive();
 			
 		}

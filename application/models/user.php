@@ -25,6 +25,7 @@ class Model_user extends Zend_Db_Table_Abstract
     public $option = null;
     public $data = null;
     public $ID;
+    static private $instance;
     /**
      * @param mixed $option
      */
@@ -34,9 +35,10 @@ class Model_user extends Zend_Db_Table_Abstract
     	parent::__construct();
     	if (is_int($option)) $query="`ID`='$option'";
     	elseif (is_array($option)) $query=$option;
-    	else throw new Zend_Db_Table_Exception(' $option params is not int or array');
+    	else throw new Zend_Db_Table_Exception(' $option('.print_r($option,true).') params is not int or array');
     	$this->data= $this->fetchRow($query);
-    	$id=intval($this->data['id']);
+    	$ID=intval($this->data['ID']);
+    	$this->ID=$ID;
     	self::$instance=$this;
     	$this->option=new Model_option($ID);
     }

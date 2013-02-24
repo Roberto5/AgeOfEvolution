@@ -14,34 +14,36 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		return $config;
 	}
 	/**
-	 * impostazione del traduttore
+	 * set language of application
 	 */
 	protected function _initLanguage ()
 	{
 		$t = new Zend_Translate_Adapter_Csv(
 				array('content' => APPLICATION_PATH . '/language/en.csv',
-						'locale' => 'en', 'delimiter' => '@'));
+					'locale' => 'en', 'delimiter' => '@'));
 		$t->addTranslation(
-				array('content' => APPLICATION_PATH . '/language/it.csv',
-						'locale' => 'it', 'delimiter' => '@'));
+			array('content' => APPLICATION_PATH . '/language/it.csv',
+				'locale' => 'it', 'delimiter' => '@'
+	 				,'disableNotices'=>true
+	 		)
+		);
 		if ($_GET['locale']) {
-	 	setcookie('locale',$_GET['locale'],time()+604800,'/');$_COOKIE['locale']=$_GET['locale'];
-	 }
-	 Zend_Registry::set('langnotsup', false);
-	 try {
-	 	if (($_COOKIE['locale']=='browser')||!$_COOKIE['locale'])
-	 		$t->setLocale("browser");
-	 	elseif (in_array($_COOKIE['locale'], $t->getList())) $t->setLocale($_COOKIE['locale']);
-	 	else {
-	 		$t->setLocale("en");
-	 		Zend_Registry::set('langnotsup', true);
+	 		setcookie('locale',$_GET['locale'],time()+604800,'/');$_COOKIE['locale']=$_GET['locale'];
 	 	}
-
-	 }
-	 catch (Zend_Translate_Exception $e)
-	 {
-	 	$t->setLocale("en");
-	 }
+		Zend_Registry::set('langnotsup', false);
+		try {
+	 		if (($_COOKIE['locale']=='browser')||!$_COOKIE['locale'])
+	 			$t->setLocale("browser");
+	 		elseif (in_array($_COOKIE['locale'], $t->getList())) $t->setLocale($_COOKIE['locale']);
+	 		else {
+	 			$t->setLocale("en");
+	 			Zend_Registry::set('langnotsup', true);
+	 		}
+	 	}
+	 	catch (Zend_Translate_Exception $e)
+	 	{
+	 		$t->setLocale("en");
+	 	}
 		Zend_Validate_Abstract::setDefaultTranslator($t);
 		Zend_Form::setDefaultTranslator($t);
 		Zend_Registry::set('translate', $t);
@@ -58,7 +60,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 				array('basePath' => APPLICATION_PATH, 'namespace' => '',
 						'resourceTypes' => array(
 								'form' => array('path' => 'forms/', 'namespace' => 'Form_'),
-								'model' => array('path' => 'models/DbTable/', 'namespace' => 'Model_'),
+								'model' => array('path' => 'models/', 'namespace' => 'Model_'),
 								'plugin' => array('path' => 'plugin/', 'namespace' => 'plugin_'))));
 		// viene restituto l'oggetto per essere utilizzato e memorizzato nel bootstrap
 		return $autoLoader;
@@ -69,25 +71,112 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	protected function _initAuth ()
 	{
 		$this->bootstrap("db");
-
+		$this->bootstrap("Autoload");
+		require_once 'application/models/session.php';
 		$db = $this->getPluginResource('db')->getDbAdapter();
 		$adp = new Zend_Auth_Adapter_DbTable($db);
 		$adp->setTableName(USERS_TABLE)
 		->setIdentityColumn('username')
-		->setCredentialColumn('user_pass')
-		->setCredentialTreatment('s(?)');
-		require_once APPLICATION_PATH . '/models/session.php';
-
-		$storage = new Sessions(false, $db);
+		->setCredentialColumn('password')
+		->setCredentialTreatment('sha1(?)');
+		$storage = new Model_sessions(false, $db);
 		$auth = Zend_Auth::getInstance();
 		$auth->setStorage($storage);
-		$this->bootstrap("log");
+		//$this->bootstrap('log');$log=$this->getResource('log');
 		if ($auth->hasIdentity()) {
 			$identity = $auth->getIdentity();
-			$user = $identity->user_id;
+			$user = intval($identity->user_id);
 		} else
 			$user = 1;
 		$user = new Model_user($user);
+	}
+	/**
+	* init log
+	*/
+	protected function _initLog () {
+		$this->bootstrap('db');
+		$this->bootstrap("Controller");
+		$this->bootstrap("Auth");
+		$this->bootstrap('Autoload');
+		//$this->bootstrap('view');
+		$this->bootstrap('layout');
+		$this->bootstrap('config');
+		$acl = Zend_Registry::get("acl");
+		$db = $this->getPluginResource('db')->getDbAdapter();
+		$log = new Zend_Log();
+		$web=new Plugin_Logweb();
+		$formatter = new Zend_Log_Formatter_Xml();
+		$file = new Zend_Log_Writer_Stream(APPLICATION_PATH . "/log/log" . date("Ymd") . ".txt");
+		if ($this->getResource('config')->evolution->debug) {
+			$file2 = new Zend_Log_Writer_Stream(APPLICATION_PATH . "/log/debug" . date("Ymd") . ".txt");
+			$file2->addFilter(new Zend_Log_Filter_Priority(Zend_Log::DEBUG,"=="));
+			$file2->setFormatter($formatter);
+			$log->addWriter($file2);
+		}
+		$file->addFilter(new Zend_Log_Filter_Priority(Zend_Log::DEBUG,"!="));
+		include_once 'application/models/role.php';
+		$role = Model_Role::getRole();
+		$file->setFormatter($formatter);
+		if ((APPLICATION_ENV != "production") || ($acl->isAllowed($role, "debug"))) {
+			$log->addWriter($web);
+			//profilazione query
+		} 
+		$log->addWriter($file);
+		Zend_Registry::set('log', $log);
+		$view=new Zend_View();
+		$viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper(
+				'ViewRenderer');
+		$view->log=$log;
+		$viewRenderer->setView($view);
+		//delete olg log
+		@unlink(APPLICATION_PATH.'/log/debug'.date('Ymd',strtotime('-1 day')));
+		return $log;
+	}
+	/**
+	 * applica i plugin acl
+	 *
+	 */
+	protected function _initController ()
+	{
+		require_once APPLICATION_PATH.'/plugin/acl_controller.php';
+		require_once APPLICATION_PATH.'/plugin/myTmpEng.php';
+		$acl = null;
+		include_once (APPLICATION_PATH . "/models/acl.php");
+		$front = Zend_Controller_Front::getInstance();
+		$front->registerPlugin(new plugin_acl_controller($acl))->registerPlugin(new plugin_myTmpEng(Zend_Controller_Action_HelperBroker::getStaticHelper(
+				'ViewRenderer')));
+		Zend_Registry::set("acl", $acl);
+	}
+	/**
+	 * inizializza helper
+	 */
+	protected function _initView()
+	{
+		// Initialize view
+		$view = new Zend_View();
+		include_once APPLICATION_PATH . "/views/helpers/Image.php";
+		include_once APPLICATION_PATH . "/views/helpers/Template.php";
+		include_once APPLICATION_PATH.'/plugin/Tmpeng.php';
+		include_once APPLICATION_PATH . "/views/helpers/MyMenu.php";
+		$view->addFilter('Tmpeng')->addFilterPath(APPLICATION_PATH.'/plugin');
+		$img = new Zend_View_Helper_image();
+		$tmp = new Zend_View_Helper_template();
+		$mymenu=new Zend_View_Helper_MyMenu();
+		$view->registerHelper($img, "image");
+		$view->registerHelper($tmp, "template");
+		$view->registerHelper($mymenu, "MyMenu");
+		$this->bootstrap("log")->bootstrap("Language")->bootstrap("costomlayout");
+		$layout=$this->getResource("costomlayout");
+
+		$view->t = $this->getResource("Language");
+		$view->log = $this->getResource("log");
+		// Add it to the ViewRenderer
+		$viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper(
+				'ViewRenderer');
+		$layout->setView($view);
+		$viewRenderer->setView($view);
+		// Return it, so that it can be stored by the bootstrap
+		return $view;
 	}
 	/**
 	 * inizializza il server di gioco
@@ -149,21 +238,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 			Zend_Registry::set("param", $param);
 		}
 	}
-	/**
-	 * applica i plugin acl
-	 *
-	 */
-	protected function _initController ()
-	{
-		require_once 'application/plugin/acl_controller.php';
-		require_once APPLICATION_PATH.'/plugin/myTmpEng.php';
-		$acl = null;
-		include_once (APPLICATION_PATH . "/models/acl.php");
-		$front = Zend_Controller_Front::getInstance();
-		$front->registerPlugin(new plugin_acl_controller($acl))->registerPlugin(new plugin_myTmpEng(Zend_Controller_Action_HelperBroker::getStaticHelper(
-				'ViewRenderer')));
-		Zend_Registry::set("acl", $acl);
-	}
+	
 	/**
 	 * inizializza il layout
 	 */
@@ -183,73 +258,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		elseif ($module!='default') $layout->setLayout("game");
 		return $layout;
 	}
-	/**
-	 * init log
-	 */
-	protected function _initLog ()
-	{
-		$this->bootstrap('db');
-		$this->bootstrap("Controller");
-		//$this->bootstrap("Auth");
-		$acl = Zend_Registry::get("acl");
-		$db = $this->getPluginResource('db')->getDbAdapter();
-		$log = new Zend_Log();
-		$firebug = new Zend_Log_Writer_Firelog();
-		$file = new Zend_Log_Writer_Stream(
-				APPLICATION_PATH . "/log/log" . date("Ymd") . ".txt");
-		$file->addFilter(new Zend_Log_Filter_Priority(Zend_Log::DEBUG,"!="));
-		$role = Model_role::getRole();
-		$formatter = new Zend_Log_Formatter_Xml();
-		$file->setFormatter($formatter);
-		if ((APPLICATION_ENV != "production") || ($acl->isAllowed($role, "debug"))) {
-			$log->addWriter($firebug);
-			/*/profilazione query
-			 $profiler = new Zend_Db_Profiler_Firelog(
-			 		'All DB Queries');
-			$profiler->setEnabled(true);
-			$db->setProfiler($profiler);//*/
-		} /*else {
-		$filter = new Zend_Log_Filter_Priority(Zend_Log::INFO);
-		$log->addFilter($filter);
-		}*/
-		$log->addWriter($file);
-		$log->addPriority("movement", 8);
-		$log->addPriority("build", 9);
-		$log->addPriority("market", 10);
-		$log->addPriority("train", 11);
-		$log->addPriority("startMovement", 12);
-		Zend_Registry::set('log', $log);
-		return $log;
-	}
-	/**
-	 * inizializza helper
-	 */
-	protected function _initView ()
-	{
-		// Initialize view
-		$view = new Zend_View();
-		//$view->addHelperPath(APPLICATION_PATH."/views/helpers/","Zend_View_Helper");
-		include_once APPLICATION_PATH . "/views/helpers/image.php";
-		include_once APPLICATION_PATH . "/views/helpers/template.php";
-		include_once APPLICATION_PATH . "/views/helpers/MyMenu.php";
-		$img = new Zend_View_Helper_image();
-		$tmp = new Zend_View_Helper_template();
-		$mymenu=new Zend_View_Helper_MyMenu();
-		$view->registerHelper($img, "image");
-		$view->registerHelper($tmp, "template");
-		$view->registerHelper($mymenu, "MyMenu");
-		$this->bootstrap("log")->bootstrap("Language")->bootstrap("costomlayout");
-		$layout=$this->getResource("costomlayout");
-
-		$view->t = $this->getResource("Language");
-		$view->log = $this->getResource("log");
-		// Add it to the ViewRenderer
-		$viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper(
-				'ViewRenderer');
-		$layout->setView($view);
-		$viewRenderer->setView($view);
-		// Return it, so that it can be stored by the bootstrap
-		return $view;
-	}
+	
+	
 }
 

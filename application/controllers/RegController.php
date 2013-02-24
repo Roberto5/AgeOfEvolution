@@ -33,7 +33,7 @@ class RegController extends Zend_Controller_Action
                 $data = array('username' => $post['username'], 
                 'password' => sha1($post['password']), 'email' => $post['email'], 
                 'active' => $active, 'code' => $code);
-                $user = new Model_user();
+                $user = new Model_user(1);
                 $user->register($data);
                 if ($conf->email->validation) {
                     $sender = new Zend_Mail();
