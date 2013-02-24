@@ -1,7 +1,7 @@
 <?php
 
 $this->headScript()->captureStart();
-echo '$(document).ready(function() {
+if (APPLICATION_ENV=='production') echo '$(document).ready(function() {
 	
    //$("#recaptcha_switch_audio_btn").remove();
    Recaptcha.switch_type=function(){ alert("audio disabilitato!");};

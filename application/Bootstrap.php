@@ -51,8 +51,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	}
 	/**
 	 * caricamento modelli, form, plugin
-	 */
-	protected function _initAutoload ()
+	*/
+	protected function _initAutoload()
 	{
 		// Add autoloader empty namespace
 		$autoLoader = Zend_Loader_Autoloader::getInstance();

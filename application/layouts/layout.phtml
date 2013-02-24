@@ -198,6 +198,16 @@ echo $this->headTitle();
 ?>
 	</head>
 	<body>
+		<!-- SELECT LOCALE -->
+		<div id="locale">
+			language
+			<form action="<?php echo $this->url();?>">
+			<?php 
+			$list=array_merge(array('browser'=>'auto'),$this->t->getList());
+			echo $this->formSelect('locale',$_COOKIE['locale'],array('onchange'=>'submit();','id'=>'loc'),$list);
+			?>
+			</form>
+		</div>
 		<div id="container">
 			<div id="load"></div>
 			<div id="top">

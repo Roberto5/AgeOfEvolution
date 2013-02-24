@@ -42,14 +42,18 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
      * 
      * @return Zend_View_Helper_template
      */
-    public function template ()
-    {
-        if (! $this->baseUrl) {
-            $baseurl = new Zend_View_Helper_BaseUrl();
-            $this->baseUrl = $baseurl->baseUrl();
+    public function template ($template=null,$option=array())
+    { 
+    	if ($template) {
+    		return $this->$template($option);
+    	}
+        else {
+        	if (! $this->baseUrl) {
+            	$baseurl = new Zend_View_Helper_BaseUrl();
+            	$this->baseUrl = $baseurl->baseUrl();
+        	}
+        	return $this;
         }
-        if (!$this->civ) $this->civ=Model_civilta::getInstance();
-        return $this;
     }
     /**
      * avvisi

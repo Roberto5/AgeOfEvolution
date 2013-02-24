@@ -23,7 +23,8 @@ function css_compress ($buffer)
     $buffer = str_replace(' ;', ';', $buffer);
     return $buffer;
 }
-function dump_css_cache ($filename)
+
+function dump_css_cache ($filename,$key=array())
 {
     $cwd = getcwd() . DIRECTORY_SEPARATOR;
     $stat = stat($filename);
@@ -50,44 +51,45 @@ function dump_css_cache ($filename)
         $cache_contents = css_compress(file_get_contents($filename));
         @file_put_contents($current_cache, $cache_contents);
     }
+    foreach ($key as $k => $v) {
+    	$cache_contents=str_replace($k, $v, $cache_contents);
+    }
     return array('text' => $cache_contents, 'mtime' => $stat['mtime']);
 }
+
+$css=array(
+//		'jquery.contextmenu.css',
+//		'jquery.lightbox-0.5.css',
+		'jquery-ui.css',
+		'scroll.css'
+);
 if ($_GET['l'] == 'g') {
-    $layout = 'game.css';
+    $css[] = 'game.css';
     if ((is_numeric($_GET['s'])) && ($_GET['s'] > 0) && ($_GET['s'] < 7)) {
-        $file = "style_" . $_GET['s'] . ".css";
-        $file2 = "jquery-ui-" . $_GET['s'] . ".css";
+        $css[] = "style_" . $_GET['s'] . ".css";
+        $css[] = "jquery-ui-" . $_GET['s'] . ".css";
     } else {
-        $file = "style_" . rand(1, 6) . ".css";
+        $css[] = "style_" . rand(1, 6) . ".css";
     }
 } else {
-    $layout = 'home.css';
-    $file2 = "jquery-ui-1.8.11.custom.css";
+    $css[] = 'home.css';
+    $css[] = "jquery-ui-1.8.11.custom.css";
 }
-$r = dump_css_cache('style.css');
-$display = $r['text'];
-$mtime = $r['mtime'];
-$r = dump_css_cache($layout);
-$display .= $r['text'];
-if ($mtime < $r['mtime'])
-    $mtime = $r['mtime'];
-$r = dump_css_cache($file2);
-$display .= $r['text'];
-if ($mtime < $r['mtime'])
-    $mtime = $r['mtime'];
-$r = dump_css_cache('jquery.contextmenu.css');
-$display .= $r['text'];
-if ($mtime < $r['mtime'])
-    $mtime = $r['mtime'];
-$r = dump_css_cache('jquery.lightbox-0.5.css');
-$display .= $r['text'];
-if ($mtime < $r['mtime'])
-    $mtime = $r['mtime'];
-if ($file) {
-	$r = dump_css_cache($file);
+$key=array('NORMAL'=>'#e6e6e6',
+		'HOVER'=>'#dadada',
+		'ACTIVE'=>'#eee',
+		'INPUT_TEXT'=>'#000',
+		'INPUT_BG'=>'#fff',
+		'BACKGROUND2'=>'#aaa',
+		'BACKGROUND'=>'#eee',
+		'COLOR'=>'#000',
+		'BORDER'=>'#001'
+);
+$mtime = 0;
+foreach ($css as $value) {
+	$r = dump_css_cache($value,$key);
 	$display .= $r['text'];
-	if ($mtime < $r['mtime'])
-    	$mtime = $r['mtime'];
+	if ($mtime < $r['mtime']) $mtime = $r['mtime'];
 }
 header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $mtime) . ' GMT');
 echo $display;
