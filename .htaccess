@@ -24,7 +24,6 @@ RewriteCond %{HTTP_REFERER} !^http(s)?://(www\.)?ageofevolution.it [NC]
 RewriteCond %{HTTP_REFERER} !^http(s)?://localhost/ [NC]
 RewriteRule \.(jpg|jpeg|png|gif)$ http://img689.imageshack.us/img689/1339/bartlavagna.gif [NC,R,L]
 
-
 #########chache immagini #################
 #<FilesMatch "\.(jpg|jpeg|png|gif|ico)$">
 

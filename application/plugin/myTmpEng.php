@@ -1,6 +1,6 @@
 <?php
 require_once ('Zend/Controller/Plugin/Abstract.php');
-class plugin_myTmpEng extends Zend_Controller_Plugin_Abstract
+class Plugin_myTmpEng extends Zend_Controller_Plugin_Abstract
 {
 	/**
 	 * 

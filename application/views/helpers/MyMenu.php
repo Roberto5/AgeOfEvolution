@@ -92,8 +92,7 @@ class Zend_View_Helper_MyMenu extends Zend_View_Helper_Abstract
      * 
      * @return string
      */
-    public function render() {
-    	
+    public function render() {    	
     	try
     	{
     		$menu=new Zend_Navigation($this->page);

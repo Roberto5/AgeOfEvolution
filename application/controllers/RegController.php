@@ -1,8 +1,6 @@
 <?php
-
 class RegController extends Zend_Controller_Action
 {
-<<<<<<< HEAD
     /**
      * traduttore
      * @var Zend_Translate
@@ -52,53 +50,6 @@ class RegController extends Zend_Controller_Action
             }
         }
     }
-=======
->>>>>>> 67759326d774f3784664dea8eeece2e45eb40db1
-
-	public function init()
-	{
-	}
-
-	public function indexAction()
-	{
-		$form = new Form_Register();
-		$form->setAction($this->view->url(array('controller' => 'reg')));
-		$this->view->form = $form;
-		if ($this->getRequest()->isPost()) {
-			$this->view->send = true;
-			if ($form->isValid($_POST)) {
-				$this->view->type = 1;
-				$this->view->text = $this->view->t->_("registrazione avvenuta con successo");
-				$post = $form->getValues();
-				$conf = Zend_Registry::get("config");
-				$code=$this->genrandpass();
-				$cryptcode = sha1($code);
-				$active=($conf->email->validation ? 0 : 1 );
-				$data = array('username' => $post['username'],
-						'password' => sha1($post['password']), 'email' => $post['email'],
-						'active' => $active, 'code' => $cryptcode);
-				Model_User::register($data);
-				if ($conf->email->validation) {
-					include_once APPLICATION_PATH.'/language/email.php';
-					$locale=$this->_t->getLocale();
-					$sender = new Zend_Mail();
-					$sender->addTo($post['email'])
-					->setFrom($conf->webmail,$conf->site)
-					->setBodyHtml(
-							str_replace('{link}', $conf->url.$this->view->baseUrl('reg/active/code/'.$code),
-									str_replace('{user}', $post['username'], $message[$locale]['html'])))
-									->setBodyText(
-											str_replace('{link}', $conf->url.$this->view->baseUrl('reg/active/code/'.$code),
-													str_replace('{user}', $post['username'], $message[$locale]['text'])))
-													->setSubject($message[$locale]['obj'])
-													->send();
-				}
-			} else {
-				$this->view->type = 2;
-				$this->view->form->populate($_POST);
-			}
-		}
-	}
 
 	public function ctrlAction()
 	{	
@@ -129,7 +80,7 @@ class RegController extends Zend_Controller_Action
 		if ($user->data && ($user->data['code_time']+86400)<time()) {
 			$auth=Zend_Auth::getInstance();
 			$data=new stdClass();
-			$data->id=$user->data['id'];
+			$data->id=$user->data['ID'];
 			$data->username=$user->data['username'];
 			$auth->getStorage()->write($data);
 			$this->view->text=$this->_t->_("SUC_ACTIV");

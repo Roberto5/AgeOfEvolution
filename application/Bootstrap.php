@@ -143,7 +143,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$acl = null;
 		include_once (APPLICATION_PATH . "/models/acl.php");
 		$front = Zend_Controller_Front::getInstance();
-		$front->registerPlugin(new plugin_acl_controller($acl))->registerPlugin(new plugin_myTmpEng(Zend_Controller_Action_HelperBroker::getStaticHelper(
+		$front->registerPlugin(new Plugin_acl_controller($acl))->registerPlugin(new Plugin_myTmpEng(Zend_Controller_Action_HelperBroker::getStaticHelper(
 				'ViewRenderer')));
 		Zend_Registry::set("acl", $acl);
 	}
@@ -258,7 +258,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		elseif ($module!='default') $layout->setLayout("game");
 		return $layout;
 	}
-	
+	//*/
 	
 }
 

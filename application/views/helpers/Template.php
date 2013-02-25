@@ -43,15 +43,16 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
      * @return Zend_View_Helper_template
      */
     public function template ($template=null,$option=array())
-    { 
+    {
+		if (! $this->baseUrl) {
+            $baseurl = new Zend_View_Helper_BaseUrl();
+            $this->baseUrl = $baseurl->baseUrl();
+        	}
     	if ($template) {
     		return $this->$template($option);
     	}
         else {
-        	if (! $this->baseUrl) {
-            	$baseurl = new Zend_View_Helper_BaseUrl();
-            	$this->baseUrl = $baseurl->baseUrl();
-        	}
+        	
         	return $this;
         }
     }
