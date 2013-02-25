@@ -61,7 +61,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 						'resourceTypes' => array(
 								'form' => array('path' => 'forms/', 'namespace' => 'Form_'),
 								'model' => array('path' => 'models/', 'namespace' => 'Model_'),
-								'plugin' => array('path' => 'plugin/', 'namespace' => 'plugin_'))));
+								'plugin' => array('path' => 'plugin/', 'namespace' => 'Plugin_'))));
 		// viene restituto l'oggetto per essere utilizzato e memorizzato nel bootstrap
 		return $autoLoader;
 	}
@@ -72,14 +72,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	{
 		$this->bootstrap("db");
 		$this->bootstrap("Autoload");
-		require_once 'application/models/session.php';
+		require_once 'application/models/Session.php';
 		$db = $this->getPluginResource('db')->getDbAdapter();
 		$adp = new Zend_Auth_Adapter_DbTable($db);
 		$adp->setTableName(USERS_TABLE)
 		->setIdentityColumn('username')
 		->setCredentialColumn('password')
 		->setCredentialTreatment('sha1(?)');
-		$storage = new Model_sessions(false, $db);
+		$storage = new Model_Sessions(false, $db);
 		$auth = Zend_Auth::getInstance();
 		$auth->setStorage($storage);
 		//$this->bootstrap('log');$log=$this->getResource('log');

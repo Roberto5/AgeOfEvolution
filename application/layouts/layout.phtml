@@ -3,6 +3,7 @@
 header('Content-Type:text/html; charset=UTF-8');
 $this->headTitle()->setSeparator(' - ');
 $this->headTitle('Age of Evolution');
+//init variable
 $auth = Zend_Auth::getInstance();
 $req = Zend_Controller_Front::getInstance()->getRequest();
 $module = $req->getModuleName();
@@ -15,6 +16,7 @@ if ($auth->hasIdentity()) {
 if (! $alerts)
     $alerts[0] = false;
 //$menu=new Zend_View_Helper_MyMenu();
+//*******************************************init menu
 $iconSize=16;
 $path=$this->baseUrl();
 $this->myMenu()
@@ -24,39 +26,50 @@ $this->myMenu()
 	->add('Login','default','login','index',4,'login','index',$path.'/common/images/login.gif',$iconSize,false)
 	->add('[REG]','default','reg','index',5,'reg','index',$path.'/common/images/add.png',$iconSize,false)
 	->add('Logout','default','login','logout',6,'login','logout',$path.'/common/images/logout.png',$iconSize,false)
-	->add('[PROFILE]','default','account','logout',7,'account',null,$path.'/common/images/modacc.png',$iconSize,false)
+	->add('[PROFILE]','default','account','index',7,'account',null,$path.'/common/images/modacc.png',$iconSize,false)
 	->add('[BUG]','javascript:ev.bugreport();',null,null,20,'priv_zone',null,$path.'/common/images/bug.png',$iconSize,false)
-	->add('Admin','admin','index','index',100,'admin',null,$path.'/common/images/village/corona.gif',$iconSize,false)
+	->add(array('label'=>'Admin'
+			,'module'=>'admin'
+			//,'controller'=>'index'
+			//,'action'=>'index'
+			,'order'=>100
+			,'resource'=>'admin'
+			,'icon'=>$path.'/common/images/village/corona.gif'
+			,'iconSize'=>$iconSize
+			,'text'=>false
+		)
+	)
 	->add('Help',"javascript:ev.help('index');",null,null,99,null,null,$path.'/common/images/help.png',$iconSize,false);
-/*if ($auth->hasIdentity()) {
-    $nav['account'] = array('url' => 'account', 
-    'img' => '/common/images/modacc.png');
-    $nav['logout'] = array('url' => 'login/logout', 
-    'img' => '/common/images/logout.png');
-    $bug = $t->_('Segnalaci un bug o un tuo parere');
-    $nav[$bug] = array('url' => 'ev.bugreport();', 
-    'img' => '/common/images/bug.png', 'js' => true);
-} else {
-    $nav['Login'] = array('url' => 'login', 'img' => '/common/images/login.gif');
-    $reg = $t->_('registrati');
-    $nav[$reg] = array('url' => 'reg', 'img' => '/common/images/add.png');
+
+if ($module=='admin') {
+	$this->myMenu()->add(array('label'=>'[MKDATA]'
+					,'module'=>'admin'
+					,'controller'=>'mkdata'
+					,'order'=>8
+					,'resource'=>'admin'
+	))->add(array('label'=>'[ALERTS]'
+					,'module'=>'admin'
+					,'controller'=>'track'
+					,'order'=>9
+					,'resource'=>'admin'
+	))->add(array('label'=>'[MAP]'
+					,'module'=>'admin'
+					,'controller'=>'generate'
+					,'order'=>10
+					,'resource'=>'admin'
+	))->add(array('label'=>'[MAINTENAINCE]'
+					,'module'=>'admin'
+					,'controller'=>'maintenance'
+					,'order'=>11
+					,'resource'=>'admin'
+	))->add(array('label'=>'F.a.q'
+					,'module'=>'admin'
+					,'controller'=>'faq'
+					,'order'=>12
+					,'resource'=>'admin'
+	));
 }
-if (is_array($this->layout()->nav)) {
-    $nav = array_merge($nav, $this->layout()->nav);
-}*/
-/*if ($acl->isAllowed(Model_role::getRole(), 'admin')) {
-    $nav['Admin'] = array('url' => 'admin','img'=>'/common/images/village/corona.gif');
-}*/
-/*if ($module == "admin") {
-    $nav['mkdata'] = array('url' => 'admin/mkdata');
-    $nav['alerts'] = array('url' => 'admin/alerts');
-    $nav['track'] = array('url' => 'admin/track');
-    $man = $t->_('genera mappa');
-    $nav[$man] = array('url' => 'admin/generate');
-    $man = $t->_('manutenzione');
-    $nav[$man] = array('url' => 'admin/maintenance');
-    $nav['faq'] = array('url' => 'admin/faq');
-}*/
+
 //feed 
 $ev = $config = Zend_Registry::get('config');
 if ($ev->local) $news='<li>le news non funzionano in locale</li>';

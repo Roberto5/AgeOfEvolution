@@ -2,7 +2,7 @@
 /**
  * @method get($k,$dv=FALSE)
  */
-class Model_sessions implements Zend_Auth_Storage_Interface
+class Model_Sessions implements Zend_Auth_Storage_Interface
 {
     var $ID = '';
     var $log;

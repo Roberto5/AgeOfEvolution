@@ -93,12 +93,14 @@ class Zend_View_Helper_MyMenu extends Zend_View_Helper_Abstract
      * @return string
      */
     public function render() {
-    	$menu=new Zend_Navigation($this->page);
+    	
     	try
     	{
+    		$menu=new Zend_Navigation($this->page);
     		$this->view->navigation($menu)
     			->setAcl($this->acl)
     			->setRole(Model_Role::getRole());
+    			//->menu()->setMaxDepth(0);
     	}
     	catch (Exception $e)
     	{
