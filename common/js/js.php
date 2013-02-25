@@ -8,7 +8,7 @@ $expire_offset = 1814400; // set to a reaonable interval, say 3600 (1 hr)
 header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expire_offset) . ' GMT');
 
 
-$file=array('*main script*','evolution.js',"function.js","reg.js","time.js","*framework*","jquery.js","jquery-ui.js","jquery.contextmenu.js","jquery.tools.min.js","jquery.cookie.js","jquery.lightbox-0.5.min.js","jquery.li-scroller.1.0.js");
+$file=array("*framework*","jquery.js","jquery-ui.js","jquery.validate.min.js","jquery.contextmenu.js","jquery.tools.min.js","jquery.cookie.js","jquery.lightbox-0.5.min.js","jquery.li-scroller.1.0.js",'*main script*','evolution.js',"function.js","reg.js","time.js");
 
 $text="";$mtime=0;
 foreach ($file as $value) {

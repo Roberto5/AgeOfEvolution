@@ -61,7 +61,8 @@ $css=array(
 //		'jquery.contextmenu.css',
 //		'jquery.lightbox-0.5.css',
 		'jquery-ui.css',
-		'scroll.css'
+		'scroll.css',
+		'style.css'
 );
 if ($_GET['l'] == 'g') {
     $css[] = 'game.css';

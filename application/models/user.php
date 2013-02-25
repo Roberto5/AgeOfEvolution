@@ -55,7 +55,7 @@ class Model_user extends Zend_Db_Table_Abstract
 	{
 		if ($data) {
 			$data['code_time']=time();
-			self::getDefaultAdapter()->insert(PREFIX.'user',$data);
+			self::getDefaultAdapter()->insert(USERS_TABLE,$data);
 			return true;
 		} else {
 			return false;
