@@ -38,6 +38,7 @@ $this->headScript()->captureStart();
 echo '$(function() {
 		$( "#tabs" ).tabs({
 			cache: true,
+			//active:1,
 			ajaxOptions: {
 				error: function( xhr, status, index, anchor ) {
 					$( anchor.hash ).html(
@@ -51,12 +52,9 @@ echo '$(function() {
 	});';
 $this->headScript()->captureEnd();
 ?>
-<p>
+
 <div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="tabs">
 	<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-		<li><a href="#tabs-1"><?php
-    echo $t->_('Login');
-    ?></a></li>
     	<li><a href="ideals.html"><?php
     echo $t->_('ideali del gioco');
     ?></a></li>
@@ -69,16 +67,7 @@ $this->headScript()->captureEnd();
 		<li><a href="screen.php"><?php
     echo $t->_('Screen shoot');
     ?></a></li>
-    	<li><a href="<?php echo $this->url(array('controller'=>'reg'));?>?nolayout=1"><?php
-    echo $t->_('Registrati');
-    ?></a></li>
 	</ul>
-	<div id="tabs-1">
-		<?php 
-		$login=new Form_LoginForm();
-		$login->setAction($this->url(array('controller'=>'login')));
-		echo $login; 
-		?>
-	</div>
 </div>
-</p>
+
+

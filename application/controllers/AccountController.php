@@ -9,7 +9,7 @@ class AccountController extends Zend_Controller_Action
 	var $log;
     public function init()
     {
-        $this->user=Zend_Registry::get("user");
+        $this->user=Model_user::getInstance();
         $this->log=Zend_Registry::get("log");
     }
 
@@ -25,13 +25,12 @@ class AccountController extends Zend_Controller_Action
     	$this->log->debug($_POST);
         if (($_POST['submit'])&&($bool['tokenP'])) {
 			if ($_POST['newpass']) {
-				
 				if (!$pass->isValid($_POST)) {
 					$this->view->pass->populate($_POST);
 					//$this->log->debug("fallito");
 				}
 				else {
-					$this->user->updateU(array('user_pass'=>sha1($pass->getValue('newpass'))));
+					$this->user->updateU(array('password'=>sha1($pass->getValue('newpass'))));
 					$session=Zend_Auth::getInstance()->getStorage();
 					$uid=$this->user->ID;
 					$session->destroyAll($uid);

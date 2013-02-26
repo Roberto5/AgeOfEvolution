@@ -38,11 +38,13 @@ div#navigation a:hover{
     text-decoration: underline;
 }
 div#footer {
-    bottom: -20px; 
+    bottom: 0; 
     width: 100%;
     text-align:center;
     min-height: 20px;
-	position: relative;
+	position: fixed;
+	font-size: 15px;
+	font-weight: bold;
 }
 div#footer a{
     text-decoration: underline;

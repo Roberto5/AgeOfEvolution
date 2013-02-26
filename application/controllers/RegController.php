@@ -12,8 +12,9 @@ class RegController extends Zend_Controller_Action
     }
     public function indexAction ()
     {
+    	//@todo aggiunstare
     	global $messRegisterMail;
-        $form = new Application_Form_Register();
+        $form = new Form_Register();
         $form->setAction($this->view->url(array('controller' => 'reg')));
         $this->view->form = $form;
         if ($this->getRequest()->isPost()) {

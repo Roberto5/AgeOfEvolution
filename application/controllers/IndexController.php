@@ -23,7 +23,5 @@ class IndexController extends Zend_Controller_Action {
 		else
 			$this->view->identity=false;
 	}
-
-	public function creditsAction() {}
 }
 
