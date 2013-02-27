@@ -1,4 +1,18 @@
+
+
 (function($) {
+	jQuery.interval={
+			id:0,
+			start:function() {
+				this.id=setInterval(this.callback,1000);
+			},
+			stop:function() {
+				clearInterval(this.id);
+			},
+			callback:function() {
+				
+			}
+	};
     $.fn.timer = function(options) {
         // valori di default
         var config = {
@@ -24,10 +38,12 @@
         	else {
         		//method start,stop,reset
         		switch (options) {
-        			case 'stop' : 
+        			case 'stop' : $this.data('run',false);
         				break;
-        			case 'reset' : break;
-        			case 'start' : break;
+        			case 'reset' : $this.data('time',$this.data('reset'));
+        				break;
+        			case 'start' : $this.data('run',true);
+        				break;
         		}
         	}
         });
