@@ -1,9 +1,3 @@
-#locale {
-	top:0px;
-	right:0px;
-	position:fixed;
-}
-
 /*toltip*/
 .tooltip {
 	display:none;
@@ -557,21 +551,3 @@ table.admin th {
 	.t h4 .ui-icon { float: left; }
 
 	.input_troops { width: 35px; }
-.server {
-	background-image: url('./../images/mondo.gif');
-    background-repeat: no-repeat;
-    color: black;
-    height: 131px;
-    padding-left: 131px;
-    width: 300px;
-    font-size:13px;
-}
-.server.offline{
-	background-image: url('./../images/mondooff.gif');
-}
-.server.reg.offline{
-	background-image: url('./../images/mondooff.gif');
-}
-.server.reg{
-	background-image: url('./../images/mondobn.gif');
-}
