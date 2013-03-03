@@ -93,8 +93,8 @@ else{
 }
 
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE HTML>
+<html>
 	<head>
 		<meta name="DESCRIPTION" content="browser game gratuito, gestionale in cui i giocatori comandano civiltà, portandole ad evolversi dalla preistoria fino al futuro" />
 		<meta name="KEYWORDS" content="browsergame,strategia,gestionale,evoluzione,gratis" />
@@ -102,19 +102,44 @@ else{
 <?php
 		echo $this->headLink()->prependStylesheet(
 		$this->baseUrl() . '/common/css/css.php');
-		$this->headScript()->captureStart();
-		//******************************************logger*******************************************************
-		
+echo $this->headScript()->prependFile($this->baseUrl('/common/js/js.php'));
+?>
+<script type="text/javascript">
+<!--
+//******************************************logger*******************************************************
+<?php
 		if ($this->logger) {
 			foreach ($this->logger as $log) {
 				echo 'console.log("'.$log['timestamp'].' - '.$log['priorityName'].' - '.($log['info']? $log[info].': ' : '').'",'.$log['message'].');';
 			}
 		}
-		?>
-$(document).ready(function(){
+?>
+	$(document).ready(function(){
+		//add button
+		$("button:not(.close):not(.edit):not(.add):not(.delete),input[type=submit]:not(.edit):not(.add):not(.delete)").button();
+		$("button.edit").button({icons: {
+	        primary: "ui-icon-wrench"
+	    },
+	    text: false
+	    });
+		$("button.close").button({icons: {
+	        primary: "ui-icon-circle-close"
+	    },
+	    text: false
+	    });
+		$("button.add").button({icons: {
+	        primary: "ui-icon-plus"
+	    },
+	    text: false
+	    });
+		$("button.delete").button({icons: {
+	        	primary: "ui-icon-close"
+	    	},
+	    		text: false
+	    });;
 //windows
-	$("#credits").dialog({autoOpen: false});
-	<?php 
+		$("#credits").dialog({autoOpen: false});
+		<?php 
 	if ($module=='default') {
 		echo '$("#reg").dialog({autoOpen: false});$("#login").dialog({autoOpen: false});';
 		if (APPLICATION_ENV=='production') echo '$(document).ready(function() {
@@ -125,7 +150,7 @@ $(document).ready(function(){
 		}); ';
 	}
 	?>
-    //***************************controllo aggiornamento script
+	//***************************controllo aggiornamento script
     if (ev.revision<67) {
 	    if (confirm('<?php echo $this->t->_('alcuni file (.js /.css) sono stati aggiornati, ma nel suo pc è presente una versione vecchia. la pagina verrà ricaricata per aggiornare la cache.');?>'))
 	    	location.reload();
@@ -150,80 +175,80 @@ $(document).ready(function(){
 	setTimeout(ev.showalert,3000);
 	ev.alertstak=<?php echo json_encode($alerts);?>;
 	<?php
-	if ($auth->hasIdentity()) {
-    	$cat = Zend_Db_Table::getDefaultAdapter()->fetchAll("SELECT * FROM `site_track_cat`");
-    foreach ($cat as $value) {
-        $cate .= '<option value="' . $value['id'] . '" title="' .
-         $value['description'] . '">' . $value['name'] . '</option>';
-    }
-    $content = array('title' => '[bugreport]', 
-    'text' => ('
-<div id="report"></div>
-<div id="form">
-	<div id="type">
-		<input type="radio" id="type1" name="type" checked="checked" value="bug" /><label for="type1">' .
-     $this->image('/common/images/bug.png', 'bug', null, 32, 32) .
-     '</label>
-		<input type="radio" id="type2" name="type"  value="idea" /><label for="type2">' .
-     $this->image('/common/images/idea.gif', '[idee]', null, 32, 32) .
-     '</label>
-		<input type="radio" id="type3" name="type" value="notlike" /><label for="type3">' .
-     $this->image('/common/images/notlike.gif', '[lamentele]', null, 32, 
-    32) . '</label>
-	</div>
-	<div>
-		<select id="category">' . $cate .
-     '</select>
-	</div>
-	<div>tags : <span id="itag"></span> <input id="tag" />
-	<button onclick="ev.addtag($(\'#tag\').val());">' .
-     '[inserisci/elimina]' .
-     '</button></div>
-	<textarea cols="42" rows="14" style="border:1px solid black;" id="description">' . 
-    '[descrivi qui il bug che hai trovato, un idea per migliorare il gioco o quello che non ti piace.
-	cerca di essere chiaro e di compilare bene il form]' .
-     '</textarea>
-	<div>' .
-     
-    '[se vuoi inviarci immagini caricale su un host online e metti qui l&apos;indirizzo]' .
-     '</div>
-	<div><input id="link" /></div>
-	<div style="float: right;"><button onclick="ev.sendbug()">' .
-     '[invia]' . '</button></div>
-</div><script type="text/javascript">$("#type").buttonset();$("button").button();
-$(function() {
-var cache = {},
-lastXhr;
-$( "#tag" ).autocomplete({
-minLength: 1,
-source: function( request, response ) {
-var term = request.term;
-if ( term in cache ) {
-response( cache[ term ] );
-return;
-}
-lastXhr = $.getJSON( path+"/track/auto", request, function( data, status, xhr ) {
-cache[ term ] = data;
-if ( xhr === lastXhr ) {
-response( data );
-}
-});
-}
-});
-});
-	</' . 'script>'));
-    echo 'ev.bugcontent=' . json_encode($content) . ';';
-}
-?>
+			if ($auth->hasIdentity()) {
+		    	$cat = Zend_Db_Table::getDefaultAdapter()->fetchAll("SELECT * FROM `site_track_cat`");
+		    foreach ($cat as $value) {
+		        $cate .= '<option value="' . $value['id'] . '" title="' .
+		         $value['description'] . '">' . $value['name'] . '</option>';
+		    }
+		    $content = array('title' => '[bugreport]', 
+		    'text' => ('
+		<div id="report"></div>
+		<div id="form">
+			<div id="type">
+				<input type="radio" id="type1" name="type" checked="checked" value="bug" /><label for="type1">' .
+		     $this->image('/common/images/bug.png', 'bug', null, 32, 32) .
+		     '</label>
+				<input type="radio" id="type2" name="type"  value="idea" /><label for="type2">' .
+		     $this->image('/common/images/idea.gif', '[idee]', null, 32, 32) .
+		     '</label>
+				<input type="radio" id="type3" name="type" value="notlike" /><label for="type3">' .
+		     $this->image('/common/images/notlike.gif', '[lamentele]', null, 32, 
+		    32) . '</label>
+			</div>
+			<div>
+				<select id="category">' . $cate .
+		     '</select>
+			</div>
+			<div>tags : <span id="itag"></span> <input id="tag" />
+			<button onclick="ev.addtag($(\'#tag\').val());">' .
+		     '[inserisci/elimina]' .
+		     '</button></div>
+			<textarea cols="42" rows="14" style="border:1px solid black;" id="description">' . 
+		    '[descrivi qui il bug che hai trovato, un idea per migliorare il gioco o quello che non ti piace.
+			cerca di essere chiaro e di compilare bene il form]' .
+		     '</textarea>
+			<div>' .
+		     
+		    '[se vuoi inviarci immagini caricale su un host online e metti qui l&apos;indirizzo]' .
+		     '</div>
+			<div><input id="link" /></div>
+			<div style="float: right;"><button onclick="ev.sendbug()">' .
+		     '[invia]' . '</button></div>
+		</div><script type="text/javascript">$("#type").buttonset();$("button").button();
+		$(function() {
+		var cache = {},
+		lastXhr;
+		$( "#tag" ).autocomplete({
+		minLength: 1,
+		source: function( request, response ) {
+		var term = request.term;
+		if ( term in cache ) {
+		response( cache[ term ] );
+		return;
+		}
+		lastXhr = $.getJSON( path+"/track/auto", request, function( data, status, xhr ) {
+		cache[ term ] = data;
+		if ( xhr === lastXhr ) {
+		response( data );
+		}
+		});
+		}
+		});
+		});
+			</' . 'script>'));
+		    echo 'ev.bugcontent=' . json_encode($content) . ';';
+		}
+		?>
+		   
+	
 });
 var path='<?php echo $this->baseUrl();?>';
 var module='<?php echo $module; ?>';
 ev.parsedata({ alertstak:'<?php echo json_encode($alerts);?>'});
-
+//-->
+</script>
 <?php
-$this->headScript()->captureEnd();
-		echo $this->headScript()->prependFile($this->baseUrl('/common/js/js.php'));
-
 echo $this->headTitle();
 ?>
 	</head>

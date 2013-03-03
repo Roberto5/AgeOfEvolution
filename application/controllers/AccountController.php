@@ -10,69 +10,103 @@ class AccountController extends Zend_Controller_Action
     public function init()
     {
         $this->user=Model_user::getInstance();
-        $this->log=Zend_Registry::get("log");
+        $this->view->option=array(
+        		//'prova'=>array(
+        		//		'name'=>'[PROVA]',
+        		//		'value'=>'prova',
+        		//		'label'=>''//if null display value
+        		//		'type'=>'Input'// default or Select or Textarea
+        		//		'option'=>array())
+        );
     }
 
     public function indexAction()
     {
-    	$bool=token_ctrl($this->getRequest()->getParams());
-    	$_POST['password']=sha1($_POST['password']);
-    	$this->view->token=auth();
-    	Zend_Auth::getInstance()->getStorage()->set("tokenP",$this->view->token);
-    	$t=Zend_Registry::get("translate");
-    	$pass=new Form_Profile();
-    	$this->view->pass=$pass;
-    	$this->log->debug($_POST);
-        if (($_POST['submit'])&&($bool['tokenP'])) {
-			if ($_POST['newpass']) {
-				if (!$pass->isValid($_POST)) {
-					$this->view->pass->populate($_POST);
-					//$this->log->debug("fallito");
-				}
-				else {
-					$this->user->updateU(array('password'=>sha1($pass->getValue('newpass'))));
-					$session=Zend_Auth::getInstance()->getStorage();
-					$uid=$this->user->ID;
-					$session->destroyAll($uid);
-					//$this->log->debug("successo nuova pass ".$pass->getValue('newpass'));
-				}
-			}
-			/*
-			 * @todo implementare cambio email
-			 * if ($_POST['email']) {
-				$val=new Zend_Validate_EmailAddress();
-				if (!$val->isValid($_POST['email'])) {
-					$bool=false;
-				}
-				else {
-					$this->db->query("UPDATE `".USERS_TABLE."` SET `user_pass`='".$_POST['newpass']."' WHERE `ID`='$id'");
-				}
-			}*/
-        	$this->log->debug($_POST['order']);
-        	$this->log->debug($this->user->option->get("order", 1));
-    		if ($_POST['order'] != $this->user->option->get("order", 1))
-				$this->user->option->set("order", intval($_POST['order']));
-    		if ($_POST['orderT'] != $this->user->option->get("orderT"))
-				$this->user->option->set("orderT", intval($_POST['orderT']));
-    		if ($_POST['coordB'] != $this->user->option->get("coord"))
-				$this->user->option->set("coord", intval($_POST['coordB']));
-    		if ($_POST['x'] != $this->user->option->get("coord_x"))
-				$this->user->option->set("coord_x", intval($_POST['x']));
-    		if ($_POST['y'] != $this->user->option->get("coord_y"))
-				$this->user->option->set("coord_y", intval($_POST['y']));
-    		if ($_POST['news'] != $this->user->option->get("news"))
-				$this->user->option->set("news", intval($_POST['news']));
-    //$this->alerts("profile.php", $t->_('opzioni modifiate'));
-        }
-        else {
-        	$this->view->order = $this->user->option->get("order", "1");
-        	$this->log->debug($this->view->order);
-    		$this->view->orderT = $this->user->option->get("orderT");
-    		$this->view->x=$this->user->option->get("coord_x");
-    		$this->view->y=$this->user->option->get("coord_y");
-    		$this->view->coordB=$this->user->option->get("coord");
-    		$this->view->news=$this->user->option->get("news",1);
-        }
+    	$this->view->key=array('NICK'=>$this->user->data['username'],'EMAIL'=>$this->user->data['email']);
+    }
+    public function editAction()
+    {
+    	$this->_helper->layout->setLayout("ajax");
+    	$this->_helper->viewRenderer->setNoRender(true);
+    	$bool=false;$mess='""';
+    	$form=new Form_Register();
+    	if ($e=$form->getElement($_POST['key'])) {
+    		if ($e->isValid($_POST['value'])) {
+    			$bool=true;
+    			$this->user->updateU(array($_POST['key']=>$_POST['value']));
+    		}
+    		else $mess=$this->_t->_('DATA_ERROR');
+    	}
+    	else {
+    		$mess=$this->_t->_('DATA_ERROR');
+    	}
+    	$this->_helper->layout->data=$bool;
+    	if (!$bool) {
+    		$this->_helper->layout->content=$mess;
+    	}
+    }
+    
+    public function ctrlAction()
+    {
+    	$this->_helper->layout->disableLayout();
+    	$this->_helper->viewRenderer->setNoRender(true);
+    	header("Content-type: application/json");
+    	$username=$_POST['username'];
+    	$email=$_POST['email'];
+    	$db=new Zend_Validate_Db_NoRecordExists(array('table'=>USERS_TABLE,'field'=>'username'));
+    	$bool=true;
+    	if ($username) {
+    		$alnum= new Zend_Validate_Alnum();
+    		$db->setField('username');
+    		$bool= (($alnum->isValid($username)) && ($db->isValid($username)));
+    	}
+    	if ($email) {
+    		$db->setField('email');
+    		$vemail=new Zend_Validate_EmailAddress();
+    		$bool= (($db->isValid($email)) && ($vemail->isValid($email)));
+    	}
+    	echo json_encode($bool);
+    }
+    
+    public function passwordAction()
+    {
+    	$this->_helper->layout->setLayout("ajax");
+    	$this->_helper->viewRenderer->setNoRender(true);
+    	$bool=false;$mess='';
+    	$form=new Form_Register();
+    	$e=$form->getElement('password');
+    	if (sha1($_POST['password'])==$this->user->data['password']) {
+    		if ($e->isValid($_POST['new'])&&($_POST['new']==$_POST['new2'])) {
+    			$bool='true';
+    			$this->user->updateU(array('password'=>$_POST['new']));
+    		}
+    		else $mess=$this->_t->_('DATA_ERROR');
+    	}
+    	else $mess=$this->_t->_('PASS_ERR');
+    	$this->_helper->layout->data=$bool;
+    	if (!$bool) {
+    		$this->_helper->layout->content=$mess;
+    	}
+    }
+    
+    public function deleteAction()
+    {
+    	$this->_helper->layout->disableLayout();
+    	$this->_helper->viewRenderer->setNoRender(true);
+    	$bool=false;$mess='';
+    	if (sha1($_POST['password'])==$this->user->data['password']) {
+    		$id=$this->user->data['id'];
+    		$this->user->delete("`id`='$id'");
+    		$auth = Zend_Auth::getInstance();
+    		if ($auth->hasIdentity())
+    			$auth->clearIdentity();
+    		$bool=true;
+    	}
+    	else $mess=$this->_t->_('PASS_ERR');
+    	$this->_helper->layout->data=$bool;
+    	if (!$bool) {
+    		$this->_helper->layout->content=$mess;
+    	}
     }
 }
 

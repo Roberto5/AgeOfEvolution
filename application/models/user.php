@@ -14,11 +14,6 @@ class Model_user extends Zend_Db_Table_Abstract
     protected $_name = USERS_TABLE;
     protected $_primary = 'ID';
     /**
-     * db
-     * @var Zend_Db_Adapter_Abstract
-     */
-    private $db;
-    /**
      * model_option
      * @var Model_option
      */
@@ -86,10 +81,10 @@ class Model_user extends Zend_Db_Table_Abstract
     }
     
     function getCiv($server) {
-    	$sel=$this->db->select();
+    	$sel=$this->getAdapter()->select();
     	$where="`user_id`='".$this->ID."' AND `server`='".$server."'";
         $sel->from(RELATION_USER_CIV_TABLE)->where($where);
-        $cid=$this->db->fetchRow($sel);
+        $cid=$this->getAdapter()->fetchRow($sel);
     	return $cid;
     }
 }

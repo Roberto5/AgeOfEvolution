@@ -207,7 +207,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 			$event = new Model_event();
 
 			//carichiamo le informazioni sulla civiltà
-			$user = Zend_Registry::get("user");
+			$user = Model_user::getInstance();
 			$cid = $user->getCiv($module);
 			$civ = new Model_civilta($cid, $user->option, $event);
 			Zend_Registry::set("civ", $civ);

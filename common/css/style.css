@@ -1,3 +1,27 @@
+.error {
+	color:red;
+}
+input.error {
+	border:2px solid red;
+}
+/*profile*/
+
+.profile {
+	margin:0 auto;
+	width:300px;
+	border: 1px solid BORDER;
+	border-radius:10px;
+}
+.profile td:nth-child(2n) {
+	text-align:right;
+}
+.profile td:nth-child(1):not(.button) {
+	text-align:left;
+	padding-left: 10px;
+}
+.profile input{
+	width:140px;
+}
 /*toltip*/
 .tooltip {
 	display:none;

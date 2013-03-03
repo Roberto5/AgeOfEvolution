@@ -33,7 +33,7 @@ $mittente=Zend_Auth::getInstance()->getIdentity()->username;
 ?>
 
 <form action="<?php echo $this->escape($this->form->getAction()); ?>" method="<?php echo $this->escape($this->form->getMethod()); ?>">
-<center><div id="foglio">
+<div id="foglio" style="align:center;">
 		  <div id="contenitore">
 		  <br /><br />
 		  <table style="width: 300px;">
@@ -56,5 +56,5 @@ $mittente=Zend_Auth::getInstance()->getIdentity()->username;
 		  
 		  </div>
 		  <?php echo $this->form->$submit;?>
-		 </div></div></center></form>
+		 </div></div></form>
      

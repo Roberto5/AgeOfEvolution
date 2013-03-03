@@ -321,7 +321,7 @@ AND `" . RELATION_USER_CIV_TABLE . "`.`user_id`=`" . USERS_TABLE . "`.`ID`");
     function refresh ($option = array('order'=>false,'queue'=>false))
     {
         //aggiorno la coda costruzioni
-        require_once APPLICATION_PATH . '/views/helpers/template.php';
+        require_once APPLICATION_PATH . '/views/helpers/Template.php';
         $tmp = new Zend_View_Helper_template($this);
         if ($option['queue']) {//ricalcolo coda
             $where = array("`type`='1'", 

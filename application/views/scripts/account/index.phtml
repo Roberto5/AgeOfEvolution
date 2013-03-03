@@ -1,4 +1,58 @@
+<div id="dialog" title="[CONFIRM]">
+[DELETE_CONFIRM]
+<div>Password :<input id="delete" type="password" /></div>
+</div>
+<form class="profile">
+<table style="width: 300px;">
+  <tr id="username">
+    <td>[USERNAME]</td>
+    <td><span>NICK</span><input name="username" style="display:none;" required="required" value="NICK" /></td>
 <?php 
+if ($this->can) {
+?>
+    <td><button class="edit profile">[EDIT]</button></td>
+<?php 
+}
+?>
+  </tr>
+  <tr id="email">
+    <td>Email :</td>
+    <td><span>EMAIL</span><input name="email" type="email" required="required" style="display:none;" value="EMAIL" /></td>
+    <td><button class="edit profile">[EDIT]</button></td>
+  </tr>
+<?php 
+foreach ($this->option as $key => $value) {
+	if (!$value['label']) $value['label']=$value['value'];
+	echo '<tr id="'.$key.'">
+		<td>'.$value['name'].'</td>
+		<td><span>'.$value['label'].'</span>';
+	if (!$value['type']) $value['type']='Text';
+	$value['attr']['style']='display:none;';
+	if ($value['required']) $value['attr']['required']='required';
+	$helper='form'.$value['type'];
+	echo $this->$helper($key,$value['value'],$value['attr'],$value['option']);
+	//$h=new Zend_View_Helper_FormSelect();$h->formSelect($name);
+	//		<input '.(?'required="required"':'').' name="'.$key.'" style="display:none;" value="'.$value['value'].'" /></td>
+	echo'<td><button class="edit profile">[EDIT]</button></td>
+	</tr>';
+}
+?>
+  <tr>
+    <td class="button" colspan="3"><button>[CHANGEPASS]</button> <button>[DELETE] account</button></td>
+  </tr>
+  <tr class="password">
+  	<td>[OLD_PASS] :</td>
+  	<td colspan="2"><input name="password" type="password" /></td>
+  </tr>
+  <tr class="password">
+  	<td><input id="password" name="new" type="password" /></td>
+  	<td colspan="2"><input name="new2" type="password" /></td>
+  </tr>
+</table>
+</form>
+
+
+<?php /*
 $t=Zend_Registry::get("translate");
 ?>
 <form name="account" action="<?php echo $this->baseUrl(); ?>/account/index/tokenP/<?php echo $this->token;?>" method="post">
@@ -10,7 +64,7 @@ $t=Zend_Registry::get("translate");
 	/*<h3><?php echo $t->_("Cambia password");?></h3>
 <div><?php echo $t->_("Vecchia password");?>:<input name="pass"  size="10" type="password" /></div>
 <div><?php echo $t->_("Nuova password");?>:<input name="newpass" class="password" size="10" type="password" /></div>
-<?php echo $t->_("Ripeti");?>:<input name="newpass2" class="password" size="10" type="password" />*/
+<?php echo $t->_("Ripeti");?>:<input name="newpass2" class="password" size="10" type="password" />
 ?>
 <h3><?php echo $t->_("Cambia email");?></h3>
 <div><input disabled="disabled" name="email" size="10"/></div>
@@ -51,7 +105,7 @@ echo '<h3>' . $t->_('ordinamento dei villaggi') . '</h3>
             ?>?')" /></p>
         <?php echo $t->_("inserisci password");?>
 	<input disabled="disabled" name="pass" size="7" type="password" />
-	<center>
+	
 	<input type="submit" value="<?php echo $t->_("salva");?>" name="submit" />
-	</center>
-</form>
+
+</form>*/
