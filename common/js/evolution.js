@@ -266,6 +266,8 @@ var ev = {
     },
     iconstak : new Array(),
     windows : function(size, pos, content, mod, alerts, close) {
+    	if (typeof(content.text)!='string') content.text=content.text.toString();
+    	var i;
 	button = null;
 	if (alerts) {
 	    if ((alerts.n - alerts.i) > 1) {

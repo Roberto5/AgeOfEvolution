@@ -5,22 +5,22 @@
  *
  */
 class Plugin_Logweb extends Zend_Log_Writer_Abstract {
-	private $layout;
+	private  static  $mess=array();
 	function __construct() {
-		//$layout=new Zend_View_Helper_Layout();
-		$this->layout=Zend_Layout::getMvcInstance()->getView();
-		$this->layout->logger=array();
 	}
 	function write($event) {
 		$this->_write($event);
 	}
 	protected function _write($event) {
 		$event['message']=json_encode($event['message']);
-		$this->layout->logger[]=$event;
+		self::$mess[]=$event;
 	}
 	static function factory($config) {
 		$web=new Plugin_Logweb();
 		return $web;
+	}
+	static function get() {
+		return self::$mess;
 	}
 }
 

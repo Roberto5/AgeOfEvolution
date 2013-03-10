@@ -108,8 +108,9 @@ echo $this->headScript()->prependFile($this->baseUrl('/common/js/js.php'));
 <!--
 //******************************************logger*******************************************************
 <?php
-		if ($this->logger) {
-			foreach ($this->logger as $log) {
+
+		if ($logmess=Plugin_Logweb::get()) {
+			foreach ($logmess as $log) {
 				echo 'console.log("'.$log['timestamp'].' - '.$log['priorityName'].' - '.($log['info']? $log[info].': ' : '').'",'.$log['message'].');';
 			}
 		}
@@ -309,7 +310,9 @@ document.write('<s'+'cript type=\"text/javascript\" src=\"http://ad.altervista.o
 ?>
 			</div>
 			<div id="content">      
-<?php 			echo $this->layout()->content;?>
+<?php 
+echo $this->layout()->content;
+?>
 			</div>
 		</div>
 <?php 

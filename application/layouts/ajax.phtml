@@ -1,6 +1,4 @@
-{"html":
 <?php 
-
 //$update=Model_civilta::getInstance()->refresh->getdata();
 $update=Model_refresh::getInstance();
 $title=$this->headTitle()->toString();
@@ -46,9 +44,12 @@ if ($epflag) {
 	$script.="$.ajax({url:path+'/'+module+'/processing',timeout:5000});";
 }
 
-if ($this->layout()->content) echo json_encode(array('text'=>$this->layout()->content,'title'=>$title,
+if ($this->layout()->content) $this->key['HTML']=json_encode(array('text'=>$this->layout()->content,'title'=>$title,
 'notdestroy'=>$this->layout()->notdetroy,'close'=>$this->layout()->close,
 'x'=>$this->layout()->x,'y'=>$this->layout()->y,'mod'=>$this->layout()->mod,'id'=>$this->layout()->id));
-else echo "false";?>,
-"data":<?php echo json_encode($this->layout()->data);?>,"update":<?php echo json_encode($update);?>,
-"javascript":<?php echo json_encode($script);?>}
+else $this->key['HTML']="false";
+$this->key['DATA']=json_encode($this->layout()->data);
+$this->key["UPDATE"]=json_encode($update);
+$this->key["JAVASCRIPT"]=json_encode($script);
+?>
+{"html":"HTML","data":DATA,"update":UPDATE,"javascript":JAVASCRIPT}

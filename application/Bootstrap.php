@@ -98,8 +98,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$this->bootstrap("Controller");
 		$this->bootstrap("Auth");
 		$this->bootstrap('Autoload');
-		//$this->bootstrap('view');
-		$this->bootstrap('layout');
 		$this->bootstrap('config');
 		$acl = Zend_Registry::get("acl");
 		$db = $this->getPluginResource('db')->getDbAdapter();
@@ -123,11 +121,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		} 
 		$log->addWriter($file);
 		Zend_Registry::set('log', $log);
-		$view=new Zend_View();
-		$viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper(
-				'ViewRenderer');
-		$view->log=$log;
-		$viewRenderer->setView($view);
 		//delete olg log
 		@unlink(APPLICATION_PATH.'/log/debug'.date('Ymd',strtotime('-1 day')));
 		return $log;
@@ -165,11 +158,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$view->registerHelper($img, "image");
 		$view->registerHelper($tmp, "template");
 		$view->registerHelper($mymenu, "MyMenu");
-		$this->bootstrap("log")->bootstrap("Language")->bootstrap("costomlayout");
+		$this->bootstrap("Language")->bootstrap("costomlayout")->bootstrap('log');
 		$layout=$this->getResource("costomlayout");
 
 		$view->t = $this->getResource("Language");
-		$view->log = $this->getResource("log");
+		$view->log=$this->getResource("log");
 		// Add it to the ViewRenderer
 		$viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper(
 				'ViewRenderer');
