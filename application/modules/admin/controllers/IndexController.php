@@ -28,6 +28,11 @@ class Admin_IndexController extends Zend_Controller_Action
         	$this->view->params=$this->param->getall();
         }
     }
+    public function editAction() {
+    	$this->_helper->layout->setLayout('ajax');
+    	$this->_helper->viewRenderer->setNoRender(true);
+    	$this->param->set($_POST['name'], htmlentities($_POST['value']));
+    }
 
     public function selAction()
     {

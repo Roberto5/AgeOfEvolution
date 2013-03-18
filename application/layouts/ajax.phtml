@@ -51,5 +51,6 @@ else $this->key['HTML']="false";
 $this->key['DATA']=json_encode($this->layout()->data);
 $this->key["UPDATE"]=json_encode($update);
 $this->key["JAVASCRIPT"]=json_encode($script);
+Zend_View_Filter_Tmpeng::addkey($this->key);
 ?>
-{"html":"HTML","data":DATA,"update":UPDATE,"javascript":JAVASCRIPT}
+{"html":HTML,"data":DATA,"update":UPDATE,"javascript":JAVASCRIPT}

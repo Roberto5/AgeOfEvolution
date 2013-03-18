@@ -23,8 +23,8 @@ define("START_POP","0");
 define("MAX_BOTTINO","1000");
 define("SERVER", "s1");
 
-define("MAX_X", "200");
-define("MAX_Y","200");
+define("MAX_X", "100");
+define("MAX_Y","100");
 
 
 ?>

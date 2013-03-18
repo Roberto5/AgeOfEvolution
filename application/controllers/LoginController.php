@@ -12,6 +12,10 @@ class LoginController extends Zend_Controller_Action
 		$this->view->form = $form;
 		if ($this->getRequest()->isPost()) {
 			//Se il form è valido, lo processiamo
+			$this->_helper->layout->setLayout("ajax");
+			$this->view->layout()->x=300;
+			$this->view->layout()->y=100;
+			//$this->_helper->viewRenderer->setNoRender(true);
 			if ($form->isValid($_POST)) {
 				//recuperiamo i dati così .....
 				$user = $this->getRequest()->getParam('username');
@@ -31,28 +35,32 @@ class LoginController extends Zend_Controller_Action
 							'username'));
 					$auth->getStorage()->write(
 							$user);
-					$this->view->type = 1;
-					$this->view->text = "SUCCESS";
+					//$this->_helper->layout->data->user=$adapter->getResultRowObject();
+					//Zend_Layout::getMvcInstance()->getLayout();
+					$this->view->layout()->data = 1;
+					$this->view->mess = "[SUCCESS]";
 				} else {
-					$this->view->type = 2;
+					$this->view->layout()->data = 2;
 					switch ($result->getCode()) {
 						case Zend_Auth_Result::FAILURE:
-							$this->view->text = "FAILURE";
+							$this->view->mess = "[FAILURE]";
 							break;
 						case Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID:
-							$this->view->text = "PASS_ERR";
+							$this->view->mess = "[PASS_ERR]";
 							break;
 						case Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND:
-							$this->view->text = "USER_NOT_FOUND";
+							$this->view->mess = "[USER_NOT_FOUND]";
 							break;
 						case Zend_Auth_Result::FAILURE_UNCATEGORIZED:
-							$this->view->text = $result->getMessages();
+							$this->view->mess = $result->getMessages();
 							break;
 					}
 				}
 			}
-			else
-				$this->view->form->populate($_POST);
+			else {
+				$this->view->layout()->data= 0;
+				$this->view->mess = "[ERR_FORM]";
+			}
 		}
 	}
 	function logoutAction ()
@@ -60,6 +68,7 @@ class LoginController extends Zend_Controller_Action
 		$auth = Zend_Auth::getInstance();
 		if ($auth->hasIdentity())
 			$auth->clearIdentity();
+		$this->_helper->layout->setLayout('ajax');
 	}
 	public function recoverAction() {
 		$conf=Zend_Registry::get('config');

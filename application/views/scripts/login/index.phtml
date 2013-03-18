@@ -1,10 +1,8 @@
 <?php 
-switch ($this->type) {
-	case 1:
-	case 2: echo $this->template()->alerts($this->text,$this->url(array('controller'=>'index','action'=>'index')),$this->type,5);
-	break;
-	default:
-		echo $this->form;
-	break;
+echo $this->mess;
+if ($this->layout()->data==1) {
+	$this->headTitle('Success');
+	$this->layout()->close='location.reload';
 }
+else $this->headTitle('Error');
 ?>

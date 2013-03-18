@@ -1,4 +1,5 @@
-<?php 
+<?php
+$this->headScript()->appendFile($this->baseUrl('/common/js/admin.js'));
 $t=Zend_Registry::get("translate");
 if ($this->sel) {
 	//selezione server
@@ -42,7 +43,7 @@ else {
   </tr>
   <?php 
   foreach ($this->params as $value) {
-  	echo '<tr><td>'.$value['name'].'</td><td>'.$value['value'].'</td></tr>';
+  	echo '<tr><td>'.$value['name'].'</td><td>'.$value['value'].'</td><td><button class="edit"></button></td></tr>';
   }
   
   ?>

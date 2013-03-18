@@ -16,9 +16,18 @@ class Model_params extends Zend_Db_Table_Abstract {
 	 */
 	protected $_name=PARAMS_TABLE;
 	protected $_primary="name";
+	static $instance;
 	
 	function __construct() {
 		parent::__construct();
+		self::$instance=$this;
+	}
+	/**
+	 * @return Model_params
+	 */
+	static function getInstance() {
+		if (!self::$instance) self::$instance= new Model_params();
+		return self::$instance;
 	}
 	/**
 	 * 

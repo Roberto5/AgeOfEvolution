@@ -3,7 +3,7 @@ class Form_LoginForm extends Zend_Form {
 	public function init() {
          
 		// (1) Impostiamo gli attributi "action", "method" e "id" del form
-        $this->setMethod('post')->setAttrib('id', 'loginForm');
+        $this->setMethod('post')->setAttrib('id', 'loginForm')->setAttrib('onsubmit', 'return false');
  		$t=Zend_Registry::get("translate");
         $this->setDefaultTranslator($t);
                 /************************ Textbox nome utente *************************/

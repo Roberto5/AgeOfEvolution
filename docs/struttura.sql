@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 3.4.10.1deb1
+-- version 3.4.11.1deb1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generato il: Gen 27, 2013 alle 18:21
+-- Generato il: Mar 17, 2013 alle 18:51
 -- Versione del server: 5.5.29
--- Versione PHP: 5.3.10-1ubuntu3.5
+-- Versione PHP: 5.4.6-1ubuntu1.2
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -32,7 +32,7 @@ CREATE TABLE `s1_ally` (
   `name` varchar(30) NOT NULL,
   `description` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -102,7 +102,7 @@ CREATE TABLE `s1_civ` (
   `ev_ready` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`civ_id`),
   KEY `ally` (`civ_ally`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -117,7 +117,7 @@ CREATE TABLE `s1_events` (
   `time` int(30) NOT NULL,
   `params` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -173,7 +173,7 @@ CREATE TABLE `s1_mess` (
   PRIMARY KEY (`id`),
   KEY `destinatario` (`destinatario`),
   KEY `mittente` (`mittente`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -408,9 +408,9 @@ CREATE TABLE `site_option` (
 
 DROP TABLE IF EXISTS `site_role`;
 CREATE TABLE `site_role` (
-  `user_id` int(5) NOT NULL DEFAULT '1',
+  `uid` int(5) NOT NULL DEFAULT '1',
   `role` varchar(40) NOT NULL,
-  PRIMARY KEY (`user_id`,`role`)
+  PRIMARY KEY (`uid`,`role`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -504,7 +504,7 @@ DROP TABLE IF EXISTS `site_users`;
 CREATE TABLE `site_users` (
   `ID` int(5) NOT NULL AUTO_INCREMENT,
   `username` varchar(30) NOT NULL,
-  `password` varchar(32) NOT NULL,
+  `password` varchar(64) NOT NULL,
   `email` varchar(30) NOT NULL,
   `active` int(1) NOT NULL,
   `code` varchar(256) NOT NULL,
@@ -646,13 +646,7 @@ ALTER TABLE `site_option`
 -- Limiti per la tabella `site_role`
 --
 ALTER TABLE `site_role`
-  ADD CONSTRAINT `site_role_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `site_users` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Limiti per la tabella `site_sessions`
---
-ALTER TABLE `site_sessions`
-  ADD CONSTRAINT `site_sessions_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `site_users` (`ID`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `site_role_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `site_users` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `site_track`

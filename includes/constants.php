@@ -64,6 +64,7 @@ define("MAX_EV","100");
 define("OWNER", 3);
 define("SHARER", 2);
 define("WAIT", 1);
+define("REVISION", '1');
 
 $server=array('s1');
 
@@ -75,31 +76,4 @@ define("URLSITO","http://www.ageofevolution.it");
 define("WEBMAIL","admin@ageofevolution.it");
 
 
-$messChangeMail="
-            <html>
-			<head>
-			<title>".SITO." - Conferma cambio E-mail per l'account {0}</title>
-			</head>
-			<body>
-			<p><b>".SITO."</b></p>
-			<br />Conferma cambio E-mail per l'account {0}</b>
-			<br /><br />Per confermare il cambio E-mail <a href=\"".URLSITO."/profile.php?action=change&auth={1}&email={2}\">clicca qui</a>
-			<br />se non hai fatto tu questa richiesta ignora il messaggio.
-			</p>
-			</body>
-			</html>";
-
-$messRegisterMail="
-            <html>
-			<head>
-			<title>".SITO." - Conferma registrazione account {0}</title>
-			</head>
-			<body>
-            <p><b>".SITO."</b></p>
-            <br />Conferma account {0}</b>
-            <br /><br />Per completare la registrazione <a href=\"".URLSITO."/register.php?action=confirm&auth={1}\">clicca qui</a>
-			<br />Grazie per esserti registrato!
-            </p>
-            </body>
-            </html>";
 ?>

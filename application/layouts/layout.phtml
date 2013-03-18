@@ -29,7 +29,7 @@ $this->myMenu()
 	->add('Wiki','wiki',null,null,3,null,null,$path.'/common/images/wiki-icon.png',$iconSize,false)
 	->add('Login',"javascript:$('#login').dialog('open');",null,null,4,'login','index',$path.'/common/images/login.gif',$iconSize,false)
 	->add('[REG]',"javascript:$('#reg').dialog('open');",null,null,5,'reg','index',$path.'/common/images/add.png',$iconSize,false)
-	->add('Logout','default','login','logout',6,'login','logout',$path.'/common/images/logout.png',$iconSize,false)
+	->add('Logout','javascript:ev.logout();','','',6,'login','logout',$path.'/common/images/logout.png',$iconSize,false)
 	->add('[PROFILE]','default','account','index',7,'account',null,$path.'/common/images/modacc.png',$iconSize,false)
 	->add('[BUG]','javascript:ev.bugreport();',null,null,20,'priv_zone',null,$path.'/common/images/bug.png',$iconSize,false)
 	->add(array('label'=>'Admin'
@@ -102,7 +102,7 @@ else{
 <?php
 		echo $this->headLink()->prependStylesheet(
 		$this->baseUrl() . '/common/css/css.php');
-echo $this->headScript()->prependFile($this->baseUrl('/common/js/js.php'));
+echo $this->headScript()->prependFile($this->baseUrl('js'));
 ?>
 <script type="text/javascript">
 <!--
@@ -117,7 +117,7 @@ echo $this->headScript()->prependFile($this->baseUrl('/common/js/js.php'));
 ?>
 	$(document).ready(function(){
 		//add button
-		$("button:not(.close):not(.edit):not(.add):not(.delete),input[type=submit]:not(.edit):not(.add):not(.delete)").button();
+		$("button:not(.server):not(.close):not(.edit):not(.add):not(.delete),input[type=submit]:not(.edit):not(.add):not(.delete)").button();
 		$("button.edit").button({icons: {
 	        primary: "ui-icon-wrench"
 	    },
@@ -138,6 +138,11 @@ echo $this->headScript()->prependFile($this->baseUrl('/common/js/js.php'));
 	    	},
 	    		text: false
 	    });;
+	    $("#loginForm").submit(function(e) {
+		    ev.login();
+		    e.preventDefault();
+		    return false;
+	    });
 //windows
 		$("#credits").dialog({autoOpen: false});
 		<?php 
@@ -152,7 +157,7 @@ echo $this->headScript()->prependFile($this->baseUrl('/common/js/js.php'));
 	}
 	?>
 	//***************************controllo aggiornamento script
-    if (ev.revision<67) {
+    if (ev.revision<<?php echo REVISION;?>) {
 	    if (confirm('<?php echo $this->t->_('alcuni file (.js /.css) sono stati aggiornati, ma nel suo pc è presente una versione vecchia. la pagina verrà ricaricata per aggiornare la cache.');?>'))
 	    	location.reload();
     }
@@ -319,7 +324,7 @@ echo $this->layout()->content;
 if ($module=="default") {
 	echo ' <div id="login" title="Login">';
 	$login=new Form_LoginForm();
-	$login->setAction($this->url(array('controller'=>'login')));
+	//$login->setAction($this->url(array('controller'=>'login')));
 	echo $login.'</div>
 			<div id="reg" title="[REG]">';
 	$reg=new Form_Register();
