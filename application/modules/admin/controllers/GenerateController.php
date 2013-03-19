@@ -40,10 +40,10 @@ class Admin_GenerateController extends Zend_Controller_Action
         $coord = null;
         $data = null;
         $this->param->set("work", 1);
-        $w = 1; //265 giri
-        $w2 = 1;
+        $w = 1; //indicatore di lavoro
+        $w2 = 1;//altro indicatore
         $lf = 1;
-        $q = 100;
+        $q = 100; // larghezza settore 100x100 blocchi
         $tot = (MAX_X * 2 / $q) * (MAX_Y * 2 / $q) * 4 + 1;
         //$i=-MAX_X;$j = -MAX_Y;$k = 1;
         for ($i = - MAX_X; $i < MAX_X; $i += $q) {
@@ -51,11 +51,10 @@ class Admin_GenerateController extends Zend_Controller_Action
             	$this->param->set("comment", "generate zone in sector $i/$j");
                 for ($k = 1; $k <= 4; $k ++) {
                     //tot:w=100:x x= w*100/tot
-                    $perc = intval($w * 100 / $tot);
-                    $w ++;
+                    $perc = intval($w++ * 100 / $tot);// calcolo percentuale
                     $this->param->set("work", $perc);
-                    $rad = rand(10, 25);
-                    $cx = rand($i, $i + $q);
+                    $rad = rand(10, 25);//raggio macchia
+                    $cx = rand($i, $i + $q);//coordinate macchia
                     $cy = rand($j, $j + $q);
                     //$this->log->log("rad $rad cx $cx cy $cy",Zend_Log::DEBUG);
                     $c = Model_map::generateZone($k, $rad, 
@@ -139,7 +138,7 @@ class Admin_GenerateController extends Zend_Controller_Action
             }
         }*/
         $this->param->set("comment", "send query");
-        file_put_contents("/var/www/temp.txt",serialize($coord));
+        file_put_contents(APPLICATION_PATH."/../temp.txt",serialize($coord));
         //$this->db->query("INSERT INTO `temp`  (`x`,`y`,`zone`,`bonus1`,`bonus2`,`bonus3`) VALUES" . implode(",", $data));
         $this->param->set("comment", "success");
         $this->param->set("work", 100);
@@ -199,7 +198,7 @@ class Admin_GenerateController extends Zend_Controller_Action
         foreach ($m as $value) {
             $map[$value['x']][$value['y']] = $value;
         }*/
-        $m=file_get_contents("/var/www/temp.txt");
+        $m=file_get_contents(APPLICATION_PATH."/../temp.txt");
         $map=unserialize($m);
         unset($m);
         $w = 1;
@@ -208,6 +207,7 @@ class Admin_GenerateController extends Zend_Controller_Action
         $this->db->query("TRUNCATE TABLE `" . MAP_TABLE . "`");
         $this->param->set("work", 0);
         $prec=0;
+        $data=array();
         for ($i = - MAX_X; $i <= MAX_X; $i ++) {
             for ($j = - MAX_Y; $j <= MAX_Y; $j ++) {
                 if (! $map[$i][$j]['zone']) {
@@ -222,9 +222,8 @@ class Admin_GenerateController extends Zend_Controller_Action
                     $map[$i][$j]['bonus3'] = 300 - $map[$i][$j]['bonus1'] -
                      $map[$i][$j]['bonus2'];
                 }
-                $perc = intval($w * 100 / $tot);
-                $w ++;
-                //if ($prec!=$perc) {$this->param->set("work", $perc);$prec=$perc;}
+                $perc = intval($w++ * 100 / $tot);
+                if ($prec!=$perc) {$this->param->set("work", $perc);$prec=$perc;}
                 
                 $data[] = "('" . $this->t->_('Valle Inabitata') . "','" .
                  START_RES . "','" . START_RES . "','" . START_RES .
@@ -239,7 +238,7 @@ class Admin_GenerateController extends Zend_Controller_Action
                      "` 
 			(`name`,`resource_1`,`resource_2`,`resource_3`,`x`,`y`,`zone`,`production_1`,`production_2`,`production_3`,`prod1_bonus`,`prod2_bonus`,`prod3_bonus`) values" .
                      implode(",", $data));
-                    unset($data);
+                    $data=array();
                 }
                 $c ++;
             }
