@@ -14,7 +14,7 @@ function refreshbar() {
 		if (data.data>0) {
 			$("#progresbar").progressbar("value",data.data);
 			perc=$("#progresbar div").text();
-			perc=perc.substr(0,perc.length-1);
+			perc=perc.substr(0,perc.indexOf('%')-1);
 		//alert(perc+'time '+ev.time+' data '+data.data);
 			if (perc>=data.data) ev.time*=2;
 			else {if ((perc<data.data)&&(ev.time>2000)) ev.time/=2;}
