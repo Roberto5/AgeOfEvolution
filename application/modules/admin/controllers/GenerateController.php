@@ -146,7 +146,7 @@ class Admin_GenerateController extends Zend_Controller_Action
     public function imageAction ()
     {
         $data = $this->getRequest()->getParams();
-        $where = "";
+        /*$where = "";
         if (is_numeric($data['rad'])) {
             $where = "WHERE ABS(`x`+'" . intval($data['x']) . "')<'" .
              $data['rad'] . "' 
@@ -160,14 +160,18 @@ class Admin_GenerateController extends Zend_Controller_Action
 				AND `x`>'" . intval($data['minx']) . "'
 				AND `y`<'" . $data['maxy'] . "'
 				AND `y`>'" . intval($data['miny']) . "'";
-        }
+        }*/
         Zend_Layout::getMvcInstance()->disableLayout();
-        $c = $this->db->fetchAll("SELECT * FROM `temp` $where");
-        $coord = null;
-        foreach ($c as $value) {
-            $coord[$value['x']][$value['y']] = $value['zone'];
+        //$c = $this->db->fetchAll("SELECT * FROM `temp` $where");
+        $coord =array();$c=unserialize(file_get_contents(APPLICATION_PATH."/../temp.txt"));
+        foreach ($c as $x=>$value) {
+        	foreach ($value as $y => $v) {
+        		$coord[$x][$y] = $v['zone'];
+        	}
         }
+        unset($c);
         $this->view->coord = $coord;
+        unset($coord);
         $this->view->resize = $this->getRequest()->getParam("resize", false);
         $n = $this->param->get("nmap");
         /*$ctot=null;
@@ -204,7 +208,7 @@ class Admin_GenerateController extends Zend_Controller_Action
         $w = 1;
         $tot = (MAX_X * 2) * (MAX_Y * 2);
         $c = 0;
-        $this->db->query("TRUNCATE TABLE `" . MAP_TABLE . "`");
+        $this->db->query("DELETE FROM `" . MAP_TABLE . "` WHERE 1");
         $this->param->set("work", 0);
         $prec=0;
         $data=array();

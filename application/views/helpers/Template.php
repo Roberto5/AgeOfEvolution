@@ -416,7 +416,7 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
         $html .= '</div>';
         return $html;
     }
-    function queue ($queue,$order=false)
+    function queue ($queue=array(),$order=false)
     {
     	
     	$t=Zend_Registry::get("translate");
