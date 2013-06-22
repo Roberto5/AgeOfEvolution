@@ -36,7 +36,7 @@ class Model_role extends Zend_Db_Table_Abstract {
 		return self::$r;
 	}
 	function __construct($id) {
-		$this->_name=PREFIX.'role';
+		//$this->_name=PREFIX.'role';
 		parent::__construct();
 		$id = intval($id);
 		$this->id=$id;

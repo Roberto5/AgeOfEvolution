@@ -1,4 +1,5 @@
 <?php
+
 date_default_timezone_set('Europe/Rome');
 // Define path to application directory
 defined('APPLICATION_PATH') || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/application'));
@@ -10,20 +11,37 @@ set_include_path(implode(PATH_SEPARATOR, array(
     realpath(APPLICATION_PATH . '/../library'),
     get_include_path(),
 )));
-require_once ('includes/constants.php');
-//require_once 'includes/s1_constants.php';
-require_once 'includes/image.php';
-require_once 'includes/data.php';
-require_once 'includes/research.php';
-require_once 'includes/troopers.php';
-require_once 'includes/gods.php';
-require_once 'includes/functions.php';
-require_once 'Zend/Application.php';
-//error_reporting(E_ERROR | E_WARNING | E_PARSE);
-// Create application, bootstrap, and run
-$application = new Zend_Application(
-    APPLICATION_ENV,
-    APPLICATION_PATH . '/configs/application.ini'
-);
-$application->bootstrap()
-            ->run();
+if (!file_exists(APPLICATION_PATH.'/configs/application.ini')) {
+	echo '<TITLE>Redirect...</TITLE> 
+<script language="javascript">
+<!-- 
+location.replace("install/install.html");
+-->
+</script>
+</HEAD>
+<BODY>
+Redirect in corso...
+</BODY>
+</HTML>';
+	
+}
+else {
+	require_once ('includes/constants.php');
+	//require_once 'includes/s1_constants.php';
+	require_once 'includes/image.php';
+	require_once 'includes/data.php';
+	require_once 'includes/research.php';
+	require_once 'includes/troopers.php';
+	require_once 'includes/gods.php';
+	require_once 'includes/functions.php';
+	require_once 'Zend/Application.php';
+	//error_reporting(E_ERROR | E_WARNING | E_PARSE);
+	// Create application, bootstrap, and run
+	$application = new Zend_Application(
+			APPLICATION_ENV,
+			APPLICATION_PATH . '/configs/application.ini'
+	);
+	$application->bootstrap()
+	->run();
+}
+

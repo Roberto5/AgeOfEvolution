@@ -7,9 +7,9 @@ class JsController extends Zend_Controller_Action
 	{
 		$this->_helper->layout->disableLayout();
 		//$this->_helper->viewRenderer->setNoRender(true);
-		if(!empty($_SERVER["HTTP_ACCEPT_ENCODING"]) && strpos("gzip",$_SERVER["HTTP_ACCEPT_ENCODING"]) === NULL){
+		/*if(!empty($_SERVER["HTTP_ACCEPT_ENCODING"]) && strpos("gzip",$_SERVER["HTTP_ACCEPT_ENCODING"]) === NULL){
 		}else{ob_start("ob_gzhandler");
-		}
+		}*/
 		
 		header('Content-Type: text/javascript; charset: UTF-8');
 		header('Cache-Control: must-revalidate');

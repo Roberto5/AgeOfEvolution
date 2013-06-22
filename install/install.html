@@ -1,0 +1,116 @@
+<!doctype html>
+ 
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Install</title>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+  <script src="../common/js/jquery.validate.min.js"></script>
+  <script>
+  $(function() {
+    $( "#tabs" ).tabs({active:0}).addClass( "ui-tabs-vertical ui-helper-clearfix" );
+    $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+    $('#tabs ul a').unbind('click')
+    $('#conf').validate({debug:false});
+    $('#adminpass').rules("add",{minlength:6})
+    $('#pass2').rules("add",{equalTo:"#adminpass"})
+  });
+  function send() {
+	  if ($('#conf').valid()) {
+		  input=$('#conf input:not([type=checkbox])');
+		  value={};
+		  for (var i in input) {
+			  v=input.eq(i);
+			  value[v.attr('id')]=v.val();
+		  }
+		  input=$('#conf input[type=checkbox]');
+		  for (var i in input) {
+			  v=input[i];
+			  value[v.id]=v.checked ? 1 : 0;
+		  }
+		  console.log(value);
+		  $.ajax({
+			  url:"install.php",
+			  data:value,
+			  type:'post',
+			  dataType:'json',
+			  success:function(data) {
+				  if (data.bool) {
+				  	$('#tabs').tabs('option','active',2);
+				  	$('#preview').text(data.text);
+				  }
+			  }
+		  });
+	  }
+  }
+  </script>
+  <style>
+  .ui-tabs-vertical { width: 55em; }
+  .ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 12em; }
+  .ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0; }
+  .ui-tabs-vertical .ui-tabs-nav li a { display:block; }
+  .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { padding-bottom: 0; padding-right: .1em; border-right-width: 1px; border-right-width: 1px; }
+  .ui-tabs-vertical .ui-tabs-panel { padding: 1em; float: right; width: 40em;}
+  #tabs {margin:80px auto;}
+  </style>
+</head>
+<body>
+ 
+<div id="tabs">
+  <ul>
+    <li><a href="#tabs-1">Requirements</a></li>
+    <li><a href="#tabs-2">DB credenzial</a></li>
+    <li><a href="#tabs-3">Writing</a></li>
+  </ul>
+  <div id="tabs-1">
+    <h2>Requirements</h2>
+    <ul>
+    	<li>l.a.m.p. server</li>
+    	<li>rewrite module enabled (type sudo a2enmod )</li>
+    	<li>Override All for usind .htaccess (edit this file /etc/apache2/sites-available/default)</li>
+    	<li>read and write privileges on this directory</li>
+    </ul>
+    <p>
+    <button onclick="$('#tabs').tabs('option','active',1);">next</button></p>
+  </div>
+  <div id="tabs-2">
+  <form id="conf">
+    <h2>DB credenzial</h2>
+    <p>
+    	<div>Host <input required="required" name="host" id="host" value="localhost"></div>
+		<div>Username <input required="required" name="dbuser" id="dbuser" value="ageofevolution"></div>
+		<div>Password <input id="dbpass" name="dbpass" type=password></div>
+		<div>DB name <input required="required" name="dbname" id="dbname" value="my_ageofevolution"></div>
+	</p>
+	<h2>Admin game credential</h2>
+	<p>
+		<div>Admin username <input required="required" id="admin" name="admin"></div>
+		<div>Admin password <input class="password" required="required" name="adminpass" id="adminpass" type="password" >
+		retype <input name="pass2" class="password" required="required" id="pass2" type="password"></div>
+	</p>
+	<h2>script option</h2>
+	<p>
+		<div>script path <input required="required" name="path" id="path" value="/AgeOfEvolution"></div>
+		<div>url <input required="required" name="url" id="url" value="http://localhost/" ></div>
+		<div>script runnig in local machine <input name="local" id="local" type="checkbox" value="1" checked="true"></div>
+		<div>debug mode <input id="debug" name="debug" type="checkbox" value="1" checked="true"></div>
+		<div>email validation <input id="email" name="email" type="checkbox" value="1" ></div>
+		<div>detect mobile device (experimental) <input id="mobile" name="mobile" type="checkbox" value="1" ></div>
+	</p>
+	</form>
+		<button onclick="send()">send</button>
+  </div>
+  <div id="tabs-3">
+    <h2>Writing</h2>
+    application.ini:
+    <pre id="preview">
+    
+    </pre>
+  </div>
+</div>
+ 
+ 
+</body>
+</html>
