@@ -14,7 +14,9 @@
     $( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
     $('#tabs ul a').unbind('click')
     $('#conf').validate({debug:false});
-    $('#adminpass').rules("add",{minlength:6})
+    $('#adminpass').rules("add",{minlength:8,
+			maxlength:16,
+			regExpr:/^[a-zA-Z\d]+$/})
     $('#pass2').rules("add",{equalTo:"#adminpass"})
   });
   function send() {
@@ -41,6 +43,7 @@
 				  	$('#tabs').tabs('option','active',2);
 				  	$('#preview').text(data.text);
 				  }
+				  else alert(data.text);
 			  }
 		  });
 	  }
@@ -54,6 +57,7 @@
   .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { padding-bottom: 0; padding-right: .1em; border-right-width: 1px; border-right-width: 1px; }
   .ui-tabs-vertical .ui-tabs-panel { padding: 1em; float: right; width: 40em;}
   #tabs {margin:80px auto;}
+  pre {border:1px solid black;}
   </style>
 </head>
 <body>
@@ -62,7 +66,7 @@
   <ul>
     <li><a href="#tabs-1">Requirements</a></li>
     <li><a href="#tabs-2">DB credenzial</a></li>
-    <li><a href="#tabs-3">Writing</a></li>
+    <li><a href="#tabs-3">Finish</a></li>
   </ul>
   <div id="tabs-1">
     <h2>Requirements</h2>
@@ -89,6 +93,7 @@
 		<div>Admin username <input required="required" id="admin" name="admin"></div>
 		<div>Admin password <input class="password" required="required" name="adminpass" id="adminpass" type="password" >
 		retype <input name="pass2" class="password" required="required" id="pass2" type="password"></div>
+		<div>Admin email <input type="email" required="required" id="adminemail" name="adminemail"></div>
 	</p>
 	<h2>script option</h2>
 	<p>
@@ -103,11 +108,13 @@
 		<button onclick="send()">send</button>
   </div>
   <div id="tabs-3">
-    <h2>Writing</h2>
+    <h2>Finish</h2>
+    <p>Admin account is added on database. configuration file has been write.</p>
     application.ini:
     <pre id="preview">
     
     </pre>
+    <a href="../">go to index</a>
   </div>
 </div>
  
