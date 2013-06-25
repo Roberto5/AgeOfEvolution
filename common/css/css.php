@@ -59,7 +59,7 @@ function dump_css_cache ($filename,$key=array())
 
 $css=array(
 //		'jquery.contextmenu.css',
-//		'jquery.lightbox-0.5.css',
+		'lightbox.css',
 		'jquery-ui.css',
 		'scroll.css',
 		'style.css'

@@ -1,9 +1,10 @@
 log*.txt
 debug*.txt
-﻿*~
+*~
 .buildpath
 .project
 .settings/
 .zfproject.xml
 log*.txt
 *.cache
+application/configs/application.ini

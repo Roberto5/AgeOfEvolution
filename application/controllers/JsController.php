@@ -25,7 +25,7 @@ class JsController extends Zend_Controller_Action
 				,"jquery.contextmenu.js"
 				,"jquery.tools.min.js"
 				,"jquery.cookie.js"
-				,"jquery.lightbox-0.5.min.js"
+				,"lightbox.js"
 				,"jquery.li-scroller.1.0.js"
 				,"jquery.edit.js"
 				,'*main script*'
