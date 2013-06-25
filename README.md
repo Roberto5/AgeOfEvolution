@@ -5,7 +5,7 @@ Browsergame gestionale
 
 readme:
 
-https://github.com/pagliaccio/AgeOfEvolution/docs/readme.txt
+https://github.com/pagliaccio/AgeOfEvolution/docs/README.txt
 
 to do:
 
