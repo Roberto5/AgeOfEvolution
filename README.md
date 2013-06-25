@@ -3,5 +3,10 @@ AgeOfEvolution
 
 Browsergame gestionale
 
-https://github.com/pagliaccio/AgeOfEvolution/docs/readme
+readme:
 
+https://github.com/pagliaccio/AgeOfEvolution/docs/readme.txt
+
+to do:
+
+https://github.com/pagliaccio/AgeOfEvolution/docs/todo
