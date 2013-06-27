@@ -60,8 +60,8 @@ function dump_css_cache ($filename,$key=array())
 $css=array(
 //		'jquery.contextmenu.css',
 		'lightbox.css',
-		'jquery-ui.css',
-		'scroll.css',
+		//'jquery-ui.css',
+		//'scroll.css',
 		'style.css'
 );
 if ($_GET['l'] == 'g') {

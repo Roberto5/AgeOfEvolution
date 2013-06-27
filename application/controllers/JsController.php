@@ -18,8 +18,8 @@ class JsController extends Zend_Controller_Action
 		header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expire_offset) . ' GMT');
 		
 		
-		$file=array("*framework*"
-				,"jquery.js"
+		$file=array("*framework*",
+				"jquery.js"
 				,"jquery-ui.js"
 				,"jquery.validate.min.js"
 				,"jquery.contextmenu.js"
@@ -35,7 +35,8 @@ class JsController extends Zend_Controller_Action
 				,"time.js"
 				,"profile.js");
 		
-		$text="";$mtime=0;
+		$text="";
+		$mtime=0;
 		foreach ($file as $value) {
 			if (preg_match("/\*(.+)\*/", $value)) {
 				$text.="\n/************$value************/\n";
@@ -47,6 +48,8 @@ class JsController extends Zend_Controller_Action
 			}
 		
 		}
+		include_once 'includes/jsmin.php';
+		$js=new jsmin($file,APPLICATION_PATH.'/../common/js/');
 		header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $mtime) . ' GMT');
 		$this->view->text=$text;
 	}	
