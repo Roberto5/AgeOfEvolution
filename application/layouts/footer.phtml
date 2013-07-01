@@ -1,9 +1,8 @@
 <div id="footer">
 <?php
-$t=Zend_Registry::get("translate");
-$auth=Zend_Auth::getInstance()->getInstance();
-if ($auth->hasIdentity()) echo 'user '.$auth->getIdentity()->username.'(id:'.$auth->getIdentity()->user_id.') ';
-echo $t->_("Versione");
-$ev =$config = Zend_Registry::get('config');
-echo " ".$ev->version;  ?> <a href="#credits" onclick="$('#credits').dialog('open');">credits</a>
+if ($this->game) echo $this->servertime;
+if ($this->auth->hasIdentity()) echo ' user '.$this->auth->getIdentity()->username.'(id:'.$this->auth->getIdentity()->user_id.') ';
+
+
+echo " [VERSION] ".$this->ev->version;  ?> <a href="#credits" onclick="$('#credits').dialog('open');">credits</a>
 </div>

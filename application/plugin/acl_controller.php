@@ -50,15 +50,17 @@ class Plugin_acl_controller extends Zend_Controller_Plugin_Abstract
         }
         $status = array("civless", "wait", "sharer", "owner");
         
-        
+        //@todo dividere il controllo dei privilegi interni al server
         if (($module!="admin")&&($module!="default")&&($role!='guest')) {
         	//ruolo nel server di gioco viene creato come figlio del ruolo e dello status
         	$roleserver=$status[Model_civilta::getInstance()->status];
         	$this->_acl->addRole("child",array($role,$roleserver));
+        	$roleprev=$role;
         	$role="child";
         }
         // controllo privilegi
         if (! $this->_acl->isAllowed($role, $resource, $privilege)) {
+        	if ($role=='child') $role.='->'.$roleprev.'->'.$roleserver;
         	Zend_Controller_Front::getInstance()->getResponse()->setHttpResponseCode(403);
             $log->warn("access deny for $role on $module/$resource/$privilege");
             $request->setModuleName('default')

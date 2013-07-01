@@ -5,7 +5,13 @@ input.error {
 	border:2px solid red;
 }
 /*profile*/
+.password {
+	display:none;
+}
 
+#profile{
+	display:none;
+}
 .profile {
 	margin:0 auto;
 	width:300px;

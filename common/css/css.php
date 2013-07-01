@@ -58,7 +58,7 @@ function dump_css_cache ($filename,$key=array())
 }
 
 $css=array(
-//		'jquery.contextmenu.css',
+		'jquery.contextmenu.css',
 		'lightbox.css',
 		//'jquery-ui.css',
 		//'scroll.css',
@@ -70,7 +70,7 @@ if ($_GET['l'] == 'g') {
         $css[] = "style_" . $_GET['s'] . ".css";
         $css[] = "jquery-ui-" . $_GET['s'] . ".css";
     } else {
-        $css[] = "style_" . rand(1, 6) . ".css";
+        $css[] = "style_1.css";
     }
 } else {
     $css[] = 'home.css';

@@ -80,5 +80,5 @@ $acl->deny("sharer","sharer");
 //permessi debugger
 $acl->allow("debuger","debug");
 //permessi admin
-$acl->allow("admin",'admin');// do tutti i poteri all'admin
+$acl->allow("admin");// do tutti i poteri all'admin
 ?>

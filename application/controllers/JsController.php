@@ -29,6 +29,7 @@ class JsController extends Zend_Controller_Action
 				,"jquery.li-scroller.1.0.js"
 				,"jquery.edit.js"
 				,'*main script*'
+				,'main.js'
 				,'evolution.js'
 				,"function.js"
 				,"reg.js"

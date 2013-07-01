@@ -1,6 +1,6 @@
 <?php
 /**
- * @todo aggiungere finestra account. rendere il login e la registrazione ajax.
+ * @todo aggiungere finestra account. 
  * @todo usare un solo layout e discriminare qui i vari parziali da usare
  */
 //init
@@ -8,44 +8,56 @@ header('Content-Type:text/html; charset=UTF-8');
 $this->headTitle()->setSeparator(' - ');
 $this->headTitle('Age of Evolution');
 //init variable
-$auth = Zend_Auth::getInstance();
+$this->auth = Zend_Auth::getInstance();
 $req = Zend_Controller_Front::getInstance()->getRequest();
-$module = $req->getModuleName();
-$action = $req->getActionName();
-$controller = $req->getControllerName();
-$alerts = false;
-if ($auth->hasIdentity()) {
-    $alerts=Model_alerts::getAlerts();
+$this->module = $req->getModuleName();
+$this->action = $req->getActionName();
+$this->controller = $req->getControllerName();
+$this->ev = $config = Zend_Registry::get('config');
+$this->alerts = false;
+if ($this->auth->hasIdentity()&& $this->game) {
+	$age=Zend_Registry::get("age");
+	$par = "&s=" . ($age + 1);
 }
-if (! $alerts)
-    $alerts[0] = false;
+$this->servertime='<span id="timestamp" style="display:none">' . mktime() .'000</span>' .
+"[SERVERTIME]" . ': '.($this->game? '' :'<br/>').'<span id="timedisp">' . date("d/m/Y H:i:s") .'</span>';
+/**
+ *
+ * @var Zend_View
+ */
+$view=$this;
+if ($this->auth->hasIdentity()) {
+    $this->alerts=Model_alerts::getAlerts();
+}
+if (! $this->alerts)
+    $this->alerts[0] = false;
 //$menu=new Zend_View_Helper_MyMenu();
 //*******************************************init menu
 $iconSize=16;
-$path=$this->baseUrl();
+$this->path=$this->baseUrl();
 $this->myMenu()
-	->add('Home','default','index','index',1,null,null,$path.'/common/images/home.png',$iconSize,false)
-	->add('Forum','forum',null,null,2,null,null,$path.'/common/images/forum.ico',$iconSize,false)
-	->add('Wiki','wiki',null,null,3,null,null,$path.'/common/images/wiki-icon.png',$iconSize,false)
-	->add('Login',"javascript:$('#login').dialog('open');",null,null,4,'login','index',$path.'/common/images/login.gif',$iconSize,false)
-	->add('[REG]',"javascript:$('#reg').dialog('open');",null,null,5,'reg','index',$path.'/common/images/add.png',$iconSize,false)
-	->add('Logout','javascript:ev.logout();','','',6,'login','logout',$path.'/common/images/logout.png',$iconSize,false)
-	->add('[PROFILE]','default','account','index',7,'account',null,$path.'/common/images/modacc.png',$iconSize,false)
-	->add('[BUG]','javascript:ev.bugreport();',null,null,20,'priv_zone',null,$path.'/common/images/bug.png',$iconSize,false)
+	->add('Home','default','index','index',1,null,null,$this->path.'/common/images/home.png',$iconSize,false)
+	->add('Forum','forum',null,null,2,null,null,$this->path.'/common/images/forum.ico',$iconSize,false)
+	->add('Wiki','wiki',null,null,3,null,null,$this->path.'/common/images/wiki-icon.png',$iconSize,false)
+	->add('Login',"javascript:$('#login').dialog('open');",null,null,4,'login','index',$this->path.'/common/images/login.gif',$iconSize,false)
+	->add('[REG]',"javascript:$('#reg').dialog('open');",null,null,5,'reg','index',$this->path.'/common/images/add.png',$iconSize,false)
+	->add('Logout','javascript:ev.logout();','','',6,'login','logout',$this->path.'/common/images/logout.png',$iconSize,false)
+	->add('[ACCOUNT]',"javascript:$('#account').dialog('open');",null,null,7,'account',null,$this->path.'/common/images/modacc.png',$iconSize,false)
+	->add('[BUG]','javascript:ev.bugreport();',null,null,20,'priv_zone',null,$this->path.'/common/images/bug.png',$iconSize,false)
 	->add(array('label'=>'Admin'
 			,'module'=>'admin'
 			//,'controller'=>'index'
 			//,'action'=>'index'
 			,'order'=>100
 			,'resource'=>'admin'
-			,'icon'=>$path.'/common/images/village/corona.gif'
+			,'icon'=>$this->path.'/common/images/village/corona.gif'
 			,'iconSize'=>$iconSize
 			,'text'=>false
 		)
 	)
-	->add('Help',"javascript:ev.help('index');",null,null,99,null,null,$path.'/common/images/help.png',$iconSize,false);
+	->add('Help',"javascript:ev.help('index');",null,null,99,null,null,$this->path.'/common/images/help.png',$iconSize,false);
 
-if ($module=='admin') {
+if ($this->module=='admin') {
 	$this->myMenu()->add(array('label'=>'[MKDATA]'
 					,'module'=>'admin'
 					,'controller'=>'mkdata'
@@ -75,8 +87,8 @@ if ($module=='admin') {
 }
 
 //feed 
-$ev = $config = Zend_Registry::get('config');
-if ($ev->local) $news='<li>le news non funzionano in locale</li>';
+
+if ($this->ev->local) $news='<li>le news non funzionano in locale</li>';
 else{
 	try {
     	$feed =Zend_Feed::import('http://blogpagliaccio.wordpress.com/category/progetti/age-of-evolution/feed/');
@@ -100,12 +112,23 @@ else{
 		<meta name="KEYWORDS" content="browsergame,strategia,gestionale,evoluzione,gratis" />
 		<link rel="shortcut icon" href="<?php echo $this->baseUrl(); ?>/favicon.ico" />	
 <?php
+// js e css script
 		echo $this->headLink()->prependStylesheet(
-		$this->baseUrl() . '/common/css/css.php');
+		$this->baseUrl() . '/common/css/css.php'.($this->game? '?l=g':'').($par?$par:''));
 echo $this->headScript()->prependFile($this->baseUrl('js'));
+
+$complete=new Form_Complete();
+$ev=$complete->getElement("ev");
+$select='<select>';
+foreach ($ev->getMultiOptions() as $key => $value) {
+	$select.='<option value="'.$key.'">'.$value.'</value>';
+}
+$select.='</select>';
+
 ?>
 <script type="text/javascript">
 <!--
+$(document).ready(function(){
 //******************************************logger*******************************************************
 <?php
 
@@ -114,39 +137,7 @@ echo $this->headScript()->prependFile($this->baseUrl('js'));
 				echo 'console.log("'.$log['timestamp'].' - '.$log['priorityName'].' - '.($log['info']? $log[info].': ' : '').'",'.$log['message'].');';
 			}
 		}
-?>
-	$(document).ready(function(){
-		//add button
-		$("button:not(.server):not(.close):not(.edit):not(.add):not(.delete),input[type=submit]:not(.edit):not(.add):not(.delete)").button();
-		$("button.edit").button({icons: {
-	        primary: "ui-icon-wrench"
-	    },
-	    text: false
-	    });
-		$("button.close").button({icons: {
-	        primary: "ui-icon-circle-close"
-	    },
-	    text: false
-	    });
-		$("button.add").button({icons: {
-	        primary: "ui-icon-plus"
-	    },
-	    text: false
-	    });
-		$("button.delete").button({icons: {
-	        	primary: "ui-icon-close"
-	    	},
-	    		text: false
-	    });;
-	    $("#loginForm").submit(function(e) {
-		    ev.login();
-		    e.preventDefault();
-		    return false;
-	    });
-//windows
-		$("#credits").dialog({autoOpen: false});
-		<?php 
-	if ($module=='default') {
+	if ($this->module=='default') {
 		echo '$("#reg").dialog({autoOpen: false});$("#login").dialog({autoOpen: false});';
 		if (APPLICATION_ENV=='production') echo '$(document).ready(function() {
 		
@@ -161,27 +152,10 @@ echo $this->headScript()->prependFile($this->baseUrl('js'));
 	    if (confirm('<?php echo $this->t->_('alcuni file (.js /.css) sono stati aggiornati, ma nel suo pc è presente una versione vecchia. la pagina verrà ricaricata per aggiornare la cache.');?>'))
 	    	location.reload();
     }
-	$("ul#news").liScroll();
-	$("[title]:not(.context-menu div)").tooltip({
-		   offset: [-10, 0],
-		   delay:1,
-		   predelay:400
-		}).dynamic({ bottom: { direction: 'down'} });
-	counter();
-	$('input:submit,input:button,button:not(.img)').button();
-	$(".password").keyup(function(){
-		ev.ctrlpass();
-	});
-	$(".email").change(function() {
-		ev.ctrlemail(this);
-	});
-	$(".number").keyup(function(){
-		ev.ctrlnum(this);
-	});
-	setTimeout(ev.showalert,3000);
-	ev.alertstak=<?php echo json_encode($alerts);?>;
+	
+	ev.alertstak=<?php echo json_encode($this->alerts);?>;
 	<?php
-			if ($auth->hasIdentity()) {
+			if ($this->auth->hasIdentity()) {
 		    	$cat = Zend_Db_Table::getDefaultAdapter()->fetchAll("SELECT * FROM `site_track_cat`");
 		    foreach ($cat as $value) {
 		        $cate .= '<option value="' . $value['id'] . '" title="' .
@@ -250,8 +224,40 @@ echo $this->headScript()->prependFile($this->baseUrl('js'));
 	
 });
 var path='<?php echo $this->baseUrl();?>';
-var module='<?php echo $module; ?>';
-ev.parsedata({ alertstak:'<?php echo json_encode($alerts);?>'});
+var module='<?php echo $this->module; ?>';
+ev.parsedata({ alertstak:'<?php echo json_encode($this->alerts);?>'});
+<?php
+if ($this->game) {
+	echo "ev.totpos".TOTBUILDING.";";
+	global $Building_Array;
+	echo "ev.classbuilding=".json_encode($Building_Array).";";
+	?>
+	ev.menubuilding=[{'[UPGRADE]':{onclick:ev.build.upgrade,icon:path+'/common/images/add.png'}},
+		          {'[DESTROY]':{onclick:ev.build.destroy,icon:path+'/common/images/del.gif'}}];
+	$(document).bind('quest',ev.quest.questhandler);
+	$(document).ready(function(){
+		<?php
+		global $epflag;
+		if ($epflag) echo "$.ajax({url:path+'/'+module+'/processing',timeout:5000});";
+		
+		
+	if ((!$civ->quest->read)&&$canshow) {
+			echo 'setTimeout(ev.quest.showquest,4000);';
+		}
+		
+		?>
+	});
+	ev.age=<?php echo intval(( $civ ? $civ->getAge() : '0'));?>;
+	<?php if ($civ) {?>ev.focus.x=<?php echo intval($civ->village->data[$civ->getCurrentVillage()]['x']);?>;
+	ev.focus.y=<?php echo intval($civ->village->data[$civ->getCurrentVillage()]['y']);?>;
+	ev.focus.id=<?php echo intval($civ->getCurrentVillage());?>;
+	ev.max=[<?php echo MAX_X;?>,<?php echo MAX_Y;?>];
+	ev.civ=<?php echo json_encode($civ->data);?>;
+	<?php }?>
+	ev.quest.flagquest=<?php echo ($canshow? "true" : "false");?>;
+	<?php 
+}
+?>
 //-->
 </script>
 <?php
@@ -259,69 +265,26 @@ echo $this->headTitle();
 ?>
 	</head>
 	<body>
-		<!-- SELECT LOCALE -->
-		<div id="locale">
-			language
-			<form action="<?php echo $this->url();?>">
-			<?php 
-			$list=array_merge(array('browser'=>'auto'),$this->t->getList());
-			echo $this->formSelect('locale',$_COOKIE['locale'],array('onchange'=>'submit();','id'=>'loc'),$list);
-			?>
-			</form>
-		</div>
 		<div id="container">
 			<div id="load"></div>
-			<div id="top">
-				<table>
-					<tr>
-						<td style="width: 20%;"><?php echo $this->partial('right.phtml');?></td>
-						<td style="width: 20%;"> <?php
-							echo '<span id="timestamp" style="display:none">' . mktime() .'000</span>' .
- 								"[Ora del server]" . ': <br/><span id="timedisp">' . date("d/m/Y H:i:s") .'</span>';?>
- 						</td>
-						<td style="width: 30%;">
-							<div id="navigation">
-<?php 							echo $this->myMenu();?>							
-							</div>
-						</td>
-						<td style="width: 30%;"> <?php echo '<ul id="news"><li><span>AGE OF EVOLUTION</span><a href="http://blogpagliaccio.wordpress.com/category/progetti/age-of-evolution/">News</a></li>'.$news.'</ul>';?> </td>
-					</tr>
-				</table>
-			</div>
-			<div id="sinistra">
-<?php
-if (! $ev->local) {
-/*/pubblicità adsense
-echo '
-<script type="text/javascript"><!--
-google_ad_client = "ca-pub-2668371131665980";
-// banner_dx 
-google_ad_slot = "3462675419";
-google_ad_width = 120;
-google_ad_height = 600;
-//-->
-</script> <script type="text/javascript"
-	src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>';
-// altervista */
-
-echo "<script type=\"text/javascript\">
-/* <![CDATA[ */
-document.write('<s'+'cript type=\"text/javascript\" src=\"http://ad.altervista.org/js.ad/size=120X600/r='+new Date().getTime()+'\"><\/s'+'cript>');
-/* ]]> */
-</script>";
-
-}
-?>
-			</div>
+			<!-- da mettere in home -->
+			<?php 
+			
+			if ($this->game) {
+				echo $view->render('game.phtml');
+			}
+			else echo $view->render('home.phtml');
+			?>
+			
 			<div id="content">      
 <?php 
 echo $this->layout()->content;
 ?>
 			</div>
+			<?php 	echo $view->render('footer.phtml');?> 
 		</div>
 <?php 
-if ($module=="default") {
+if ($this->module=="default") {
 	echo ' <div id="login" title="Login">';
 	$login=new Form_LoginForm();
 	//$login->setAction($this->url(array('controller'=>'login')));
@@ -331,8 +294,25 @@ if ($module=="default") {
 	$reg->setAction($this->url(array('controller'=>'reg')));
 	echo $reg.'</div>';
 }
-?>
-		
+ // account
+		if ($this->auth->hasIdentity()) {
+			$v=new Zend_View();
+			$v->option=array(
+					//'prova'=>array(
+					//		'name'=>'[PROVA]',
+					//		'value'=>'prova',
+					//		'label'=>''//if null display value
+					//		'type'=>'Input'// default or Select or Textarea
+					//		'option'=>array())
+			);
+			$user=Model_user::getInstance();
+			$v->addFilter('Tmpeng')->addFilterPath(APPLICATION_PATH.'/plugin');
+			$v->setScriptPath(APPLICATION_PATH.'/views/scripts/account/');
+			$key=array('NICK'=>$user->data['username'],'EMAIL'=>$user->data['email']);
+			Zend_View_Filter_Tmpeng::addkey($key);
+			echo '<div id="account" title="[ACCOUNT]">'.$v->render('index.phtml').'</div>';
+		}
+		?>
 		<div id="credits">
 <h3><a href="http://blogpagliaccio.wordpress.com" target="_blanc" >Pagliaccio</a></h3>
 <p>
@@ -360,6 +340,6 @@ if ($module=="default") {
 <a href="http://www.zend.com/"><img src="<?php echo $this->baseUrl()?>/common/images/zend.png" alt="zend" height="50" width="50" /></a>
 
 </div>
-<?php 	echo $this->partial('footer.phtml');?> 
+
 	</body>
 </html>

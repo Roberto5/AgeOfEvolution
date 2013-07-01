@@ -28,7 +28,12 @@ $(function(){
 			password:{
 				minlength:8,
 				maxlength:16,
-				regExpr:/^[a-zA-Z\d]+$/
+				regExpr:/^[a-zA-Z\d]+$/,
+				remote:{
+					url : path+"/account/ctrl",
+					type : "post" 
+					//dataType : "json"
+				}
 			},
 			'new':{
 				minlength:8,

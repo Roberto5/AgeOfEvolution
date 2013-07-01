@@ -47,7 +47,8 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
 		if (! $this->baseUrl) {
             $baseurl = new Zend_View_Helper_BaseUrl();
             $this->baseUrl = $baseurl->baseUrl();
-        	}
+        }
+        if (!$this->civ) $this->civ=Model_civilta::getInstance();
     	if ($template) {
     		return $this->$template($option);
     	}

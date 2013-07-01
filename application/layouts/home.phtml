@@ -1,0 +1,62 @@
+<!-- SELECT LOCALE -->
+		<div id="locale">
+			language
+			<form action="<?php echo $this->url();?>">
+			<?php 
+			$list=array_merge(array('browser'=>'auto'),$this->t->getList());
+			echo $this->formSelect('locale',$_COOKIE['locale'],array('onchange'=>'submit();','id'=>'loc'),$list);
+			?>
+			</form>
+		</div>
+<div id="top">
+				<table>
+					<tr>
+						<td style="width: 20%;"><?php $db = Zend_Db_Table::getDefaultAdapter();
+						echo '<div style="padding-left: 20px;" ><b>[TOTALUSER]</b>
+                    '. $db->fetchOne(
+    "SELECT count(*) FROM `" . USERS_TABLE . "`") . "<br/>
+                        <b>[USERONLINE]</b> " . intval(
+    $db->fetchOne(
+    "SELECT count(*) 
+			FROM `" . SESSIONS_TABLE . "` 
+			 WHERE `validate`='1' 
+			 AND `last_activity`>'" . (mktime() - 900) . "' 
+			 AND `user_id` != '0'")) . '</div>';?></td>
+						<td style="width: 20%;"> <?php
+							echo $this->servertime;?>
+ 						</td>
+						<td style="width: 30%;">
+							<div id="navigation">
+<?php 							echo $this->myMenu();?>							
+							</div>
+						</td>
+						<td style="width: 30%;"> <?php echo '<ul id="news"><li><span>AGE OF EVOLUTION</span><a href="http://blogpagliaccio.wordpress.com/category/progetti/age-of-evolution/">News</a></li>'.$news.'</ul>';?> </td>
+					</tr>
+				</table>
+			</div>
+			<div id="sinistra">
+<?php
+if (! $this->ev->local) {
+/*/pubblicità adsense
+echo '
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-2668371131665980";
+// banner_dx 
+google_ad_slot = "3462675419";
+google_ad_width = 120;
+google_ad_height = 600;
+//-->
+</script> <script type="text/javascript"
+	src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>';
+// altervista */
+
+echo "<script type=\"text/javascript\">
+/* <![CDATA[ */
+document.write('<s'+'cript type=\"text/javascript\" src=\"http://ad.altervista.org/js.ad/size=120X600/r='+new Date().getTime()+'\"><\/s'+'cript>');
+/* ]]> */
+</script>";
+
+}
+?>
+			</div>

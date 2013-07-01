@@ -166,6 +166,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		// Add it to the ViewRenderer
 		$viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper(
 				'ViewRenderer');
+		$view->game=$layout->getView()->game;
 		$layout->setView($view);
 		$viewRenderer->setView($view);
 		// Return it, so that it can be stored by the bootstrap
@@ -248,7 +249,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$layout = Zend_Layout::getMvcInstance();
 		if ($_POST['nolayout']||$_GET['nolayout']) $layout->disableLayout();
 		elseif (($_POST['ajax'])||($_GET['ajax'])) $layout->setLayout("ajax");
-		elseif ($module!='default') $layout->setLayout("game");
+		elseif ($module!='default') $layout->getView()->game=true;//$layout->setLayout("game");
 		return $layout;
 	}
 	//*/

@@ -191,18 +191,5 @@ if ($auth->hasIdentity() && ($module != "default") && ($module != "admin") &&
     }
     echo '<ol id="vlist">' . $display . '</ol>';
     
-} else {
-    echo '<div style="padding-left: 20px;" ><b>' . $t->_("Utenti totali") . "</b>
-                    " . $db->fetchOne(
-    "SELECT count(*) FROM `" . USERS_TABLE . "`") . "<br/>
-                        <b>" .
-     $t->_("Utenti online") . '</b> ' . intval(
-    $db->fetchOne(
-    "SELECT count(*) 
-			FROM `" . SESSIONS_TABLE . "` 
-			 WHERE `validate`='1' 
-			 AND `last_activity`>'" . (mktime() - 900) . "' 
-			 AND `user_id` != '0'")) . '</div>';
-    
-}
+} 
 ?>

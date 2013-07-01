@@ -894,9 +894,10 @@ class Model_civilta extends Zend_Db_Table_Abstract
 	function changeCurrentVillage ($id)
 	{
 		$server = Zend_Registry::get("server");
+		$user=Model_user::getInstance();
 		Zend_Db_Table::getDefaultAdapter()->query(
 				"UPDATE `" . RELATION_USER_CIV_TABLE . "` SET `current_village`='" . $id .
-				"' WHERE `user_id`='" . Zend_Registry::get("user")->data['ID'] .
+				"' WHERE `user_id`='" . $user->data['ID'] .
 				"' AND `SERVER`='" . $server . "'");
 	}
 	/**

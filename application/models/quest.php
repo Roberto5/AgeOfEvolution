@@ -145,7 +145,7 @@ class Model_quest extends Zend_Db_Table_Abstract
      */
     function ShowQuest ($load = false, $n = false, $state = false)
     {
-    	include_once APPLICATION_PATH.'/views/helpers/image.php';
+    	include_once APPLICATION_PATH.'/views/helpers/Image.php';
     	$img=new Zend_View_Helper_image();
         if (! $this->civ)
             return false;

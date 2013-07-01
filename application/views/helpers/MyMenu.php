@@ -70,6 +70,7 @@ class Zend_View_Helper_MyMenu extends Zend_View_Helper_Abstract
     			,'icon'=>$icon
     			,'iconSize'=>$iconSize
     			,'text'=>$text
+    			,'attribs'=>array('rel'=>'link-'.str_replace(array('[',']'), "", $label))
 			);
     		if (!$controller && !$action) {
     			if (strstr($module, 'javascript')) {
@@ -122,6 +123,13 @@ class Zend_View_Helper_MyMenu extends Zend_View_Helper_Abstract
     		trigger_error($e->getMessage());
     	}
     	return $str;
+    }
+    /**
+     * return the number of pages
+     * @return int
+     */
+    public function getPageCount() {
+    	return count($this->page);
     }
     /**
      * Sets the view field 

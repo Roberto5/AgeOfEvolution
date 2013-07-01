@@ -53,6 +53,7 @@ class AccountController extends Zend_Controller_Action
     	header("Content-type: application/json");
     	$username=$_POST['username'];
     	$email=$_POST['email'];
+    	$password=$_POST['password'];
     	$db=new Zend_Validate_Db_NoRecordExists(array('table'=>USERS_TABLE,'field'=>'username'));
     	$bool=true;
     	if ($username) {
@@ -64,6 +65,11 @@ class AccountController extends Zend_Controller_Action
     		$db->setField('email');
     		$vemail=new Zend_Validate_EmailAddress();
     		$bool= (($db->isValid($email)) && ($vemail->isValid($email)));
+    	}
+    	if ($password) {
+    		$db->setField('email');
+    		$alnum=new Zend_Validate_Alnum();
+    		$bool= (($alnum->isValid($password)) && ($this->user->data['password']==sha1($password)));
     	}
     	echo json_encode($bool);
     }
