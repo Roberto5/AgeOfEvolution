@@ -1,6 +1,6 @@
 $(document).ready(function(){
 		// add button
-		$("button:not(.server):not(.close):not(.edit):not(.add):not(.delete),input[type=submit]:not(.edit):not(.add):not(.delete)").button();
+		$("button:not(.img):not(.server):not(.close):not(.edit):not(.add):not(.delete),input[type=submit]:not(.edit):not(.add):not(.delete)").button();
 		$("button.edit").button({icons: {
 	        primary: "ui-icon-wrench"
 	    },
@@ -99,6 +99,8 @@ $(document).ready(function(){
 		$('[rel=link-Report]').contextMenu(reportmenu,{theme:'human'});
 		$('[rel=link-MESSAGES]').contextMenu(messagemenu,{theme:'human'});
 		$('[rel=link-Debug]').contextMenu(debugmenu,{theme:'human'});
+		//@todo aggiungere timeout per rinfrescare il banner
+		$('#hidad a').click(function() {$('#banner').hide();$('#hidad').prev().remove();});
 });
 function togleraid(value)
 {

@@ -17,6 +17,7 @@ div#header{
 div#container{
     background-color: trasparent;
     border-left: 4px solid #872a13;
+    border-top: 4px solid #872a13;
     border-right: 4px solid #872a13;
 }
 div#navigation{

@@ -62,11 +62,13 @@ div#destra{
     max-height: 1000px;
     height: auto;
 }
-div#sinistra{
+div#banner{
     float:left;
     width: 120px;
     height: 600px;
-	background-color:black;
+    top: 100px;
+	left: 5px;
+	position: absolute;
 }
 #top {
 	width:900px;

@@ -69,13 +69,13 @@ class Model_map extends Zend_Db_Table_Abstract
         $base.='/'.Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
         $mx=min(array_keys($villaggi));
         $my=max(array_keys($villaggi[$mx]));
-        $gap=-2700;
+        $gap=-2700;$n=0;
         for($y = $my,$j=1; $y>($my-$h); $y--,$j++) {
             
             for ($x =$mx,$i=1;$x<($w+$mx); $x++,$i++) {
             	$own=$villaggi[$x][$y]['civ_id']==$this->civ->cid ? '1' : '0';
                 $table.='<div style="position:relative;width:50px;height:50px;left:'.(($i-1)*$dim).'px;top:'.($gap+($j-1)*$dim).'px;" class="map_village zoom-'.$dim.'" id="map_village_' . $i .
-                 '_'.$j.'" onmouseover="ev.map.details($(this).attr(\'alt\'));" onmouseout="ev.map.hide_map_details();" onclick="if (!ev.drag) ev.map.get_village_info($(this).attr(\'alt\')); else ev.drag=false;" alt="'.$x.'|'.$y.'" ></div>';
+                 '_'.$j.'" onmouseover="ev.map.details($(this).attr(\'alt\'),'.$n++.');" onmouseout="ev.map.hide_map_details();" onclick="if (!ev.drag) ev.map.get_village_info($(this).attr(\'alt\')); else ev.drag=false;" alt="'.$x.'|'.$y.'" ></div>';
             	$gap-=50;
             }
         }

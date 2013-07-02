@@ -695,7 +695,7 @@ var ev = {
 						}, false, false, ev.map.hide_village_info);
 			}
 		},
-		details : function(coord) {
+		details : function(coord,n) {
 			i = coord.indexOf('|');
 			x = coord.substr(0, i);
 			y = coord.substr(i + 1);
@@ -707,7 +707,16 @@ var ev = {
 					this.village[x][y].prod1_bonus + "% "
 							+ this.village[x][y].prod2_bonus + "% "
 							+ this.village[x][y].prod3_bonus + "%");
-			$("#map_details").show();
+			esclude=[1468,1236,1467,1395,1323,1322,1394,1466,1465,1393,1321,1320,1392,1464,1324,1252];
+			bool=false;
+			//console.log(n);
+			for (var k in esclude) {
+				if (n==esclude[k]) {bool=true;break;}
+			}
+			if (bool) 
+				$("#map_details").css('top','200px').show();
+			else
+				$("#map_details").css('top','0').show();
 		},
 		hide_map_details : function() {
 			// if (ev.map.canhide)

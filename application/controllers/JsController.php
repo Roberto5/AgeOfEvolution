@@ -49,8 +49,6 @@ class JsController extends Zend_Controller_Action
 			}
 		
 		}
-		include_once 'includes/jsmin.php';
-		$js=new jsmin($file,APPLICATION_PATH.'/../common/js/');
 		header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $mtime) . ' GMT');
 		$this->view->text=$text;
 	}	

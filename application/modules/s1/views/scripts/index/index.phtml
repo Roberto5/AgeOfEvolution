@@ -82,6 +82,13 @@ $(document).keydown(keyDown);
 	'.($this->vid ? 'location.hash = "#'.$this->x.'|'.$this->y.'";ev.map.load_detail();':'').'
 	});';
     $this->headScript()->captureEnd();
+    ?>
+    <!-- <div id="helper" onmouseup="$('#map_details').css('top','200px');alert('ciao');return:false;"
+    				onmouseover="$('#map_details').css('top','200px');alert('ciao');return:false;"
+    				onmousedown="$('#map_details').css('top','0');return:false;"
+    				onmouseout="$('#map_details').css('top','0');return:false;">
+    </div> -->
+    <?php 
     echo '<div id="map_details" style="display: none; position:absolute;z-index:200;">
 <table>
 	<thead>

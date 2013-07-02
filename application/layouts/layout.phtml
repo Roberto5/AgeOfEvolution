@@ -1,8 +1,4 @@
 <?php
-/**
- * @todo aggiungere finestra account. 
- * @todo usare un solo layout e discriminare qui i vari parziali da usare
- */
 //init
 header('Content-Type:text/html; charset=UTF-8');
 $this->headTitle()->setSeparator(' - ');
@@ -265,9 +261,18 @@ echo $this->headTitle();
 ?>
 	</head>
 	<body>
+		<div id="banner">
+		<?php 
+		if (!$this->ev->local) {//banner
+		}
+		if ($this->game) {
+			echo '<div id="hidad"><a href="#">[HIDE]</a></div>';
+		}
+		?>
+		</div>
 		<div id="container">
 			<div id="load"></div>
-			<!-- da mettere in home -->
+			
 			<?php 
 			
 			if ($this->game) {
