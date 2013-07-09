@@ -120,6 +120,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 			//profilazione query
 		} 
 		$log->addWriter($file);
+		$log->addPriority("movement", 8);
+        $log->addPriority("build", 9);
+        $log->addPriority("market", 10);
+        $log->addPriority("train", 11);
+        $log->addPriority("startMovement", 12);
 		Zend_Registry::set('log', $log);
 		//delete olg log
 		@unlink(APPLICATION_PATH.'/log/debug'.date('Ymd',strtotime('-1 day')));
@@ -215,9 +220,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 				sleep(1);
 			}
 			if (!$param->get("epon")&&!$_GET['ep']) {
-				/*$this->getResource("log")->emerg("restart event processor!");
+				$this->getResource("log")->emerg("restart event processor!");
 				 $client = new Zend_Http_Client();
-				if (APPLICATION_ENV!="production") $uri=Zend_Uri_Http::factory("http://localhost/evolution/$module/processing?ep=1");
+				 $client->setConfig(array('timeout'=>5));
+				 //@todo migliorare
+				if (APPLICATION_ENV!="production") $uri=Zend_Uri_Http::factory("http://localhost/AgeOfEvolution/$module/processing?ep=1");
 				else $uri=Zend_Uri_Http::factory("http://ageofevolution.altervista.org/$module/processing?ep=1");
 				$client->setUri($uri);
 				try{
@@ -226,7 +233,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 				}
 				catch (Exception $e) {
 				$this->getResource("log")->debug($e);
-				}*/
+				}
 				$epflag=true;
 			}
 			Zend_Registry::set("param", $param);

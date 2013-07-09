@@ -28,6 +28,7 @@ class JsController extends Zend_Controller_Action
 				,"lightbox.js"
 				,"jquery.li-scroller.1.0.js"
 				,"jquery.edit.js"
+				,'processing.js'
 				,'*main script*'
 				,'main.js'
 				,'evolution.js'
