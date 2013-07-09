@@ -6,8 +6,7 @@ $module = Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
 if ($this->hasCivilty > 1) {
     //lascia spazio alla mappa 24x18
     
-    $village=$this->village['focus'];
-    $cache=$village;
+    //$cache=$this->village['cache'];
     /*foreach ($this->village['cache'] as $x => $value) {
     	foreach ($value as $y => $v) {
     		$cache[$x][$y]=$v;
@@ -40,55 +39,30 @@ if ($this->hasCivilty > 1) {
 $(document).keydown(keyDown);
 	ev.map.centre=['.intval($x).','.intval($y).'];
 	ev.map.init=['.intval($x).','.intval($y).'];
-    ev.map.village='.json_encode($cache).';
+    
     ev.map.size=['.intval($this->zoom['x']).','.intval($this->zoom['y']).','.$this->zoom['dim'].'];
+    
     var menu=[{"'.$t->_('rinforza').'":{onclick:ev.support,icon:"'.$this->baseUrl('/common/images/inrinfo.png').'"}},
 		{"'.$t->_('raid').'":{onclick:ev.raid,icon:"'.$this->baseUrl('/common/images/outattack.png').'"}},
 		{"'.$t->_('attacca').'":{onclick:ev.atk,icon:"'.$this->baseUrl('/common/images/inattack.png').'"}},
 		{"'.$t->_('colonizza').'":{onclick:ev.colony,icon:"'.$this->baseUrl('/common/images/pop.gif').'"}},
 		{"'.$t->_('invia mercanti (non implementato)').'":{onclick:ev.market,icon:"'.$this->baseUrl('/common/images/market.png').'"}}	
 	];
-	$(function () {' .
-		'$("#minimap").attr("src","'.$this->baseUrl().'/'.$module.'/village/map/zoom/'.$this->zoom['n'].'/x/'.$this->x.'/y/'.$this->y.'");
-		$("#map").draggable({ grid: [ 50,50 ],
-			containment:[-2400,-1800,50,0] ,
-			start:function(){ev.drag=true;},
-			stop:function(){
-				l=parseInt($("#map").css("left"));
-				t=parseInt($("#map").css("top"));
-				x=l/(-'.$this->zoom['dim'].')+('.$x.')-'.$this->zoom['x'].';
-				y=t/'.$this->zoom['dim'].'+('.$y.')+'.$this->zoom['y'].';
-				ev.map.centre=[x,y];
-				location.hash=x+"|"+y;
-				ev.map.position(x,y);
-				setTimeout(function(){ev.drag=false;},1000);
-			},
-			cursor:"move"
-		});
+	$(function () {
 		$(".map_village").contextMenu(menu,{theme:"human"});
-		if (location.hash!="") {
+		if (m=location.hash.match(/(-*\d+)\|(-*\d+)(@*)/)) {
         // #2|2-dsf
-        i=location.hash.indexOf("|");
-        j=location.hash.indexOf("@");
-	x = location.hash.substr(1,i-1);
-        if (j>0) {
-            y = location.hash.substr(i+1,j-i-1);
-            ev.map.position(x,y,ev.map.load_detail);
-        }
-        else {
-            y = location.hash.substr(i+1);}
-        	ev.map.position(x,y);
-	}
-	'.($this->vid ? 'location.hash = "#'.$this->x.'|'.$this->y.'";ev.map.load_detail();':'').'
+        console.log(m);
+        	x=parseInt(m[1]);
+        	y=parseInt(m[2]);
+        	console.log(x,y);
+            ev.map.position(x,y,m[3]? ev.map.get_village_info:null);
+        	
+		}else ev.map.position('.$x.','.$y.');
+			'.($this->vid ? 'location.hash = "#'.$this->x.'|'.$this->y.'";ev.map.load_detail();':'').'
+		
 	});';
     $this->headScript()->captureEnd();
-    ?>
-    <!-- <div id="helper" onmouseup="$('#map_details').css('top','200px');alert('ciao');return:false;"
-    				onmouseover="$('#map_details').css('top','200px');alert('ciao');return:false;"
-    				onmousedown="$('#map_details').css('top','0');return:false;"
-    				onmouseout="$('#map_details').css('top','0');return:false;">
-    </div> -->
-    <?php 
     echo '<div id="map_details" style="display: none; position:absolute;z-index:200;">
 <table>
 	<thead>
@@ -119,19 +93,7 @@ $(document).keydown(keyDown);
 	</tbody>
 </table>
 </div>';
-    $h=$this->zoom['y'];
-    $w=$this->zoom['x'];
-    $map=array(
-    	array('x'=>$this->x-$w,'y'=>$this->y+$h),array('x'=>$this->x,'y'=>$this->y+$h),
-    	array('x'=>$this->x+$w,'y'=>$this->y+$h),
-    	array('x'=>$this->x-$w,'y'=>$this->y),array('x'=>$this->x,'y'=>$this->y),
-    	array('x'=>$this->x+$w,'y'=>$this->y),
-    	array('x'=>$this->x-$w,'y'=>$this->y-$h),array('x'=>$this->x,'y'=>$this->y-$h),
-    	array('x'=>$this->x+$w,'y'=>$this->y-$h));
-    $this->log->debug($map);
-    echo '<div id="map" style="position:absolute;top:-900px;left:-1200px;width: 3600px; height: 2700px;">';
-    for ($i=0;$i<9;$i++)
-    	echo $this->image('/'.$module.'/village/map/zoom/'.$this->zoom['n'].'/x/'.$map[$i]['x'].'/y/'.$map[$i]['y'],'map',null,1200,900);
+    echo '<div id="map" style="position:absolute;width: 1200px; height: 900px;top:0;">';
     echo $this->table.'</div>';
     
 } elseif ($this->hasCivilty == 1) {
@@ -141,8 +103,7 @@ $(document).keydown(keyDown);
     ?>
 non hai civilt&agrave;
 <p><strong>unisciti ad una civilt&agrave;</strong> <br />
-<input type="hidden" value="0" id="start" /> <input id="civ_name"
-	size="20" maxlength="30" />
+<input type="hidden" value="0" id="start" /> <input id="civ_name" size="20" maxlength="30" />
 <button onclick="ev.SearchCiv(0)"><?php
     echo $t->_("Cerca");
     ?></button>

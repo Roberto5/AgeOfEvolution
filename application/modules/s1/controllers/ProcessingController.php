@@ -118,8 +118,9 @@ class S1_ProcessingController extends Zend_Controller_Action
                 }
             }
         } catch (Exception $e) {
-            $this->p->set("epon", false);
-            $this->_log->err($e);
+            $this->p->set("epon", 0);
+            $this->_log->err($e->getMessage());
+            $this->view->error=$e->getMessage().'at line '.$e->getLine();
         }
     }
     /*********** funzioni per la gestione di eventi qui************

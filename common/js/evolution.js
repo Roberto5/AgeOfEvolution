@@ -101,8 +101,8 @@ var ev = {
 										if ((k == 'src') || (k == 'href'))
 											v = path + v;
 										if (k == 'title') {
-											$tip = $('#' + key).data('tooltip')
-													.getTip();
+											api =$('#' + key).data('tooltip')
+											$tip = api ? api.getTip() : false;
 											if ($tip)
 												$tip.text(v);
 											else {
@@ -238,7 +238,7 @@ var ev = {
 									.appendChild(s);
 						}
 						if (callback)
-							callback(data);
+							callback(data,this);
 					},
 					error : function(request, state, error) {
 						ev.flagLoader = false;
@@ -355,9 +355,7 @@ var ev = {
 				modal : mod,
 				buttons : button
 			});
-			$(
-					'div[aria-labelledby="ui-dialog-title-' + id
-							+ '"]  a[role="button"]')
+			$('#' + id).parent().find('a[role="button"]')
 					.before(
 							'<a href="#" class="ui-corner-all" id="minus'
 									+ id
@@ -386,9 +384,12 @@ var ev = {
 	},
 	togglewin : function() {
 		id = this.id.substr(5);
+		if (ev.cache.width == undefined) {
+			ev.cache.width=[];
+		}
 		if (ev.flagicon[id]) {// amplio la finestra
-			$('div[aria-labelledby="ui-dialog-title-' + id + '"]').css("width",
-					ev.cache.width);
+			$('#' + id ).parent().css("width",
+					ev.cache.width[id]);
 			$("#" + id).dialog("option", "draggable", true);
 			$("#" + id).show();
 			$("#" + id).dialog("option", "position", 'center');
@@ -413,21 +414,18 @@ var ev = {
 			}
 		} else {// riduco ad icona
 			$("#" + id).dialog("option", "draggable", false);
-			ev.cache.width = $(
-					'div[aria-labelledby="ui-dialog-title-' + id + '"]').css(
-					"width");
-			$('div[aria-labelledby="ui-dialog-title-' + id + '"]').css("width",
-					200);
-			$('div[aria-labelledby="ui-dialog-title-' + id + '"]').css(
-					'height', 'auto');
-			$("#" + id).hide();
-			for (i = 1; ev.iconstak[i]; i++)
-				;
+			$w=$('#' + id )
+			$win =$w.parent();
+			ev.cache.width[id] = $win.css("width");
+			$win.css("width",200);
+			$win.css('height', 'auto');
+			$w.hide();
+			for (i = 1; ev.iconstak[i]; i++);
 			if (i > 6)
 				p = i % 6;
 			else
 				p = i;
-			$("#" + id).dialog("option", "position",
+			$w.dialog("option", "position",
 					[ 206 * (p - 1), 'bottom' ]);
 			ev.iconstak[i] = true;
 			ev.flagicon[id] = i;
@@ -450,19 +448,19 @@ var ev = {
 			}
 		}
 	},
-	login:function() {
-		form=$('#loginForm');
-		var data={
-				username:form.find('#username').val(),
-				password:form.find('#password').val()
+	login : function() {
+		form = $('#loginForm');
+		var data = {
+			username : form.find('#username').val(),
+			password : form.find('#password').val()
 		};
 		ev.request('login', 'post', data, function(rep) {
-			//if (rep.type==1) ;//ev.user=rep.data.user;
+			// if (rep.type==1) ;//ev.user=rep.data.user;
 		});
 		return false;
 	},
-	logout: function() {
-		ev.request('login/logout','post',null,function(){
+	logout : function() {
+		ev.request('login/logout', 'post', null, function() {
 			location.reload();
 		});
 	},
@@ -557,9 +555,12 @@ var ev = {
 		size : [ 24, 18, 50 ],
 		zoom : 0,
 		centre : [ 0, 0 ],
-		init : [],
-		sizeHelper : [ 3600, 2700 ],
-		TtoY : function(t) {
+		//init : [],
+		limit:[],
+		esclude:[ 0, 1, 2, 3, 4, 
+		          24, 25, 26, 27, 28, 
+		          48, 49, 50, 51, 52],
+		/*TtoY : function(t) {
 			return t / ev.map.size[2] + (ev.map.init[1]) + ev.map.size[1];
 		},
 		YtoT : function(y) {
@@ -570,40 +571,105 @@ var ev = {
 		},
 		XtoL : function(x) {
 			return (x - (ev.map.init[0]) + ev.map.size[0]) * (-ev.map.size[2]);
-		},
-		// ricarica la prossima mappa e sposta
-		position : function(x, y) {
-			// 
-			if ((Math.abs(x) <= ev.max[0]) && (Math.abs(y) <= ev.max[1])) {
-				if ((x != ev.map.centre[0]) || (y != ev.map.centre[1])) {
-					l = ev.map.XtoL(x);
-					t = ev.map.YtoT(y);
-					$('#map').css("left", l).css("top", t);
+		},*/
+		// cerca nel vettore villaggi i villaggi disponibili
+		position : function(x, y, callback) {
+			x=parseInt(x);
+			y=parseInt(y);
+			if ((Math.abs(x) <= ev.max[0]) && (Math.abs(y) <= ev.max[1])) { //non sei fuori dai limiti
+				z = true;// controllo esistenza dati nel vettore cache
+				rx = parseInt(ev.map.size[0] / 2);//raggio di visuale
+				ry = parseInt(ev.map.size[1] / 2);
+				for (var i in ev.map.limit) {//ogni settore mappato ha un min e max per ascissa e ordinata
+					lim=ev.map.limit[i];
+					if ((lim.x.max>(x+rx))&&(lim.x.min<x-rx)&&(lim.y.max>(y+ry))&&(lim.y.min<y-ry)) {
+						z=false;
+						break;
+					}
 				}
-				i = x - ev.map.init[0];
-				j = y - ev.map.init[1];
-				if ((Math.abs(j) > ev.map.size[1] - 6)
-						|| (Math.abs(i) > ev.map.size[0] - 6)) {
-					/*
-					 * $('#map
-					 * img').attr('src',path+'/'+module+'/village/map/zoom/'+ev.map.zoom+'/x/'+x+'/y/'+y);
-					 * $('#minimap').attr('src',path+'/'+module+'/village/map/zoom/'+ev.map.zoom+'/x/'+x+'/y/'+y);
-					 * alert('preload'); /*ev.flagLoader = true;
-					 * setTimeout(function() { ev.loader(); }, 1000);
-					 * //$(document).smartpreload({images:[path+'/'+module+'/village/map/zoom/'+ev.map.zoom+'/x/'+x+'/y/'+y],oneachimageload:function(src) {
-					 * $('#map img').attr('src',src);* ev.map.init=[x,y];
-					 * l=-ev.map.sizeHelper[0]/3; t=-ev.map.sizeHelper[1]/3;
-					 * $('#map').css("left", l).css("top", t);
-					 * /*ev.flagLoader=false; ev.loader(); }});
-					 */
+				if (z) { // richiesta dei dati mancanti
+					ev.request(module + "/map/getvettorvillage", "post", {
+						'x' : [ x-rx-ev.map.size[0], x*1+rx+ev.map.size[0] ],
+						'y' : [ y-ry-ev.map.size[0], y*1+ry+ev.map.size[0] ],
+						ajax : 1
+					}, function(rep,req) {
+						for (i = 0; i < rep.data.village.length; i++) {
+							a = rep.data.village[i].x;
+							b = rep.data.village[i].y;
+							try {
+								ev.map.village[a][b] = rep.data.village[i];
+							} catch (err) {
+								ev.map.village[a] = new Array();
+								ev.map.village[a][b] = rep.data.village[i];
+							}
+						}
+						v=req.data.match(/=(-*\d+)/g);
+						ev.map.limit.push({
+							x:{
+								min:parseInt(v[0].substr(1)),
+								max:parseInt(v[1].substr(1))
+							},
+							y:{
+								min:parseInt(v[2].substr(1)),
+								max:parseInt(v[3].substr(1))
+							}
+						});
+						ev.map.changetable(x, y);
+						if (callback)
+							callback({'x':x,'y':y});
+					});
+				} else {
+					ev.map.changetable(x, y);
+					if (callback)
+						callback({'x':x,'y':y});
 				}
-			}// */
+			}
 		},
-		// sposta la mappa
 		changetable : function(x, y) {
-			l = (x - (ev.map.init[0]) + ev.map.size[0]) * (-ev.map.size[2]);
-			t = (y - (ev.map.init[1]) - ev.map.size[1]) * ev.map.size[2];
-			$('#map').css("left", l).css("top", t);
+			rx = parseInt(ev.map.size[0] / 2);
+			ry = parseInt(ev.map.size[1] / 2);
+			map=$('#map');
+			for (j = (y * 1 - ry * 1 + ev.map.size[1] * 1), k = 1; j >= (y * 1 - ry * 1); j--, k++) {
+				for (i = (x * 1 - rx * 1), z = 1; i <= (x * 1 - rx * 1 + ev.map.size[0] * 1); i++, z++) {
+					square=map.find('#map_village_' + z + '_' + k);
+					if ((Math.abs(i) <= ev.max[0])
+							&& (Math.abs(j) <= ev.max[1])) {
+						
+						if (this.village[i][j].type) {
+							square.children().removeClass().addClass('village'+this.village[i][j].type);
+							own="";
+							if (this.village[i][j].civ_id==ev.civ.civ_id) own='own';
+							square.children()
+								.children()
+								.removeClass()
+								.addClass(own);
+						}
+						else square.children().removeClass().children().removeClass();
+						square.removeClass('area0 area1 area2 area3 area4 area5').addClass('area'+this.village[i][j].zone);
+					} else {
+						square.removeClass('area0 area1 area2 area3 area4 area5').addClass('area5');
+						try {
+							ev.map.village[i][j] = {
+								name : ev.lang.sea,
+								civ_name : '-',
+								ally : '-',
+								prod1_bonus : '-',
+								prod2_bonus : '-',
+								prod3_bonus : '-'
+							};
+						} catch (e) {
+							ev.map.village[i] = new Array();
+							ev.map.village[i][j] = {name : ev.lang.sea,
+									civ_name : '-',
+									ally : '-',
+									prod1_bonus : '-',
+									prod2_bonus : '-',
+									prod3_bonus : '-'};
+						}
+					}
+					$('#map_village_' + z + '_' + k).data('coords',{x:i,y:j});
+				}
+			}
 			ev.map.centre = [ x, y ];
 			location.hash = "#" + x + "|" + y;
 		},
@@ -641,10 +707,8 @@ var ev = {
 			this.position(x, y);
 		},
 		get_village_info : function(coord) {
-			// ev.map.details(coord);
-			i = coord.indexOf('|');
-			x = coord.substr(0, i);
-			y = coord.substr(i + 1);
+			x = coord.x;
+			y = coord.y;
 			location.hash = "#" + x + "|" + y + "@";
 			try {
 				village = ev.map.village[x][y]
@@ -695,10 +759,9 @@ var ev = {
 						}, false, false, ev.map.hide_village_info);
 			}
 		},
-		details : function(coord,n) {
-			i = coord.indexOf('|');
-			x = coord.substr(0, i);
-			y = coord.substr(i + 1);
+		details : function(coord, n) {
+			x = coord.x;
+			y = coord.y;
 			$("#village_name").html(
 					this.village[x][y].name + ' (' + x + '|' + y + ')');
 			$("#village_player").html(this.village[x][y].civ_name);
@@ -707,16 +770,18 @@ var ev = {
 					this.village[x][y].prod1_bonus + "% "
 							+ this.village[x][y].prod2_bonus + "% "
 							+ this.village[x][y].prod3_bonus + "%");
-			esclude=[1468,1236,1467,1395,1323,1322,1394,1466,1465,1393,1321,1320,1392,1464,1324,1252];
-			bool=false;
-			//console.log(n);
-			for (var k in esclude) {
-				if (n==esclude[k]) {bool=true;break;}
+			bool = false;
+			// console.log(n);
+			for ( var k in this.esclude) {
+				if (n == this.esclude[k]) {
+					bool = true;
+					break;
+				}
 			}
-			if (bool) 
-				$("#map_details").css('top','200px').show();
+			if (bool)
+				$("#map_details").css('top', '200px').show();
 			else
-				$("#map_details").css('top','0').show();
+				$("#map_details").css('top', '0').show();
 		},
 		hide_map_details : function() {
 			// if (ev.map.canhide)
@@ -912,10 +977,9 @@ var ev = {
 		});
 	},
 	support : function(menuItem, menu) {
-		coord = $(this).attr('alt');
-		i = coord.indexOf(':');
-		x = coord.substr(0, i);
-		y = coord.substr(i + 1);
+		coord = $(this).data('coords');
+		x = coord.x;
+		y = coord.y;
 		ev.request(module + "/movements/send", "post", {
 			type : "sup",
 			ajax : 1,
@@ -923,10 +987,9 @@ var ev = {
 		});
 	},
 	atk : function(menuItem, menu) {
-		coord = $(this).attr('alt');
-		i = coord.indexOf(':');
-		x = coord.substr(0, i);
-		y = coord.substr(i + 1);
+		coord = $(this).data('coords');
+		x = coord.x;
+		y = coord.y;
 		ev.request(module + "/movements/send", "post", {
 			type : "attack",
 			ajax : 1,
@@ -934,10 +997,9 @@ var ev = {
 		});
 	},
 	raid : function(menuItem, menu) {
-		coord = $(this).attr('alt');
-		i = coord.indexOf(':');
-		x = coord.substr(0, i);
-		y = coord.substr(i + 1);
+		coord = $(this).data('coords');
+		x = coord.x;
+		y = coord.y;
 		ev.request(module + "/movements/send", "post", {
 			type : "raid",
 			ajax : 1,
@@ -945,10 +1007,9 @@ var ev = {
 		});
 	},
 	marketMap : function() {
-		coord = $(this).attr('alt');
-		i = coord.indexOf(':');
-		x = coord.substr(0, i);
-		y = coord.substr(i + 1);
+		coord = $(this).data('coords');
+		x = coord.x;
+		y = coord.y;
 	},
 	hideopt : function(value) {
 		if (value == 3) {

@@ -224,6 +224,7 @@ var module='<?php echo $this->module; ?>';
 ev.parsedata({ alertstak:'<?php echo json_encode($this->alerts);?>'});
 <?php
 if ($this->game) {
+	$civ=Model_civilta::getInstance();
 	echo "ev.totpos".TOTBUILDING.";";
 	global $Building_Array;
 	echo "ev.classbuilding=".json_encode($Building_Array).";";
@@ -261,16 +262,21 @@ echo $this->headTitle();
 ?>
 	</head>
 	<body>
-		<div id="banner">
-		<?php 
-		if (!$this->ev->local) {//banner
-		}
-		if ($this->game) {
-			echo '<div id="hidad"><a href="#">[HIDE]</a></div>';
-		}
-		?>
-		</div>
+	<?php 
+	$banner='<div id="banner">';
+	if (!$this->ev->local) {//banner
+	}
+	if ($this->game) {
+		$banner.='<div id="hidad"><a href="#">[HIDE]</a></div>';
+	}
+	$banner.='</div>';
+	if ($this->game) echo $banner;
+	?>
 		<div id="container">
+			<?php 
+			if (!$this->game) echo $banner;
+			?>
+		
 			<div id="load"></div>
 			
 			<?php 
@@ -286,8 +292,9 @@ echo $this->headTitle();
 echo $this->layout()->content;
 ?>
 			</div>
-			<?php 	echo $view->render('footer.phtml');?> 
-		</div>
+			<?php if ($this->game) echo $view->render('footer.phtml'); else echo '<div id="push"></div>';?>
+			
+		</div><?php 	if (!$this->game) echo $view->render('footer.phtml');?> 
 <?php 
 if ($this->module=="default") {
 	echo ' <div id="login" title="Login">';

@@ -14,7 +14,7 @@ $iconSize=16;
 $this->myMenu() 
 	->add('[PROFILE]',"javascript:$('#profile').dialog('open');",null,null,8,'account',null,$this->path.'/common/images/pannello_utente.png',$iconSize,false)
 	->add('[CITY]',"javascript:ev.request('".$this->module."/index/village','post',{ajax:1});",null,null,9,null,null,$this->path.'/common/images/city.png',$iconSize,false)
-	->add('[MAP]',$this->module,null,null,10,null,null,$this->path.'/common/images/mappa.gif',$iconSize,false)
+	->add('[MAP]',$this->module,'index','index',10,null,null,$this->path.'/common/images/mappa.gif',$iconSize,false)
 	->add('Report',"javascript:ev.request('".$this->module."/report','post',{ajax:1});",null,null,11,null,null,$this->path.'/common/images/report1.gif',$iconSize,false)
 	->add('[MESSAGES]',"javascript:ev.request('".$this->module."/message','post',{ajax:1});",null,null,12,null,null,$this->path.'/common/images/mess_read0.gif',$iconSize,false)
 	->add('[TOP]',"javascript:ev.request('".$this->module."/top','post',{ajax:1});",null,null,13,null,null,$this->path.'/common/images/top.png',$iconSize,false)
@@ -25,17 +25,17 @@ $this->myMenu()
  $width=$this->myMenu()->getPageCount()*28;
 
 ?>		
-			<div id="movemap" <?php 
-if ($_COOKIE['right_pannel']=='true') {
-	echo 'style="display:none;"';
-}?> >
+			<div id="movemap"  >
 				<div style="padding:4px;text-align:center;" class="ui-state-default" onmouseover="$(this).removeClass('ui-state-default').addClass('ui-state-hover');" 
 				onmouseout="$(this).removeClass('ui-state-hover').addClass('ui-state-default');" 
 				onmousedown="$(this).removeClass('ui-state-hover').addClass('ui-state-active');" 
 				onmouseup="$(this).removeClass('ui-state-active').addClass('ui-state-default');">
 					<img  style="margin:0 auto;" src="<?php echo $this->baseUrl();?>/common/images/void.png" onclick="$('#nav_pannel').toggle('blind', null,500);p=$.cookie('nav_pannel')=='true';$.cookie('nav_pannel',!p,{path:'/',expires:1});" class="ui-state-default ui-icon ui-icon-grip-dotted-horizontal ui-corner-all" />
 				</div>
-				<div id="nav_pannel"><div id="navpad">
+				<div <?php 
+if ($_COOKIE['nav_pannel']=='true') {
+	echo 'style="display:none;"';
+}?> id="nav_pannel"><div id="navpad">
 					<div id="freccia_su" class="arrow_up" onclick="ev.map.arrow('up')"></div>
 					<div id="freccia_sx" class="arrow_sx" onclick="ev.map.arrow('left')"></div>
 					<div id="freccia_giu" class="arrow_down" onclick="ev.map.arrow('down')"></div>

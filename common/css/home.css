@@ -18,8 +18,10 @@ h1,h2{
     text-align: center;
 }
 div#container{
-    height: 90%;
-	padding: 20px;
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -20px; 
 }
 div#navigation ul{
     margin: 0;
@@ -37,14 +39,14 @@ div#navigation a{
 div#navigation a:hover{
     text-decoration: underline;
 }
-div#footer {
-    bottom: 0; 
+div#footer, #push  {
     width: 100%;
     text-align:center;
     min-height: 20px;
-	position: fixed;
+	/*position: fixed;*/
 	font-size: 15px;
 	font-weight: bold;
+	 clear: both;
 }
 div#footer a{
     text-decoration: underline;
@@ -66,9 +68,7 @@ div#banner{
     float:left;
     width: 120px;
     height: 600px;
-    top: 100px;
-	left: 5px;
-	position: absolute;
+    margin: 150px 10px 10px 10px;
 }
 #top {
 	width:900px;
