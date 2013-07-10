@@ -452,3 +452,21 @@ table.troopers th {
 	width:16px;
 	background-position:-150px -50px;
 }
+.troops-icon{
+	background-image: url('../images/troops/troops.png');
+	height:16px;
+	width:16px;
+	display: inline-block;
+}
+.t1{
+	background-position:-16px 0;
+}
+.t2{
+	background-position:-32px 0;
+}
+.t3{
+	background-position:-48px 0;
+}
+.t4{
+	background-position:-64px 0;
+}

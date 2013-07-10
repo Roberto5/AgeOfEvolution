@@ -28,7 +28,7 @@ class JsController extends Zend_Controller_Action
 				,"lightbox.js"
 				,"jquery.li-scroller.1.0.js"
 				,"jquery.edit.js"
-				,'processing.js'
+				//,'processing.js'
 				,'*main script*'
 				,'main.js'
 				,'evolution.js'
@@ -39,13 +39,14 @@ class JsController extends Zend_Controller_Action
 		
 		$text="";
 		$mtime=0;
+		$path=APPLICATION_PATH.'/../common/js/';
 		foreach ($file as $value) {
 			if (preg_match("/\*(.+)\*/", $value)) {
 				$text.="\n/************$value************/\n";
 			}
-			else {
-				$text.=file_get_contents(APPLICATION_PATH.'/../common/js/'.$value);
-				$stat=stat(APPLICATION_PATH.'/../common/js/'.$value);
+			elseif (file_exists($path.$value)) {
+				$text.=file_get_contents($path.$value);
+				$stat=stat($path.$value);
 				if ($mtime<$stat['mtime']) $mtime=$stat['mtime'];
 			}
 		

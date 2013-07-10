@@ -82,11 +82,7 @@ class Zend_View_Helper_image extends Zend_View_Helper_Abstract
     public function troop($id)
     {
         global $NameTroops;
-        
-        $title = $alt = $NameTroops[$id];
-        $src = "/common/images/troops/t" . $id .
-         ".gif";
-        return $this->image($src, $alt,$title);
+        return '<div class="troops-icon t'.$id.'" title="'.$NameTroops[$id].'"></div>';
     }
     /**
      * Sets the view field 
