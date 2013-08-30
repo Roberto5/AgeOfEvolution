@@ -4,7 +4,7 @@ WebApp
 l'applicazione carica sul browser tutto quello che serve per eseguire l'interfaccia grafica, 
 e scambia col server solo dati in formato json.
 Al primo caricamento viene immagazzinata nella cache del browser i seguenti file:
-*[] immagini sprite dell'interfaccia
+* immagini sprite dell'interfaccia
 * un file css generato da uno script php che comprime lo script
 * un file javascript generato in php per comprimere lo script
 * un output html5 generato in php contenente la versione della app, e tutte le pagine o finestre che si potranno aprire durante una normale sessione
