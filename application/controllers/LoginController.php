@@ -14,7 +14,8 @@ class LoginController extends Zend_Controller_Action
 			//Se il form è valido, lo processiamo
 			$this->_helper->layout->setLayout("ajax");
 			$this->view->layout()->x=300;
-			$this->view->layout()->y=100;
+			$this->view->layout()->y='auto';
+			$this->view->layout()->button="Ok";
 			//$this->_helper->viewRenderer->setNoRender(true);
 			if ($form->isValid($_POST)) {
 				//recuperiamo i dati così .....

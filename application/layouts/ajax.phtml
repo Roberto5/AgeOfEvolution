@@ -46,7 +46,7 @@ if ($epflag) {
 
 if ($this->layout()->content) $this->key['HTML']=json_encode(array('text'=>$this->layout()->content,'title'=>$title,
 'notdestroy'=>$this->layout()->notdetroy,'close'=>$this->layout()->close,
-'x'=>$this->layout()->x,'y'=>$this->layout()->y,'mod'=>$this->layout()->mod,'id'=>$this->layout()->id));
+'x'=>$this->layout()->x,'y'=>$this->layout()->y,'mod'=>$this->layout()->mod,'id'=>$this->layout()->id,'button'=>$this->layout()->button,'error'=>$this->layout()->error));
 else $this->key['HTML']="false";
 $this->key['DATA']=json_encode($this->layout()->data);
 $this->key["UPDATE"]=json_encode($update);

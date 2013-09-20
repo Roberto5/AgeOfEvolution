@@ -74,7 +74,7 @@ if ($_GET['l'] == 'g') {
     }
 } else {
     $css[] = 'home.css';
-    $css[] = "jquery-ui-1.8.11.custom.css";
+    $css[] = "jquery-ui-home.css";
 }
 $key=array('NORMAL'=>'#e6e6e6',
 		'HOVER'=>'#dadada',

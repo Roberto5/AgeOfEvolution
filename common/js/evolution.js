@@ -69,10 +69,11 @@ var ev = {
 								w = data.html.x;
 							else
 								w = 800;
+							button=data.html.button ? {'ok':function(){$(this).dialog('close');}} : null;
 							data.wid = ev.windows({
 								x : w,
 								y : h
-							}, "center", data.html, data.html.mod, false, cb);
+							}, "center", data.html, data.html.mod, false, cb,button);
 						}
 						// update
 						if (data.update) {
@@ -246,6 +247,7 @@ var ev = {
 						content = {
 							title : "ERROR",
 							text : '<span style="float: left; clear:both; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span>'
+							,error : true
 						};
 						switch (request.status) {
 						case 500:
@@ -257,27 +259,19 @@ var ev = {
 						default:
 							content.text = error;
 						}
+						content.text ='<div>'+content.text+'<div>';
 						wid = ev.windows({
 							x : 300,
-							y : 200
+							y : 'auto'
 						}, "center", content, true, true);
-						$(
-								'div[aria-labelledby="ui-dialog-title-windows'
-										+ wid + '"]').removeClass(
-								"ui-widget-content");
-						$(
-								'div[aria-labelledby="ui-dialog-title-windows'
-										+ wid + '"]')
-								.addClass("ui-state-error");
 					}
 				});
 	},
 	iconstak : new Array(),
-	windows : function(size, pos, content, mod, alerts, close) {
+	windows : function(size, pos, content, mod, alerts, close,button) {
 		if (typeof (content.text) != 'string')
 			content.text = content.text.toString();
 		var i;
-		button = null;
 		if (alerts) {
 			if ((alerts.n - alerts.i) > 1) {
 				button = {
@@ -288,9 +282,8 @@ var ev = {
 				};
 				content.title += " (" + (alerts.i * 1 + 1) + "/" + alerts.n
 						+ ")";
-			} else
-				button = null;
-		}
+			}
+		} 
 		if (content.id) {
 			$open = $('.ev-windows');
 			for (i = 0; i < $open.length; i++) {
@@ -321,11 +314,17 @@ var ev = {
 			}
 			$win.dialog("moveToTop");
 		} else {
+			d_class="";
+			if (content.error) {
+				d_class+=" ui-state-error";
+			}
 			$("body").append(
 					'<div class="ev-windows ui-widget-content" id="' + id
 							+ '" title="' + content.title + '"><p>'
 							+ content.text + '</p></div>');
+			
 			$("#" + id).dialog({
+				dialogClass:d_class,
 				stack : ".ev-windows",
 				height : size.y,
 				width : size.x,
@@ -355,7 +354,12 @@ var ev = {
 				modal : mod,
 				buttons : button
 			});
-			$('#' + id).parent().find('a[role="button"]')
+			$container=$('#' + id).parent();
+			if (content.error) {
+				$container.find('div:eq(0)').addClass('ui-state-error').prepend('<span class="ui-icon ui-icon-alert" style="float:left;"></span> ');
+				$container.find('div.ui-dialog-buttonpane').removeClass('ui-widget-content');
+			}
+			$container.find('a[role="button"]')
 					.before(
 							'<a href="#" class="ui-corner-all" id="minus'
 									+ id
@@ -454,9 +458,9 @@ var ev = {
 			username : form.find('#username').val(),
 			password : form.find('#password').val()
 		};
-		ev.request('login', 'post', data, function(rep) {
+		ev.request('login', 'post', data/*, function(rep) {
 			// if (rep.type==1) ;//ev.user=rep.data.user;
-		});
+		}*/);
 		return false;
 	},
 	logout : function() {
