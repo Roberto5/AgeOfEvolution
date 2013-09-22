@@ -9,11 +9,11 @@
 body{
     font-family: arial,sans-serif;
     background-color: #2f6206;
-    background-image: url('../images/Mimetica2.jpg');
+    background-image: url('PATH/common/images/Mimetica2.jpg');
     color: white;
 }
 div#header{
-    background-image: url('../images/title_moderna.png');
+    background-image: url('PATH/common/images/title_moderna.png');
 }
 div#container{
     border-left: 4px solid white;
@@ -67,88 +67,88 @@ button {
 /* immagini strutture */
 
 .village_view{
-    background-image: url('../images/Moderna/ground.gif');
+    background-image: url('PATH/common/images/Moderna/ground.gif');
 }
 
 .main {
-    background-image: url('../images/Moderna/main.png');
+    background-image: url('PATH/common/images/Moderna/main.png');
 }
 .storage1 {
-    background-image: url('../images/Moderna/storage1.png');
+    background-image: url('PATH/common/images/Moderna/storage1.png');
 }
 .storage2 {
-    background-image: url('../images/Moderna/storage2.png');
+    background-image: url('PATH/common/images/Moderna/storage2.png');
 }
 .prod1 {
-    background-image: url('../images/Moderna/prod1.png');
+    background-image: url('PATH/common/images/Moderna/prod1.png');
 }
 .prod2 {
-    background-image: url('../images/Moderna/prod2.png');
+    background-image: url('PATH/common/images/Moderna/prod2.png');
 }
 .prod3 {
-    background-image: url('../images/Moderna/prod3.png');
+    background-image: url('PATH/common/images/Moderna/prod3.png');
 }
 .house {
-    background-image: url('../images/Moderna/house.png');
+    background-image: url('PATH/common/images/Moderna/house.png');
 }
 .market {
-    background-image: url('../images/Moderna/market.png');
+    background-image: url('PATH/common/images/Moderna/market.png');
 }
 .barrack {
-    background-image: url('../images/Moderna/barrack.png');
+    background-image: url('PATH/common/images/Moderna/barrack.png');
 }
 .command {
-    background-image: url('../images/Moderna/command.png');
+    background-image: url('PATH/common/images/Moderna/command.png');
 }
 .research {
-    background-image: url('../images/Moderna/research.png');
+    background-image: url('PATH/common/images/Moderna/research.png');
 }
 
 .mainbn {
-    background-image: url('../images/Moderna/mainbn.png');
+    background-image: url('PATH/common/images/Moderna/mainbn.png');
 }
 .storage1bn {
-    background-image: url('../images/Moderna/storage1bn.png');
+    background-image: url('PATH/common/images/Moderna/storage1bn.png');
 }
 .storage2bn {
-    background-image: url('../images/Moderna/storage2bn.png');
+    background-image: url('PATH/common/images/Moderna/storage2bn.png');
 }
 .prod1bn {
-    background-image: url('../images/Moderna/prod1bn.png');
+    background-image: url('PATH/common/images/Moderna/prod1bn.png');
 }
 .prod2bn {
-    background-image: url('../images/Moderna/prod2bn.png');
+    background-image: url('PATH/common/images/Moderna/prod2bn.png');
 }
 .prod3bn {
-    background-image: url('../images/Moderna/prod3bn.png');
+    background-image: url('PATH/common/images/Moderna/prod3bn.png');
 }
 .housebn {
-    background-image: url('../images/Moderna/housebn.png');
+    background-image: url('PATH/common/images/Moderna/housebn.png');
 }
 .marketbn {
-    background-image: url('../images/Moderna/marketbn.png');
+    background-image: url('PATH/common/images/Moderna/marketbn.png');
 }
 .barrackbn {
-    background-image: url('../images/Moderna/barrackbn.png');
+    background-image: url('PATH/common/images/Moderna/barrackbn.png');
 }
 .commandbn {
-    background-image: url('../images/Moderna/commandbn.png');
+    background-image: url('PATH/common/images/Moderna/commandbn.png');
 }
 .researchbn {
-    background-image: url('../images/Moderna/researchbn.png');
+    background-image: url('PATH/common/images/Moderna/researchbn.png');
 }
 /*navpad*/
 .arrow_up {
-    background-image: url('../images/Moderna/up.png');
+    background-image: url('PATH/common/images/Moderna/up.png');
 }
 .arrow_sx {
-    background-image: url('../images/Moderna/sx.png');
+    background-image: url('PATH/common/images/Moderna/sx.png');
 }
 .arrow_dx {
-    background-image: url('../images/Moderna/dx.png');
+    background-image: url('PATH/common/images/Moderna/dx.png');
 }
 .arrow_down {
-    background-image: url('../images/Moderna/down.png');
+    background-image: url('PATH/common/images/Moderna/down.png');
 }
 .arrow_up:hover {
     border: 1px dotted white;

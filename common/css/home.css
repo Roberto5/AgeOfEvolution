@@ -10,7 +10,7 @@ html, body{
 body{
     font-size: 76%; 
     text-align: left;
-	background-image: url('../images/sfondo.jpg');
+	background-image: url('PATH/common/images/sfondo.jpg');
 }
 h1,h2{
     margin: 0;
@@ -81,7 +81,7 @@ div#banner{
 	border:2px solid black;
 }
 .server {
-	background-image: url('./../images/mondo.gif');
+	background-image: url('PATH/common/images/mondo.gif');
     background-repeat: no-repeat;
     color: black;
     height: 131px;
@@ -91,13 +91,13 @@ div#banner{
     margin:20px;
 }
 .server.offline{
-	background-image: url('./../images/mondooff.gif');
+	background-image: url('PATH/common/images/mondooff.gif');
 }
 .server.reg.offline{
-	background-image: url('./../images/mondooff.gif');
+	background-image: url('PATH/common/images/mondooff.gif');
 }
 .server.reg{
-	background-image: url('./../images/mondobn.gif');
+	background-image: url('PATH/common/images/mondobn.gif');
 }
 #locale {
 	top:0px;

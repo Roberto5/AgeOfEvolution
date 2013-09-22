@@ -13,11 +13,11 @@ body{
     color: black;
 }
 div#header{
-    background-image: url('../images/title_medievale.jpg');
+    background-image: url('PATH/common/images/title_medievale.jpg');
 }
 div#container{
     background-color: white;
-    background-image: url('../images/sfondo_foglio.jpg');
+    background-image: url('PATH/common/images/sfondo_foglio.jpg');
     /*border-left: 4px solid black;
     border-right: 4px solid black;*/
 }
@@ -47,7 +47,7 @@ div#footer a{
 }
 div#destra{
     background-color: white;
-    background-image: url('../images/sfondo_foglio.jpg');
+    background-image: url('PATH/common/images/sfondo_foglio.jpg');
     background-position: -20px;
     border: 1px black;
     border-style: solid;
@@ -57,7 +57,7 @@ div#sinistra{
 }
 #movemap {
     background-color: white;
-    background-image: url('../images/sfondo_foglio.jpg');
+    background-image: url('PATH/common/images/sfondo_foglio.jpg');
     background-position: -20px;
     border: 1px black;
     border-style: solid;
@@ -76,88 +76,88 @@ button {
 /* immagini strutture */
 
 .village_view{
-    background-image: url('../images/Medievale/ground.gif');
+    background-image: url('PATH/common/images/Medievale/ground.gif');
 }
 
 .main {
-    background-image: url('../images/Medievale/main.png');
+    background-image: url('PATH/common/images/Medievale/main.png');
 }
 .storage1 {
-    background-image: url('../images/Medievale/storage1.png');
+    background-image: url('PATH/common/images/Medievale/storage1.png');
 }
 .storage2 {
-    background-image: url('../images/Medievale/storage2.png');
+    background-image: url('PATH/common/images/Medievale/storage2.png');
 }
 .prod1 {
-    background-image: url('../images/Medievale/prod1.png');
+    background-image: url('PATH/common/images/Medievale/prod1.png');
 }
 .prod2 {
-    background-image: url('../images/Medievale/prod2.png');
+    background-image: url('PATH/common/images/Medievale/prod2.png');
 }
 .prod3 {
-    background-image: url('../images/Medievale/prod3.png');
+    background-image: url('PATH/common/images/Medievale/prod3.png');
 }
 .house {
-    background-image: url('../images/Medievale/house.png');
+    background-image: url('PATH/common/images/Medievale/house.png');
 }
 .market {
-    background-image: url('../images/Medievale/market.png');
+    background-image: url('PATH/common/images/Medievale/market.png');
 }
 .barrack {
-    background-image: url('../images/Medievale/barrack.png');
+    background-image: url('PATH/common/images/Medievale/barrack.png');
 }
 .command {
-    background-image: url('../images/Medievale/command.png');
+    background-image: url('PATH/common/images/Medievale/command.png');
 }
 .research {
-    background-image: url('../images/Medievale/research.png');
+    background-image: url('PATH/common/images/Medievale/research.png');
 }
 
 .mainbn {
-    background-image: url('../images/Medievale/mainbn.png');
+    background-image: url('PATH/common/images/Medievale/mainbn.png');
 }
 .storage1bn {
-    background-image: url('../images/Medievale/storage1bn.png');
+    background-image: url('PATH/common/images/Medievale/storage1bn.png');
 }
 .storage2bn {
-    background-image: url('../images/Medievale/storage2bn.png');
+    background-image: url('PATH/common/images/Medievale/storage2bn.png');
 }
 .prod1bn {
-    background-image: url('../images/Medievale/prod1bn.png');
+    background-image: url('PATH/common/images/Medievale/prod1bn.png');
 }
 .prod2bn {
-    background-image: url('../images/Medievale/prod2bn.png');
+    background-image: url('PATH/common/images/Medievale/prod2bn.png');
 }
 .prod3bn {
-    background-image: url('../images/Medievale/prod3bn.png');
+    background-image: url('PATH/common/images/Medievale/prod3bn.png');
 }
 .housebn {
-    background-image: url('../images/Medievale/housebn.png');
+    background-image: url('PATH/common/images/Medievale/housebn.png');
 }
 .marketbn {
-    background-image: url('../images/Medievale/marketbn.png');
+    background-image: url('PATH/common/images/Medievale/marketbn.png');
 }
 .barrackbn {
-    background-image: url('../images/Medievale/barrackbn.png');
+    background-image: url('PATH/common/images/Medievale/barrackbn.png');
 }
 .commandbn {
-    background-image: url('../images/Medievale/commandbn.png');
+    background-image: url('PATH/common/images/Medievale/commandbn.png');
 }
 .researchbn {
-    background-image: url('../images/Medievale/researchbn.png');
+    background-image: url('PATH/common/images/Medievale/researchbn.png');
 }
 /*navpad*/
 .arrow_up {
-    background-image: url('../images/Medievale/up.png');
+    background-image: url('PATH/common/images/Medievale/up.png');
 }
 .arrow_sx {
-    background-image: url('../images/Medievale/sx.png');
+    background-image: url('PATH/common/images/Medievale/sx.png');
 }
 .arrow_dx {
-    background-image: url('../images/Medievale/dx.png');
+    background-image: url('PATH/common/images/Medievale/dx.png');
 }
 .arrow_down {
-    background-image: url('../images/Medievale/down.png');
+    background-image: url('PATH/common/images/Medievale/down.png');
 }
 .arrow_up:hover {
     border: 1px dotted black;

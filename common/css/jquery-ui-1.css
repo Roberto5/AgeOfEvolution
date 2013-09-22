@@ -59,26 +59,26 @@
 .ui-widget { font-family: Verdana,Arial,sans-serif; font-size: 1.1em; }
 .ui-widget .ui-widget { font-size: 1em; }
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Verdana,Arial,sans-serif; font-size: 1em; }
-.ui-widget-content { border: 0; background: #ffffff url(../images/sfondo2.jpg) 50% 50% repeat; color: #222222; }
+.ui-widget-content { border: 0; background: #ffffff url(PATH/common/images/sfondo2.jpg) 50% 50% repeat; color: #222222; }
 .ui-widget-content a { color: #222222; }
-.ui-widget-header { border: 1px solid #5f2011; background: #872a13 url(images/ui-bg_fine-grain_75_872a13_60x60.png) 50% 50% repeat; color: #f6f3f3; font-weight: bold; }
+.ui-widget-header { border: 1px solid #5f2011; background: #872a13 url(PATH/common/images/jquery-ui/ui-bg_fine-grain_75_872a13_60x60.png) 50% 50% repeat; color: #f6f3f3; font-weight: bold; }
 .ui-widget-header a { color: #f6f3f3; }
 
 /* Interaction states
 ----------------------------------*/
-.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { border: 1px solid #b98031; background: #b98031 url(images/ui-bg_fine-grain_75_b98031_60x60.png) 50% 50% repeat; font-weight: normal; color: #555555; }
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { border: 1px solid #b98031; background: #b98031 url(PATH/common/images/jquery-ui/ui-bg_fine-grain_75_b98031_60x60.png) 50% 50% repeat; font-weight: normal; color: #555555; }
 .ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #555555; text-decoration: none; }
-.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { border: 1px solid #b98031; background: #b98031 url(images/ui-bg_highlight-soft_75_b98031_1x100.png) 50% 50% repeat-x; font-weight: normal; color: #212121; }
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { border: 1px solid #b98031; background: #b98031 url(PATH/common/images/jquery-ui/ui-bg_highlight-soft_75_b98031_1x100.png) 50% 50% repeat-x; font-weight: normal; color: #212121; }
 .ui-state-hover a, .ui-state-hover a:hover { color: #212121; text-decoration: none; }
-.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { border: 1px solid #c46c31; background: #c46c31 url(images/ui-bg_fine-grain_65_c46c31_60x60.png) 50% 50% repeat; font-weight: normal; color: #212121; }
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { border: 1px solid #c46c31; background: #c46c31 url(PATH/common/images/jquery-ui/ui-bg_fine-grain_65_c46c31_60x60.png) 50% 50% repeat; font-weight: normal; color: #212121; }
 .ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited { color: #212121; text-decoration: none; }
 .ui-widget :active { outline: none; }
 
 /* Interaction Cues
 ----------------------------------*/
-.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight  {border: 1px solid #8ec176; background: #8ec176 url(images/ui-bg_fine-grain_70_8ec176_60x60.png) 50% 50% repeat; color: #363636; }
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight  {border: 1px solid #8ec176; background: #8ec176 url(PATH/common/images/jquery-ui/ui-bg_fine-grain_70_8ec176_60x60.png) 50% 50% repeat; color: #363636; }
 .ui-state-highlight a, .ui-widget-content .ui-state-highlight a,.ui-widget-header .ui-state-highlight a { color: #363636; }
-.ui-state-error, .ui-widget-content .ui-state-error, .ui-widget-header .ui-state-error {border: 1px solid #cd0a0a; background: #a13926 url(images/ui-bg_fine-grain_70_a13926_60x60.png) 50% 50% repeat; color: #1c1717; }
+.ui-state-error, .ui-widget-content .ui-state-error, .ui-widget-header .ui-state-error {border: 1px solid #cd0a0a; background: #a13926 url(PATH/common/images/jquery-ui//ui-bg_fine-grain_70_a13926_60x60.png) 50% 50% repeat; color: #1c1717; }
 .ui-state-error a, .ui-widget-content .ui-state-error a, .ui-widget-header .ui-state-error a { color: #1c1717; }
 .ui-state-error-text, .ui-widget-content .ui-state-error-text, .ui-widget-header .ui-state-error-text { color: #1c1717; }
 .ui-priority-primary, .ui-widget-content .ui-priority-primary, .ui-widget-header .ui-priority-primary { font-weight: bold; }
@@ -89,14 +89,14 @@
 ----------------------------------*/
 
 /* states and images */
-.ui-icon { width: 16px; height: 16px; background-image: url(images/ui-icons_222222_256x240.png); }
-.ui-widget-content .ui-icon {background-image: url(images/ui-icons_222222_256x240.png); }
-.ui-widget-header .ui-icon {background-image: url(images/ui-icons_ffffff_256x240.png); }
-.ui-state-default .ui-icon { background-image: url(images/ui-icons_872a13_256x240.png); }
-.ui-state-hover .ui-icon, .ui-state-focus .ui-icon {background-image: url(images/ui-icons_000000_256x240.png); }
-.ui-state-active .ui-icon {background-image: url(images/ui-icons_000000_256x240.png); }
-.ui-state-highlight .ui-icon {background-image: url(images/ui-icons_43689d_256x240.png); }
-.ui-state-error .ui-icon, .ui-state-error-text .ui-icon {background-image: url(images/ui-icons_762323_256x240.png); }
+.ui-icon { width: 16px; height: 16px; background-image: url(PATH/common/images/jquery-ui/ui-icons_222222_256x240.png); }
+.ui-widget-content .ui-icon {background-image: url(PATH/common/images/jquery-ui/ui-icons_222222_256x240.png); }
+.ui-widget-header .ui-icon {background-image: url(PATH/common/images/jquery-ui/ui-icons_ffffff_256x240.png); }
+.ui-state-default .ui-icon { background-image: url(PATH/common/images/jquery-ui/ui-icons_872a13_256x240.png); }
+.ui-state-hover .ui-icon, .ui-state-focus .ui-icon {background-image: url(PATH/common/images/jquery-ui/ui-icons_000000_256x240.png); }
+.ui-state-active .ui-icon {background-image: url(PATH/common/images/jquery-ui/ui-icons_000000_256x240.png); }
+.ui-state-highlight .ui-icon {background-image: url(PATH/common/images/jquery-ui/ui-icons_43689d_256x240.png); }
+.ui-state-error .ui-icon, .ui-state-error-text .ui-icon {background-image: url(PATH/common/images/jquery-ui/ui-icons_762323_256x240.png); }
 
 /* positioning */
 .ui-icon-carat-1-n { background-position: 0 0; }
@@ -286,8 +286,8 @@
 .ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br { -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; -khtml-border-bottom-right-radius: 5px; border-bottom-right-radius: 5px; }
 
 /* Overlays */
-.ui-widget-overlay { background: #000000 url(images/ui-bg_diagonals-medium_60_000000_40x40.png) 50% 50% repeat; opacity: .30;filter:Alpha(Opacity=30); }
-.ui-widget-shadow { margin: -8px 0 0 -8px; padding: 8px; background: #000000 url(images/ui-bg_flat_0_000000_40x100.png) 50% 50% repeat-x; opacity: .50;filter:Alpha(Opacity=50); -moz-border-radius: 8px; -khtml-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; }/*
+.ui-widget-overlay { background: #000000 url(PATH/common/images/jquery-ui/ui-bg_diagonals-medium_60_000000_40x40.png) 50% 50% repeat; opacity: .30;filter:Alpha(Opacity=30); }
+.ui-widget-shadow { margin: -8px 0 0 -8px; padding: 8px; background: #000000 url(PATH/common/images/jquery-ui/ui-bg_flat_0_000000_40x100.png) 50% 50% repeat-x; opacity: .50;filter:Alpha(Opacity=50); -moz-border-radius: 8px; -khtml-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; }/*
  * jQuery UI Resizable 1.8.16
  *
  * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
@@ -441,7 +441,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 .ui-dialog .ui-dialog-titlebar-close { position: absolute; right: .3em; top: 50%; width: 19px; margin: -10px 0 0 0; padding: 1px; height: 18px; }
 .ui-dialog .ui-dialog-titlebar-close span { display: block; margin: 1px; }
 .ui-dialog .ui-dialog-titlebar-close:hover, .ui-dialog .ui-dialog-titlebar-close:focus { padding: 0; }
-.ui-dialog .ui-dialog-content { position: relative; border: 0; padding: .5em 1em; background: url('../images/sfondo1.jpg'); overflow: auto; zoom: 1; }
+.ui-dialog .ui-dialog-content { position: relative; border: 0; padding: .5em 1em; background: url('PATH/common/images/sfondo1.jpg'); overflow: auto; zoom: 1; }
 .ui-dialog .ui-dialog-buttonpane { text-align: left; border-width: 1px 0 0 0; background-image: none; margin: .5em 0 0 0; padding: .3em 1em .5em .4em; }
 .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset { float: right; }
 .ui-dialog .ui-dialog-buttonpane button { margin: .5em .4em .5em 0; cursor: pointer; }

@@ -89,7 +89,29 @@ lightbox = new Lightbox options
         id: 'lightboxOverlay'
       }).after($('<div/>', {
         id: 'lightbox'
+      })
+      
+      
+      .append($('<div/>', {
+        "class": 'lb-dataContainer'
       }).append($('<div/>', {
+        "class": 'lb-data'
+      }).append($('<div/>', {
+        "class": 'lb-details'
+      }).append($('<span/>', {
+        "class": 'lb-caption'
+      }), $('<span/>', {
+        "class": 'lb-number'
+      })), $('<div/>', {
+        "class": 'lb-closeContainer'
+      }).append($('<a/>', {
+        "class": 'lb-close'
+      }).append($('<img/>', {
+        src: this.options.fileCloseImage
+      }))))),
+    		  
+    		  
+    		  $('<div/>', {
         "class": 'lb-outerContainer'
       }).append($('<div/>', {
         "class": 'lb-container'
@@ -107,23 +129,10 @@ lightbox = new Lightbox options
         "class": 'lb-cancel'
       }).append($('<img/>', {
         src: this.options.fileLoadingImage
-      }))))), $('<div/>', {
-        "class": 'lb-dataContainer'
-      }).append($('<div/>', {
-        "class": 'lb-data'
-      }).append($('<div/>', {
-        "class": 'lb-details'
-      }).append($('<span/>', {
-        "class": 'lb-caption'
-      }), $('<span/>', {
-        "class": 'lb-number'
-      })), $('<div/>', {
-        "class": 'lb-closeContainer'
-      }).append($('<a/>', {
-        "class": 'lb-close'
-      }).append($('<img/>', {
-        src: this.options.fileCloseImage
-      }))))))).appendTo($('body'));
+      })))))
+      
+      
+      )).appendTo($('body'));
       $('#lightboxOverlay').hide().on('click', function(e) {
         _this.end();
         return false;
@@ -177,7 +186,7 @@ lightbox = new Lightbox options
         }
       }
       $window = $(window);
-      top = $window.scrollTop() + $window.height() / 10;
+      top = $window.scrollTop() + 10;
       left = $window.scrollLeft();
       $lightbox = $('#lightbox');
       $lightbox.css({

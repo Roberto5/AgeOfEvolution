@@ -12,7 +12,7 @@ body{
     color: black;
 }
 div#header{
-    background-image: url('../images/title_industriale.jpg');
+    background-image: url('PATH/common/images/title_industriale.jpg');
 }
 div#container{
     border-left: 4px solid black;
@@ -63,120 +63,120 @@ button {
 /* immagini strutture */
 
 .village_view{
-    background-image: url('../images/Industriale/ground.gif');
+    background-image: url('PATH/common/images/Industriale/ground.gif');
 }
 
 .main {
-    background-image: url('../images/Industriale/main.png');
+    background-image: url('PATH/common/images/Industriale/main.png');
 }
 .storage1 {
-    background-image: url('../images/Industriale/storage1.png');
+    background-image: url('PATH/common/images/Industriale/storage1.png');
 }
 .storage2 {
-    background-image: url('../images/Industriale/storage2.png');
+    background-image: url('PATH/common/images/Industriale/storage2.png');
 }
 .prod1 {
-    background-image: url('../images/Industriale/prod1.png');
+    background-image: url('PATH/common/images/Industriale/prod1.png');
 }
 .prod2 {
-    background-image: url('../images/Industriale/prod2.png');
+    background-image: url('PATH/common/images/Industriale/prod2.png');
 }
 .prod3 {
-    background-image: url('../images/Industriale/prod3.png');
+    background-image: url('PATH/common/images/Industriale/prod3.png');
 }
 .house {
-    background-image: url('../images/Industriale/house.png');
+    background-image: url('PATH/common/images/Industriale/house.png');
 }
 .market {
-    background-image: url('../images/Industriale/market.png');
+    background-image: url('PATH/common/images/Industriale/market.png');
 }
 .barrack {
-    background-image: url('../images/Industriale/barrack.png');
+    background-image: url('PATH/common/images/Industriale/barrack.png');
 }
 .command {
-    background-image: url('../images/Industriale/command.png');
+    background-image: url('PATH/common/images/Industriale/command.png');
 }
 .research {
-    background-image: url('../images/Industriale/research.png');
+    background-image: url('PATH/common/images/Industriale/research.png');
 }
 
 .main {
-    background-image: url('../images/Industriale/main.png');
+    background-image: url('PATH/common/images/Industriale/main.png');
 }
 .storage1 {
-    background-image: url('../images/Industriale/storage1.png');
+    background-image: url('PATH/common/images/Industriale/storage1.png');
 }
 .storage2 {
-    background-image: url('../images/Industriale/storage2.png');
+    background-image: url('PATH/common/images/Industriale/storage2.png');
 }
 .prod1 {
-    background-image: url('../images/Industriale/prod1.png');
+    background-image: url('PATH/common/images/Industriale/prod1.png');
 }
 .prod2 {
-    background-image: url('../images/Industriale/prod2.png');
+    background-image: url('PATH/common/images/Industriale/prod2.png');
 }
 .prod3 {
-    background-image: url('../images/Industriale/prod3.png');
+    background-image: url('PATH/common/images/Industriale/prod3.png');
 }
 .house {
-    background-image: url('../images/Industriale/house.png');
+    background-image: url('PATH/common/images/Industriale/house.png');
 }
 .market {
-    background-image: url('../images/Industriale/market.png');
+    background-image: url('PATH/common/images/Industriale/market.png');
 }
 .barrack {
-    background-image: url('../images/Industriale/barrack.png');
+    background-image: url('PATH/common/images/Industriale/barrack.png');
 }
 .command {
-    background-image: url('../images/Industriale/command.png');
+    background-image: url('PATH/common/images/Industriale/command.png');
 }
 .research {
-    background-image: url('../images/Industriale/research.png');
+    background-image: url('PATH/common/images/Industriale/research.png');
 }.mainbn {
-    background-image: url('../images/Industriale/main.pngbn');
+    background-image: url('PATH/common/images/Industriale/main.pngbn');
 }
 .storage1bn {
-    background-image: url('../images/Industriale/storage1bn.png');
+    background-image: url('PATH/common/images/Industriale/storage1bn.png');
 }
 .storage2bn {
-    background-image: url('../images/Industriale/storage2bn.png');
+    background-image: url('PATH/common/images/Industriale/storage2bn.png');
 }
 .prod1bn {
-    background-image: url('../images/Industriale/prod1bn.png');
+    background-image: url('PATH/common/images/Industriale/prod1bn.png');
 }
 .prod2bn {
-    background-image: url('../images/Industriale/prod2bn.png');
+    background-image: url('PATH/common/images/Industriale/prod2bn.png');
 }
 .prod3bn {
-    background-image: url('../images/Industriale/prod3bn.png');
+    background-image: url('PATH/common/images/Industriale/prod3bn.png');
 }
 .housebn {
-    background-image: url('../images/Industriale/housebn.png');
+    background-image: url('PATH/common/images/Industriale/housebn.png');
 }
 .marketbn {
-    background-image: url('../images/Industriale/marketbn.png');
+    background-image: url('PATH/common/images/Industriale/marketbn.png');
 }
 .barrackbn {
-    background-image: url('../images/Industriale/barrackbn.png');
+    background-image: url('PATH/common/images/Industriale/barrackbn.png');
 }
 .commandbn {
-    background-image: url('../images/Industriale/commandbn.png');
+    background-image: url('PATH/common/images/Industriale/commandbn.png');
 }
 .researchbn {
-    background-image: url('../images/Industriale/researchbn.png');
+    background-image: url('PATH/common/images/Industriale/researchbn.png');
 }
 /*navpad*/
 .arrow_up {
-    background-image: url('../images/Industriale/up.png');
+    background-image: url('PATH/common/images/Industriale/up.png');
 }
 .arrow_sx {
-    background-image: url('../images/Industriale/sx.png');
+    background-image: url('PATH/common/images/Industriale/sx.png');
 }
 .arrow_dx {
-    background-image: url('../images/Industriale/dx.png');
+    background-image: url('PATH/common/images/Industriale/dx.png');
 }
 .arrow_down {
-    background-image: url('../images/Industriale/down.png');
+    background-image: url('PATH/common/images/Industriale/down.png');
 }
 .arrow_up:hover {
     border: 1px dotted black;

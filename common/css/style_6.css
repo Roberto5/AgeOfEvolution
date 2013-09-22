@@ -12,7 +12,7 @@ body{
     color: #72e616;
 }
 div#header{
-    background-image: url('../images/title_futura.jpg');
+    background-image: url('PATH/common/images/title_futura.jpg');
 }
 div#container{
     background-color: black;
@@ -62,88 +62,88 @@ button {
 
 /* immagini strutture */
 .village_view{
-    background-image: url('../images/Futura/ground.gif');
+    background-image: url('PATH/common/images/Futura/ground.gif');
 }
 
 .main {
-    background-image: url('../images/Futura/main.png');
+    background-image: url('PATH/common/images/Futura/main.png');
 }
 .storage1 {
-    background-image: url('../images/Futura/storage1.png');
+    background-image: url('PATH/common/images/Futura/storage1.png');
 }
 .storage2 {
-    background-image: url('../images/Futura/storage2.png');
+    background-image: url('PATH/common/images/Futura/storage2.png');
 }
 .prod1 {
-    background-image: url('../images/Futura/prod1.png');
+    background-image: url('PATH/common/images/Futura/prod1.png');
 }
 .prod2 {
-    background-image: url('../images/Futura/prod2.png');
+    background-image: url('PATH/common/images/Futura/prod2.png');
 }
 .prod3 {
-    background-image: url('../images/Futura/prod3.png');
+    background-image: url('PATH/common/images/Futura/prod3.png');
 }
 .house {
-    background-image: url('../images/Futura/house.png');
+    background-image: url('PATH/common/images/Futura/house.png');
 }
 .market {
-    background-image: url('../images/Futura/market.png');
+    background-image: url('PATH/common/images/Futura/market.png');
 }
 .barrack {
-    background-image: url('../images/Futura/barrack.png');
+    background-image: url('PATH/common/images/Futura/barrack.png');
 }
 .command {
-    background-image: url('../images/Futura/command.png');
+    background-image: url('PATH/common/images/Futura/command.png');
 }
 .research {
-    background-image: url('../images/Futura/research.png');
+    background-image: url('PATH/common/images/Futura/research.png');
 }
 
 .mainbn {
-    background-image: url('../images/Futura/mainbn.png');
+    background-image: url('PATH/common/images/Futura/mainbn.png');
 }
 .storage1bn {
-    background-image: url('../images/Futura/storage1bn.png');
+    background-image: url('PATH/common/images/Futura/storage1bn.png');
 }
 .storage2bn {
-    background-image: url('../images/Futura/storage2bn.png');
+    background-image: url('PATH/common/images/Futura/storage2bn.png');
 }
 .prod1bn {
-    background-image: url('../images/Futura/prod1bn.png');
+    background-image: url('PATH/common/images/Futura/prod1bn.png');
 }
 .prod2bn {
-    background-image: url('../images/Futura/prod2bn.png');
+    background-image: url('PATH/common/images/Futura/prod2bn.png');
 }
 .prod3bn {
-    background-image: url('../images/Futura/prod3bn.png');
+    background-image: url('PATH/common/images/Futura/prod3bn.png');
 }
 .housebn {
-    background-image: url('../images/Futura/housebn.png');
+    background-image: url('PATH/common/images/Futura/housebn.png');
 }
 .marketbn {
-    background-image: url('../images/Futura/marketbn.png');
+    background-image: url('PATH/common/images/Futura/marketbn.png');
 }
 .barrackbn {
-    background-image: url('../images/Futura/barrackbn.png');
+    background-image: url('PATH/common/images/Futura/barrackbn.png');
 }
 .commandbn {
-    background-image: url('../images/Futura/commandbn.png');
+    background-image: url('PATH/common/images/Futura/commandbn.png');
 }
 .researchbn {
-    background-image: url('../images/Futura/researchbn.png');
+    background-image: url('PATH/common/images/Futura/researchbn.png');
 }
 /*navpad*/
 .arrow_up {
-    background-image: url('../images/Futura/up.png');
+    background-image: url('PATH/common/images/Futura/up.png');
 }
 .arrow_sx {
-    background-image: url('../images/Futura/sx.png');
+    background-image: url('PATH/common/images/Futura/sx.png');
 }
 .arrow_dx {
-    background-image: url('../images/Futura/dx.png');
+    background-image: url('PATH/common/images/Futura/dx.png');
 }
 .arrow_down {
-    background-image: url('../images/Futura/down.png');
+    background-image: url('PATH/common/images/Futura/down.png');
 }
 .arrow_up:hover {
     border: 1px dotted white;

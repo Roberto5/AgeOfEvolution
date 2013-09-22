@@ -8,11 +8,11 @@
 /*layout*/
 body{
     font-family: arial,sans-serif;
-    background-image: url('../images/sfondo1.jpg');
+    background-image: url('PATH/common/images/sfondo1.jpg');
     color: #872a13;
 }
 div#header{
-    background-image: url('../images/title_preistorica.png');
+    background-image: url('PATH/common/images/title_preistorica.png');
 }
 div#container{
     background-color: trasparent;
@@ -21,7 +21,7 @@ div#container{
     border-right: 4px solid #872a13;
 }
 div#navigation{
-    background-image: url('../images/sfondo2.jpg');
+    background-image: url('PATH/common/images/sfondo2.jpg');
 	border-radius: 0 0 7px 7px;
 }
 div#navigation a{
@@ -29,13 +29,13 @@ div#navigation a{
 }
 div#footer{
     border-radius: 7px 7px 0 0;
-	background-image: url('../images/sfondo2.jpg');
+	background-image: url('PATH/common/images/sfondo2.jpg');
 }
 div#footer a{
     font-weight: bold;
 }
 div#destra{
-    background-image: url('../images/sfondo2.jpg');
+    background-image: url('PATH/common/images/sfondo2.jpg');
 	border-radius: 0 0 7px 7px;
 }
 /*div#sinistra{
@@ -49,14 +49,14 @@ div#content{
 	background: none;
 }
 .ui-widget-content {
-	background: url('../images/sfondo1.jpg') !important;
+	background: url('PATH/common/images/sfondo1.jpg') !important;
 	border:0 !important;
 }
 .ui-widget-header {
-	background: url('../images/header.png') !important;
+	background: url('PATH/common/images/header.png') !important;
 }
 .ui-accordion-header{
-	background: url('../images/header.png') !important;
+	background: url('PATH/common/images/header.png') !important;
 	border:0 !important;
 }
 .ui-accordion-header a {
@@ -64,7 +64,7 @@ div#content{
 }*/
 
 #info{
-	background-image: url('../images/sfondo2.jpg');
+	background-image: url('PATH/common/images/sfondo2.jpg');
 	border-radius: 7px;
 }
 
@@ -85,75 +85,75 @@ button {
 }
 
 /*.village_view{
-    background-image: url('../images/Preistorica/ground.gif');
+    background-image: url('PATH/common/images/Preistorica/ground.gif');
 }*/
 
 .main {
-    background-image: url('../images/Preistorica/main.png');
+    background-image: url('PATH/common/images/Preistorica/main.png');
 }
 .storage1 {
-    background-image: url('../images/Preistorica/storage1.png');
+    background-image: url('PATH/common/images/Preistorica/storage1.png');
 }
 .storage2 {
-    background-image: url('../images/Preistorica/storage2.png');
+    background-image: url('PATH/common/images/Preistorica/storage2.png');
 }
 .prod1 {
-    background-image: url('../images/Preistorica/prod1.png');
+    background-image: url('PATH/common/images/Preistorica/prod1.png');
 }
 .prod2 {
-    background-image: url('../images/Preistorica/prod2.png');
+    background-image: url('PATH/common/images/Preistorica/prod2.png');
 }
 .prod3 {
-    background-image: url('../images/Preistorica/prod3.png');
+    background-image: url('PATH/common/images/Preistorica/prod3.png');
 }
 .house {
-    background-image: url('../images/Preistorica/house.png');
+    background-image: url('PATH/common/images/Preistorica/house.png');
 }
 .market {
-    background-image: url('../images/Preistorica/market.png');
+    background-image: url('PATH/common/images/Preistorica/market.png');
 }
 .barrack {
-    background-image: url('../images/Preistorica/barrack.png');
+    background-image: url('PATH/common/images/Preistorica/barrack.png');
 }
 .mainbn {
-    background-image: url('../images/Preistorica/mainbn.png');
+    background-image: url('PATH/common/images/Preistorica/mainbn.png');
 }
 .storage1bn {
-    background-image: url('../images/Preistorica/storage1bn.png');
+    background-image: url('PATH/common/images/Preistorica/storage1bn.png');
 }
 .storage2bn {
-    background-image: url('../images/Preistorica/storage2bn.png');
+    background-image: url('PATH/common/images/Preistorica/storage2bn.png');
 }
 .prod1bn {
-    background-image: url('../images/Preistorica/prod1bn.png');
+    background-image: url('PATH/common/images/Preistorica/prod1bn.png');
 }
 .prod2bn {
-    background-image: url('../images/Preistorica/prod2bn.png');
+    background-image: url('PATH/common/images/Preistorica/prod2bn.png');
 }
 .prod3bn {
-    background-image: url('../images/Preistorica/prod3bn.png');
+    background-image: url('PATH/common/images/Preistorica/prod3bn.png');
 }
 .housebn {
-    background-image: url('../images/Preistorica/housebn.png');
+    background-image: url('PATH/common/images/Preistorica/housebn.png');
 }
 .marketbn {
-    background-image: url('../images/Preistorica/marketbn.png');
+    background-image: url('PATH/common/images/Preistorica/marketbn.png');
 }
 .barrackbn {
-    background-image: url('../images/Preistorica/barrackbn.png');
+    background-image: url('PATH/common/images/Preistorica/barrackbn.png');
 }
 /*navpad*/
 .arrow_up {
-    background-image: url('../images/Preistorica/up.png');
+    background-image: url('PATH/common/images/Preistorica/up.png');
 }
 .arrow_sx {
-    background-image: url('../images/Preistorica/sx.png');
+    background-image: url('PATH/common/images/Preistorica/sx.png');
 }
 .arrow_dx {
-    background-image: url('../images/Preistorica/dx.png');
+    background-image: url('PATH/common/images/Preistorica/dx.png');
 }
 .arrow_down {
-    background-image: url('../images/Preistorica/down.png');
+    background-image: url('PATH/common/images/Preistorica/down.png');
 }
 .arrow_up:hover {
     border: 1px dotted #872a13;
@@ -168,6 +168,6 @@ button {
     border: 1px dotted #872a13;
 }
 #movemap {
-	background-image: url('../images/sfondo2.jpg');
+	background-image: url('PATH/common/images/sfondo2.jpg');
 	border-radius: 0 0 7px 7px;
 }

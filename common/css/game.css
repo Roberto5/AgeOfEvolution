@@ -178,7 +178,7 @@ table.report td {
 
 table.report th {
 	border: 1px solid #CCC;
-	background-image: url(../images/table_bg.png);
+	background-image: url(PATH/common/images/table_bg.png);
         color: black;
 	padding-left: 7px;
 	padding-top: 2px;
@@ -207,7 +207,7 @@ table.troopers td {
 }
 table.troopers th {
         border: 1px solid #CCC;
-	background-image: url(../images/table_bg.png);
+	background-image: url(PATH/common/images/table_bg.png);
 	padding-left: 7px;
 	padding-top: 2px;
 	vertical-align:middle;
@@ -235,7 +235,7 @@ table.troopers th {
 /* Mappa */
 .map_village {
     padding: 0px;
-    background-image: url('../images/map/map.png');
+    background-image: url('PATH/common/images/map/map.png');
 }
 .map_village:hover {
     border: 1px solid black;
@@ -251,11 +251,11 @@ table.troopers th {
 /* posizione degli edifici*/
 .empty {
     border: none;
-    background-image: url('../images/empty1.png');
+    background-image: url('PATH/common/images/empty1.png');
 }
 .empty:hover {
     border: none;
-    background-image: url('../images/empty.png');
+    background-image: url('PATH/common/images/empty.png');
 }
 .pos0 {
     left: 475px;
@@ -429,31 +429,31 @@ table.troopers th {
 	background-position:-50px -50px;
 }
 .village1 {
-	background-image: url('../images/map/map.png');
+	background-image: url('PATH/common/images/map/map.png');
 	height:50px;
 	width:50px;
 	background-position:-100px -50px;
 }
 .allied {
-	background-image: url('../images/map/map.png');
+	background-image: url('PATH/common/images/map/map.png');
 	height:16px;
 	width:16px;
 	background-position:-182px -50px;
 }
 .enemy {
-	background-image: url('../images/map/map.png');
+	background-image: url('PATH/common/images/map/map.png');
 	height:16px;
 	width:16px;
 	background-position:-166px -50px;
 }
 .own {
-	background-image: url('../images/map/map.png');
+	background-image: url('PATH/common/images/map/map.png');
 	height:16px;
 	width:16px;
 	background-position:-150px -50px;
 }
 .troops-icon{
-	background-image: url('../images/troops/troops.png');
+	background-image: url('PATH/common/images/troops/troops.png');
 	height:16px;
 	width:16px;
 	display: inline-block;
