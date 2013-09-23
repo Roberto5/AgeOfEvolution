@@ -19,7 +19,7 @@ $this->myMenu()
 	->add('[MESSAGES]',"javascript:ev.request('".$this->module."/message','post',{ajax:1});",null,null,12,null,null,$this->path.'/common/images/mess_read0.gif',$iconSize,false)
 	->add('[TOP]',"javascript:ev.request('".$this->module."/top','post',{ajax:1});",null,null,13,null,null,$this->path.'/common/images/top.png',$iconSize,false)
 	->add('Debug',$this->module,'debug',null,14,null,null,$this->path.'/common/images/tool.gif',$iconSize,false)
-	;
+	->add('Help',"javascript:ev.help('index');",null,null,99,null,null,$this->path.'/common/images/help.png',$iconSize,false);
 	
 
  $width=$this->myMenu()->getPageCount()*28;

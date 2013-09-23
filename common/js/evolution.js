@@ -1033,7 +1033,7 @@ var ev = {
 	bugreport : function() {
 		this.windows({
 			x : 400,
-			y : 600
+			y : "auto"
 		}, "centre", ev.bugcontent);
 	},
 	bugcontent : {

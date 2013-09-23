@@ -39,7 +39,7 @@ $this->myMenu()
 	->add('[REG]',"javascript:$('#reg').dialog('open');",null,null,5,'reg','index',$this->path.'/common/images/add.png',$iconSize,false)
 	->add('Logout','javascript:ev.logout();','','',6,'login','logout',$this->path.'/common/images/logout.png',$iconSize,false)
 	->add('[ACCOUNT]',"javascript:$('#account').dialog('open');",null,null,7,'account',null,$this->path.'/common/images/modacc.png',$iconSize,false)
-	->add('[BUG]','javascript:ev.bugreport();',null,null,20,'priv_zone',null,$this->path.'/common/images/bug.png',$iconSize,false)
+	->add('Feedback','javascript:ev.bugreport();',null,null,20,'priv_zone',null,$this->path.'/common/images/bug.png',$iconSize,false)
 	->add(array('label'=>'Admin'
 			,'module'=>'admin'
 			//,'controller'=>'index'
@@ -50,8 +50,7 @@ $this->myMenu()
 			,'iconSize'=>$iconSize
 			,'text'=>false
 		)
-	)
-	->add('Help',"javascript:ev.help('index');",null,null,99,null,null,$this->path.'/common/images/help.png',$iconSize,false);
+	);
 
 if ($this->module=='admin') {
 	$this->myMenu()->add(array('label'=>'[MKDATA]'
@@ -157,41 +156,34 @@ $(document).ready(function(){
 		        $cate .= '<option value="' . $value['id'] . '" title="' .
 		         $value['description'] . '">' . $value['name'] . '</option>';
 		    }
-		    $content = array('title' => '[bugreport]', 
+		    $content = array('title' => 'Feedback', 
 		    'text' => ('
 		<div id="report"></div>
 		<div id="form">
 			<div id="type">
 				<input type="radio" id="type1" name="type" checked="checked" value="bug" /><label for="type1">' .
-		     $this->image('/common/images/bug.png', 'bug', null, 32, 32) .
+		     $this->image('/common/images/bug.png', 'Bug', 'Bug', 32, 32) .
 		     '</label>
 				<input type="radio" id="type2" name="type"  value="idea" /><label for="type2">' .
-		     $this->image('/common/images/idea.gif', '[idee]', null, 32, 32) .
+		     $this->image('/common/images/idea.gif', '[IDEA]', '[IDEA]', 32, 32) .
 		     '</label>
 				<input type="radio" id="type3" name="type" value="notlike" /><label for="type3">' .
-		     $this->image('/common/images/notlike.gif', '[lamentele]', null, 32, 
+		     $this->image('/common/images/notlike.gif', '[NOTLIKE]', '[NOTLIKE]', 32, 
 		    32) . '</label>
 			</div>
-			<div>
+			<div>[CATEGORY]
 				<select id="category">' . $cate .
 		     '</select>
 			</div>
-			<div>tags : <span id="itag"></span> <input id="tag" />
+			<div title="[BUGTAG]">tags : <span id="itag"></span> <input id="tag"/>
 			<button onclick="ev.addtag($(\'#tag\').val());">' .
-		     '[inserisci/elimina]' .
+		     '[INSERT]/[DELETE]' .
 		     '</button></div>
-			<textarea cols="42" rows="14" style="border:1px solid black;" id="description">' . 
-		    '[descrivi qui il bug che hai trovato, un idea per migliorare il gioco o quello che non ti piace.
-			cerca di essere chiaro e di compilare bene il form]' .
-		     '</textarea>
-			<div>' .
-		     
-		    '[se vuoi inviarci immagini caricale su un host online e metti qui l&apos;indirizzo]' .
-		     '</div>
-			<div><input id="link" /></div>
+			<textarea cols="42" rows="14" style="border:1px solid black;" id="description" placeholder="[BUGDESC]"></textarea>
+			<div>Link:<input id="link"  placeholder="[BUGIMG]" /></div>
 			<div style="float: right;"><button onclick="ev.sendbug()">' .
-		     '[invia]' . '</button></div>
-		</div><script type="text/javascript">$("#type").buttonset();$("button").button();
+		     '[SEND]' . '</button></div>
+		</div><script type="text/javascript">$("#type").buttonset();initbutton();
 		$(function() {
 		var cache = {},
 		lastXhr;

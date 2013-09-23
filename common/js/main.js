@@ -1,26 +1,29 @@
+function initbutton() {
+	// add button
+	$("button:not(.img):not(.server):not(.close):not(.edit):not(.add):not(.delete),input[type=submit]:not(.edit):not(.add):not(.delete)").button();
+	$("button.edit").button({icons: {
+        primary: "ui-icon-wrench"
+    },
+    text: false
+    });
+	$("button.close").button({icons: {
+        primary: "ui-icon-circle-close"
+    },
+    text: false
+    });
+	$("button.add").button({icons: {
+        primary: "ui-icon-plus"
+    },
+    text: false
+    });
+	$("button.delete").button({icons: {
+        	primary: "ui-icon-close"
+    	},
+    		text: false
+    });;
+}
 $(document).ready(function(){
-		// add button
-		$("button:not(.img):not(.server):not(.close):not(.edit):not(.add):not(.delete),input[type=submit]:not(.edit):not(.add):not(.delete)").button();
-		$("button.edit").button({icons: {
-	        primary: "ui-icon-wrench"
-	    },
-	    text: false
-	    });
-		$("button.close").button({icons: {
-	        primary: "ui-icon-circle-close"
-	    },
-	    text: false
-	    });
-		$("button.add").button({icons: {
-	        primary: "ui-icon-plus"
-	    },
-	    text: false
-	    });
-		$("button.delete").button({icons: {
-	        	primary: "ui-icon-close"
-	    	},
-	    		text: false
-	    });;
+		initbutton()
 	    $("#loginForm").submit(function(e) {
 		    ev.login();
 		    e.preventDefault();

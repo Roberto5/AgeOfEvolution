@@ -1,48 +1,56 @@
-Value is required and can't be empty@Il campo deve essere pieno
-The two given tokens do not match@I due campi non coincidono
-Missing captcha fields@Compilare il campo captcha
-DESCRIPTION@descrizione del sito
-USERNAME@Nome utente :
-ALNUM@Questo campo deve contenere solo lettere e numeri
-PASS_LENG@La password deve contenere 8 caratteri
-ENTER@Entra
-SUCCESS@login eseguito con successo
-LOGOUT@Logout eseguito con successo
-FAILURE@login fallito
-PASS_ERR@Password errata
-LOST_PASS@Hai dimenticato la password?
-USER_NOT_FOUND@Username inesistente
-GUEST@Visitatore
-CREATE@Crea
-EDIT@Modifica
-REG@Registrati
-E_FATAL@Fatal Error, contattare l'admin
-LOGorEMAIL@lasciaci un email per essere ricontattato oppure fai
-OBJECT@oggetto
-WRITE@Scrivi il tuo messaggio qui
-CONTACT@Contattaci
-EMAIL_CONTACT@Contattaci per email
-FORM_CONTACT@Oppure compila questo modulo
-CTRL_MAIL@Email inviata con successo, controlla la casella di posta
-RECOVER@Inserisci l'email dell'account da recuperare
-RESEND@Il tuo account non è attivo, puoi reinviare l'email di attivazione tramite il modulo qua sotto
-NAME@Nome
-DESCRIPTION2@Descrizione
-ADD@Aggiungi
-DELETE@Cancella
-TARGET@Obbiettivo
-DATA_ERROR@Errore nei dati
-PROFILE@Profilo
-CHANGEPASS@Cambia password
-OLD_PASS@Vecchia password
-HOSTED@i sorgenti si possono trovare su
-CLOSE@Chiudi
-LANGUAGE@Il tuo linguaggio non è supportato, puoi aggiungere una traguzione andando su
 ACCOUNT@Account
-SERVERTIME@Ora del server
-TOTALUSER@Utenti totali
-USERONLINE@Utenti online
-VERSION@Versione
+ADD@Aggiungi
+ALERTS@Avvisi
+ALNUM@Questo campo deve contenere solo lettere e numeri
+BUGDESC@Descrivi qui il bug che hai trovato, un idea per migliorare il gioco o quello che non ti piace. cerca di essere chiaro e di compilare bene il form
+BUGIMG@Se vuoi inviarci immagini caricale su un host online e metti qui l&apos;indirizzo
+BUGTAG@Il Tag serve per etichettare la segnalazione e ricercare segnalazioni simili
+CATEGORY@Categoria
+CHANGEPASS@Cambia password
+CLOSE@Chiudi
+CONTACT@Contattaci
+CREATE@Crea
+CTRL_MAIL@Email inviata con successo, controlla la casella di posta
+DATA_ERROR@Errore nei dati
+DELETE@Cancella
+DESCRIPTION2@Descrizione
+DESCRIPTION@descrizione del sito
+EDIT@Modifica
+EMAIL_CONTACT@Contattaci per email
+ENTER@Entra
+E_FATAL@Fatal Error, contattare l'admin
+FAILURE@login fallito
+FORM_CONTACT@Oppure compila questo modulo
+GUEST@Visitatore
+HOSTED@i sorgenti si possono trovare su
+IDEA@Idea
+INSERT@Inserisci
+LANGUAGE@Il tuo linguaggio non è supportato, puoi aggiungere una traguzione andando su
+LOGOUT@Logout eseguito con successo
+LOGorEMAIL@lasciaci un email per essere ricontattato oppure fai
+LOST_PASS@Hai dimenticato la password?
 MAINTENAINCE@Manutenzione
 MAP@Mappa
-ALERTS@Avvisi
+Missing captcha fields@Compilare il campo captcha
+NAME@Nome
+NOTLIKE@Critiche
+OBJECT@oggetto
+OLD_PASS@Vecchia password
+PASS_ERR@Password errata
+PASS_LENG@La password deve contenere 8 caratteri
+PROFILE@Profilo
+RECOVER@Inserisci l'email dell'account da recuperare
+REG@Registrati
+RESEND@Il tuo account non è attivo, puoi reinviare l'email di attivazione tramite il modulo qua sotto
+SEND@Invia
+SERVERTIME@Ora del server
+SUCCESS@login eseguito con successo
+TARGET@Obbiettivo
+TOTALUSER@Utenti totali
+The two given tokens do not match@I due campi non coincidono
+USERNAME@Nome utente :
+USERONLINE@Utenti online
+USER_NOT_FOUND@Username inesistente
+VERSION@Versione
+Value is required and can't be empty@Il campo deve essere pieno
+WRITE@Scrivi il tuo messaggio qui
