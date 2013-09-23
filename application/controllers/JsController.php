@@ -6,19 +6,14 @@ class JsController extends Zend_Controller_Action
 	public function indexAction ()
 	{
 		$this->_helper->layout->disableLayout();
-		//$this->_helper->viewRenderer->setNoRender(true);
-		/*if(!empty($_SERVER["HTTP_ACCEPT_ENCODING"]) && strpos("gzip",$_SERVER["HTTP_ACCEPT_ENCODING"]) === NULL){
-		}else{ob_start("ob_gzhandler");
-		}*/
 		
-		header('Content-Type: text/javascript; charset: UTF-8');
-		header('Cache-Control: must-revalidate');
-		
-		$expire_offset = 1814400; // set to a reaonable interval, say 3600 (1 hr)
-		header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $expire_offset) . ' GMT');
+		$conf = Zend_Registry::get("config");
+		// set to a reaonable interval, say 3600 (1 hr)
+		$this->view->expire = $conf->js->expire ? $conf->js->expire : 86400;
+		$file=$conf->js->file->toArray();
 		
 		
-		$file=array("*framework*",
+		/*$file=array("*framework*",
 				"jquery.js"
 				,"jquery-ui.js"
 				,"jquery.validate.min.js"
@@ -35,7 +30,7 @@ class JsController extends Zend_Controller_Action
 				,"function.js"
 				,"reg.js"
 				,"time.js"
-				,"profile.js");
+				,"profile.js");*/
 		
 		$text="";
 		$mtime=0;
@@ -51,7 +46,7 @@ class JsController extends Zend_Controller_Action
 			}
 		
 		}
-		header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $mtime) . ' GMT');
+		$this->mtime=$mtime;
 		$this->view->text=$text;
 	}	
 }

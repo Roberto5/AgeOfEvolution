@@ -59,6 +59,7 @@ class CssController extends Zend_Controller_Action
 			$display .= $r['text'];
 			if ($mtime < $r['mtime']) $mtime = $r['mtime'];
 		}
+		$this->view->mtime=$mtime;
 		$this->view->output=$display;
 	}
 	function css_compress ($buffer)
