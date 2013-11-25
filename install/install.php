@@ -5,7 +5,9 @@ try {
 			get_include_path(),
 	)));
 	include_once 'Zend/Db.php';
-	include_once 'library/Zend/Validate.php';
+	include_once 'Zend/Validate.php';
+    include_once 'Zend/Validate/EmailAddress.php';
+    include_once 'Zend/Validate/Alnum.php';
 	foreach ($_POST as $key=>$value) {
 		$_POST[$key]=htmlentities($value);
 	}
