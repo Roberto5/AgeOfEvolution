@@ -8,36 +8,58 @@
 require_once 'Zend/Db/Table/Abstract.php';
 class Model_map extends Zend_Db_Table_Abstract
 {
-    /**
-     * The default table name 
-     */
-    protected $_name = 'map';
     private $t;
     /**
      * 
      * @var Model_civilta
      */
-    private $civ;
+    //private $civ;
     private $log;
+    private $map;
     function __construct ()
     {
+    	$this->_name=SERVER.'_map';
+    	
         $this->t = Zend_Registry::get("translate");
         $this->log = Zend_Registry::get("log");
-        $this->civ=Model_civilta::getInstance();
+        //$this->civ=Model_civilta::getInstance();
+        //parent::__construct();
+        $this->map=json_decode(file_get_contents(MAP_FILE));
     }
     /**
-     * restituisce una matrice con le caratteristiche del villaggio
-     * @param int $centX
-     * @param int $centY
-     * @param int $rx
-     * @param int $ry
-     * @param int $cache
-     * @return Array 
+     * understandig id sistem
+     * es map 5x5
+     * y/x 0  1  2  3  4
+     * 0   00 01 02 03 04
+     * 1   05 06 07 08 09
+     * 2   10 11 12 13 14
+     * 3   15 16 17 18 19
+     * 4   20 21 22 23 24
+     * id=5*y+x
+     * 
+     * id=17
+     * x=17%5=2
+     * y=intval(17/5)=3
+     * @param int $id
+     * @return array
      */
-    function getVillageArray ($centX = 0, $centY = 0, $rx = 3, $ry = 3,$cache=0)
-    {
-        $rows = $this->getDefaultAdapter()->fetchAll(
-        "SELECT `" . MAP_TABLE . "`.`id`,`" . MAP_TABLE . "`.`civ_id`,`" . MAP_TABLE . "`.`name`,
+    function getCoordFromId(int $id) {
+    	$x=$id%MAX_X;
+    	$y=intval($id/MAX_X);
+    	return array('x'=>$x,'y'=>$y);
+    }
+    /**
+     * 
+     * @param int $x
+     * @param int $y
+     * @return int
+     */
+    function getIdFromCoord(int $x,int $y) {
+    	$id=MAX_X*$y+$x;
+    	return $id;
+    }
+    /**
+    "SELECT `" . MAP_TABLE . "`.`id`,`" . MAP_TABLE . "`.`civ_id`,`" . MAP_TABLE . "`.`name`,
         	`" . MAP_TABLE . "`.`capital`,`" . MAP_TABLE . "`.`type`,`" . MAP_TABLE . "`.`busy_pop`,
         	`" . MAP_TABLE . "`.`x`,`" . MAP_TABLE . "`.`y`,`" . MAP_TABLE . "`.`zone`,
         	`" . MAP_TABLE . "`.`prod1_bonus`,`" . MAP_TABLE . "`.`prod2_bonus`,`" . MAP_TABLE . "`.`prod3_bonus`, 
@@ -51,13 +73,12 @@ class Model_map extends Zend_Db_Table_Abstract
          MAP_TABLE . "`,`" . CIV_TABLE . "` WHERE `x` >= '" . ($centX - $rx-$cache) .
          "' AND `x` <= '" . ($centX + $rx+$cache) . "' AND `y` >= '" . ($centY - $ry-$cache) .
          "' AND `y` <= '" . ($centY + $ry+$cache) . "' AND `" . MAP_TABLE .
-         "`.`civ_id`=`" . CIV_TABLE . "`.`civ_id`");
-        for ($i = 0; $rows[$i]; $i ++) {
-        	if ((abs($rows[$i]["x"]-$centX)<=$rx)&&((abs($rows[$i]["y"]-$centY)<=$ry)))
-            	$map['focus'][$rows[$i]["x"]][$rows[$i]["y"]] = $rows[$i];
-            $map['cache'][$rows[$i]["x"]][$rows[$i]["y"]] = $rows[$i];
-        }
-        return $map;
+         "`.`civ_id`=`" . CIV_TABLE . "`.`civ_id`"
+     * @return Array 
+     */
+    function getVillageArray ()
+    {
+        return $this->fetchAll();;
     }
     /**
      * genera una tabella html del villaggi
@@ -92,12 +113,11 @@ class Model_map extends Zend_Db_Table_Abstract
      */
     static function getZone ($x, $y)
     {
-        if (($x > 400) || ($x < - 400) || ($y > 400) || ($y < - 400))
-            $zone = 5;
+    	
+        if (($x > MAX_X) || ($x < - MAX_X) || ($y > MAX_Y) || ($y < - MAX_Y))
+            $zone = WATER;
         else
-            $zone = Zend_Db_Table::getDefaultAdapter()->fetchOne(
-            "SELECT `zone` FROM `" . MAP_TABLE . "` WHERE `x`='" . $x .
-             "' AND `y`='" . $y . "'");
+            $zone=$this->map->layers[0]->data[$this->getIdFromCoord($x, $y)];
         return ($zone ? $zone : "0");
     }
     /**
@@ -107,7 +127,7 @@ class Model_map extends Zend_Db_Table_Abstract
      * @param unknown_type $rad
      * @param unknown_type $cx
      * @param unknown_type $cy
-     */
+     *
     static function generateZone ($zone, $rad, $cx, $cy)
     {
         //$co = array();
@@ -153,5 +173,5 @@ class Model_map extends Zend_Db_Table_Abstract
             }
         }
         return $co;
-    }
+    }//*/
 }

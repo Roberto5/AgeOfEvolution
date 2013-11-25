@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generato il: Nov 24, 2013 alle 00:13
+-- Generato il: Nov 24, 2013 alle 00:06
 -- Versione del server: 5.5.34
 -- Versione PHP: 5.3.10-1ubuntu3.8
 
@@ -122,15 +122,14 @@ CREATE TABLE `s1_civ` (
   `ev_ready` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`civ_id`),
   KEY `ally` (`civ_ally`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
 -- Struttura stand-in per le viste `s1_data_map`
 --
-DROP VIEW IF EXISTS `s1_data_map`;
-CREATE TABLE `s1_data_map` (
+CREATE TABLE IF NOT EXISTS `s1_data_map` (
 `id` int(5)
 ,`civ_id` int(5)
 ,`name` varchar(30)
@@ -191,7 +190,7 @@ CREATE TABLE `s1_map` (
   PRIMARY KEY (`id`),
   KEY `name` (`name`),
   KEY `civ_id` (`civ_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- RELATIONS FOR TABLE `s1_map`:
@@ -301,8 +300,7 @@ CREATE TABLE `s1_option` (
 -- Struttura della tabella `s1_params`
 --
 
-DROP TABLE IF EXISTS `s1_params`;
-CREATE TABLE `s1_params` (
+CREATE TABLE IF NOT EXISTS `s1_params` (
   `name` varchar(20) NOT NULL,
   `value` text NOT NULL,
   PRIMARY KEY (`name`)
@@ -314,8 +312,7 @@ CREATE TABLE `s1_params` (
 -- Struttura della tabella `s1_quest`
 --
 
-DROP TABLE IF EXISTS `s1_quest`;
-CREATE TABLE `s1_quest` (
+CREATE TABLE IF NOT EXISTS `s1_quest` (
   `age` int(1) NOT NULL,
   `n` int(2) NOT NULL,
   `title` varchar(50) NOT NULL,
@@ -333,15 +330,14 @@ CREATE TABLE `s1_quest` (
 -- Struttura della tabella `s1_report`
 --
 
-DROP TABLE IF EXISTS `s1_report`;
-CREATE TABLE `s1_report` (
+CREATE TABLE IF NOT EXISTS `s1_report` (
   `civ` int(5) NOT NULL,
   `data` text NOT NULL,
   `time` int(40) NOT NULL,
   `id` int(5) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   KEY `civ` (`civ`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- RELATIONS FOR TABLE `s1_report`:
@@ -355,8 +351,7 @@ CREATE TABLE `s1_report` (
 -- Struttura della tabella `s1_report_read`
 --
 
-DROP TABLE IF EXISTS `s1_report_read`;
-CREATE TABLE `s1_report_read` (
+CREATE TABLE IF NOT EXISTS `s1_report_read` (
   `user` int(5) NOT NULL,
   `id` int(5) NOT NULL,
   PRIMARY KEY (`user`,`id`),
@@ -377,8 +372,7 @@ CREATE TABLE `s1_report_read` (
 -- Struttura della tabella `s1_research`
 --
 
-DROP TABLE IF EXISTS `s1_research`;
-CREATE TABLE `s1_research` (
+CREATE TABLE IF NOT EXISTS `s1_research` (
   `civ_id` int(5) NOT NULL,
   `rid` int(5) NOT NULL,
   `liv` int(2) NOT NULL DEFAULT '0',
@@ -398,8 +392,7 @@ CREATE TABLE `s1_research` (
 -- Struttura della tabella `s1_troopers`
 --
 
-DROP TABLE IF EXISTS `s1_troopers`;
-CREATE TABLE `s1_troopers` (
+CREATE TABLE IF NOT EXISTS `s1_troopers` (
   `trooper_id` int(5) NOT NULL,
   `civ_id` int(5) NOT NULL,
   `numbers` int(9) NOT NULL,
@@ -426,13 +419,12 @@ CREATE TABLE `s1_troopers` (
 -- Struttura della tabella `site_alerts`
 --
 
-DROP TABLE IF EXISTS `site_alerts`;
-CREATE TABLE `site_alerts` (
+CREATE TABLE IF NOT EXISTS `site_alerts` (
   `aid` int(5) NOT NULL AUTO_INCREMENT,
   `title` varchar(40) NOT NULL,
   `text` text NOT NULL,
   PRIMARY KEY (`aid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -440,8 +432,7 @@ CREATE TABLE `site_alerts` (
 -- Struttura della tabella `site_alerts_read`
 --
 
-DROP TABLE IF EXISTS `site_alerts_read`;
-CREATE TABLE `site_alerts_read` (
+CREATE TABLE IF NOT EXISTS `site_alerts_read` (
   `id` int(5) NOT NULL,
   `user` int(5) NOT NULL,
   PRIMARY KEY (`id`,`user`),
@@ -462,8 +453,7 @@ CREATE TABLE `site_alerts_read` (
 -- Struttura della tabella `site_clean`
 --
 
-DROP TABLE IF EXISTS `site_clean`;
-CREATE TABLE `site_clean` (
+CREATE TABLE IF NOT EXISTS `site_clean` (
   `id` int(1) NOT NULL DEFAULT '1',
   `time` int(30) NOT NULL,
   `server` varchar(3) NOT NULL,
@@ -476,8 +466,7 @@ CREATE TABLE `site_clean` (
 -- Struttura della tabella `site_config`
 --
 
-DROP TABLE IF EXISTS `site_config`;
-CREATE TABLE `site_config` (
+CREATE TABLE IF NOT EXISTS `site_config` (
   `option` varchar(10) NOT NULL DEFAULT '0',
   `value` text,
   PRIMARY KEY (`option`)
@@ -489,13 +478,12 @@ CREATE TABLE `site_config` (
 -- Struttura della tabella `site_faq`
 --
 
-DROP TABLE IF EXISTS `site_faq`;
-CREATE TABLE `site_faq` (
+CREATE TABLE IF NOT EXISTS `site_faq` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `question` varchar(100) NOT NULL,
   `reply` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -503,8 +491,7 @@ CREATE TABLE `site_faq` (
 -- Struttura della tabella `site_option`
 --
 
-DROP TABLE IF EXISTS `site_option`;
-CREATE TABLE `site_option` (
+CREATE TABLE IF NOT EXISTS `site_option` (
   `user_id` int(5) NOT NULL,
   `option` varchar(10) NOT NULL,
   `value` text NOT NULL,
@@ -523,8 +510,7 @@ CREATE TABLE `site_option` (
 -- Struttura della tabella `site_role`
 --
 
-DROP TABLE IF EXISTS `site_role`;
-CREATE TABLE `site_role` (
+CREATE TABLE IF NOT EXISTS `site_role` (
   `uid` int(5) NOT NULL DEFAULT '1',
   `role` varchar(40) NOT NULL,
   PRIMARY KEY (`uid`,`role`)
@@ -542,8 +528,7 @@ CREATE TABLE `site_role` (
 -- Struttura della tabella `site_sessions`
 --
 
-DROP TABLE IF EXISTS `site_sessions`;
-CREATE TABLE `site_sessions` (
+CREATE TABLE IF NOT EXISTS `site_sessions` (
   `ID` text NOT NULL,
   `var_name` text NOT NULL,
   `var_value` longtext NOT NULL,
@@ -554,7 +539,7 @@ CREATE TABLE `site_sessions` (
   `user_id` int(5) NOT NULL,
   PRIMARY KEY (`rand_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=166 ;
 
 -- --------------------------------------------------------
 
@@ -562,8 +547,7 @@ CREATE TABLE `site_sessions` (
 -- Struttura della tabella `site_track`
 --
 
-DROP TABLE IF EXISTS `site_track`;
-CREATE TABLE `site_track` (
+CREATE TABLE IF NOT EXISTS `site_track` (
   `id` int(5) NOT NULL AUTO_INCREMENT,
   `uid` int(5) NOT NULL,
   `status` enum('new','reply','close') NOT NULL DEFAULT 'new',
@@ -574,7 +558,7 @@ CREATE TABLE `site_track` (
   PRIMARY KEY (`id`),
   KEY `uid` (`uid`),
   KEY `category` (`category`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- RELATIONS FOR TABLE `site_track`:
@@ -590,8 +574,7 @@ CREATE TABLE `site_track` (
 -- Struttura della tabella `site_track_assoc_tag`
 --
 
-DROP TABLE IF EXISTS `site_track_assoc_tag`;
-CREATE TABLE `site_track_assoc_tag` (
+CREATE TABLE IF NOT EXISTS `site_track_assoc_tag` (
   `id` int(5) NOT NULL,
   `tid` int(5) NOT NULL,
   PRIMARY KEY (`id`,`tid`),
@@ -612,13 +595,12 @@ CREATE TABLE `site_track_assoc_tag` (
 -- Struttura della tabella `site_track_cat`
 --
 
-DROP TABLE IF EXISTS `site_track_cat`;
-CREATE TABLE `site_track_cat` (
+CREATE TABLE IF NOT EXISTS `site_track_cat` (
   `id` int(5) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
   `description` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -626,12 +608,11 @@ CREATE TABLE `site_track_cat` (
 -- Struttura della tabella `site_track_tag`
 --
 
-DROP TABLE IF EXISTS `site_track_tag`;
-CREATE TABLE `site_track_tag` (
+CREATE TABLE IF NOT EXISTS `site_track_tag` (
   `id` int(5) NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -639,8 +620,7 @@ CREATE TABLE `site_track_tag` (
 -- Struttura della tabella `site_users`
 --
 
-DROP TABLE IF EXISTS `site_users`;
-CREATE TABLE `site_users` (
+CREATE TABLE IF NOT EXISTS `site_users` (
   `ID` int(5) NOT NULL AUTO_INCREMENT,
   `username` varchar(30) NOT NULL,
   `password` varchar(64) NOT NULL,
@@ -650,7 +630,7 @@ CREATE TABLE `site_users` (
   `description` text NOT NULL,
   `code_time` int(20) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -658,8 +638,7 @@ CREATE TABLE `site_users` (
 -- Struttura della tabella `site_user_civ`
 --
 
-DROP TABLE IF EXISTS `site_user_civ`;
-CREATE TABLE `site_user_civ` (
+CREATE TABLE IF NOT EXISTS `site_user_civ` (
   `user_id` int(5) NOT NULL,
   `civ_id` int(5) NOT NULL,
   `server` varchar(5) NOT NULL DEFAULT 's1',
@@ -680,8 +659,7 @@ CREATE TABLE `site_user_civ` (
 -- Struttura della tabella `temp`
 --
 
-DROP TABLE IF EXISTS `temp`;
-CREATE TABLE `temp` (
+CREATE TABLE IF NOT EXISTS `temp` (
   `x` int(4) NOT NULL,
   `y` int(4) NOT NULL,
   `zone` int(1) NOT NULL,
