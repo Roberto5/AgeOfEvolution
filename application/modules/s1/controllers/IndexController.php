@@ -21,11 +21,11 @@ class S1_IndexController extends Zend_Controller_Action
     public $now;
     function init ()
     {
-        $log = Zend_Registry::get("log");
+        
         if (Zend_Registry::isRegistered("civ"))
             $civ = Zend_Registry::get("civ");
         else {
-            $log->log("civ non trovato", Zend_Log::CRIT);
+            $this->_log->log("civ non trovato", Zend_Log::CRIT);
             $e = new Zend_Exception();
             exit();
         }

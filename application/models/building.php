@@ -8,10 +8,6 @@
 require_once 'Zend/Db/Table/Abstract.php';
 class Model_building extends Zend_Db_Table_Abstract
 {
-    /**
-     * The default table name 
-     */
-    protected $_name = BUILDING_TABLE;
     var $data = array();
     static $name = array(
     array("", "focolare", "caverna dello sciamano", "dispensa", 
@@ -43,20 +39,13 @@ class Model_building extends Zend_Db_Table_Abstract
      */
     function __construct ($civ_id, $village_id)
     {
+    	$this->_name=SERVER.'_building';
     	parent::__construct();
     	$this->log=Zend_Registry::get("log");
         $this->civ_id = $civ_id;
         $this->village_id = $village_id;
-        //$this->setDefaultAdapter(Zend_Db_Table::getDefaultAdapter());
-        /**
-         * @tutorial fetchAssoc mette la tebella del DB in un array associativo
-         * il primo indice è la prima chiave selezionata, in quasto casi `pos`
-         * se metto * invece seleziona la chiave `village_id`
-         */
-        $this->data= $this->getDefaultAdapter()->fetchAssoc(
-        "SELECT `pos`,`village_id`,`type`,`liv`,`pop` FROM `" . BUILDING_TABLE . "` 
-	WHERE `village_id`='" . $village_id .
-         "' ORDER BY `pos`");
+        $this->getAdapter()->setFetchMode(Zend_Db::FETCH_ASSOC);
+        $this->data= $this->fetchAll("`village_id`='" . $village_id ."'","pos");
         $this->t = Zend_Registry::get("translate");
     }
     /**
@@ -116,7 +105,7 @@ class Model_building extends Zend_Db_Table_Abstract
     function getCapTot ($storagetype = STORAGE1)
     {
         global $Building_Array;
-        $build = $this->data;
+        $build = $this->data->toArray();
         $storage = 0;
         for ($i = 0; $i <= TOTBUILDING; $i ++) {
             if ($build[$i]['type'] == $storagetype) {
@@ -190,7 +179,7 @@ class Model_building extends Zend_Db_Table_Abstract
         $arrayBuilding = null;
         for ($i = 0; $i < TOT_TYPE_BUILING; $i ++) {
             $bool = true;
-            $build = $this->data;
+            $build = $this->data->toArray();
             $existing = false;
             $exit = false;
             $pos = 0;

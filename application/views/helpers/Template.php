@@ -262,8 +262,7 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
             if ($this->villagename[$id])
                 $name = $this->villagename[$id];
             else {
-                $name = Zend_Db_Table::getDefaultAdapter()->fetchOne(
-                "SELECT `name` FROM `" . MAP_TABLE . "` WHERE `id`='$id'");
+                $name = Model_map::getInstance()->city[$id];
                 $this->villagename[$id] = $name;
             }
         }

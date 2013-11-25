@@ -41,8 +41,9 @@ class S1_ProfileController extends Zend_Controller_Action {
 					"SELECT `ID`,`username` FROM `" . USERS_TABLE . "`,`" . RELATION_USER_CIV_TABLE . "` WHERE `civ_id`='$cid' AND `user_id`=`ID`");
 			
 			$this->view->sharer=$sharer;
+			//@todo ottimizzare
 			$this->view->village_list=$this->db->fetchAssoc(
-					"SELECT * FROM `" . MAP_TABLE. "` WHERE `civ_id`='$cid'");
+					"SELECT * FROM `" . SERVER. "_vilage` WHERE `civ_id`='$cid'");
 		}
 	}
 	public function changenamevillageAction() {
@@ -52,7 +53,7 @@ class S1_ProfileController extends Zend_Controller_Action {
 		$input->setDefaultEscapeFilter(new Zend_Filter_Callback("addslashes"));
 		$vid=$input->getEscaped('id');
 		$name=$input->getEscaped('name');
-		$this->db->query("UPDATE `".MAP_TABLE."` SET `name`='$name' WHERE `id`='$vid'");
+		$this->db->query("UPDATE `".SERVER."_village` SET `name`='$name' WHERE `id`='$vid'");
 		$civ=Model_civilta::getInstance();
 		$civ->refresh->addIds('vid'.$vid, $name);
 		$update=array('ids'=>array('vid'.$vid=>$name));

@@ -42,6 +42,7 @@ PROFILE@Profilo
 RECOVER@Inserisci l'email dell'account da recuperare
 REG@Registrati
 RESEND@Il tuo account non è attivo, puoi reinviare l'email di attivazione tramite il modulo qua sotto
+SELECT_SERVER@Seleziona un Server
 SEND@Invia
 SERVERTIME@Ora del server
 SUCCESS@login eseguito con successo
@@ -53,4 +54,5 @@ USERONLINE@Utenti online
 USER_NOT_FOUND@Username inesistente
 VERSION@Versione
 Value is required and can't be empty@Il campo deve essere pieno
+WELLCOME@Benvenuto
 WRITE@Scrivi il tuo messaggio qui

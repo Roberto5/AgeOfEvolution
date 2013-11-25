@@ -2,7 +2,7 @@
 class Admin_GenerateController extends Zend_Controller_Action
 {
     /**
-     * 
+     * @todo tutto da rifare
      * @var Zend_Db_Adapter_Abstract
      */
     private $db;

@@ -16,15 +16,27 @@ class Model_map extends Zend_Db_Table_Abstract
     //private $civ;
     private $log;
     private $map;
+    public $city;
+    static private $instance;
     function __construct ()
     {
     	$this->_name=SERVER.'_map';
-    	
+    	$this->_primary='id';
         $this->t = Zend_Registry::get("translate");
         $this->log = Zend_Registry::get("log");
         //$this->civ=Model_civilta::getInstance();
-        //parent::__construct();
+        parent::__construct();
+        $this->getAdapter()->setFetchMode(Zend_Db::FETCH_ASSOC);
+        $this->city=$this->fetchAll();
         $this->map=json_decode(file_get_contents(MAP_FILE));
+        self::$instance=$this;
+    }
+    /**
+     * @return Model_map
+     */
+    static function getInstance() {
+    	if (self::$instance) return self::$instance;
+    	else return new Model_map();
     }
     /**
      * understandig id sistem
@@ -59,21 +71,7 @@ class Model_map extends Zend_Db_Table_Abstract
     	return $id;
     }
     /**
-    "SELECT `" . MAP_TABLE . "`.`id`,`" . MAP_TABLE . "`.`civ_id`,`" . MAP_TABLE . "`.`name`,
-        	`" . MAP_TABLE . "`.`capital`,`" . MAP_TABLE . "`.`type`,`" . MAP_TABLE . "`.`busy_pop`,
-        	`" . MAP_TABLE . "`.`x`,`" . MAP_TABLE . "`.`y`,`" . MAP_TABLE . "`.`zone`,
-        	`" . MAP_TABLE . "`.`prod1_bonus`,`" . MAP_TABLE . "`.`prod2_bonus`,`" . MAP_TABLE . "`.`prod3_bonus`, 
-        	`" . CIV_TABLE ."`.`civ_name`, `" . CIV_TABLE . "`.`civ_age`,`" . CIV_TABLE . "`.`civ_ally`,
-        		(SELECT `name` 
-        			FROM `" . ALLY_TABLE . "` 
-        			WHERE `" .
-         ALLY_TABLE . "`.`id` =`" . CIV_TABLE . "`.`civ_ally` 
-        		) AS `ally` 
-        		FROM `" .
-         MAP_TABLE . "`,`" . CIV_TABLE . "` WHERE `x` >= '" . ($centX - $rx-$cache) .
-         "' AND `x` <= '" . ($centX + $rx+$cache) . "' AND `y` >= '" . ($centY - $ry-$cache) .
-         "' AND `y` <= '" . ($centY + $ry+$cache) . "' AND `" . MAP_TABLE .
-         "`.`civ_id`=`" . CIV_TABLE . "`.`civ_id`"
+    
      * @return Array 
      */
     function getVillageArray ()
@@ -86,7 +84,7 @@ class Model_map extends Zend_Db_Table_Abstract
      * @param $h
      * @param $w
      * @return string
-     */
+     *
     function getMapTable ($dim, $h = 18, $w = 24)
     {
         //$base = Zend_Controller_Front::getInstance()->getBaseUrl();
@@ -104,21 +102,19 @@ class Model_map extends Zend_Db_Table_Abstract
             }
         }
         return $table;
-    }
+    }//*/
     /**
      * ritorna l'id del dio che influenza la zona
      * @param int coordinata x
      * @param int coordinata y
      * @return int
      */
-    static function getZone ($x, $y)
+    static function getZone (int $x, $y=-1)
     {
-    	
-        if (($x > MAX_X) || ($x < - MAX_X) || ($y > MAX_Y) || ($y < - MAX_Y))
-            $zone = WATER;
-        else
-            $zone=$this->map->layers[0]->data[$this->getIdFromCoord($x, $y)];
-        return ($zone ? $zone : "0");
+    	if ($y<0) $id=$x;
+    	else $id=$this->getIdFromCoord($x, $y);
+        $zone=$this->map->layers[0]->data[$id];
+        return ($zone ? $zone : WATER);
     }
     /**
      * genera una macchia, disegnando angolo per angolo un raggio che aumenta o 

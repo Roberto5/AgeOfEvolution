@@ -16,7 +16,8 @@ class S1_TopController extends Zend_Controller_Action
     {
     	$page=$this->getRequest()->getParam("page",1);
     	$this->view->ref=$this->getRequest()->getParam("ref",false);
-        $result=$this->db->fetchAssoc("SELECT *,(SELECT COUNT(*) FROM `".MAP_TABLE."` WHERE `".MAP_TABLE."`.`civ_id`=`".CIV_TABLE."`.`civ_id`) as `villages` FROM `".CIV_TABLE."` WHERE `civ_id`!='0' ORDER BY `civ_pop` DESC");
+    	//@todo ottimizzare
+        $result=$this->db->fetchAssoc("SELECT *,(SELECT COUNT(*) FROM `".SERVER."_village` WHERE `".SERVER."_village`.`civ_id`=`".CIV_TABLE."`.`civ_id`) as `villages` FROM `".CIV_TABLE."` WHERE `civ_id`!='0' ORDER BY `civ_pop` DESC");
         $top=Zend_Paginator::factory($result);
         $top->setCurrentPageNumber($page);
         //$top->setItemCountPerPage(1);

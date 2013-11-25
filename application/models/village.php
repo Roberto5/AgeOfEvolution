@@ -11,7 +11,6 @@ class Model_village extends Zend_Db_Table_Abstract
     /**
      * The default table name 
      */
-    protected $_name = MAP_TABLE;
     protected $_primary = "id";
     private $id;
     public $data = array();
@@ -23,22 +22,25 @@ class Model_village extends Zend_Db_Table_Abstract
     public $building;
     function __construct ($cid, $order = null)
     {
+    	$this->_name=SERVER.'_village';
         $this->cid = $cid;
-        $this->setDefaultAdapter(Zend_Db_Table::getDefaultAdapter());
-        $this->data = $this->getDefaultAdapter()->fetchAssoc(
-        "SELECT * FROM `$this->_name` WHERE `civ_id`='$cid' ORDER BY " . $order);
-        foreach ($this->data as $key => $value)
+        parent::__construct();
+        $this->getAdapter()->setFetchMode(Zend_Db::FETCH_ASSOC);
+        $this->data = $this->fetchAll("`civ_id`='$cid'", $order);
+        foreach ($this->data as $key=>$value)
         	$this->building[$key] = new Model_building($this->cid, $key);
     }
+    /**
+     * @return array
+     */
     function getList ()
     {
-        return $this->data;
+        return $this->data->toArray();
     }
     function setCurrentVillage ($vid = "all")
     {
     	$this->id = $vid;
-    	if (!$this->building[$vid]) $this->building[$vid] = new Model_building($this->cid, $vid);
-        
+    	if (!$this->building[$vid]) $this->building[$vid] = new Model_building($this->cid, $vid);  
     }
     /**
      * restituisce le risorse
@@ -59,7 +61,7 @@ class Model_village extends Zend_Db_Table_Abstract
     function modNameVillage ($vect)
     {
         foreach ($vect as $key => $value) {
-            $this->getDefaultAdapter()->update(MAP_TABLE, array('name' => $value), 
+            $this->update(array('name' => $value), 
             "`id`='" . $key . "'");
         }
         return true;
@@ -82,7 +84,7 @@ class Model_village extends Zend_Db_Table_Abstract
             $this->data[$this->id][$key] = $value;
         }
         $where = "id='$this->id'";
-        $this->getDefaultAdapter()->update(MAP_TABLE, $data, $where);
+        $this->update($data, $where);
     }
     function setResource ($res)
     {
@@ -92,13 +94,12 @@ class Model_village extends Zend_Db_Table_Abstract
             $this->data[$this->id][$key] = $value;
         }
         $where = "id='$this->id'";
-        $this->getDefaultAdapter()->update(MAP_TABLE, $data, $where);
+        $this->update($data, $where);
     }
     function write ($id = false)
     {
         if (! $id)
             $id = $this->id;
-        $this->getDefaultAdapter()->update(MAP_TABLE, $this->data[$id], 
-        "`id`='$id'");
+        $this->update($this->data[$id]->toArray(),"`id`='$id'");
     }
 }

@@ -23,7 +23,7 @@ class Form_Marketsend extends Zend_Form
                 $options[$key]=$key;
         $village->addMultiOptions($options);
         $village->addValidator("Db_RecordExists",null,
-        	array('table' => MAP_TABLE, 'field' => 'id','exclude'=>"`civ_id`='".$civ->cid."'"))->setRequired(true);
+        	array('table' => SERVER.'_village', 'field' => 'id','exclude'=>"`civ_id`='".$civ->cid."'"))->setRequired(true);
         $village->getValidator("Db_RecordExists")->setMessage("seleziona uno dei tuoi villaggi!");
         $this->addElement($village);
     }

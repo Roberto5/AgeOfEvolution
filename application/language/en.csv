@@ -41,6 +41,7 @@ PROFILE@Profile
 RECOVER@Insert the email of account to recover
 REG@Register
 RESEND@the your account isn't active, you can resend the activation email with this form
+SELECT_SERVER@Select a Server
 SEND@Send
 SERVERTIME@Server's time
 SUCCESS@login success
@@ -50,4 +51,5 @@ USERNAME@Username :
 USERONLINE@Users online
 USER_NOT_FOUND@Username not found
 VERSION@Version
+WELLCOME@Welcome
 WRITE@Write your message here

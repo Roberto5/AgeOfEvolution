@@ -61,8 +61,7 @@ $research_array=array('1'=>'Rarco');
 define("VILLAGE_IMAGE_FILE", "common/images/villaggi.php");
 define("MAX_EV","100");
 define("MAP_ADD","3");
-define("MAP_FILE",realpath(APPLICATION_PATH.'/../common/images/map/map.json'));
-define("WATER",0);
+
 
 define("OWNER", 3);
 define("SHARER", 2);

@@ -26,10 +26,12 @@ class S1_ProcessingController extends Zend_Controller_Action
      * @var bool
      */
     private $refresh = false;
+    private $map;
     public function init ()
     {
         $this->p = Zend_Registry::get("param");
         $this->_db->getProfiler()->setEnabled(false);
+        $this->map=Model_map::getInstance();
     }
     public function indexAction ()
     {
@@ -137,7 +139,7 @@ class S1_ProcessingController extends Zend_Controller_Action
         //info civiltà
         $civ = $this->_db->fetchRow(
         "SELECT `civ_age`,`" . CIV_TABLE . "`.`civ_id` FROM `" . CIV_TABLE .
-         "`,`" . MAP_TABLE . "` WHERE `" . MAP_TABLE . "`.`civ_id`=`" . CIV_TABLE .
+         "`,`" . SERVER . "_village` WHERE `" . SERVER . "_village`.`civ_id`=`" . CIV_TABLE .
          "`.`civ_id` AND `id`='" . $param['village_id'] . "'");
         $age = $civ['civ_age'];
         //info edifici
@@ -182,20 +184,20 @@ class S1_ProcessingController extends Zend_Controller_Action
         if (($build[$param['pos']]['type'] == COMMAND)&&($build[$param['pos']]['liv'] < 2)) {
             // cerco il senato e lo cancello
             $village = $this->_db->fetchCol(
-            "SELECT `id` FROM `" . MAP_TABLE . "` WHERE `civ_id`='" .
+            "SELECT `id` FROM `" . SERVER . "_village` WHERE `civ_id`='" .
              $civ['civ_id'] . "' AND `id`!='" . $param['village_id'] . "'");
             if ($village)
                 $this->_db->delete(BUILDING_TABLE, 
                 "`village_id`IN('" . implode("','", $village) . "') AND `type`='" .
                  COMMAND . "'");
-            $this->_db->update(MAP_TABLE, array('capital' => 0), 
+            $this->_db->update(SERVER.'_village', array('capital' => 0), 
             "`civ_id`='" . $civ['civ_id'] . "'");
              $this->_log->build("capitale spostata in ". $param['village_id']);
-            $this->_db->query("UPDATE `".MAP_TABLE."` SET `capital`='1' WHERE `id`='" . $param['village_id'] . "'");   
+            $this->_db->query("UPDATE `".SERVER."_village` SET `capital`='1' WHERE `id`='" . $param['village_id'] . "'");   
 		}
         if ($dif_pop != 0) { // aggiorno statistiche
             $this->_db->query(
-            "UPDATE `" . MAP_TABLE . "` SET `busy_pop`=`busy_pop`+'$dif_pop' 
+            "UPDATE `" . SERVER . "_village` SET `busy_pop`=`busy_pop`+'$dif_pop' 
            	WHERE `id`='" .$param['village_id'] . "'");
             $this->_db->query(
             "UPDATE `" . CIV_TABLE .
@@ -217,15 +219,11 @@ class S1_ProcessingController extends Zend_Controller_Action
         $param = unserialize($param2);
         $p = new Model_params();
         $id_market = $p->get("id_market", 1);
-        $mitt = $this->_db->fetchOne(
-        "SELECT `civ_id` FROM `" . MAP_TABLE . "` WHERE `id`='" .
-         $param['mittente'] . "'");
-        $dest = $this->_db->fetchOne(
-        "SELECT `civ_id` FROM `" . MAP_TABLE . "` WHERE `id`='" .
-         $param['destinatario'] . "'");
+        $mitt=$this->map->city[$param['mittente']];
+        $dest = $this->map->city[$param['destinatario']]['civ_id'];
         if ($param['destinatario'] != $id_market)
             $this->_db->query(
-            "UPDATE `" . MAP_TABLE . "` SET `resource_1`=`resource_1`+'" .
+            "UPDATE `" . SERVER . "_village` SET `resource_1`=`resource_1`+'" .
              $param['res'][0] . "' , `resource_2`=`resource_2`+'" .
              $param['res'][1] . "' , `resource_3`=`resource_3`+'" .
              $param['res'][2] . "' WHERE `id`='" . $param['destinatario'] . "'");
@@ -310,7 +308,7 @@ class S1_ProcessingController extends Zend_Controller_Action
                 //aggiungo risorse al villaggio
                 if ($p['resource']) {
                     $this->_db->query(
-                    "UPDATE `" . MAP_TABLE . "` SET `resource_1`=`resource_1`+'" .
+                    "UPDATE `" . SERVER . "_village` SET `resource_1`=`resource_1`+'" .
                      $p['resource'][0] . "' , `resource_2`=`resource_2`+'" .
                      $p['resource'][1] . "' , `resource_3`=`resource_3`+'" .
                      $p['resource'][2] . "' WHERE `id`='" . $p['village_B'] . "'");
@@ -323,7 +321,7 @@ class S1_ProcessingController extends Zend_Controller_Action
                 break;
             case REINFORCEMENT:
                 // scarico risorse
-                $this->_db->update(MAP_TABLE, 
+                $this->_db->update(SERVER.'_village', 
                 array('resource_1' => $p['res'][0], 
                 'resource_2' => $p['res'][1], 'resource_3' => $p['res'][2]), 
                 "`id`='" . $p['village_B'] . "'");
@@ -360,9 +358,7 @@ class S1_ProcessingController extends Zend_Controller_Action
                 $data['res'] = $p['res'];
                 $data['troops'] = $p['troopers'];
                 Model_report::sendReport($p['civ_id'], $data, $this->time);
-                $dest = $this->_db->fetchOne(
-                "SELECT `civ_id` FROM `" . MAP_TABLE . "` WHERE `id`='" .
-                 $p['village_B'] . "'");
+                $dest =$map->city[$p['village_B'] ]['civ_id'];
                 Model_report::sendReport($dest, $data, $this->time);
                 //log
                 $this->_log->movement(
@@ -377,15 +373,9 @@ class S1_ProcessingController extends Zend_Controller_Action
                 $res = Model_civilta::aggResourceById(
                 $p['village_B']);
                 //informazioni attaccante
-                $query = "SELECT * FROM `" . CIV_TABLE . "`,`" .
-                 MAP_TABLE . "` WHERE `id`='" . $p['village_A'] . "' AND `" .
-                 CIV_TABLE . "`.`civ_id`=`" . MAP_TABLE . "`.`civ_id`";
-                $a = $this->_db->fetchRow($query);
+                $a=$this->map->city[$p['village_A']];
                 //informazioni difensore
-                $query = "SELECT * FROM `" . CIV_TABLE . "`,`" .
-                 MAP_TABLE . "` WHERE `id`='" . $p['village_B'] . "' AND `" .
-                 MAP_TABLE . "`.`civ_id`=`" . CIV_TABLE . "`.`civ_id`";
-                $d = $this->_db->fetchRow($query);
+                $d=$this->map->city[$p['village_B']];
                 $query = "SELECT sum(`numbers`) as `numbers` ,`trooper_id` FROM `s1_troopers` WHERE `village_now`='" .
                  $p['village_B'] . "' GROUP BY `trooper_id`";
                 $dif = $this->_db->fetchAll($query);
@@ -520,7 +510,7 @@ class S1_ProcessingController extends Zend_Controller_Action
                         intval($r2 * $capacity), intval($r3 * $capacity));
                     }
                     $this->_db->query(
-                    "UPDATE `" . MAP_TABLE . "` SET `resource_1`=`resource_1`-'" .
+                    "UPDATE `" . SERVER . "_village` SET `resource_1`=`resource_1`-'" .
                      $par['resource'][0] . "' , `resource_2`=`resource_2`-'" .
                      $par['resource'][1] . "' , `resource_3`=`resource_3`-'" .
                      $par['resource'][2] . "' WHERE `id`='" . $p['village_B'] .
@@ -594,22 +584,22 @@ class S1_ProcessingController extends Zend_Controller_Action
     function colonyEvent ($param)
     {
         $param = unserialize($param);
+        //@todo ottimizzare
         $vids = $this->_db->fetchCol(
-        "SELECT `id` FROM `" . MAP_TABLE . "` WHERE `civ_id`='" . $param['cid'] .
+        "SELECT `id` FROM `" . SERVER . "_village` WHERE `civ_id`='" . $param['cid'] .
          "'");
         $n = count($vids);
         $liv = $this->_db->fetchOne(
         "SELECT `liv` FROM `" . BUILDING_TABLE . "` WHERE `type`='" . COMMAND .
          "' AND `village_id`IN('" . implode("','", $vids) . "')");
-        $cords = $this->_db->fetchAssoc(
-        "SELECT `civ_id`,`x`,`y` FROM `" . MAP_TABLE . "` WHERE `id`IN('" .
-         $param['village_B'] . "','" . $param['village_A'] . "')");
+        $cords = array($this->map->getCoordFromId($param['village_B']),$this->map->getCoordFromId($param['village_A']));
+        
         $this->_log->debug(array($cords, $liv, $n));
-        if (($liv > $n) && ($cords[0]['civ_id'] == 0)) {
+        if (($liv > $n) && (!isset($this->map->city[$param['village_B']]))) {
             Model_civilta::addVillage($cords[0]['x'], $cords[0]['y'], 
             $param['cid']);
             $this->_db->query(
-            "UPDATE `" . MAP_TABLE . "` SET `pop`='" . $param[num] .
+            "UPDATE `" . SERVER . "_village` SET `pop`='" . $param[num] .
              "' WHERE `id`='" . $param['village_B'] . "'");
             $param['succes'] = true;
         } else {
@@ -640,7 +630,7 @@ class S1_ProcessingController extends Zend_Controller_Action
     {
         $param = unserialize($param);
         $this->_db->query(
-        "UPDATE `" . MAP_TABLE . "` SET `busy_pop`=`busy_pop`-'" . $param['pop'] .
+        "UPDATE `" . SERVER . "_village` SET `busy_pop`=`busy_pop`-'" . $param['pop'] .
          "' WHERE `id`='" . $param['village_id'] . "'");
         $this->_db->query(
         "UPDATE `" . CIV_TABLE . "` SET `civ_pop`=`civ_pop`-'" . $param['pop'] .
