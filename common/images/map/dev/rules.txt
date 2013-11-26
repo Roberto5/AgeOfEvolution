@@ -1,0 +1,3 @@
+random.tmx
+area1/rules.txt
+area2/rules.txt
