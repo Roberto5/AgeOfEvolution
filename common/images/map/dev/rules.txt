@@ -1,3 +1,2 @@
-random.tmx
-area1/rules.txt
-area2/rules.txt
+rules_set.tmx
+//random.tmx

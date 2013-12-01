@@ -7,7 +7,7 @@
  <tileset firstgid="5" name="evolution1" tilewidth="50" tileheight="50">
   <image source="../../evolution1.png" width="300" height="500"/>
  </tileset>
- <layer name="Regions_input" width="15" height="15" visible="0">
+ <layer name="Regions_input" width="15" height="15">
   <data>
    <tile gid="0"/>
    <tile gid="1"/>
@@ -236,7 +236,7 @@
    <tile gid="0"/>
   </data>
  </layer>
- <layer name="Regions_Output" width="15" height="15" visible="0">
+ <layer name="Regions_Output" width="15" height="15">
   <data>
    <tile gid="0"/>
    <tile gid="1"/>
@@ -465,7 +465,7 @@
    <tile gid="0"/>
   </data>
  </layer>
- <layer name="Input_Ground" width="15" height="15" visible="0">
+ <layer name="Input_Ground" width="15" height="15">
   <data>
    <tile gid="0"/>
    <tile gid="25"/>
@@ -483,23 +483,14 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="15"/>
+   <tile gid="42"/>
    <tile gid="0"/>
-   <tile gid="15"/>
+   <tile gid="42"/>
    <tile gid="0"/>
    <tile gid="25"/>
-   <tile gid="15"/>
+   <tile gid="42"/>
    <tile gid="0"/>
-   <tile gid="15"/>
-   <tile gid="25"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
+   <tile gid="42"/>
    <tile gid="25"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -509,6 +500,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="25"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -528,50 +520,50 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="9"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="9"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="36"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="14"/>
    <tile gid="0"/>
+   <tile gid="36"/>
    <tile gid="0"/>
-   <tile gid="16"/>
    <tile gid="0"/>
-   <tile gid="14"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="16"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="41"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="43"/>
    <tile gid="0"/>
+   <tile gid="41"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="21"/>
+   <tile gid="43"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="21"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="48"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="48"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -588,42 +580,50 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="15"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="15"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="42"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="15"/>
    <tile gid="0"/>
+   <tile gid="42"/>
    <tile gid="0"/>
-   <tile gid="15"/>
    <tile gid="0"/>
-   <tile gid="15"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="15"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="42"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="42"/>
    <tile gid="0"/>
+   <tile gid="42"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="15"/>
+   <tile gid="42"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="15"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="42"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="42"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -694,7 +694,7 @@
    <tile gid="0"/>
   </data>
  </layer>
- <layer name="Input_Ground" width="15" height="15" visible="0">
+ <layer name="Input_Ground" width="15" height="15">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -757,29 +757,13 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="33"/>
+   <tile gid="60"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="32"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="33"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="26"/>
-   <tile gid="0"/>
-   <tile gid="27"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="32"/>
+   <tile gid="59"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -787,12 +771,28 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="26"/>
-   <tile gid="0"/>
+   <tile gid="60"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="27"/>
+   <tile gid="53"/>
+   <tile gid="0"/>
+   <tile gid="54"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="59"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="53"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="54"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -926,7 +926,7 @@
  <layer name="Output_Ground" width="15" height="15">
   <data>
    <tile gid="0"/>
-   <tile gid="9"/>
+   <tile gid="36"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -945,11 +945,11 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="14"/>
+   <tile gid="41"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="16"/>
+   <tile gid="43"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -958,7 +958,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="21"/>
+   <tile gid="48"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -985,7 +985,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="8"/>
+   <tile gid="35"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -993,7 +993,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="10"/>
+   <tile gid="37"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -1018,9 +1018,9 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="22"/>
+   <tile gid="49"/>
    <tile gid="0"/>
-   <tile gid="20"/>
+   <tile gid="47"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -1045,7 +1045,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="33"/>
+   <tile gid="60"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -1053,7 +1053,7 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="32"/>
+   <tile gid="59"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -1078,9 +1078,9 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="26"/>
+   <tile gid="53"/>
    <tile gid="0"/>
-   <tile gid="27"/>
+   <tile gid="54"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
