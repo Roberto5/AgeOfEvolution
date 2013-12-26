@@ -81,7 +81,7 @@ class CssController extends Zend_Controller_Action
 	 
 	function dump_css_cache ($filename,$key=array())
 	{
-		$cwd = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'cache';
+		$cwd = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'cache'.DIRECTORY_SEPARATOR;
 		$stat = stat($filename);
 		$current_cache = $cwd . '.' . $filename . '.' . $stat['size'] . '-' .
 				$stat['mtime'] . '.cache';
