@@ -20,12 +20,14 @@ try {
 		echo json_encode(array('bool'=>false,'text'=>'form error'));
 		exit(1);
 	}
+	$debugQuery="";
 	function import($file,Zend_Db_Adapter_Abstract $adapter) {
 		$all_lines = file($file, FILE_SKIP_EMPTY_LINES | FILE_IGNORE_NEW_LINES);
 		$query="";
 		foreach($all_lines as $line) {
 			if(substr($line, 0, 2) == "--") {
 				if ($query) $adapter->query($query);
+				$debugQuery=$query;
 				$query="";
 				continue;
 			}
@@ -67,6 +69,7 @@ try {
 	$bool=file_put_contents('../application/configs/application.ini', $text);
 }
 catch (Exception $e) {
-	echo json_encode(array('bool'=>false,'text'=>$e->getMessage().' query exec'.$query));
+	
+	echo json_encode(array('bool'=>false,'text'=>$e->getMessage().' query exec "'.$debugQuery.'" at line '.$e->getLine().'<pre>'.$e->getTraceAsString().'</pre>'));
 	exit(1);
 }
