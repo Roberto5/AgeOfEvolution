@@ -21,9 +21,10 @@ function initbutton() {
     	},
     		text: false
     });;
+    //$("button.img").button({text:false});
 }
 $(document).ready(function(){
-		initbutton()
+		initbutton();
 	    $("#loginForm").submit(function(e) {
 		    ev.login();
 		    e.preventDefault();

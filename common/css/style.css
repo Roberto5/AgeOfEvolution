@@ -103,6 +103,18 @@ margin: 0 10px 0 0;
 .silver {
 	background-position: -48px -64px;
 }
+.iconinline {
+	display:inline-block;
+}
+.flag {
+	background-image:url('PATH/common/images/flag.png');
+	height:16px;
+	width:16px;
+	dispay:block;
+}
+.it {
+	background-position: -16px 0px;
+}
 /*tag*/
 
 /*link decoration */
@@ -116,6 +128,9 @@ blockquote {
 }
 img{
 	border:0px;
+}
+button.img {
+	border-radius:4px;
 }
 abbr {
 	cursor: help;

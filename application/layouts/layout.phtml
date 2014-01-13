@@ -110,6 +110,7 @@ else{
 // js e css script
 		echo $this->headLink()->prependStylesheet(
 		$this->baseUrl('css') .($this->game? '?l=g':'').($par?$par:''));
+		echo $this->headStyle();
 echo $this->headScript()->prependFile($this->baseUrl('js'));
 
 $complete=new Form_Complete();

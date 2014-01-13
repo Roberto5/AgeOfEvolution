@@ -1,12 +1,18 @@
 <!-- SELECT LOCALE -->
+
 		<div id="locale">
-			language
-			<form action="<?php echo $this->url();?>">
+<?php echo '<button style="height:16px;" class="iconinline img" onclick="$(\'#locale_container\').toggle();p=$.cookie(\'locale_off\')==\'true\';$.cookie(\'locale_off\',!p,{path:\'/\',expires:1});">
+				<div class="iconinline flag '.$this->t->getLocale().'"></div>
+			</button>';
+			?> 
+			<div id="locale_container" class="iconinline" <?php echo $_COOKIE['locale_off']=='true' ? 'style="display:none;"' :'' ;?>>language
+			<form style="display: inline-block" action="<?php echo $this->url();?>">
 			<?php 
 			$list=array_merge(array('browser'=>'auto'),$this->t->getList());
 			echo $this->formSelect('locale',$_COOKIE['locale'],array('onchange'=>'submit();','id'=>'loc'),$list);
 			?>
 			</form>
+			</div>
 		</div>
 <div id="top">
 				<table>

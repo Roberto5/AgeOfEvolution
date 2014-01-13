@@ -20,10 +20,13 @@ EMAIL_CONTACT@Contact from email
 ENTER@Enter
 E_FATAL@Fatal Error, contact the admin
 FAILURE@Login failed
+FEATURES@Features
 FORM_CONTACT@Or compile this form
 GUEST@Guest
 HOSTED@The source can find on
+HOWHELP@How help us
 IDEA@Idea
+IDEAL@Ideal of game
 INSERT@Insert
 LANGUAGE@Your language is not supported, you can add a translate on
 LOGOUT@You are Logout 
@@ -41,6 +44,7 @@ PROFILE@Profile
 RECOVER@Insert the email of account to recover
 REG@Register
 RESEND@the your account isn't active, you can resend the activation email with this form
+SCREENSHOOT@Screen shoot
 SELECT_SERVER@Select a Server
 SEND@Send
 SERVERTIME@Server's time
