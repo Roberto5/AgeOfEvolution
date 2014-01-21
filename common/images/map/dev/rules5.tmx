@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="7" height="5" tilewidth="50" tileheight="50">
- <tileset firstgid="1" name="evolution1" tilewidth="50" tileheight="50">
-  <image source="../evolution1.png" width="300" height="500"/>
+<!DOCTYPE map SYSTEM "http://mapeditor.org/dtd/1.0/map.dtd">
+<map version="1.0" orientation="orthogonal" width="10" height="5" tilewidth="50" tileheight="50">
+ <tileset firstgid="1" name="set_rules" tilewidth="50" tileheight="50">
+  <image source="../set_rules.png" width="100" height="100"/>
  </tileset>
- <tileset firstgid="61" name="set_rules" tilewidth="50" tileheight="50">
-  <image source="set_rules.png" width="150" height="150"/>
+ <tileset firstgid="5" name="evolution1" tilewidth="50" tileheight="50">
+  <image source="../../evolution1.png" width="300" height="500"/>
  </tileset>
- <layer name="Regions" width="7" height="5">
+ <layer name="Regions" width="10" height="5">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -16,25 +17,40 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="61"/>
-   <tile gid="0"/>
-   <tile gid="61"/>
-   <tile gid="0"/>
-   <tile gid="61"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="0"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="0"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="0"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
+   <tile gid="1"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="0"/>
-   <tile gid="61"/>
-   <tile gid="0"/>
-   <tile gid="61"/>
-   <tile gid="0"/>
-   <tile gid="61"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -45,7 +61,7 @@
    <tile gid="0"/>
   </data>
  </layer>
- <layer name="Input_set" width="7" height="5">
+ <layer name="Input_Ground" width="10" height="5">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -55,25 +71,40 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="64"/>
-   <tile gid="0"/>
-   <tile gid="65"/>
-   <tile gid="0"/>
-   <tile gid="63"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
+   <tile gid="12"/>
+   <tile gid="0"/>
+   <tile gid="12"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="66"/>
    <tile gid="0"/>
-   <tile gid="67"/>
    <tile gid="0"/>
-   <tile gid="68"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="12"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="12"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -84,7 +115,7 @@
    <tile gid="0"/>
   </data>
  </layer>
- <layer name="Output_Ground" width="7" height="5">
+ <layer name="Output_debug" width="10" height="5">
   <data>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -94,11 +125,6 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="54"/>
-   <tile gid="0"/>
-   <tile gid="8"/>
-   <tile gid="0"/>
-   <tile gid="11"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
@@ -108,11 +134,31 @@
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
-   <tile gid="38"/>
    <tile gid="0"/>
-   <tile gid="41"/>
    <tile gid="0"/>
-   <tile gid="57"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="2"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="2"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
+   <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
    <tile gid="0"/>
