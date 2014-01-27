@@ -1,24 +1,32 @@
 disable layout
-$this->_helper->layout->disableLayout();
+-----------
+    $this->_helper->layout->disableLayout();
+  
 set layout
-$this->_helper->layout->setLayout("ajax");
+-----------
+    $this->_helper->layout->setLayout("ajax");
+  
 not render the view phtml
-$this->_helper->viewRenderer->setNoRender(true);
+-----------
+    $this->_helper->viewRenderer->setNoRender(true);
+  
 Layout Ajax
+=======
 add data 
 in phtml file
-$this->layout()->data= some data
+
+    $this->layout()->data= some data
 
 add js
-
 in phtml file
-$this->headScript()->captureStart();
-echo 'alert('script!');'
-$this->headScript()->captureEnd();
+
+    $this->headScript()->captureStart();
+    echo 'alert('script!');'
+    $this->headScript()->captureEnd();
 
 in controller
 
-Model_refresh::getInstance()->addjs()
+    Model_refresh::getInstance()->addjs()
 
 Content and title (set with $this->headTitle('sometitle') in phtml file) will display as windows
 
