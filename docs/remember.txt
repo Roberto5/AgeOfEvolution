@@ -1,6 +1,0 @@
-disable layout
-$this->_helper->layout->disableLayout();
-set layout
-$this->_helper->layout->setLayout("ajax");
-not render the view phtml
-$this->_helper->viewRenderer->setNoRender(true);
