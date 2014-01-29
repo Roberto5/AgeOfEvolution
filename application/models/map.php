@@ -15,20 +15,21 @@ class Model_map extends Zend_Db_Table_Abstract
      */
     //private $civ;
     private $log;
-    private $map;
-    public $city;
+    private $city;
+    //private $map;
+    //public $city;
     static private $instance;
     function __construct ()
     {
-    	$this->_name=SERVER.'_map';
+    	$this->_name=SERVER.'_data_map';
     	$this->_primary='id';
         $this->t = Zend_Registry::get("translate");
         $this->log = Zend_Registry::get("log");
         //$this->civ=Model_civilta::getInstance();
         parent::__construct();
-        $this->getAdapter()->setFetchMode(Zend_Db::FETCH_ASSOC);
-        $this->city=$this->fetchAll();
-        $this->map=json_decode(file_get_contents(MAP_FILE));
+        $this->getDefaultAdapter()->setFetchMode(Zend_Db::FETCH_ASSOC);
+        //$this->city=$this->fetchAll();
+        //$this->map=json_decode(file_get_contents(MAP_FILE));
         self::$instance=$this;
     }
     /**
@@ -47,17 +48,14 @@ class Model_map extends Zend_Db_Table_Abstract
      * 2   10 11 12 13 14
      * 3   15 16 17 18 19
      * 4   20 21 22 23 24
-     * id=5*y+x
-     * 
-     * id=17
-     * x=17%5=2
-     * y=intval(17/5)=3
+     
      * @param int $id
      * @return array
      */
-    function getCoordFromId(int $id) {
-    	$x=$id%MAX_X;
-    	$y=intval($id/MAX_X);
+    function getCoordFromId($id) {
+    	$id=intval($id);
+    	$x=$id%MAX_X-intval(MAX_X/2);
+    	$y=intval(MAX_Y/2)-intval($id/MAX_X);
     	return array('x'=>$x,'y'=>$y);
     }
     /**
@@ -67,16 +65,22 @@ class Model_map extends Zend_Db_Table_Abstract
      * @return int
      */
     function getIdFromCoord(int $x,int $y) {
-    	$id=MAX_X*$y+$x;
+    	$id=MAX_X*(intval(MAX_Y/2)-$y)+($x+intval(MAX_X/2));
     	return $id;
     }
     /**
     
      * @return Array 
      */
-    function getVillageArray ()
+    function getVillageArray()
     {
-        return $this->fetchAll();;
+    	if (!$this->city) {
+    		$rows=$this->fetchAll()->toArray();
+    		foreach ($rows as $value) {
+    			$this->city[$value['id']]=$value;
+    		}
+    	}
+    	return $this->city;
     }
     /**
      * genera una tabella html del villaggi
@@ -108,7 +112,7 @@ class Model_map extends Zend_Db_Table_Abstract
      * @param int coordinata x
      * @param int coordinata y
      * @return int
-     */
+     *
     static function getZone (int $x, $y=-1)
     {
     	if ($y<0) $id=$x;

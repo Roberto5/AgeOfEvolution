@@ -45,18 +45,18 @@ class S1_IndexController extends Zend_Controller_Action
             $this->view->civ = $this->civ;
             $map=new Model_map();
     		if ($vid) {
-    			$v=$this->_db->fetchRow("SELECT * FROM `".MAP_TABLE."` WHERE `id`='$vid'");
-    			$this->view->x=$v['x'];
-    			$this->view->y=$v['y'];
+    			$coord=Model_map::getInstance()->getCoordFromId($vid);
+    			$this->view->x=$coord['x'];
+    			$this->view->y=$coord['y'];
     			$this->view->vid=true;
     		}
     		else {
-    			$now = $this->civ->getCurrentVillage();
-    			$this->view->x=$this->civ->village->data[$now]['x'];
-    			$this->view->y=$this->civ->village->data[$now]['y'];
+    			$now = Model_map::getInstance()->getCoordFromId($this->civ->getCurrentVillage());
+    			$this->view->x=$now['x'];
+    			$this->view->y=$now['y'];
     		}
     		//$this->view->village=$map->getVillageArray($this->view->x,$this->view->y,intval($zoom['x']/2),intval($zoom['y']/2),$zoom['x']);
-    		$this->view->table= $map->getMapTable($zoom['dim'],$zoom['y'],$zoom['x']);
+    		//$this->view->table= $map->getMapTable($zoom['dim'],$zoom['y'],$zoom['x']);
         } else {
             $this->view->hasCivilty = false;
             $form = new Form_Regciv();

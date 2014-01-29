@@ -24,7 +24,7 @@ define("RESEARCH_TABLE","s1_research");
 //map propriety
 define("MAP_FILE",realpath(APPLICATION_PATH.'/../common/images/map/s1.json'));
 define("WATER",57);
-define("MAX_X", "101");
+define("MAX_X", "101");// 101 => -50 +50 201 => -100 +100
 define("MAX_Y","101");
 
 

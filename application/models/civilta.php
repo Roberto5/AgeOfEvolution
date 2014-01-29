@@ -155,6 +155,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 				$this->village_list = $this->village->getList();
 				// controllo se il current_village è nella lista
 				$bool = false;
+				$this->log->debug($this->village_list);
 				$bool=array_key_exists($cid['current_village'], $this->village_list);
 				if ($bool)
 					$this->currentVillage = (int) $cid['current_village'];
@@ -168,9 +169,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 					$this->coord = array('x' => $user_opt->get("coord_x"),
 							'y' => $user_opt->get("coord_y"));
 				} else {
-					$this->coord = array(
-							'x' => $this->village_list[$this->currentVillage]['x'],
-							'y' => $this->village_list[$this->currentVillage]['y']);
+					$this->coord = Model_map::getInstance()->getCoordFromId(intval($this->currentVillage));
 				}
 				if ($order == 3) {
 					usort($this->village_list, array($this, 'compare'));
@@ -451,8 +450,11 @@ class Model_civilta extends Zend_Db_Table_Abstract
 			$nmess=Model_mess::ThereAreMess($this->cid);
 			$mess=$this->t->_("Messaggi").($nmess ? " [$nmess]" : "");
 			$this->refresh->addAttr("link-Message",array('title'=>$mess,'src'=>'/common/images/mess_read'.($nmess?"1":"0").'.gif'));
-			if (is_numeric($_GET['vid']))
-				$this->refresh->setFocus(array('id'=>$this->currentVillage,'x'=>$this->village->data[$this->currentVillage]['x'],'y'=>$this->village->data[$this->currentVillage]['y']));
+			if (is_numeric($_GET['vid'])) {
+				$focus=Model_map::getInstance()->getCoordFromId($this->currentVillage);
+				$focus['id']=$this->currentVillage;
+				$this->refresh->setFocus($focus);
+			}
 		}
 	}
 	/**
@@ -694,7 +696,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 		$db = Zend_Db_Table::getDefaultAdapter();
 		
 		$res = $db->fetchRow(
-				"SELECT * FROM `" . SERVER . "_village` WHERE `id`='$id'");
+				"SELECT * FROM `" . SERVER . "_map` WHERE `id`='$id'");
 		$civ = $db->fetchRow(
 				"SELECT * FROM `" . SERVER . "_civ` WHERE `civ_id`='" . $res['civ_id'] .
 				"'");
@@ -733,7 +735,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 			}
 		}
 		if ($bool)
-			$db->update(SERVER.'_village',
+			$db->update(SERVER.'_map',
 					array('production_1' => $res['production_1'],
 							'production_2' => $res['production_2'],
 							'production_3' => $res['production_3']), "`id`='" . $id . "'");
@@ -751,9 +753,10 @@ class Model_civilta extends Zend_Db_Table_Abstract
 	static function addVillage ($x, $y, $civ_id, $cap = 0, $type = 0,
 			$name = 'Nuovo Villaggio')
 	{
+		$vid =Model_map::getInstance()->getIdFromCoord($x, $y);
 		Zend_Db_Table::getDefaultAdapter()->query(
-				"UPDATE `" . SERVER . "_village`
-				SET `civ_id`='" . $civ_id . "' , `name`='" . $name . "' ,
+				"INSERT INTO`" . SERVER . "_map`
+				SET `id`='$vid' civ_id`='$civ_id' , `name`='" . $name . "' ,
 				`capital`='" . $cap . "' , `type`='1' ,
 				`pop`='20' , `busy_pop`='0' , `resource_1`='" . START_RES . "' ,
 				`resource_2`='" . START_RES . "' , `resource_3`='" . START_RES . "' ,
@@ -761,10 +764,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 				`production_2`='" . prod2::$prod[0] . "' ,
 				`production_3`='" . prod3::$prod[0] . "' ,
 				`agg`='" . mktime() . "' ,
-				`aggPop`='" . mktime() . "' WHERE `x`='" . $x . "' AND `y`='" . $y . "'");
-		$vid = Zend_Db_Table::getDefaultAdapter()->fetchOne(
-				"SELECT `id` FROM `" . SERVER . "` WHERE `x`='" . $x . "' AND `y`='" .
-				$y . "'");
+				`aggPop`='" . mktime() . "'");
 		Zend_Db_Table::getDefaultAdapter()->query(
 				"INSERT INTO `" . BUILDING_TABLE . "` (`village_id`,`type`,`liv`,`pos`,`pop`)
 				value ('" . $vid . "','1','0','0','1'),
@@ -863,8 +863,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 					Zend_Registry::get("param")->set("minrad", $minrad);
 					Zend_Registry::get("param")->set("time", mktime());
 				} elseif (! $db->fetchOne(
-						"SELECT `type` FROM `" . SERVER . "_village` WHERE `x`='" . $x .
-						"' AND `y`='" . $y . "'"))
+						"SELECT `type` FROM `" . SERVER . "_map` WHERE `id`='" . Model_map::getInstance()->getIdFromCoord($x, $y) ."'"))
 						$fine = false;
 			}
 			if ($count >= $quad)
@@ -989,7 +988,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 	{
 		global $Troops_Array;
 		$res = Zend_Db_Table::getDefaultAdapter()->fetchRow(
-				"SELECT * FROM `" . SERVER . "_village` WHERE `id`='" . $id . "'");
+				"SELECT * FROM `" . SERVER . "_map` WHERE `id`='" . $id . "'");
 		$now = mktime();
 		$agg = $res['agg'];
 		// ore di differenza dall'ultimo aggiornamento
@@ -1017,11 +1016,11 @@ class Model_civilta extends Zend_Db_Table_Abstract
 				");
 		$my_troopers = Zend_Db_Table::getDefaultAdapter()->fetchAll(
 				"SELECT `" . TROOPERS . "`.*,
-				`" . SERVER . "_village`.`name`
-				FROM `" . TROOPERS . "`,`" . SERVER . "_village`
+				`" . SERVER . "_map`.`name`
+				FROM `" . TROOPERS . "`,`" . SERVER . "_map`
 				WHERE `village_prev`='" . $id . "'
 				AND `village_now`!='" . $id . "'
-				AND `village_now`=`" . SERVER . "_village`.`id`
+				AND `village_now`=`" . SERVER . "_map`.`id`
 				ORDER BY `village_now`,`trooper_id`");
 		for ($i = 0; ($troopers_now[$i]) || ($my_troopers[$i]); $i ++) {
 			if ($troopers_now[$i]) {
@@ -1059,11 +1058,11 @@ class Model_civilta extends Zend_Db_Table_Abstract
 		$prod = ($res['production_1'] - $negativ);
 		$other_troopers = Zend_Db_Table::getDefaultAdapter()->fetchAll(
 				"SELECT `" . TROOPERS . "`.*,
-				`" . SERVER . "_village`.`name`
-				FROM `" . TROOPERS . "`,`" . SERVER . "_village`
+				`" . SERVER . "_map`.`name`
+				FROM `" . TROOPERS . "`,`" . SERVER . "_map`
 				WHERE `village_prev`!='" . $id . "'
 				AND `village_now`='" . $id . "'
-				AND `village_prev`=`" . SERVER . "_village`.`id`
+				AND `village_prev`=`" . SERVER . "_map`.`id`
 				ORDER BY `village_prev`,`trooper_id`");
 		while (($res['resource_1'] < 0) && ($prod < 0)) {
 			if ($other_troopers) { //se ci sono rinforzi iniziamo con loro
@@ -1086,7 +1085,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 		if ($res['resource_1'] < 0)
 			$res['resource_1'] = 0;
 		Zend_Db_Table::getDefaultAdapter()->query(
-				"UPDATE `" . SERVER . "_village`  SET `resource_1`='" . $res['resource_1'] .
+				"UPDATE `" . SERVER . "_map`  SET `resource_1`='" . $res['resource_1'] .
 				"' , `resource_2`='" . $res['resource_2'] . "' , `resource_3`='" .
 				$res['resource_3'] . "' , `agg`='" . mktime() . "' WHERE `id`='" . $id .
 				"'");

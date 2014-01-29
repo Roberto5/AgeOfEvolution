@@ -1,13 +1,12 @@
 <?php 
-//$update=Model_civilta::getInstance()->refresh->getdata();
 $update=Model_refresh::getInstance();
+$module=Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
+//retrive a title
 $title=$this->headTitle()->toString();
 $title=str_replace("<title>", "", $title);
 $title=str_replace("</title>", "", $title);
 //preparazione truppe
-$t=Zend_Registry::get("translate");
-$module=Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
-if ($update->displaytroops) {
+if ($update->displaytroops) {//@todo rifare
 		global $NameTroops;
 		$text= '<h3><a href="'.$this->baseUrl().'/'.$module.'/movements">
 		' . $t->_('TRUPPE PRESENTI') . '</a>
@@ -28,22 +27,24 @@ if ($update->displaytroops) {
 		$this->headScript()->captureEnd();
 }
 $update->addIds("troopers", $text);
+//preparazione javascript
 if ($update->getjs()) {
 	$this->headScript()->captureStart();
 	echo $update->getjs();
 	$this->headScript()->captureEnd();
 }
-$update=$update->getdata();
 $script=$this->headScript()->toString();
 $script=str_replace('<script type="text/javascript">', "", $script);
 $script=str_replace('</script>', "", $script);
 $script=str_replace('//<!--', "", $script);
 $script=str_replace('//-->', "", $script);
+//if Event Processor stop.
 global $epflag;
 if ($epflag) {
 	$script.="$.ajax({url:path+'/'+module+'/processing',timeout:5000});";
 }
-
+$update=$update->getdata();
+//content is display on window
 if ($this->layout()->content) $this->key['HTML']=json_encode(array('text'=>$this->layout()->content,'title'=>$title,
 'notdestroy'=>$this->layout()->notdetroy,'close'=>$this->layout()->close,
 'x'=>$this->layout()->x,'y'=>$this->layout()->y,'mod'=>$this->layout()->mod,'id'=>$this->layout()->id,'button'=>$this->layout()->button,'error'=>$this->layout()->error));

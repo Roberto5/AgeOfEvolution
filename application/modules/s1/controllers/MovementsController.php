@@ -403,7 +403,7 @@ class S1_MovementsController extends Zend_Controller_Action
           ( SELECT `name` FROM `" .
          ALLY_TABLE . "` WHERE `id`=`" . CIV_TABLE . "`.`civ_ally` LIMIT 1) , '-')
 ) as `ally`  FROM `" . CIV_TABLE . "`,`" .
-         SERVER . "_village` WHERE `id`='$vid' AND `" . SERVER ."_village`.`civ_id`=`" . CIV_TABLE . "`.`civ_id`");
+         SERVER . "_map` WHERE `id`='$vid' AND `" . SERVER ."_map`.`civ_id`=`" . CIV_TABLE . "`.`civ_id`");
         $reply = array('data' => false, 'html' => false, 'javascript' => false, 
         'update' => array(
         'ids' => array('village_player' => $village['civ_name'], 

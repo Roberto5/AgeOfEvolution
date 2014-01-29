@@ -185,8 +185,9 @@ if ($auth->hasIdentity() && ($module != "default") && ($module != "admin") &&
     //******************lista villaggi***************
     //$log->log("now $now",Zend_Log::DEBUG);
     foreach ($list as $key => $value) {
+    	$coord=Model_map::getInstance()->getCoordFromId($value['id']);
         $display .= '<li class="village_list" id="v' . $value['id'] . '" '.($now==$key? 'style="font-weight:bold;"':'').'><a id="vid' . $value['id'] . '" href="#'.
-             $value['x'] . '|'.$value['y'].'@" onclick="ev.map.get_village_info({x:'.$value['x'] . ',y:'.$value['y'].'})">' . $value['name'] . "(" . $value['x'] . "|" . $value['y'] .
+             $coord['x'] . '|'.$coord['y'].'@" onclick="ev.map.get_village_info({x:'.$coord['x'] . ',y:'.$coord['y'].'})">' . $value['name'] . "(" . $coord['x'] . "|" . $coord['y'] .
              ")</a></li>";
     }
     echo '<ol id="vlist">' . $display . '</ol>';

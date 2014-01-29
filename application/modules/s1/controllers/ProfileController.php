@@ -53,7 +53,7 @@ class S1_ProfileController extends Zend_Controller_Action {
 		$input->setDefaultEscapeFilter(new Zend_Filter_Callback("addslashes"));
 		$vid=$input->getEscaped('id');
 		$name=$input->getEscaped('name');
-		$this->db->query("UPDATE `".SERVER."_village` SET `name`='$name' WHERE `id`='$vid'");
+		$this->db->query("UPDATE `".SERVER."_map` SET `name`='$name' WHERE `id`='$vid'");
 		$civ=Model_civilta::getInstance();
 		$civ->refresh->addIds('vid'.$vid, $name);
 		$update=array('ids'=>array('vid'.$vid=>$name));

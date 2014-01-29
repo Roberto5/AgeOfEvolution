@@ -54,22 +54,22 @@ class Model_troopers extends Zend_Db_Table_Abstract {
 		$this->my_troopers=$this->getDefaultAdapter()
 			->fetchAll(
 				"SELECT `" . TROOPERS . "`.*,
-			`" . SERVER . "_village`.`name`
-			FROM `" . TROOPERS . "`,`" . SERVER . "_village` 
+			`" . SERVER . "_map`.`name`
+			FROM `" . TROOPERS . "`,`" . SERVER . "_map` 
 			WHERE `village_prev`='" . $vid . "' 
 			AND `village_now`!='" . $vid . "' 
-			AND `village_now`=`" . SERVER . "_village`.`id` 
+			AND `village_now`=`" . SERVER . "_map`.`id` 
 			ORDER BY `village_now`,`trooper_id`") or array();
 		
 		//truppe straniere nel proprio villo
 		$this->other_troopers=$this->getDefaultAdapter()
 			->fetchAll(
 				"SELECT `" . TROOPERS . "`.*,
-            `" . SERVER . "_village`.`name`
-             FROM `" . TROOPERS . "`,`" . SERVER . "_village` 
+            `" . SERVER . "_map`.`name`
+             FROM `" . TROOPERS . "`,`" . SERVER . "_map` 
              WHERE `village_prev`!='" . $vid . "' 
              AND `village_now`='" . $vid . "' 
-             AND `village_prev`=`" . SERVER . "_village`.`id` 
+             AND `village_prev`=`" . SERVER . "_map`.`id` 
              ORDER BY `village_prev`,`trooper_id`") or array();
 		
 	}

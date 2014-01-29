@@ -37,9 +37,10 @@ class S1_MarketController extends Zend_Controller_Action
                 $now = $this->civ->getCurrentVillage();
                 //tempo di attraversata
                 $village = $this->civ->village_list[$idv];
+                $coord=Model_map::getInstance()->getCoordFromId($now);
                 $dist = getDistance($village, 
-                array('x' => $this->civ->village->data[$now]['x'], 
-                'y' => $this->civ->village->data[$now]['y']));
+                array('x' => $coord['x'], 
+                'y' => $coord['y']));
                 $time = getTime($dist, mercants::$speed[$this->civ->getAge()]);
                 //mercanti presenti
                 $disp = $this->civ->village->building[$now]->getLiv(
@@ -102,10 +103,11 @@ class S1_MarketController extends Zend_Controller_Action
                         if ($n < $num)
                             $n ++;
                              //tempo di attraversata
+                        $coord=Model_map::getInstance()->getCoordFromId($now);
                         $dist = getDistance(
                         array('x' => 0, 'y' => 0), 
-                        array('x' => $this->civ->village->data[$now]['x'], 
-                        'y' => $this->civ->village->data[$now]['y']));
+                        array('x' => $coord['x'], 
+                        'y' => $coord['y']));
                         $time = getTime($dist, 
                         mercants::$speed[$this->civ->getAge()]);
                         $resource = array(0, 0, 0);
@@ -142,9 +144,10 @@ class S1_MarketController extends Zend_Controller_Action
                     $tot = $offer['resource'] *
                      $offer['rapport'];
                     if ($this->civ->village->data[$now]['resource_1'] >= $tot) {
+                    	$coord=Model_map::getInstance()->getCoordFromId($now);
                         $dist = getDistance(array('x' => 0, 'y' => 0), 
-                        array('x' => $this->civ->village->data[$now]['x'], 
-                        'y' => $this->civ->village->data[$now]['y']));
+                        array('x' => $coord['x'], 
+                        'y' => $coord['y']));
                         $time = getTime($dist, 
                         mercants::$speed[$this->civ->getAge()]);
                         $resource = array(0, 0, 0);

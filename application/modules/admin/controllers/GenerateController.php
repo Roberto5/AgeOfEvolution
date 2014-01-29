@@ -146,21 +146,6 @@ class Admin_GenerateController extends Zend_Controller_Action
     public function imageAction ()
     {
         $data = $this->getRequest()->getParams();
-        /*$where = "";
-        if (is_numeric($data['rad'])) {
-            $where = "WHERE ABS(`x`+'" . intval($data['x']) . "')<'" .
-             $data['rad'] . "' 
-				AND ABS(`y`+'" .
-             intval($data['y']) . "')<'" . $data['rad'] . "'";
-        } elseif (($data['maxx']) || ($data['maxy']) || ($data['miny']) ||
-         ($data['minx'])) {
-            $data['maxx'] = $data['maxx'] ? intval($data['maxx']) : MAX_X;
-            $data['maxy'] = $data['maxy'] ? intval($data['maxy']) : MAX_Y;
-            $where = "WHERE `x`<'" . $data['maxx'] . "' 
-				AND `x`>'" . intval($data['minx']) . "'
-				AND `y`<'" . $data['maxy'] . "'
-				AND `y`>'" . intval($data['miny']) . "'";
-        }*/
         Zend_Layout::getMvcInstance()->disableLayout();
         //$c = $this->db->fetchAll("SELECT * FROM `temp` $where");
         $coord =array();$c=unserialize(file_get_contents(APPLICATION_PATH."/../temp.txt"));
@@ -240,7 +225,7 @@ class Admin_GenerateController extends Zend_Controller_Action
                     $this->db->query(
                     "INSERT INTO `" . MAP_TABLE .
                      "` 
-			(`name`,`resource_1`,`resource_2`,`resource_3`,`x`,`y`,`zone`,`production_1`,`production_2`,`production_3`,`prod1_bonus`,`prod2_bonus`,`prod3_bonus`) values" .
+			(`name`,`resource_1`,`resource_2`,`resource_3`,`zone`,`production_1`,`production_2`,`production_3`,`prod1_bonus`,`prod2_bonus`,`prod3_bonus`) values" .
                      implode(",", $data));
                     $data=array();
                 }
@@ -252,11 +237,11 @@ class Admin_GenerateController extends Zend_Controller_Action
             $this->db->query(
             "INSERT INTO `" . MAP_TABLE .
              "` 
-			 (`name`,`resource_1`,`resource_2`,`resource_3`,`x`,`y`,`zone`,`production_1`,`production_2`,`production_3`,`prod1_bonus`,`prod2_bonus`,`prod3_bonus`) VALUES" .
+			 (`name`,`resource_1`,`resource_2`,`resource_3`,`zone`,`production_1`,`production_2`,`production_3`,`prod1_bonus`,`prod2_bonus`,`prod3_bonus`) VALUES" .
              implode(",", $data));
         unset($data);
         $this->db->update(MAP_TABLE, array('name' => 'mercato', 'type' => 1), 
-        "`x`='0' AND `y`='0'");
+        "`id`='".Model_map::getInstance()->getIdFromCoord(0, 0)."'");
         $idm = $this->db->lastInsertId();
         $this->param->set("id_market", $idm);
         $this->param->set("work", 100);

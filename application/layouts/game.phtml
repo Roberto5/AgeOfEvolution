@@ -7,8 +7,10 @@ $log=Zend_Registry::get("log");
 $x="0";$y="0";
 if ($this->auth->hasIdentity()) {
 	$civ=Model_civilta::getInstance();
-	$x=$civ->village->data[$civ->getCurrentVillage()]['x'];
-	$y=$civ->village->data[$civ->getCurrentVillage()]['y'];
+	$id=$civ->village->data[$civ->getCurrentVillage()]['id'];
+	$coord=Model_map::getInstance()->getCoordFromId($is);
+	$x=$coord['x'];
+	$y=$coord['y'];
 }
 $iconSize=16;
 $this->myMenu() 

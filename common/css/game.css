@@ -7,7 +7,7 @@ html, body{
 	margin:0px;
 	padding:0px;
 	height:900px;
-	min-width:1280px;
+	min-width:1200px;
 }
 body{
     font-size: 76%; 
@@ -233,11 +233,11 @@ table.troopers th {
 
 
 /* Mappa */
-.map_village {
+.map, .map div, .map div div {
     padding: 0px;
-    background-image: url('PATH/common/images/map/map.png');
+    background-image: url('PATH/common/images/map/evolution1.png');
 }
-.map_village:hover {
+.map:hover {
     border: 1px solid black;
 }
 .zoom-50 {
@@ -247,6 +247,52 @@ table.troopers th {
 .zoom-50:hover {
 	height:48px;
 	width:48px;
+}
+/*@todo creare uno script per generare sprite!!*/
+.map-null{
+	background-position: 50px 50px;
+}
+.area0 {
+	background-position: 0 0;
+}
+.area1 {
+	background-position:-50px 0;
+}
+.area2 {
+	background-position:-100px 0;
+}
+.area3 {
+	background-position:-150px 0;
+}
+.area4 {
+	background-position:0 -50px;
+}
+.area5 {
+	background-position:-50px -50px;
+}
+.village1 {
+	background-image: url('PATH/common/images/map/evolution1.png');
+	height:50px;
+	width:50px;
+	background-position:-100px -50px;
+}
+.allied {
+	background-image: url('PATH/common/images/map/evolution1.png');
+	height:16px;
+	width:16px;
+	background-position:-182px -50px;
+}
+.enemy {
+	background-image: url('PATH/common/images/map/evolution1.png');
+	height:16px;
+	width:16px;
+	background-position:-166px -50px;
+}
+.own {
+	background-image: url('PATH/common/images/map/evolution1.png');
+	height:16px;
+	width:16px;
+	background-position:-150px -50px;
 }
 /* posizione degli edifici*/
 .empty {
@@ -410,48 +456,7 @@ table.troopers th {
 	width: 200px;
 	position: absolute;
 }
-.area0 {
-	background-position: 0 0;
-}
-.area1 {
-	background-position:-50px 0;
-}
-.area2 {
-	background-position:-100px 0;
-}
-.area3 {
-	background-position:-150px 0;
-}
-.area4 {
-	background-position:0 -50px;
-}
-.area5 {
-	background-position:-50px -50px;
-}
-.village1 {
-	background-image: url('PATH/common/images/map/map.png');
-	height:50px;
-	width:50px;
-	background-position:-100px -50px;
-}
-.allied {
-	background-image: url('PATH/common/images/map/map.png');
-	height:16px;
-	width:16px;
-	background-position:-182px -50px;
-}
-.enemy {
-	background-image: url('PATH/common/images/map/map.png');
-	height:16px;
-	width:16px;
-	background-position:-166px -50px;
-}
-.own {
-	background-image: url('PATH/common/images/map/map.png');
-	height:16px;
-	width:16px;
-	background-position:-150px -50px;
-}
+
 .troops-icon{
 	background-image: url('PATH/common/images/troops/troops.png');
 	height:16px;

@@ -14,7 +14,7 @@ if ($this->identity) {//******************************** utente connesso
             $s[] = $value['server'];
             echo '<div><button id="button' . $value['server'] . '" class="img server" onclick="location.href=\'' .
              $this->url(array('module' => $value['server'])) . '\'"><div>server ' .
-             $value['server'] . '</div> [stato: iscritto come] [' .$status[$value['status']] . '] <div>[civiltà presenti]:<span id="n_civ' . $value['server'] . '"></span></div></button></div>';
+             $value['server'] . '</div> [stato: iscritto come] [' .$status[$value['status']] . '] <div>[civiltà presenti]:<span class="N_civ"></span></div><div>[numero villaggi]:<span class="N_village"></span></div></button></div>';
         }
     }
     $list = array_diff($server, $s);

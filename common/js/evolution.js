@@ -9,7 +9,8 @@ var ita = {
 	village5 : 'invia truppe',
 	village6 : 'invia mercanti',
 	build : 'costruisci',
-	sea : 'mare'
+	sea : 'mare',
+	valley : 'valle neutrale'
 };
 var ev = {
 	focus : {},
@@ -560,122 +561,37 @@ var ev = {
 		zoom : 0,
 		centre : [ 0, 0 ],
 		//init : [],
+		data:[],
 		limit:[],
 		esclude:[ 0, 1, 2, 3, 4, 
 		          24, 25, 26, 27, 28, 
 		          48, 49, 50, 51, 52],
-		/*TtoY : function(t) {
-			return t / ev.map.size[2] + (ev.map.init[1]) + ev.map.size[1];
-		},
-		YtoT : function(y) {
-			return (y - (ev.map.init[1]) - ev.map.size[1]) * ev.map.size[2];
-		},
-		LtoX : function(l) {
-			return l / (-ev.map.size[2]) + (ev.map.init[0]) - ev.map.size[0];
-		},
-		XtoL : function(x) {
-			return (x - (ev.map.init[0]) + ev.map.size[0]) * (-ev.map.size[2]);
-		},*/
-		// cerca nel vettore villaggi i villaggi disponibili
-		position : function(x, y, callback) {
-			x=parseInt(x);
-			y=parseInt(y);
-			if ((Math.abs(x) <= ev.max[0]) && (Math.abs(y) <= ev.max[1])) { //non sei fuori dai limiti
-				z = true;// controllo esistenza dati nel vettore cache
-				rx = parseInt(ev.map.size[0] / 2);//raggio di visuale
-				ry = parseInt(ev.map.size[1] / 2);
-				for (var i in ev.map.limit) {//ogni settore mappato ha un min e max per ascissa e ordinata
-					lim=ev.map.limit[i];
-					if ((lim.x.max>(x+rx))&&(lim.x.min<x-rx)&&(lim.y.max>(y+ry))&&(lim.y.min<y-ry)) {
-						z=false;
-						break;
-					}
+		          
+		init:function(){
+			$.ajax({
+				url:path+"/common/images/map/"+module+".json",
+				dataType:"json",
+				success:function (data) {
+					ev.map.data=data.layers[0].data;
 				}
-				if (z) { // richiesta dei dati mancanti
-					ev.request(module + "/map/getvettorvillage", "post", {
-						'x' : [ x-rx-ev.map.size[0], x*1+rx+ev.map.size[0] ],
-						'y' : [ y-ry-ev.map.size[0], y*1+ry+ev.map.size[0] ],
-						ajax : 1
-					}, function(rep,req) {
-						for (i = 0; i < rep.data.village.length; i++) {
-							a = rep.data.village[i].x;
-							b = rep.data.village[i].y;
-							try {
-								ev.map.village[a][b] = rep.data.village[i];
-							} catch (err) {
-								ev.map.village[a] = new Array();
-								ev.map.village[a][b] = rep.data.village[i];
-							}
-						}
-						v=req.data.match(/=(-*\d+)/g);
-						ev.map.limit.push({
-							x:{
-								min:parseInt(v[0].substr(1)),
-								max:parseInt(v[1].substr(1))
-							},
-							y:{
-								min:parseInt(v[2].substr(1)),
-								max:parseInt(v[3].substr(1))
-							}
-						});
-						ev.map.changetable(x, y);
-						if (callback)
-							callback({'x':x,'y':y});
-					});
-				} else {
-					ev.map.changetable(x, y);
-					if (callback)
-						callback({'x':x,'y':y});
+			});
+			$.ajax({
+				url:path+"/"+module+"/map",
+				dataType:"json",
+				success:function (data) {
+					ev.map.village=data;
 				}
-			}
+			});
 		},
-		changetable : function(x, y) {
-			rx = parseInt(ev.map.size[0] / 2);
-			ry = parseInt(ev.map.size[1] / 2);
-			map=$('#map');
-			for (j = (y * 1 - ry * 1 + ev.map.size[1] * 1), k = 1; j >= (y * 1 - ry * 1); j--, k++) {
-				for (i = (x * 1 - rx * 1), z = 1; i <= (x * 1 - rx * 1 + ev.map.size[0] * 1); i++, z++) {
-					square=map.find('#map_village_' + z + '_' + k);
-					if ((Math.abs(i) <= ev.max[0])
-							&& (Math.abs(j) <= ev.max[1])) {
-						
-						if (this.village[i][j].type) {
-							square.children().removeClass().addClass('village'+this.village[i][j].type);
-							own="";
-							if (this.village[i][j].civ_id==ev.civ.civ_id) own='own';
-							square.children()
-								.children()
-								.removeClass()
-								.addClass(own);
-						}
-						else square.children().removeClass().children().removeClass();
-						square.removeClass('area0 area1 area2 area3 area4 area5').addClass('area'+this.village[i][j].zone);
-					} else {
-						square.removeClass('area0 area1 area2 area3 area4 area5').addClass('area5');
-						try {
-							ev.map.village[i][j] = {
-								name : ev.lang.sea,
-								civ_name : '-',
-								ally : '-',
-								prod1_bonus : '-',
-								prod2_bonus : '-',
-								prod3_bonus : '-'
-							};
-						} catch (e) {
-							ev.map.village[i] = new Array();
-							ev.map.village[i][j] = {name : ev.lang.sea,
-									civ_name : '-',
-									ally : '-',
-									prod1_bonus : '-',
-									prod2_bonus : '-',
-									prod3_bonus : '-'};
-						}
-					}
-					$('#map_village_' + z + '_' + k).data('coords',{x:i,y:j});
-				}
-			}
-			ev.map.centre = [ x, y ];
-			location.hash = "#" + x + "|" + y;
+		getCoordFromId:function(id) {
+			id=parseInt(id);
+			x=id%ev.max[0]-parseInt(ev.map[0]/2);
+			y=parseInt(ev.map[1]/2)-parseInt(id/ev.max[0]);
+			return {'x':x,'y':y};
+		},
+		getIdFromCoord:function (x,y) {
+			id=ev.max[0]*(parseInt(ev.max[1]/2)-y)+x*1+parseInt(ev.max[0]/2);
+			return id;
 		},
 		hide_village_info : function() {
 			// ev.map.canhide=true;
@@ -710,70 +626,97 @@ var ev = {
 			}
 			this.position(x, y);
 		},
-		get_village_info : function(coord) {
-			x = coord.x;
-			y = coord.y;
+		get_village_info : function(i,j,n) {
+			l=this.centre[0]-Math.round(this.size[0]/2);
+			t=this.centre[1]-Math.round(this.size[1]/2);
+			x=l+i;
+			y=t-j+parseInt(this.size[1]);
+			id=this.getIdFromCoord(x, y);
 			location.hash = "#" + x + "|" + y + "@";
-			try {
-				village = ev.map.village[x][y]
-			} catch (e) {
-				ev.map.position(x, y, function() {
-					ev.map.get_village_info(coord);
-				});
-				return;
+			if (ev.map.village[id]) {
+				cid=ev.map.village[id].civ_id;
+				civ_name=ev.map.village[id].civ_name;
+				civ_ally=ev.map.village[id].civ_ally;
+				ally=ev.map.village[id].ally;
+				busy_pop=ev.map.village[id].busy_pop;
+				prod1_bonus=ev.map.village[id].prod1_bonus;
+				prod2_bonus=ev.map.village[id].prod2_bonus;
+				prod3_bonus=ev.map.village[id].prod3_bonus;
+				name=ev.map.village[id].name;
 			}
-			if (ev.map.village[x][y].civ_id == ev.civ.civ_id) {
-				ev.request(module + '/index/village/?vid='
-						+ ev.map.village[x][y].id, "post", {
-					ajax : 1
-				});
-			} else {
-				text = '<div>' + ev.lang.village1
+			else {
+				cid=0;
+				civ_name='-';
+				civ_ally='-';
+				ally='-';
+				busy_pop=0;
+				prod1_bonus='-';
+				prod2_bonus='-';
+				prod3_bonus='-';
+				name=ev.lang.valley;
+			}
+			
+			text = '<div>' + ev.lang.village1
 						+ ' <a class="civ" href="#civ'
-						+ ev.map.village[x][y].civ_id
+						+ cid
 						+ '" onclick="ev.request(module+\'/profile/index/cid/'
-						+ ev.map.village[x][y].civ_id
+						+ cid
 						+ '\',\'post\',{ajax:1});">'
-						+ ev.map.village[x][y].civ_name + '</a><div>';
+						+ civ_name + '</a><div>';
 				text += '<div>' + ev.lang.village2
 						+ ' <a class="ally" href="#ally'
-						+ ev.map.village[x][y].civ_ally + '">'
-						+ ev.map.village[x][y].ally + '</a></div>';
+						+ civ_ally + '">'
+						+ ally + '</a></div>';
 				text += '<div>' + ev.lang.village3 + ': '
-						+ ev.map.village[x][y].busy_pop + '</div>';
+						+ busy_pop + '</div>';
 				text += '<div>' + ev.lang.village4 + ': '
-						+ ev.map.village[x][y].prod1_bonus + '% '
-						+ ev.map.village[x][y].prod2_bonus + '% '
-						+ ev.map.village[x][y].prod3_bonus + '%</div>';
+						+ prod1_bonus + '% '
+						+ prod2_bonus + '% '
+						+ prod3_bonus + '%</div>';
 				text += '<div><a href="#sendTroop'
-						+ ev.map.village[x][y].id
+						+ id
 						+ '" onclick="ev.request(\''
 						+ module
 						+ '/movements/send\', \'post\', {type:\'attack\',ajax:1,vid:'
-						+ ev.map.village[x][y].id + '});">' + ev.lang.village5
+						+ id + '});">' + ev.lang.village5
 						+ '</a></div>';
 				ev.windows({
 					h : 300,
 					w : 400
 				}, "center",
 						{
-							title : ev.map.village[x][y].name + '(' + x + '|'
+							title : name + '(' + x + '|'
 									+ y + ')',
 							'text' : text
 						}, false, false, ev.map.hide_village_info);
-			}
+			
 		},
-		details : function(coord, n) {
-			x = coord.x;
-			y = coord.y;
-			$("#village_name").html(
-					this.village[x][y].name + ' (' + x + '|' + y + ')');
-			$("#village_player").html(this.village[x][y].civ_name);
-			$("#village_ally").html(this.village[x][y].ally);
-			$("#village_bonus").html(
-					this.village[x][y].prod1_bonus + "% "
-							+ this.village[x][y].prod2_bonus + "% "
-							+ this.village[x][y].prod3_bonus + "%");
+		details : function(i,j,n) {
+			//@todo sapendo il centro posso ricavare l'id
+			l=this.centre[0]-Math.round(this.size[0]/2);
+			t=this.centre[1]-Math.round(this.size[1]/2);
+			x=l+i;
+			y=t-j+parseInt(this.size[1]);
+			id=this.getIdFromCoord(x, y);
+			if (this.village[id]) {
+				$("#village_name").html(this.village[id].name + ' (' + x + '|' + y + ')');
+				$("#village_player").html(this.village[id].civ_name);
+				$("#village_ally").html(this.village[id].ally);
+				$("#village_bonus").html(
+					this.village[id].prod1_bonus + "% "
+							+ this.village[id].prod2_bonus + "% "
+							+ this.village[id].prod3_bonus + "%");
+			}
+			else {
+				$("#village_name").html(ev.lang['valley']+ ' (' + x + '|' + y + ')');
+				$("#village_player").html("");
+				$("#village_ally").html('');
+				$("#village_bonus").html('');
+			}
+					
+			
+			
+			
 			bool = false;
 			// console.log(n);
 			for ( var k in this.esclude) {
@@ -1199,18 +1142,20 @@ var ev = {
 		}
 	},
 	statserver : function(server) {
+		$('server').removeClass('offline');
 		for (i = 0; server[i]; i++) {
 			this.request(server[i] + '/stats', 'post', {
 				ajax : 1
-			}, function(data) {
-				$('#n_civ' + data.server).text(data.N_civ);
-				if (data.offline)
-					$('#button' + data.server).addClass('offline');
-				$.ajax({
-					url : path + '/' + data.server + '/processing',
+			}, function(reponse) {
+				//$('#n_civ' + data.server).text(data.N_civ);
+				if (reponse.data.offline)
+					$('#button' + reponse.data.server).addClass('offline');
+				
+			});
+			$.ajax({
+					url : path + '/' + server[i] + '/processing',
 					timeout : 5000
 				});
-			});
 		}
 	}
 };

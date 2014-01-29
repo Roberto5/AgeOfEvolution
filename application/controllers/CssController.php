@@ -60,6 +60,7 @@ class CssController extends Zend_Controller_Action
 			if ($mtime < $r['mtime']) $mtime = $r['mtime'];
 		}
 		$this->view->mtime=$mtime;
+		$display.=$this->sprite("area",10,6,50,50);
 		$this->view->output=$display;
 	}
 	function css_compress ($buffer)
@@ -111,6 +112,14 @@ class CssController extends Zend_Controller_Action
 		}
 		return array('text' => $cache_contents, 'mtime' => $stat['mtime']);
 	}
-
+	function sprite($name,$rows,$cols,$tile_h,$tile_w) {
+		$output="";
+		for ($i = 0; $i < ($rows*$cols); $i++) {
+			$x=($i%$cols)*$tile_w;
+			$y=intval($i/$cols)*$tile_h;
+			$output.=".$name-$i {background-position: ".-$x."px ".-$y."px;}";
+		}
+		return $output;
+	}
 }
 

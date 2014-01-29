@@ -10,6 +10,7 @@ CHANGEPASS@Change password
 CLOSE@Close
 CONTACT@Contact us
 CREATE@Create
+CREATECIV@Create a new civilization
 CTRL_MAIL@Email send , control your email
 DATA_ERROR@Data Error
 DELETE@Delete
@@ -21,6 +22,7 @@ ENTER@Enter
 E_FATAL@Fatal Error, contact the admin
 FAILURE@Login failed
 FEATURES@Features
+FINDCIV@Find a civilization for enter.
 FORM_CONTACT@Or compile this form
 GUEST@Guest
 HOSTED@The source can find on
@@ -35,6 +37,7 @@ LOST_PASS@You are lost the password?
 MAINTENAINCE@Maintenaince
 MAP@Map
 NAME@Nome
+NOCIV@You haven't Civilization in this server
 NOTLIKE@Not Like
 OBJECT@object
 OLD_PASS@Old password
@@ -45,6 +48,7 @@ RECOVER@Insert the email of account to recover
 REG@Register
 RESEND@the your account isn't active, you can resend the activation email with this form
 SCREENSHOOT@Screen shoot
+SEARCH@search
 SELECT_SERVER@Select a Server
 SEND@Send
 SERVERTIME@Server's time

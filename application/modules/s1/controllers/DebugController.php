@@ -49,7 +49,7 @@ class S1_DebugController extends Zend_Controller_Action {
 	}
 	public function addpopAction() {
 		$vid=Model_civilta::getInstance()->getCurrentVillage();
-		$this->db->query("UPDATE `".SERVER."_village` SET `pop`=`pop`+'100' WHERE `id`='$vid'");
+		$this->db->query("UPDATE `".SERVER."_map` SET `pop`=`pop`+'100' WHERE `id`='$vid'");
 		$this->log->notice("aggiunti 100 abitanti in $vid");
 		$this->view->text="done";
 		$this->view->display=true;
@@ -129,7 +129,7 @@ class S1_DebugController extends Zend_Controller_Action {
 		Zend_Db_Table::getDefaultAdapter()->query(
 				"UPDATE `" . BUILDING_TABLE . "` SET `liv`='20' WHERE `village_id`='" . $now . "'");
 		Zend_Db_Table::getDefaultAdapter()->query(
-				"UPDATE `" . SERVER . "_village` SET `pop`=`pop`+'2000' WHERE `id`='" . $now . "'");
+				"UPDATE `" . SERVER . "_map` SET `pop`=`pop`+'2000' WHERE `id`='" . $now . "'");
 		$this->view->text="done";
 		$this->view->display=true;
 		$this->log->notice("villaggio $now portato a liv 20");
@@ -149,7 +149,7 @@ class S1_DebugController extends Zend_Controller_Action {
 				"INSERT INTO `" . BUILDING_TABLE . "` (`village_id`,`type`,`liv`,`pos`) value ('" . $vid . "','5','0','2')");
 		$this->db->query(
 				"INSERT INTO `" . BUILDING_TABLE . "` (`village_id`,`type`,`liv`,`pos`) value ('" . $vid . "','6','0','3')");
-		$this->db->update(SERVER.'_village', array('busy_pop'=>'0','pop'=>'100','name'=>'Nuovo Villaggio'),"`id`='$vid'");
+		$this->db->update(SERVER.'_map', array('busy_pop'=>'0','pop'=>'100','name'=>'Nuovo Villaggio'),"`id`='$vid'");
 		$this->view->text="done";
 		$this->view->display=true;
 		$this->log->notice("villaggio resettato in $vid");

@@ -1,7 +1,7 @@
 <?php 
 $t=Zend_Registry::get("translate");
 $text='
-<table>
+<table style="margin: auto;">
 	<tr>
 		<td>' . $t->_("nome") . '</td>
 		<td>' . $t->_("et&aacute;") . '</td>
@@ -21,4 +21,4 @@ foreach ($this->paginator as $value) {
 $text.="</table>";
 $p=$this->paginationControl($this->paginator,'Sliding','paginatorajax.phtml');
 $text.=str_replace("*", $this->func, $p);
-echo json_encode(array('html'=>false,'data'=>false,'javascript'=>false,'update'=>array('ids'=>array('mess'=>$text))));?>
+echo json_encode(array('html'=>false,'data'=>false,'javascript'=>false,'update'=>array('ids'=>array('result'=>$text))));?>

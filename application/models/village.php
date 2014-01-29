@@ -22,20 +22,22 @@ class Model_village extends Zend_Db_Table_Abstract
     public $building;
     function __construct ($cid, $order = null)
     {
-    	$this->_name=SERVER.'_village';
+    	$this->_name=SERVER.'_map';
         $this->cid = $cid;
         parent::__construct();
-        $this->getAdapter()->setFetchMode(Zend_Db::FETCH_ASSOC);
-        $this->data = $this->fetchAll("`civ_id`='$cid'", $order);
-        foreach ($this->data as $key=>$value)
-        	$this->building[$key] = new Model_building($this->cid, $key);
+        //$this->getAdapter()->setFetchMode(Zend_Db::FETCH_ASSOC); not work
+        $rows= $this->fetchAll("`civ_id`='$cid'", $order);
+        foreach ($rows->toArray() as $value) {
+        	$this->data[$value['id']]=$value;
+        	$this->building[$value['id']] = new Model_building($this->cid, $value['id']);
+        }
     }
     /**
      * @return array
      */
     function getList ()
     {
-        return $this->data->toArray();
+        return $this->data;//->toArray();
     }
     function setCurrentVillage ($vid = "all")
     {

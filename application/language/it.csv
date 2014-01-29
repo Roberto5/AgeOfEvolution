@@ -10,6 +10,7 @@ CHANGEPASS@Cambia password
 CLOSE@Chiudi
 CONTACT@Contattaci
 CREATE@Crea
+CREATECIV@Crea una nuova civilt&agrave;
 CTRL_MAIL@Email inviata con successo, controlla la casella di posta
 DATA_ERROR@Errore nei dati
 DELETE@Cancella
@@ -21,6 +22,7 @@ ENTER@Entra
 E_FATAL@Fatal Error, contattare l'admin
 FAILURE@login fallito
 FEATURES@Caratteristiche
+FINDCIV@Cerca una civilt&agrave; in cui entrare.
 FORM_CONTACT@Oppure compila questo modulo
 GUEST@Visitatore
 HOSTED@i sorgenti si possono trovare su
@@ -36,6 +38,7 @@ MAINTENAINCE@Manutenzione
 MAP@Mappa
 Missing captcha fields@Compilare il campo captcha
 NAME@Nome
+NOCIV@Non hai una civilt&agrave; in questo server
 NOTLIKE@Critiche
 OBJECT@oggetto
 OLD_PASS@Vecchia password
@@ -46,6 +49,7 @@ RECOVER@Inserisci l'email dell'account da recuperare
 REG@Registrati
 RESEND@Il tuo account non è attivo, puoi reinviare l'email di attivazione tramite il modulo qua sotto
 SCREENSHOOT@Screen shoot
+SEARCH@Cerca
 SELECT_SERVER@Seleziona un Server
 SEND@Invia
 SERVERTIME@Ora del server
