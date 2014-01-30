@@ -4,9 +4,13 @@ $module = Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
 $this->headTitle($module);
 $this->headTitle("index");
 $t = Zend_Registry::get("translate");
-/**
- * @todo spostare in file js
- * function keyDown(event) {
+
+if ($this->hasCivilty > 1) {
+    $x=$this->x;
+    $y=$this->y;
+    $this->headScript()->captureStart();
+    
+    echo 'function keyDown(event) {
     if (event.which == null)
         key= (event.keyCode);    // IE
     else key=event.which;
@@ -14,26 +18,19 @@ $t = Zend_Registry::get("translate");
     y=ev.map.centre[1];
     bool=true;
     switch (key) {
-        case 37:x--;
+        case 37:ev.map.centre[0]--;
         break;
-        case 38:y++;
+        case 38:ev.map.centre[1]++;
         break;
-        case 39:x++;
+        case 39:ev.map.centre[0]++;
         break;
-        case 40:y--;
+        case 40:ev.map.centre[1]--;
         break;
         default:bool=false;
     }
-    if (bool) {ev.map.position(x,y);return false;}
+    if (bool) {ev.map.shift();return false;}
 	}
-$(document).keydown(keyDown);
- */
-if ($this->hasCivilty > 1) {
-    $x=$this->x;
-    $y=$this->y;
-    $this->headScript()->captureStart();
-    
-    echo '
+	$(document).keydown(keyDown);
 	ev.map.centre=['.intval($x).','.intval($y).','.intval($this->civ->getCurrentVillage()).'];
 	//ev.map.init=['.intval($x).','.intval($y).'];
     ev.map.size=['.intval($this->zoom['x']).','.intval($this->zoom['y']).','.$this->zoom['dim'].'];
@@ -44,16 +41,17 @@ if ($this->hasCivilty > 1) {
 		{"'.$t->_('invia mercanti (non implementato)').'":{onclick:ev.market,icon:"'.$this->baseUrl('/common/images/market.png').'"}}	
 	];
 	$(function () {
-		$(".map_village").contextMenu(menu,{theme:"human"});
-		/*if (m=location.hash.match(/(-*\d+)\|(-*\d+)(@*)/)) {
+		$(".map").contextMenu(menu,{theme:"human"});
+		if (m=location.hash.match(/(-*\d+)\|(-*\d+)(@*)/)) {
         // #2|2-dsf
         console.log(m);
         	x=parseInt(m[1]);
         	y=parseInt(m[2]);
         	console.log(x,y);
-            ev.map.position(x,y,m[3]? ev.map.get_village_info:null);
+        	ev.map.centre=[x,y];
+            //ev.map.shift();
         	
-		}else ev.map.position('.$x.','.$y.');*/
+		}
 			'.($this->vid ? 'location.hash = "#'.$this->x.'|'.$this->y.'";ev.map.load_detail();':'').'
 		ev.map.init();
 	});';
@@ -101,7 +99,7 @@ if ($this->hasCivilty > 1) {
             				class="map zoom-'.$this->zoom['dim'].'" id="map_village_' . $i .
                  '_'.$j.'" onmouseover="ev.map.details('.($i-1).','.($j-1).','.$n++.');" 
             				onmouseout="ev.map.hide_map_details();" 
-            				onclick="if (!ev.drag) ev.map.get_village_info('.($i-1).','.($j-1).','.$n++.'); else ev.drag=false;" alt="'.($n-1).'" ><div class="zoom-'.$this->zoom['dim'].'map-null"><!--vilage--><div class="zoom-'.$this->zoom['dim'].' map-null"><!--flag--></div></div></div>';
+            				onclick="if (!ev.drag) ev.map.get_village_info('.($i-1).','.($j-1).','.$n++.'); else ev.drag=false;" alt="'.($n-1).'" ><div class="zoom-'.$this->zoom['dim'].' map-null"><!--vilage--><div class="zoom-'.$this->zoom['dim'].' map-null"><!--flag--></div></div></div>';
             	$gap-=50;
             }
         }

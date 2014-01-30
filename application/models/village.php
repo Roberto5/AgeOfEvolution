@@ -102,6 +102,6 @@ class Model_village extends Zend_Db_Table_Abstract
     {
         if (! $id)
             $id = $this->id;
-        $this->update($this->data[$id]->toArray(),"`id`='$id'");
+        $this->update($this->data[$id],"`id`='$id'");
     }
 }

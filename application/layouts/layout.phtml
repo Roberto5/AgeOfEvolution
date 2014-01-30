@@ -244,7 +244,7 @@ if ($this->game) {
 	ev.focus.y=<?php echo intval($xy['y']);?>;
 	ev.focus.id=<?php echo intval($civ->getCurrentVillage());?>;
 	ev.max=[<?php echo MAX_X;?>,<?php echo MAX_Y;?>];
-	ev.civ=<?php echo json_encode($civ->data);?>;
+	ev.civ=<?php echo json_encode($civ->data->toArray());?>;
 	<?php }?>
 	ev.quest.flagquest=<?php echo ($canshow? "true" : "false");?>;
 	<?php 

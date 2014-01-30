@@ -43,7 +43,8 @@ if ($_COOKIE['nav_pannel']=='true') {
 					<div id="freccia_giu" class="arrow_down" onclick="ev.map.arrow('down')"></div>
 					<div id="freccia_dx" class="arrow_dx" onclick="ev.map.arrow('right')"></div>
 				</div>
-				<input id="x" class="number" size="3" maxlength="4" /> | <input id="y" class="number" size="3" maxlength="4" /> <button onclick="ev.map.position($('#x').val(),$('#y').val() );">OK</button>
+				<input id="x" class="number" size="3" maxlength="4" /> | <input id="y" class="number" size="3" maxlength="4" /> 
+				<button onclick="ev.map.centre[0]=parseInt($('#x').val());ev.map.centre[1]=parseInt($('#y').val());ev.map.shift();">OK</button>
 				</div>
 			</div>
 			<div id="destra">

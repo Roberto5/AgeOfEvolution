@@ -566,13 +566,15 @@ var ev = {
 		esclude:[ 0, 1, 2, 3, 4, 
 		          24, 25, 26, 27, 28, 
 		          48, 49, 50, 51, 52],
-		          
+		goRender:0,
 		init:function(){
 			$.ajax({
 				url:path+"/common/images/map/"+module+".json",
 				dataType:"json",
 				success:function (data) {
 					ev.map.data=data.layers[0].data;
+					ev.map.goRender++;
+					ev.map.render();
 				}
 			});
 			$.ajax({
@@ -580,8 +582,16 @@ var ev = {
 				dataType:"json",
 				success:function (data) {
 					ev.map.village=data;
+					ev.map.goRender++;
+					ev.map.render();
 				}
 			});
+		},
+		render :function() {
+			if (this.goRender>1) {
+				this.shift(this.centre[0],this.centre[1]);
+				this.goRender=0;
+			}
 		},
 		getCoordFromId:function(id) {
 			id=parseInt(id);
@@ -608,29 +618,23 @@ var ev = {
 		arrow : function(direction) {
 			switch (direction) {
 			case 'up':
-				x = ev.map.centre[0];
-				y = ev.map.centre[1] * 1 + 1 * 1;
+				ev.map.centre[1]++;
 				break;
 			case 'down':
-				x = ev.map.centre[0];
-				y = ev.map.centre[1] * 1 - 1 * 1;
+				ev.map.centre[1]--;
 				break;
 			case 'right':
-				x = ev.map.centre[0] * 1 + 1 * 1;
-				y = ev.map.centre[1];
+				ev.map.centre[0]++;
 				break;
 			case 'left':
-				x = ev.map.centre[0] * 1 - 1 * 1;
-				y = ev.map.centre[1];
+				ev.map.centre[0]--;
 				break;
 			}
-			this.position(x, y);
+			this.shift();
 		},
 		get_village_info : function(i,j,n) {
-			l=this.centre[0]-Math.round(this.size[0]/2);
-			t=this.centre[1]-Math.round(this.size[1]/2);
-			x=l+i;
-			y=t-j+parseInt(this.size[1]);
+			c=this.getCoord(i, j);
+			x=c.x;y=c.y;
 			id=this.getIdFromCoord(x, y);
 			location.hash = "#" + x + "|" + y + "@";
 			if (ev.map.village[id]) {
@@ -691,12 +695,14 @@ var ev = {
 						}, false, false, ev.map.hide_village_info);
 			
 		},
-		details : function(i,j,n) {
-			//@todo sapendo il centro posso ricavare l'id
+		getCoord:function (i,j) {
 			l=this.centre[0]-Math.round(this.size[0]/2);
 			t=this.centre[1]-Math.round(this.size[1]/2);
-			x=l+i;
-			y=t-j+parseInt(this.size[1]);
+			return {x:l+i,y:t-j-2+parseInt(this.size[1])};
+		},
+		details : function(i,j,n) {
+			c=this.getCoord(i, j);
+			x=c.x;y=c.y;
 			id=this.getIdFromCoord(x, y);
 			if (this.village[id]) {
 				$("#village_name").html(this.village[id].name + ' (' + x + '|' + y + ')');
@@ -733,6 +739,42 @@ var ev = {
 		hide_map_details : function() {
 			// if (ev.map.canhide)
 			$("#map_details").hide();
+		},
+		shift:function() {
+			t=new Date();
+			before=t.getTime();
+			map=$('.map');
+			for (var j=0,n=0;j<(ev.map.size[1]);j++) {
+				for (var i=0;i<ev.map.size[0];i++,n++) {
+					c=ev.map.getCoord(i,j);
+					id=ev.map.getIdFromCoord(c.x, c.y);
+					prev_class=map.eq(n).attr('class');
+					zoom=prev_class.match(/zoom-\d+/g);
+					map.eq(n).attr('class','map '+zoom+' area-'+(ev.map.data[id]-1));
+					map.eq(n).attr('title',id);
+					village=map.eq(n).children();
+					village.attr('class',zoom);
+					own=village.children();
+					own.attr('class',zoom);
+					if (this.village[id]) {
+						village.addClass('area-26');
+						if (ev.civ.civ_id==this.village[id].civ_id) own.addClass('area-23');
+						else {
+							// @todo add ally or enemy own
+							own.addClass('map-null');
+						}
+					}
+					else {
+						village.addClass('map-null');
+						own.addClass('map-null');
+					}
+					
+					
+					//own area-23
+				}
+			}
+			t=new Date();
+			console.log('map shift exsecution time: ',(t.getTime()-before)," ms ");
 		}
 	},
 	troops : {
