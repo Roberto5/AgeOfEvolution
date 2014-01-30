@@ -7,6 +7,8 @@ BUGIMG@Se vuoi inviarci immagini caricale su un host online e metti qui l&apos;i
 BUGTAG@Il Tag serve per etichettare la segnalazione e ricercare segnalazioni simili
 CATEGORY@Categoria
 CHANGEPASS@Cambia password
+CIVLESS@Senza civilt&agrave;
+CIVONSERVER@Civilt&agrave; presenti
 CLOSE@Chiudi
 CONTACT@Contattaci
 CREATE@Crea
@@ -40,19 +42,25 @@ Missing captcha fields@Compilare il campo captcha
 NAME@Nome
 NOCIV@Non hai una civilt&agrave; in questo server
 NOTLIKE@Critiche
+NOTREG@Non registrato
 OBJECT@oggetto
 OLD_PASS@Vecchia password
+ONWAIT@in attesa
+OWNER@Proprietario
 PASS_ERR@Password errata
 PASS_LENG@La password deve contenere 8 caratteri
 PROFILE@Profilo
 RECOVER@Inserisci l'email dell'account da recuperare
 REG@Registrati
+REGLIKE@Registrato come
 RESEND@Il tuo account non è attivo, puoi reinviare l'email di attivazione tramite il modulo qua sotto
 SCREENSHOOT@Screen shoot
 SEARCH@Cerca
 SELECT_SERVER@Seleziona un Server
 SEND@Invia
 SERVERTIME@Ora del server
+SHARER@Sharer
+STATUS@Stato
 SUCCESS@login eseguito con successo
 TARGET@Obbiettivo
 TOTALUSER@Utenti totali
@@ -61,6 +69,7 @@ USERNAME@Nome utente :
 USERONLINE@Utenti online
 USER_NOT_FOUND@Username inesistente
 VERSION@Versione
+VILONSERVER@Villaggi presenti
 Value is required and can't be empty@Il campo deve essere pieno
 WELLCOME@Benvenuto
 WRITE@Scrivi il tuo messaggio qui
