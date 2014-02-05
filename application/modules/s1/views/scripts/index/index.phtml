@@ -1,5 +1,6 @@
 <?php
-
+$x=$this->x;
+$y=$this->y;
 $module = Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
 $this->headTitle($module);
 $this->headTitle("index");
@@ -84,8 +85,7 @@ $this->headScript()->captureEnd();
 <?php 
 
 if ($this->hasCivilty > 1) {
-	$x=$this->x;
-    $y=$this->y;
+	
     $this->headScript()->captureStart();
 	echo '
     var menu=[{"'.$t->_('rinforza').'":{onclick:ev.support,icon:"'.$this->baseUrl('/common/images/inrinfo.png').'"}},

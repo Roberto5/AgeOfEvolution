@@ -325,7 +325,7 @@ class S1_BuildingController extends Zend_Controller_Action
         	$cost[3]=0;
             $this->civ->aggResource($cost);
             Zend_Db_Table::getDefaultAdapter()->query(
-            "INSERT INTO `" . BUILDING_TABLE . "` SET `village_id`='" .
+            "INSERT INTO `" . SERVER . "_building` SET `village_id`='" .
              $this->now . "' , `type`='" . $type . "' , `liv`='0' , `pos`='" .
              $this->pos . "'");
             $this->civ->village->building[$this->now]->data[$this->pos]=array('liv'=>0,'type'=>$type);

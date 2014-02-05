@@ -750,25 +750,31 @@ class Model_civilta extends Zend_Db_Table_Abstract
 	 */
 	static function addVillage ($x, $y, $civ_id, $cap = 0, $type = 0, $name = 'NEWVIL')
 	{
-		if ($y=='id') $vid=$x;
-		else $vid =Model_map::getInstance()->getIdFromCoord($x, $y);
-		Zend_Db_Table::getDefaultAdapter()->query(
-				"INSERT INTO `" . SERVER . "_map`
-				SET `id`='$vid' , `civ_id`='$civ_id' , `name`='" . $name . "' ,
-				`capital`='" . $cap . "' , `type`='1' ,
-				`pop`='20' , `busy_pop`='0' , `resource_1`='" . START_RES . "' ,
-				`resource_2`='" . START_RES . "' , `resource_3`='" . START_RES . "' ,
-				`production_1`='" . prod1::$prod[0] . "' ,
-				`production_2`='" . prod2::$prod[0] . "' ,
-				`production_3`='" . prod3::$prod[0] . "' ,
-				`agg`='" . mktime() . "' ,
-				`aggPop`='" . mktime() . "'");
-		Zend_Db_Table::getDefaultAdapter()->query(
-				"INSERT INTO `" . SERVER . "_building` (`village_id`,`type`,`liv`,`pos`,`pop`)
-				value ('" . $vid . "','1','0','0','1'),
+		
+		if ((is_string($y))&&($y=="id")) $vid=$x;
+		else $vid=Model_map::getInstance()->getIdFromCoord($x, $y);
+		self::$_defaultDb->insert(SERVER.'_map', array(
+			'id'=>$vid
+			,'civ_id'=>$civ_id
+			,'name'=>$name
+			,'capital'=>$cap
+			,'type'=>$type
+			,'pop'=>20
+			,'busy_pop'=>0
+			,'resource_1'=>START_RES
+			,'resource_2'=>START_RES
+			,'resource_3'=>START_RES
+			,'production_1'=>prod1::$prod[0]
+			,'production_2'=>prod2::$prod[0]
+			,'production_3'=>prod3::$prod[0]
+			,'agg'=>mktime()
+			,'aggPop'=>mktime()
+		));
+		self::$_defaultDb->query("INSERT INTO `" . SERVER . "_building` (`village_id`,`type`,`liv`,`pos`,`pop`)
+				value ('" . $vid . "','1','0','0','1'), 
 				('" . $vid . "','4','0','1','0'),
 				('" . $vid . "','5','0','2','0'),
-				('" . $vid . "','6','0','3','0')"); //main liv 1
+				('" . $vid . "','6','0','3','0')");//main liv 1 
 	}
 	/**
 	 * crea coordinate casuali polari che poi saranno convertite in  cartesiane
@@ -1040,13 +1046,13 @@ class Model_civilta extends Zend_Db_Table_Abstract
 		for ($i = 0; $queue[$i]; $i ++) {
 			$param = unserialize($queue[$i]['params']);
 			$liv = Zend_Db_Table::getDefaultAdapter()->fetchOne(
-					"SELECT `liv` FROM `" . BUILDING_TABLE . "` WHERE `pos`='" .
+					"SELECT `liv` FROM `" . SERVER . "_building` WHERE `pos`='" .
 					$param['pos'] . "' AND `village_id`='" . $param['village_id'] . "'");
 			$popc += $liv + 1;
 		}
 		// popolazione nelle strutture
 		$build = Zend_Db_Table::getDefaultAdapter()->fetchAll(
-				"SELECT * FROM `" . BUILDING_TABLE . "` WHERE `village_id`='" .
+				"SELECT * FROM `" . SERVER . "_building` WHERE `village_id`='" .
 				$param['village_id'] . "'");
 		$maxP = Model_civilta::getStorageById($id, HOUSE);
 		$popT = $poptroop;
@@ -1099,7 +1105,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 	{
 		global $Building_Array;
 		$build = Zend_Db_Table::getDefaultAdapter()->fetchAll(
-				"SELECT * FROM `" . BUILDING_TABLE . "` WHERE `village_id`='" . $id .
+				"SELECT * FROM `" . SERVER . "_building` WHERE `village_id`='" . $id .
 				"' AND `type`='" . $storagetype . "'");
 		$storage = 0;
 		for ($i = 0; $build[$i]; $i ++) {

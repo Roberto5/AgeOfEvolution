@@ -137,7 +137,7 @@ class S1_IndexController extends Zend_Controller_Action
             Zend_Registry::set("param", $param);
             Model_civilta::subscrive($id, $auth->getIdentity()->user_id);
             $bool=$this->db->fetchOne("SELECT `id` FROM `".SERVER."_map` WHERE `id`='".Model_map::getInstance()->getIdFromCoord($x, $y)."'");
-            if ($bool) 
+            if ($bool && ($sector==6)) 
             	$sector=5;
             switch ($sector) {
             	case 6: 

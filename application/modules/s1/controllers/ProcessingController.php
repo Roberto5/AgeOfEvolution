@@ -144,8 +144,8 @@ class S1_ProcessingController extends Zend_Controller_Action
         $age = $civ['civ_age'];
         //info edifici
         $build = $this->_db->fetchAssoc(
-        "SELECT `pos`,`village_id`,`type`,`liv`,`pop` FROM `" . BUILDING_TABLE .
-         "` WHERE `village_id`='" . $param['village_id'] . "'");
+        "SELECT `pos`,`village_id`,`type`,`liv`,`pop` FROM `" . SERVER .
+         "_building` WHERE `village_id`='" . $param['village_id'] . "'");
         $ctrl = $build;
         $build[$param['pos']]['liv'] ++;
         //aggiornamento popolazione
@@ -172,7 +172,7 @@ class S1_ProcessingController extends Zend_Controller_Action
                  $ctrl[$key]['pop'] . "'\n
         		liv aggiornato '" . $value['liv'] . "' live prec '" .
                  $ctrl[$key]['liv'] . "'");
-                $this->_db->update(BUILDING_TABLE, $value, 
+                $this->_db->update(SERVER.'_building', $value, 
                 "`village_id`='" . $param['village_id'] . "' AND `pos`='" .
                  $value['pos'] . "'");
                 $dif_pop += $value['pop'] - $ctrl[$key]['pop'];
@@ -187,7 +187,7 @@ class S1_ProcessingController extends Zend_Controller_Action
             "SELECT `id` FROM `" . SERVER . "_map` WHERE `civ_id`='" .
              $civ['civ_id'] . "' AND `id`!='" . $param['village_id'] . "'");
             if ($village)
-                $this->_db->delete(BUILDING_TABLE, 
+                $this->_db->delete(SERVER.'_building', 
                 "`village_id`IN('" . implode("','", $village) . "') AND `type`='" .
                  COMMAND . "'");
             $this->_db->update(SERVER.'_map', array('capital' => 0), 
@@ -590,7 +590,7 @@ class S1_ProcessingController extends Zend_Controller_Action
          "'");
         $n = count($vids);
         $liv = $this->_db->fetchOne(
-        "SELECT `liv` FROM `" . BUILDING_TABLE . "` WHERE `type`='" . COMMAND .
+        "SELECT `liv` FROM `" . SERVER . "_building` WHERE `type`='" . COMMAND .
          "' AND `village_id`IN('" . implode("','", $vids) . "')");
         $cords = array($this->map->getCoordFromId($param['village_B']),$this->map->getCoordFromId($param['village_A']));
         
@@ -635,7 +635,7 @@ class S1_ProcessingController extends Zend_Controller_Action
         $this->_db->query(
         "UPDATE `" . CIV_TABLE . "` SET `civ_pop`=`civ_pop`-'" . $param['pop'] .
          "' WHERE `civ_id`='" . $param['civ_id'] . "'");
-        $this->_db->delete(BUILDING_TABLE, 
+        $this->_db->delete(SERVER.'_building', 
         "`pos`='" . $param['pos'] . "' AND `village_id`='" . $param['village_id'] .
          "'");
         $this->_log->build(

@@ -420,7 +420,7 @@ class S1_MovementsController extends Zend_Controller_Action
         $n = count($this->civ->village_list);
         $vids = array_keys($this->civ->village_list);
         $liv = $this->db->fetchOne(
-        "SELECT `liv` FROM `" . BUILDING_TABLE . "` WHERE `type`='" . COMMAND .
+        "SELECT `liv` FROM `" . SERVER . "_building` WHERE `type`='" . COMMAND .
          "' AND `village_id`IN('" . implode("','", $vids) . "')");
         $now = $this->civ->getCurrentVillage();
         $num = $this->db->fetchOne(
