@@ -18,7 +18,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 	 * utente in attesa o sharer o proprietario
 	 * @var int
 	 */
-	public $status = null;
+	public $status = 0;
 	public $displaytroop;
 	/**
 	 * mappa
@@ -155,7 +155,6 @@ class Model_civilta extends Zend_Db_Table_Abstract
 				$this->village_list = $this->village->getList();
 				// controllo se il current_village è nella lista
 				$bool = false;
-				$this->log->debug($this->village_list);
 				$bool=array_key_exists($cid['current_village'], $this->village_list);
 				if ($bool)
 					$this->currentVillage = (int) $cid['current_village'];
@@ -623,7 +622,6 @@ class Model_civilta extends Zend_Db_Table_Abstract
 			// consumo_truppe : deficit = 100 : x  x=deficit*100/consumotruppe
 			$defbonus = 100 + intval(
 					$deficit * 100 / $this->poptroop);
-			$this->log->debug($defbonus);
 			if ($defbonus < 1)
 				$defbonus = 1;
 			$bonus *= $defbonus / 100;
@@ -743,20 +741,20 @@ class Model_civilta extends Zend_Db_Table_Abstract
 	/**
 	 * crea un villaggio alle coordinate date
 	 *@todo rifare
-	 * @param int $x
-	 * @param int $y
+	 * @param int $x or $vid if $y=id
+	 * @param int|String $y
 	 * @param int $cap
 	 * @param int $civ_id
 	 * @param int $type
 	 * @param String $name
 	 */
-	static function addVillage ($x, $y, $civ_id, $cap = 0, $type = 0,
-			$name = 'Nuovo Villaggio')
+	static function addVillage ($x, $y, $civ_id, $cap = 0, $type = 0, $name = 'NEWVIL')
 	{
-		$vid =Model_map::getInstance()->getIdFromCoord($x, $y);
+		if ($y=='id') $vid=$x;
+		else $vid =Model_map::getInstance()->getIdFromCoord($x, $y);
 		Zend_Db_Table::getDefaultAdapter()->query(
-				"INSERT INTO`" . SERVER . "_map`
-				SET `id`='$vid' civ_id`='$civ_id' , `name`='" . $name . "' ,
+				"INSERT INTO `" . SERVER . "_map`
+				SET `id`='$vid' , `civ_id`='$civ_id' , `name`='" . $name . "' ,
 				`capital`='" . $cap . "' , `type`='1' ,
 				`pop`='20' , `busy_pop`='0' , `resource_1`='" . START_RES . "' ,
 				`resource_2`='" . START_RES . "' , `resource_3`='" . START_RES . "' ,
@@ -766,7 +764,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 				`agg`='" . mktime() . "' ,
 				`aggPop`='" . mktime() . "'");
 		Zend_Db_Table::getDefaultAdapter()->query(
-				"INSERT INTO `" . BUILDING_TABLE . "` (`village_id`,`type`,`liv`,`pos`,`pop`)
+				"INSERT INTO `" . SERVER . "_building` (`village_id`,`type`,`liv`,`pos`,`pop`)
 				value ('" . $vid . "','1','0','0','1'),
 				('" . $vid . "','4','0','1','0'),
 				('" . $vid . "','5','0','2','0'),
@@ -856,8 +854,8 @@ class Model_civilta extends Zend_Db_Table_Abstract
 				} //rendo intere le variabili x e y per sicurezza
 				$x = (int) $x;
 				$y = (int) $y;
-				if (($x > MAX_X) || ($x < - MAX_X) || ($y > MAX_Y) || ($y <
-						- MAX_Y)) {
+				if (($x > MAX_X/2) || ($x < - MAX_X/2) || ($y > MAX_Y/2) || ($y <
+						- MAX_Y/2)) {
 					$minrad = 0;
 					$maxrad = $intervallo;
 					Zend_Registry::get("param")->set("minrad", $minrad);
@@ -877,7 +875,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 				Zend_Registry::get("param")->set("time", mktime());
 			}
 			$c ++;
-		} while (($fine) && ($c < 100));
+		} while (($fine) && ($c < 1000));
 		if ($fine) {
 			echo "errore!!!";
 			exit();

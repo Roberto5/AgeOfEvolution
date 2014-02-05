@@ -90,8 +90,6 @@ class Model_quest extends Zend_Db_Table_Abstract
     function tag_open ($parser, $tag, $attributes)
     {
         $this->tag = $tag;
-        //debug("attribute", $attributes, "quest", 66, $this->bool);
-        //debug("tag", $tag, "quest", 67, $this->bool);
         if (($attributes['ID'] == $this->age) && ($tag == "AGE"))
             $this->save_quest2 = true;
         if (($attributes['N'] == $this->n) && ($tag == "QUEST") &&
@@ -103,7 +101,6 @@ class Model_quest extends Zend_Db_Table_Abstract
             if ($tag == "REWARD")
                 $this->REWARD = $attributes;
         }
-         //debug("bool", $this->save_quest, "quest", 73, $this->bool);
     }
     /**
      *

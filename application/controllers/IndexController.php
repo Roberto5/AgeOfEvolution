@@ -7,7 +7,6 @@ class IndexController extends Zend_Controller_Action {
 	}
 
 	public function indexAction() {
-		$this->_log->debug(Model_role::getRole());
 		//recuperiamo l'istanza di Zend_Auth
 		$auth=Zend_Auth::getInstance();
 		if ($auth->hasIdentity()) {

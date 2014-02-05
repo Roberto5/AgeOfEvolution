@@ -34,7 +34,7 @@ $(document).ready(function(){
 		$("#credits").dialog({autoOpen: false});
 		$("#account").dialog({autoOpen: false,width:350});
 		$("ul#news").liScroll();
-		$("[title]:not(.context-menu div)").tooltip({
+		$("[title]:not(.context-menu div):not(.notooltip)").tooltip({
 			   offset: [-10, 0],
 			   delay:1,
 			   predelay:400

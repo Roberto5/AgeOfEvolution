@@ -36,7 +36,6 @@ class Model_battle
      */
     function start ($array, $sim = false)
     {
-        $this->log->debug($array);
         $this->atk = $array['attacker'];
         $this->def = $array['defender'];
         $this->time = $array['time'];
@@ -138,7 +137,6 @@ class Model_battle
             // abilità truppa
             $ability = $Troops_Array[$key]::specialEffect(
             array('type' => 'atk', 'num' => $value, 'obj' => $this->atk));
-            $this->log->debug($ability);
             $bonushpa[$key] += $ability['hp'];
             $bonusatka[$key] += $ability['atk'];
             // bonus hp zona di influenza
@@ -190,8 +188,6 @@ class Model_battle
         $mg = $maxgit;
         //for($r=0;($bool) &&(!$maxround||($r < $maxround));$r++) { //round
         //start mod
-        $this->log->debug("continue " . $this->continue);
-        $this->log->debug("maxround " . $maxround);
         $r = intval($this->continue);
         if (! $maxround || ($r < $maxround)) {
             $maxgit -= $r;
@@ -240,8 +236,7 @@ class Model_battle
                     $da = 0;
                 $medforza -= $da * $totb;
                 if ($medforza < 0)
-                    $medforza = 0; //*/
-                $this->log->debug('medforza ' . $medforza);
+                    $medforza = 0; 
                 // end mod scudo
                 $hpa[$key] -= $medforza;
                 //controllo se la truppa muore
@@ -279,8 +274,7 @@ class Model_battle
                     $dd = 0;
                 $medforza -= $dd * $tota;
                 if ($medforza < 0)
-                    $medforza = 0; //*/
-                $this->log->debug('medforza ' . $medforza);
+                    $medforza = 0; 
                 // end mod scudo
                 $hpd[$key] -= $medforza;
                 //controllo se la truppa muore

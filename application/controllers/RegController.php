@@ -77,7 +77,6 @@ class RegController extends Zend_Controller_Action
 		$code=$this->_getParam('code');
 		$code=$code ? sha1($code):null;
 		$user=new Model_User(array('code'=>$code));
-		$this->_log->debug(print_r($user->data,true));
 		if ($user->data && ($user->data['code_time']+86400)<time()) {
 			$auth=Zend_Auth::getInstance();
 			$data=new stdClass();

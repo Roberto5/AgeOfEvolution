@@ -7,6 +7,7 @@ BUGIMG@if you want send image, host online and put here the link
 BUGTAG@The Tag help to find report similar
 CATEGORY@Category
 CHANGEPASS@Change password
+CHOOSE@Choose
 CIVLESS@Civilization less
 CIVONSERVER@Civilization on server
 CLOSE@Close
@@ -18,6 +19,7 @@ DATA_ERROR@Data Error
 DELETE@Delete
 DESCRIPTION2@Description
 DESCRIPTION@description
+EAST@East
 EDIT@Edit
 EMAIL_CONTACT@Contact from email
 ENTER@Enter
@@ -39,7 +41,9 @@ LOST_PASS@You are lost the password?
 MAINTENAINCE@Maintenaince
 MAP@Map
 NAME@Nome
+NEWVIL@New village
 NOCIV@You haven't Civilization in this server
+NORTH@North
 NOTLIKE@Not Like
 NOTREG@Not Registered
 OBJECT@object
@@ -49,6 +53,7 @@ OWNER@Owner
 PASS_ERR@Password wrong
 PASS_LENG@The password must be 8 characters
 PROFILE@Profile
+RANDOM@Random
 RECOVER@Insert the email of account to recover
 REG@Register
 REGLIKE@Registered like
@@ -59,6 +64,7 @@ SELECT_SERVER@Select a Server
 SEND@Send
 SERVERTIME@Server's time
 SHARER@Sharer
+SOUTH@South
 STATUS@Status
 SUCCESS@login success
 TARGET@Target
@@ -67,6 +73,9 @@ USERNAME@Username :
 USERONLINE@Users online
 USER_NOT_FOUND@Username not found
 VERSION@Version
+VIEW@View
 VILONSERVER@Village on server
 WELLCOME@Welcome
+WEST@West
+WITHDRAW@withdraw
 WRITE@Write your message here

@@ -1,7 +1,4 @@
 <?php 
-$this->log->debug($this->error,'error');
-$this->log->debug($this->success,'success');
-$this->log->debug($this->text,'text');
 if ($this->error) {
 	echo $this->template('Alerts',array('text'=>print_r($this->text,true),'link'=>$this->url(),'type'=>2));
 }

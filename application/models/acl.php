@@ -63,7 +63,7 @@ $acl->deny('user','reg','index');
 //permessi civless
 $acl->allow("civless","s1");
 $acl->deny("civless","ev");
-$acl->deny("civless","map");
+$acl->allow("civless","map");
 $acl->deny("civless","market");
 $acl->deny("civless","message");
 $acl->deny("civless","movements");

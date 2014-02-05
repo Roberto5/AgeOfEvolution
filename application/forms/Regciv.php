@@ -35,45 +35,38 @@ class Form_Regciv extends Zend_Form
         
         $sector=new Zend_Form_Element_Radio("sector");//$this->createElement("radio", "sector");
         
-        $sector->setMultiOptions(array('1'=>'nord/est (+/+)',
-        '2'=>'nord/ovest (-/+)',
-        '3'=>'sud/ovest (-/-)',
-        '4'=>'sud/est (+/-)')
+        $sector->setMultiOptions(array('1'=>'[NORTH]/[EAST] (+/+)',
+        '2'=>'[NORTH]/[WEST][ (-/+)',
+        '3'=>'[SOUTH]/[WEST] (-/-)',
+        '4'=>'[SOUTH]/[EAST] (+/-)',
+        '5'=>'[RANDOM]',
+        '6'=>'[CHOOSE]')
         );
-        
+        $sector->setValue(5);
         $this->addElement($sector);
         
+        $x=$this->createElement('number', 'cx');
+        $x->setLabel('x');
+        $max=intval(MAX_X/2);
+        $x->setAttribs(array('min'=>-$max,'max'=>$max));
+        $x->addValidator('Between',null,array('min'=>-$max,'max'=>$max));
+        $x->setValue(0);
+        $y=$this->createElement('number', 'cy');
+        $y->setLabel('y');
+        $y->setValue(0);
+        $max=intval(MAX_Y/2);
+        $y->setAttribs(array('min'=>-$max,'max'=>$max));
+        $y->addValidator('Between',null,array('min'=>-$max,'max'=>$max));
+        $max=intval(MAX_Y/2);
+        $this->addElements(array($x,$y));
         $button=$this->createElement("button", "submit");
-        $button->setAttrib("onclick","ev.createciv()");
+        $button->setAttrib("onclick","ev.createciv();");
         $button->setLabel("crea");
-        
+        $view=$this->createElement('button', 'view');
+        $view->setLabel('[VIEW] [MAP]');
+        $view->setAttrib("onclick","$('#modalwindows').dialog('close');");
+        $this->addElement($view);
         $this->addElement($button);
-        /*echo '<script type="text/javascript" src="scripts/civ.js"></script>
-        <h2>crea una nuova civilt&agrave;</h2><span id="load"></span>
-        <p id="mess"><form name="civ"><table>
-        <tr>
-        <td>Nome:</td>
-        <td><input id="name" size="20" maxlength="30" /></td>
-        </tr>
-        <tr>
-        <td>Aggettivo</td>
-        <td><input id="agg" size="20" maxlength="30" /></td>
-        </tr>
-	<tr>
-	<td colspan="2"><input type="radio" name="sector" value="0" checked="true" /> settore casuale</td>
-	</tr>
-	<tr>
-	<td><input type="radio" name="sector" value="1" /> nord/est (+/+)</td>
-	<td><input type="radio" name="sector" value="2" /> nord/ovest (-/+)</td>
-	</tr><tr>
-	<td><input type="radio" name="sector" value="3" /> sud/ovest (-/-)</td>
-	<td><input type="radio" name="sector" value="4" /> sud/est (+/-)</td>
-	</tr>
-        <tr>
-	<td colspan="2"><input type="button" value="crea" onclick="createciv()" /></td>
-	</tr>
-        </table>
-        </form></p>';*/
     }
 
 

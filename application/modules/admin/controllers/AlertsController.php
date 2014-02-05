@@ -19,7 +19,6 @@ class Admin_AlertsController extends Zend_Controller_Action
     		$n=count($user);
     		
     		if ($n>0) $user=implode(",",$user);
-    		$this->_log->debug($n);
     		$ua[$key]=$user;
     		$na[$key]=(int)$n;
         }

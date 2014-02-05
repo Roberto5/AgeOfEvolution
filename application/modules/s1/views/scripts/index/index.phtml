@@ -4,11 +4,7 @@ $module = Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
 $this->headTitle($module);
 $this->headTitle("index");
 $t = Zend_Registry::get("translate");
-
-if ($this->hasCivilty > 1) {
-    $x=$this->x;
-    $y=$this->y;
-    $this->headScript()->captureStart();
+ $this->headScript()->captureStart();
     
     echo 'function keyDown(event) {
     if (event.which == null)
@@ -31,33 +27,16 @@ if ($this->hasCivilty > 1) {
     if (bool) {ev.map.shift();return false;}
 	}
 	$(document).keydown(keyDown);
-	ev.map.centre=['.intval($x).','.intval($y).','.intval($this->civ->getCurrentVillage()).'];
-	//ev.map.init=['.intval($x).','.intval($y).'];
+	ev.map.centre=['.intval($x).','.intval($y).'];
     ev.map.size=['.intval($this->zoom['x']).','.intval($this->zoom['y']).','.$this->zoom['dim'].'];
-    var menu=[{"'.$t->_('rinforza').'":{onclick:ev.support,icon:"'.$this->baseUrl('/common/images/inrinfo.png').'"}},
-		{"'.$t->_('raid').'":{onclick:ev.raid,icon:"'.$this->baseUrl('/common/images/outattack.png').'"}},
-		{"'.$t->_('attacca').'":{onclick:ev.atk,icon:"'.$this->baseUrl('/common/images/inattack.png').'"}},
-		{"'.$t->_('colonizza').'":{onclick:ev.colony,icon:"'.$this->baseUrl('/common/images/pop.gif').'"}},
-		{"'.$t->_('invia mercanti (non implementato)').'":{onclick:ev.market,icon:"'.$this->baseUrl('/common/images/market.png').'"}}	
-	];
-	$(function () {
-		$(".map").contextMenu(menu,{theme:"human"});
-		if (m=location.hash.match(/(-*\d+)\|(-*\d+)(@*)/)) {
-        // #2|2-dsf
-        console.log(m);
-        	x=parseInt(m[1]);
-        	y=parseInt(m[2]);
-        	console.log(x,y);
-        	ev.map.centre=[x,y];
-            //ev.map.shift();
-        	
-		}
-			'.($this->vid ? 'location.hash = "#'.$this->x.'|'.$this->y.'";ev.map.load_detail();':'').'
-		ev.map.init();
-	});';
-    
-    $this->headScript()->captureEnd();
-    echo '<div id="map_details" style="display: none; position:absolute;z-index:200;">
+    $(function(){
+    	ev.map.init();
+    	$("#modalwindows").dialog({modal:true});
+    });
+    ';
+$this->headScript()->captureEnd();
+?>
+<div id="map_details" style="display: none; position:absolute;z-index:200;">
 <table>
 	<thead>
 		<tr>
@@ -81,17 +60,15 @@ if ($this->hasCivilty > 1) {
 			<td>[Bonus]:</td>
 			<td id="village_bonus"></td>
 		</tr>
-		<tr>
+		<!-- add more options -->
+	
+		<!-- <tr>
 			<td colspan="2"><a href="#" id="send_link">[Invia truppe]</a></td>
-		</tr>
+		</tr> -->
 	</tbody>
 </table>
-</div>';
-    echo '<div id="map" style="position:absolute;width: 1200px; height: 900px;top:0;">';
-    
-//$base = Zend_Controller_Front::getInstance()->getBaseUrl();
-        //$base.='/'.Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
-        
+</div>
+<div id="map" style="position:absolute;width: 1200px; height: 900px;top:0;"><?php         
         $gap=0;$n=0;
         for($j=1;$j<=$this->zoom['y'];$j++) {
             for ($i=1;$i<=$this->zoom['x'];$i++) {
@@ -103,18 +80,46 @@ if ($this->hasCivilty > 1) {
             	$gap-=50;
             }
         }
-    
-    
-    
-    echo '</div>';
+?></div>
+<?php 
+
+if ($this->hasCivilty > 1) {
+	$x=$this->x;
+    $y=$this->y;
+    $this->headScript()->captureStart();
+	echo '
+    var menu=[{"'.$t->_('rinforza').'":{onclick:ev.support,icon:"'.$this->baseUrl('/common/images/inrinfo.png').'"}},
+		{"'.$t->_('raid').'":{onclick:ev.raid,icon:"'.$this->baseUrl('/common/images/outattack.png').'"}},
+		{"'.$t->_('attacca').'":{onclick:ev.atk,icon:"'.$this->baseUrl('/common/images/inattack.png').'"}},
+		{"'.$t->_('colonizza').'":{onclick:ev.colony,icon:"'.$this->baseUrl('/common/images/pop.gif').'"}},
+		{"'.$t->_('invia mercanti (non implementato)').'":{onclick:ev.market,icon:"'.$this->baseUrl('/common/images/market.png').'"}}	
+	];
+	$(function () {
+		$(".map").contextMenu(menu,{theme:"human"});
+		if (m=location.hash.match(/(-*\d+)\|(-*\d+)(@*)/)) {
+        // #2|2-dsf
+        console.log(m);
+        	x=parseInt(m[1]);
+        	y=parseInt(m[2]);
+        	console.log(x,y);
+        	ev.map.centre=[x,y];
+            //ev.map.shift();
+        	
+		}
+			'.($this->vid ? 'location.hash = "#'.$this->x.'|'.$this->y.'";ev.map.load_detail();':'').'
+	});';
+    $this->headScript()->captureEnd();
+
     
 } elseif ($this->hasCivilty == 1) {
-    echo '<h1>' . $t->_('sei in attesa') . '</h1>' .
-     $t->_('la civilt&aacute; a cui ti sei iscritto non ti ha ancora attivato');
+	?><div id="modalwindows" title="[ONWAIT]"  class="notooltip">
+		[WAITFORCIV]
+		<button onclick="ev.request(module+'/index/unsubscrive','get',null,function(){location.reload();});">[WITHDRAW]</button>
+    </div>
+     <?php 
 } else {
     ?>
-<div style="text-align: center;">
-	<h2>[NOCIV]</h2>
+<div id="modalwindows" class="notooltip" title="[NOCIV]">
 	<h3>[FINDCIV]</h3>
 	<input type="hidden" value="0" id="start" /><input id="civ_name" size="20" maxlength="30" />
 	<button onclick="ev.SearchCiv(0)">[SEARCH]</button>

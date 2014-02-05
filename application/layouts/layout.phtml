@@ -238,12 +238,13 @@ if ($this->game) {
 		?>
 	});
 	ev.age=<?php echo intval(( $civ ? $civ->getAge() : '0'));?>;
-	<?php if ($civ) { $id=$civ->village->data[$civ->getCurrentVillage()]['id'];
+	ev.max=[<?php echo MAX_X;?>,<?php echo MAX_Y;?>];
+	<?php if ($civ->data) { $id=$civ->village->data[$civ->getCurrentVillage()]['id'];
 	$xy=Model_map::getInstance()->getCoordFromId($id);
 	?>ev.focus.x=<?php echo intval($xy['x']);?>;
 	ev.focus.y=<?php echo intval($xy['y']);?>;
 	ev.focus.id=<?php echo intval($civ->getCurrentVillage());?>;
-	ev.max=[<?php echo MAX_X;?>,<?php echo MAX_Y;?>];
+	
 	ev.civ=<?php echo json_encode($civ->data->toArray());?>;
 	<?php }?>
 	ev.quest.flagquest=<?php echo ($canshow? "true" : "false");?>;

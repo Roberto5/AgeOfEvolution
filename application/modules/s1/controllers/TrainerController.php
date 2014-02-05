@@ -30,7 +30,6 @@ class S1_TrainerController extends Zend_Controller_Action
                 if (preg_match("/t(?P<id>\d+)/", $key, $matches))
                     $totrain[$matches['id']] = (int) $value;
             }
-            $this->log->debug($totrain);
             $p = $this->civ->village->building[$now]->getproperty(
             $this->civ->village->building[$now]->getBildForType(BARRACK), 
             $this->civ->getAge());

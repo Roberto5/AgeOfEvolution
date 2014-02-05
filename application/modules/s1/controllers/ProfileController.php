@@ -66,7 +66,6 @@ class S1_ProfileController extends Zend_Controller_Action {
 		$cid=Model_civilta::getInstance()->cid;
 		$bool=token_ctrl($this->getRequest()->getParams());
 		$this->view->token=token_set("tokenP");
-		$this->log->debug($_POST);
 		if ($this->getRequest()->isPost()&&$bool['tokenP']) {
 			$this->db->query("UPDATE `".USERS_TABLE."` SET `des_user`='".htmlentities($_POST['des_user'],ENT_QUOTES)."' WHERE `ID`='$id'");
 			$this->db->query("UPDATE `".CIV_TABLE."` SET `des_civ`='".htmlentities($_POST['des_civ'],ENT_QUOTES)."' WHERE `civ_id`='$cid'");

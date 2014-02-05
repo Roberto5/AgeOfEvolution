@@ -7,6 +7,7 @@ BUGIMG@Se vuoi inviarci immagini caricale su un host online e metti qui l&apos;i
 BUGTAG@Il Tag serve per etichettare la segnalazione e ricercare segnalazioni simili
 CATEGORY@Categoria
 CHANGEPASS@Cambia password
+CHOOSE@Scegli
 CIVLESS@Senza civilt&agrave;
 CIVONSERVER@Civilt&agrave; presenti
 CLOSE@Chiudi
@@ -18,6 +19,7 @@ DATA_ERROR@Errore nei dati
 DELETE@Cancella
 DESCRIPTION2@Descrizione
 DESCRIPTION@descrizione del sito
+EAST@Est
 EDIT@Modifica
 EMAIL_CONTACT@Contattaci per email
 ENTER@Entra
@@ -40,7 +42,9 @@ MAINTENAINCE@Manutenzione
 MAP@Mappa
 Missing captcha fields@Compilare il campo captcha
 NAME@Nome
+NEWVIL@Nuovo villaggio
 NOCIV@Non hai una civilt&agrave; in questo server
+NORTH@Nord
 NOTLIKE@Critiche
 NOTREG@Non registrato
 OBJECT@oggetto
@@ -50,6 +54,7 @@ OWNER@Proprietario
 PASS_ERR@Password errata
 PASS_LENG@La password deve contenere 8 caratteri
 PROFILE@Profilo
+RANDOM@Casuale
 RECOVER@Inserisci l'email dell'account da recuperare
 REG@Registrati
 REGLIKE@Registrato come
@@ -60,6 +65,7 @@ SELECT_SERVER@Seleziona un Server
 SEND@Invia
 SERVERTIME@Ora del server
 SHARER@Sharer
+SOUTH@Sud
 STATUS@Stato
 SUCCESS@login eseguito con successo
 TARGET@Obbiettivo
@@ -69,7 +75,10 @@ USERNAME@Nome utente :
 USERONLINE@Utenti online
 USER_NOT_FOUND@Username inesistente
 VERSION@Versione
+VIEW@Visualizza
 VILONSERVER@Villaggi presenti
 Value is required and can't be empty@Il campo deve essere pieno
 WELLCOME@Benvenuto
+WEST@Ovest
+WITHDRAW@ritira
 WRITE@Scrivi il tuo messaggio qui

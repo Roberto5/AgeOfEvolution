@@ -47,7 +47,6 @@ class Admin_IndexController extends Zend_Controller_Action
         //$val=$this->param->get("work");
         $val=$this->db->fetchCol("SELECT `value` FROM `".PARAMS_TABLE."` WHERE `name`IN ('work','comment')");
         //256:val=100:x x=val*100/256
-        $this->_log->debug($val);
         $this->view->value=intval($val[1]);
         $this->view->comment=$val[0];
         $this->view->flag=$_POST['flag'];

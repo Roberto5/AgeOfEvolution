@@ -21,7 +21,6 @@ class S1_SimulatorController extends Zend_Controller_Action
         if ($this->getRequest()->isPost()) {
             $def = array();
             $atk = array();
-            $this->log->debug($_POST);
             foreach ($_POST as $key => $value) {
                 if (preg_match("#^def#", $key))
                     $def[substr($key, 3)] = $value;
@@ -30,8 +29,6 @@ class S1_SimulatorController extends Zend_Controller_Action
             }
             $this->view->def = $def;
             $this->view->atk = $atk;
-            $this->log->debug($def);
-            $this->log->debug($atk);
             if ($_POST['sim']) {
             	$atk_array=array('troops' => $atk, 'age' => $age, 
                 'bonusf' => $bonusfa, 'bonusd' => $bonushpa,'civ'=>$cid);

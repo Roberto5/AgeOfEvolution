@@ -10,7 +10,8 @@ var ita = {
 	village6 : 'invia mercanti',
 	build : 'costruisci',
 	sea : 'mare',
-	valley : 'valle neutrale'
+	valley : 'valle neutrale',
+	select:'Seleziona'
 };
 var ev = {
 	focus : {},
@@ -103,7 +104,7 @@ var ev = {
 										if ((k == 'src') || (k == 'href'))
 											v = path + v;
 										if (k == 'title') {
-											api =$('#' + key).data('tooltip')
+											api =$('#' + key).data('tooltip');
 											$tip = api ? api.getTip() : false;
 											if ($tip)
 												$tip.text(v);
@@ -171,7 +172,7 @@ var ev = {
 										}
 									} else {
 										$obj = $('#cv' + ev.focus.id
-												+ ' div.building.pos' + i)
+												+ ' div.building.pos' + i);
 										$obj.removeClass();
 										$obj.addClass('building empty pos' + i);
 										api = $obj.data('tooltip');
@@ -183,7 +184,7 @@ var ev = {
 										}
 									}
 								}
-								$("[title]:not(.context-menu div)").tooltip({
+								$("[title]:not(.context-menu div):not(.notooltip)").tooltip({
 									offset : [ -10, 0 ],
 									delay : 1,
 									predelay : 400
@@ -293,7 +294,7 @@ var ev = {
 					temp = {
 						icon : ev.togglewin,
 						id : "minus" + wid
-					}
+					};
 					temp.icon();
 				}
 			}
@@ -310,7 +311,7 @@ var ev = {
 				temp = {
 					icon : ev.togglewin,
 					id : "minus" + id
-				}
+				};
 				temp.icon();
 			}
 			$win.dialog("moveToTop");
@@ -373,7 +374,7 @@ var ev = {
 				$("#" + this.id).removeClass("ui-state-hover");
 			});
 			$("#minus" + id).click(ev.togglewin);
-			$("[title]:not(.context-menu div)").tooltip({
+			$("[title]:not(.context-menu div):not(.notooltip)").tooltip({
 				offset : [ -10, 0 ],
 				delay : 1,
 				predelay : 400
@@ -408,7 +409,7 @@ var ev = {
 						temp = {
 							icon : ev.togglewin,
 							id : "minus" + wid
-						}
+						};
 						temp.icon();
 					}
 				}
@@ -419,7 +420,7 @@ var ev = {
 			}
 		} else {// riduco ad icona
 			$("#" + id).dialog("option", "draggable", false);
-			$w=$('#' + id )
+			$w=$('#' + id );
 			$win =$w.parent();
 			ev.cache.width[id] = $win.css("width");
 			$win.css("width",200);
@@ -504,7 +505,9 @@ var ev = {
 			server : module,
 			name : $("#name").val(),
 			agg : $("#agg").val(),
-			sector : $('input[name$="sector"]').val()
+			sector : $('input[name="sector"]:checked').val(),
+			cx:$('#cx').val(),
+			cy:$('#cy').val()
 		});
 	},
 	subscrive : function(cid) {
@@ -560,7 +563,7 @@ var ev = {
 		size : [ 24, 18, 50 ],
 		zoom : 0,
 		centre : [ 0, 0 ],
-		//init : [],
+		focus : {},
 		data:[],
 		limit:[],
 		esclude:[ 0, 1, 2, 3, 4, 
@@ -677,13 +680,20 @@ var ev = {
 						+ prod1_bonus + '% '
 						+ prod2_bonus + '% '
 						+ prod3_bonus + '%</div>';
-				text += '<div><a href="#sendTroop'
+				if (ev.civ.civ_id) {//@todo add more option
+					text += '<div><a href="#sendTroop'
 						+ id
 						+ '" onclick="ev.request(\''
 						+ module
 						+ '/movements/send\', \'post\', {type:\'attack\',ajax:1,vid:'
 						+ id + '});">' + ev.lang.village5
 						+ '</a></div>';
+				}
+				else {
+					if (!ev.map.village[id])
+					text += '<div><button onclick="$(\'input[name=sector]:eq(5)\').attr(\'checked\',true);$(\'#cx\').val(ev.map.focus.x);$(\'#cy\').val(ev.map.focus.y);$(\'#modalwindows\').dialog(\'open\')">' + ev.lang.select
+						+ '</button></div>';
+				}
 				ev.windows({
 					h : 300,
 					w : 400
@@ -693,6 +703,7 @@ var ev = {
 									+ y + ')',
 							'text' : text
 						}, false, false, ev.map.hide_village_info);
+				this.focus=c;
 			
 		},
 		getCoord:function (i,j) {
@@ -719,10 +730,6 @@ var ev = {
 				$("#village_ally").html('');
 				$("#village_bonus").html('');
 			}
-					
-			
-			
-			
 			bool = false;
 			// console.log(n);
 			for ( var k in this.esclude) {
@@ -1028,7 +1035,7 @@ var ev = {
 	tag : new Array(),
 	addtag : function(tag) {
 		tag = tag.replace(" ", "");
-		bool = false
+		bool = false;
 		for (i = 0; (i < this.tag.length) && (!bool); i++)
 			if (tag == this.tag[i])
 				bool = true;

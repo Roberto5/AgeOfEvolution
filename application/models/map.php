@@ -15,7 +15,6 @@ class Model_map extends Zend_Db_Table_Abstract
      */
     //private $civ;
     private $log;
-    private $city;
     //private $map;
     //public $city;
     static private $instance;
@@ -64,7 +63,7 @@ class Model_map extends Zend_Db_Table_Abstract
      * @param int $y
      * @return int
      */
-    function getIdFromCoord(int $x,int $y) {
+    function getIdFromCoord($x,$y) {
     	$id=MAX_X*(intval(MAX_Y/2)-$y)+($x+intval(MAX_X/2));
     	return $id;
     }
@@ -74,7 +73,8 @@ class Model_map extends Zend_Db_Table_Abstract
      */
     function getVillageArray()
     {
-    	if (!$this->city) {
+    	if (!isset($this->city)) {
+    		$this->city=array();
     		$rows=$this->fetchAll()->toArray();
     		foreach ($rows as $value) {
     			$this->city[$value['id']]=$value;

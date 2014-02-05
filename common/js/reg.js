@@ -11,14 +11,14 @@ $(function() {
 					//dataType : "json"
 				}
 			},
-			password:{
+			/*password:{
 				minlength:8,
 				maxlength:16,
 				regExpr:/^[a-zA-Z\d]+$/
 			},
 			password2:{
 				equalTo:"#password"
-			},
+			},*/
 			email: {
 				remote: {
 					url : path+"/reg/ctrl",

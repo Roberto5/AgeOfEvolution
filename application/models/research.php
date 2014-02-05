@@ -63,7 +63,6 @@ class Model_research extends Zend_Db_Table_Abstract
                     }
                 
             }
-            $this->log->debug($res::$livmax[$civ->getAge()]);
             if (($bool)&&($res::$livmax[$civ->getAge()]<=$this->data[$type]['liv'])) $bool=false;
             $disp[$res]=$bool;
         }

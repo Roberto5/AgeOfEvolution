@@ -369,7 +369,6 @@ class S1_BuildingController extends Zend_Controller_Action
                 $this->p['time'], $type, $this->pos, 
                 $this->civ->getCurrentVillage());
                 $queue = $this->civ->getQueue()->toArray();
-                //$this->log->debug($queue);
                 $param = serialize(
                 array('pos' => $this->pos, 'type' => $type));
                 $queue[] = array('params' => $param, 
