@@ -19,7 +19,8 @@ class Zend_View_Helper_image extends Zend_View_Helper_Abstract
 	public $baseUrl;
 	public $images=array('Clava'=>'troops/t0.gif','Fionda'=>'troops/t1.gif','Falange'=>'troops/t2.gif',
     'pietra'=>'Preistorica/0.gif','legno'=>'Preistorica/2.gif','cibo'=>'Preistorica/1.gif',
-    'Zeus'=>'master1_1.png','Ares'=>'master1_2.png','Atena'=>'master1_3.png','Demetra'=>'master1_4.png','city'=>'city.png');
+    'Zeus'=>'master1_1.png','Ares'=>'master1_2.png','Atena'=>'master1_3.png','Demetra'=>'master1_4.png','city'=>'city.png'
+	,'home'=>'home.gif');
 	/**
 	 * restituisce il codice html dell'immagine se src e alt sono definiti, altrimenti l'oggetto helper
 	 * @param String $src url immagine
