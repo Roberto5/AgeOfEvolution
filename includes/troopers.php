@@ -24,7 +24,7 @@ abstract class troops {
     public static $def2 = 0;
     public static $git = 0;
     public static $speed = 0;
-    public static $cost = array(0,0,0,0);
+    public static $cost = array(0,0,0,0);// truppe edifici monete pop
     public static $capacity = 0;
     public static $description = "";
     public static $condiction=array();

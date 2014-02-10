@@ -57,6 +57,7 @@ RANDOM@Random
 RECOVER@Insert the email of account to recover
 REG@Register
 REGLIKE@Registered like
+REG_SUCCESS@Registration was successful
 RESEND@the your account isn't active, you can resend the activation email with this form
 SCREENSHOOT@Screen shoot
 SEARCH@search
@@ -75,6 +76,7 @@ USER_NOT_FOUND@Username not found
 VERSION@Version
 VIEW@View
 VILONSERVER@Village on server
+WARNING@Warning
 WELLCOME@Welcome
 WEST@West
 WITHDRAW@withdraw

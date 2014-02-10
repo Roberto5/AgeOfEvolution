@@ -135,18 +135,19 @@ class S1_IndexController extends Zend_Controller_Action
             $auth = Zend_Auth::getInstance();
             $param = new Model_params();
             Zend_Registry::set("param", $param);
-            Model_civilta::subscrive($id, $auth->getIdentity()->user_id);
             $bool=$this->db->fetchOne("SELECT `id` FROM `".SERVER."_map` WHERE `id`='".Model_map::getInstance()->getIdFromCoord($x, $y)."'");
             if ($bool && ($sector==6)) 
             	$sector=5;
             switch ($sector) {
             	case 6: 
             		break;
-            	default:list($x,$y) = Model_civilta::randomcoord($cx[$sector], $cy[$sector]);
+            	default:$coord = Model_civilta::randomcoord($cx[$sector], $cy[$sector]);
+            		$x=$coord['x'];$y=$coord['y'];
             		break;
             };
             Model_civilta::addVillage($x, $y, $id, 1);
-                $risposta = '[SUCCESS]';
+                $risposta = $this->_t->_('REG_SUCCESS');
+            Model_civilta::subscrive($id, $auth->getIdentity()->user_id);
         } else {
         	$error=true;
         	$risposta = "";
@@ -158,8 +159,8 @@ class S1_IndexController extends Zend_Controller_Action
         }
         echo json_encode(
         array(
-        'html' => array('title' => '[WARNING]', 'text' => $risposta,'x'=>200,'y'=>200,'error'=>$error,'button'=>true), 
-        'data' => false, 'update' => false, 'javascript' => false));
+        'html' => array('title' => $this->_t->_('WARNING'), 'text' => $risposta,'x'=>200,'y'=>200,'error'=>$error,'button'=>true), 
+        'data' => false, 'update' => false, 'javascript' => 'setTimeout(function() {location.reload()},3000)'));
     	}
     	catch (Exception $e) {
     		echo $e;

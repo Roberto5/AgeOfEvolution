@@ -58,6 +58,7 @@ RANDOM@Casuale
 RECOVER@Inserisci l'email dell'account da recuperare
 REG@Registrati
 REGLIKE@Registrato come
+REG_SUCCESS@Registrazione avvenuta con successo
 RESEND@Il tuo account non è attivo, puoi reinviare l'email di attivazione tramite il modulo qua sotto
 SCREENSHOOT@Screen shoot
 SEARCH@Cerca
@@ -78,6 +79,7 @@ VERSION@Versione
 VIEW@Visualizza
 VILONSERVER@Villaggi presenti
 Value is required and can't be empty@Il campo deve essere pieno
+WARNING@Attenzione
 WELLCOME@Benvenuto
 WEST@Ovest
 WITHDRAW@ritira

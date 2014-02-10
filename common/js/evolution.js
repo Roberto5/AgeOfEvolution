@@ -11,7 +11,7 @@ var ita = {
 	build : 'costruisci',
 	sea : 'mare',
 	valley : 'valle neutrale',
-	select:'Seleziona'
+	select : 'Seleziona'
 };
 var ev = {
 	focus : {},
@@ -71,11 +71,16 @@ var ev = {
 								w = data.html.x;
 							else
 								w = 800;
-							button=data.html.button ? {'ok':function(){$(this).dialog('close');}} : null;
+							button = data.html.button ? {
+								'ok' : function() {
+									$(this).dialog('close');
+								}
+							} : null;
 							data.wid = ev.windows({
 								x : w,
 								y : h
-							}, "center", data.html, data.html.mod, false, cb,button);
+							}, "center", data.html, data.html.mod, false, cb,
+									button);
 						}
 						// update
 						if (data.update) {
@@ -104,7 +109,7 @@ var ev = {
 										if ((k == 'src') || (k == 'href'))
 											v = path + v;
 										if (k == 'title') {
-											api =$('#' + key).data('tooltip');
+											api = $('#' + key).data('tooltip');
 											$tip = api ? api.getTip() : false;
 											if ($tip)
 												$tip.text(v);
@@ -184,15 +189,17 @@ var ev = {
 										}
 									}
 								}
-								$("[title]:not(.context-menu div):not(.notooltip)").tooltip({
-									offset : [ -10, 0 ],
-									delay : 1,
-									predelay : 400
-								}).dynamic({
-									bottom : {
-										direction : 'down'
-									}
-								});
+								$(
+										"[title]:not(.context-menu div):not(.notooltip)")
+										.tooltip({
+											offset : [ -10, 0 ],
+											delay : 1,
+											predelay : 400
+										}).dynamic({
+											bottom : {
+												direction : 'down'
+											}
+										});
 							}
 							ev_array = [ '', 'inAttack', 'outAttack',
 									'marketM', 'inReinf', 'outReinf', 'reinf' ];
@@ -241,15 +248,15 @@ var ev = {
 									.appendChild(s);
 						}
 						if (callback)
-							callback(data,this);
+							callback(data, this);
 					},
 					error : function(request, state, error) {
 						ev.flagLoader = false;
 						ev.loader();
 						content = {
 							title : "ERROR",
-							text : '<span style="float: left; clear:both; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span>'
-							,error : true
+							text : '<span style="float: left; clear:both; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span>',
+							error : true
 						};
 						switch (request.status) {
 						case 500:
@@ -261,7 +268,7 @@ var ev = {
 						default:
 							content.text = error;
 						}
-						content.text ='<div>'+content.text+'<div>';
+						content.text = '<div>' + content.text + '<div>';
 						wid = ev.windows({
 							x : 300,
 							y : 'auto'
@@ -270,7 +277,7 @@ var ev = {
 				});
 	},
 	iconstak : new Array(),
-	windows : function(size, pos, content, mod, alerts, close,button) {
+	windows : function(size, pos, content, mod, alerts, close, button) {
 		if (typeof (content.text) != 'string')
 			content.text = content.text.toString();
 		var i;
@@ -285,7 +292,7 @@ var ev = {
 				content.title += " (" + (alerts.i * 1 + 1) + "/" + alerts.n
 						+ ")";
 			}
-		} 
+		}
 		if (content.id) {
 			$open = $('.ev-windows');
 			for (i = 0; i < $open.length; i++) {
@@ -316,17 +323,17 @@ var ev = {
 			}
 			$win.dialog("moveToTop");
 		} else {
-			d_class="";
+			d_class = "";
 			if (content.error) {
-				d_class+=" ui-state-error";
+				d_class += " ui-state-error";
 			}
 			$("body").append(
 					'<div class="ev-windows ui-widget-content" id="' + id
 							+ '" title="' + content.title + '"><p>'
 							+ content.text + '</p></div>');
-			
+
 			$("#" + id).dialog({
-				dialogClass:d_class,
+				dialogClass : d_class,
 				stack : ".ev-windows",
 				height : size.y,
 				width : size.x,
@@ -356,12 +363,18 @@ var ev = {
 				modal : mod,
 				buttons : button
 			});
-			$container=$('#' + id).parent();
+			$container = $('#' + id).parent();
 			if (content.error) {
-				$container.find('div:eq(0)').addClass('ui-state-error').prepend('<span class="ui-icon ui-icon-alert" style="float:left;"></span> ');
-				$container.find('div.ui-dialog-buttonpane').removeClass('ui-widget-content');
+				$container
+						.find('div:eq(0)')
+						.addClass('ui-state-error')
+						.prepend(
+								'<span class="ui-icon ui-icon-alert" style="float:left;"></span> ');
+				$container.find('div.ui-dialog-buttonpane').removeClass(
+						'ui-widget-content');
 			}
-			$container.find('a[role="button"]')
+			$container
+					.find('a[role="button"]')
 					.before(
 							'<a href="#" class="ui-corner-all" id="minus'
 									+ id
@@ -391,11 +404,10 @@ var ev = {
 	togglewin : function() {
 		id = this.id.substr(5);
 		if (ev.cache.width == undefined) {
-			ev.cache.width=[];
+			ev.cache.width = [];
 		}
 		if (ev.flagicon[id]) {// amplio la finestra
-			$('#' + id ).parent().css("width",
-					ev.cache.width[id]);
+			$('#' + id).parent().css("width", ev.cache.width[id]);
 			$("#" + id).dialog("option", "draggable", true);
 			$("#" + id).show();
 			$("#" + id).dialog("option", "position", 'center');
@@ -420,19 +432,19 @@ var ev = {
 			}
 		} else {// riduco ad icona
 			$("#" + id).dialog("option", "draggable", false);
-			$w=$('#' + id );
-			$win =$w.parent();
+			$w = $('#' + id);
+			$win = $w.parent();
 			ev.cache.width[id] = $win.css("width");
-			$win.css("width",200);
+			$win.css("width", 200);
 			$win.css('height', 'auto');
 			$w.hide();
-			for (i = 1; ev.iconstak[i]; i++);
+			for (i = 1; ev.iconstak[i]; i++)
+				;
 			if (i > 6)
 				p = i % 6;
 			else
 				p = i;
-			$w.dialog("option", "position",
-					[ 206 * (p - 1), 'bottom' ]);
+			$w.dialog("option", "position", [ 206 * (p - 1), 'bottom' ]);
 			ev.iconstak[i] = true;
 			ev.flagicon[id] = i;
 		}
@@ -460,9 +472,10 @@ var ev = {
 			username : form.find('#username').val(),
 			password : form.find('#password').val()
 		};
-		ev.request('login', 'post', data/*, function(rep) {
-			// if (rep.type==1) ;//ev.user=rep.data.user;
-		}*/);
+		ev.request('login', 'post', data/*
+										 * , function(rep) { // if (rep.type==1)
+										 * ;//ev.user=rep.data.user; }
+										 */);
 		return false;
 	},
 	logout : function() {
@@ -506,8 +519,8 @@ var ev = {
 			name : $("#name").val(),
 			agg : $("#agg").val(),
 			sector : $('input[name="sector"]:checked').val(),
-			cx:$('#cx').val(),
-			cy:$('#cy').val()
+			cx : $('#cx').val(),
+			cy : $('#cy').val()
 		});
 	},
 	subscrive : function(cid) {
@@ -564,46 +577,48 @@ var ev = {
 		zoom : 0,
 		centre : [ 0, 0 ],
 		focus : {},
-		data:[],
-		limit:[],
-		esclude:[ 0, 1, 2, 3, 4, 
-		          24, 25, 26, 27, 28, 
-		          48, 49, 50, 51, 52],
-		goRender:0,
-		init:function(){
+		data : [],
+		limit : [],
+		esclude : [ 0, 1, 2, 3, 4, 24, 25, 26, 27, 28, 48, 49, 50, 51, 52 ],
+		goRender : 0,
+		init : function() {
 			$.ajax({
-				url:path+"/common/images/map/"+module+".json",
-				dataType:"json",
-				success:function (data) {
-					ev.map.data=data.layers[0].data;
+				url : path + "/common/images/map/" + module + ".json",
+				dataType : "json",
+				success : function(data) {
+					ev.map.data = data.layers[0].data;
 					ev.map.goRender++;
 					ev.map.render();
 				}
 			});
 			$.ajax({
-				url:path+"/"+module+"/map",
-				dataType:"json",
-				success:function (data) {
-					ev.map.village=data;
+				url : path + "/" + module + "/map",
+				dataType : "json",
+				success : function(data) {
+					ev.map.village = data;
 					ev.map.goRender++;
 					ev.map.render();
 				}
 			});
 		},
-		render :function() {
-			if (this.goRender>1) {
-				this.shift(this.centre[0],this.centre[1]);
-				this.goRender=0;
+		render : function() {
+			if (this.goRender > 1) {
+				this.shift(this.centre[0], this.centre[1]);
+				this.goRender = 0;
 			}
 		},
-		getCoordFromId:function(id) {
-			id=parseInt(id);
-			x=id%ev.max[0]-parseInt(ev.map[0]/2);
-			y=parseInt(ev.map[1]/2)-parseInt(id/ev.max[0]);
-			return {'x':x,'y':y};
+		getCoordFromId : function(id) {
+			id = parseInt(id);
+			x = id % ev.max[0] - parseInt(ev.map[0] / 2);
+			y = parseInt(ev.map[1] / 2) - parseInt(id / ev.max[0]);
+			return {
+				'x' : x,
+				'y' : y
+			};
 		},
-		getIdFromCoord:function (x,y) {
-			id=ev.max[0]*(parseInt(ev.max[1]/2)-y)+x*1+parseInt(ev.max[0]/2);
+		getIdFromCoord : function(x, y) {
+			id = ev.max[0] * (parseInt(ev.max[1] / 2) - y) + x * 1
+					+ parseInt(ev.max[0] / 2);
 			return id;
 		},
 		hide_village_info : function() {
@@ -635,97 +650,99 @@ var ev = {
 			}
 			this.shift();
 		},
-		get_village_info : function(i,j,n) {
-			c=this.getCoord(i, j);
-			x=c.x;y=c.y;
-			id=this.getIdFromCoord(x, y);
+		get_village_info : function(i, j, n) {
+			c = this.getCoord(i, j);
+			x = c.x;
+			y = c.y;
+			id = this.getIdFromCoord(x, y);
 			location.hash = "#" + x + "|" + y + "@";
 			if (ev.map.village[id]) {
-				cid=ev.map.village[id].civ_id;
-				civ_name=ev.map.village[id].civ_name;
-				civ_ally=ev.map.village[id].civ_ally;
-				ally=ev.map.village[id].ally;
-				busy_pop=ev.map.village[id].busy_pop;
-				prod1_bonus=ev.map.village[id].prod1_bonus;
-				prod2_bonus=ev.map.village[id].prod2_bonus;
-				prod3_bonus=ev.map.village[id].prod3_bonus;
-				name=ev.map.village[id].name;
+				cid = ev.map.village[id].civ_id;
+				civ_name = ev.map.village[id].civ_name;
+				civ_ally = ev.map.village[id].civ_ally;
+				ally = ev.map.village[id].ally;
+				busy_pop = ev.map.village[id].busy_pop;
+				prod1_bonus = ev.map.village[id].prod1_bonus;
+				prod2_bonus = ev.map.village[id].prod2_bonus;
+				prod3_bonus = ev.map.village[id].prod3_bonus;
+				name = ev.map.village[id].name;
+			} else {
+				cid = 0;
+				civ_name = '-';
+				civ_ally = '-';
+				ally = '-';
+				busy_pop = 0;
+				prod1_bonus = '-';
+				prod2_bonus = '-';
+				prod3_bonus = '-';
+				name = ev.lang.valley;
 			}
-			else {
-				cid=0;
-				civ_name='-';
-				civ_ally='-';
-				ally='-';
-				busy_pop=0;
-				prod1_bonus='-';
-				prod2_bonus='-';
-				prod3_bonus='-';
-				name=ev.lang.valley;
-			}
-			
-			text = '<div>' + ev.lang.village1
-						+ ' <a class="civ" href="#civ'
-						+ cid
+			if (this.village[id].civ_id == ev.civ.civ_id) {
+				// todo modificare
+				ev.request('s1/index/village', 'post', {
+					ajax : 1
+				});
+			} else {
+				text = '<div>' + ev.lang.village1
+						+ ' <a class="civ" href="#civ' + cid
 						+ '" onclick="ev.request(module+\'/profile/index/cid/'
-						+ cid
-						+ '\',\'post\',{ajax:1});">'
-						+ civ_name + '</a><div>';
+						+ cid + '\',\'post\',{ajax:1});">' + civ_name
+						+ '</a><div>';
 				text += '<div>' + ev.lang.village2
-						+ ' <a class="ally" href="#ally'
-						+ civ_ally + '">'
+						+ ' <a class="ally" href="#ally' + civ_ally + '">'
 						+ ally + '</a></div>';
-				text += '<div>' + ev.lang.village3 + ': '
-						+ busy_pop + '</div>';
-				text += '<div>' + ev.lang.village4 + ': '
-						+ prod1_bonus + '% '
-						+ prod2_bonus + '% '
-						+ prod3_bonus + '%</div>';
-				if (ev.civ.civ_id) {//@todo add more option
+				text += '<div>' + ev.lang.village3 + ': ' + busy_pop + '</div>';
+				text += '<div>' + ev.lang.village4 + ': ' + prod1_bonus + '% '
+						+ prod2_bonus + '% ' + prod3_bonus + '%</div>';
+				if (ev.civ.civ_id) {// @todo add more option
 					text += '<div><a href="#sendTroop'
-						+ id
-						+ '" onclick="ev.request(\''
-						+ module
-						+ '/movements/send\', \'post\', {type:\'attack\',ajax:1,vid:'
-						+ id + '});">' + ev.lang.village5
-						+ '</a></div>';
-				}
-				else {
+							+ id
+							+ '" onclick="ev.request(\''
+							+ module
+							+ '/movements/send\', \'post\', {type:\'attack\',ajax:1,vid:'
+							+ id + '});">' + ev.lang.village5 + '</a></div>';
+				} else {
 					if (!ev.map.village[id])
-					text += '<div><button onclick="$(\'input[name=sector]:eq(5)\').attr(\'checked\',true);$(\'#cx\').val(ev.map.focus.x);$(\'#cy\').val(ev.map.focus.y);$(\'#modalwindows\').dialog(\'open\')">' + ev.lang.select
-						+ '</button></div>';
+						text += '<div><button onclick="$(\'input[name=sector]:eq(5)\').attr(\'checked\',true);$(\'#cx\').val(ev.map.focus.x);$(\'#cy\').val(ev.map.focus.y);$(\'#modalwindows\').dialog(\'open\')">'
+								+ ev.lang.select + '</button></div>';
 				}
 				ev.windows({
 					h : 300,
 					w : 400
-				}, "center",
-						{
-							title : name + '(' + x + '|'
-									+ y + ')',
-							'text' : text
-						}, false, false, ev.map.hide_village_info);
-				this.focus=c;
-			
+				}, "center", {
+					title : name + '(' + x + '|' + y + ')',
+					'text' : text
+				}, false, false, ev.map.hide_village_info);
+				this.focus = c;
+			}
+
 		},
-		getCoord:function (i,j) {
-			l=this.centre[0]-Math.round(this.size[0]/2);
-			t=this.centre[1]-Math.round(this.size[1]/2);
-			return {x:l+i,y:t-j-2+parseInt(this.size[1])};
+		getCoord : function(i, j) {
+			l = this.centre[0] - Math.round(this.size[0] / 2);
+			t = this.centre[1] - Math.round(this.size[1] / 2);
+			return {
+				x : l + i,
+				y : t - j - 2 + parseInt(this.size[1])
+			};
 		},
-		details : function(i,j,n) {
-			c=this.getCoord(i, j);
-			x=c.x;y=c.y;
-			id=this.getIdFromCoord(x, y);
+		details : function(i, j, n) {
+			c = this.getCoord(i, j);
+			x = c.x;
+			y = c.y;
+			id = this.getIdFromCoord(x, y);
 			if (this.village[id]) {
-				$("#village_name").html(this.village[id].name + ' (' + x + '|' + y + ')');
+				$("#village_name").html(
+						this.village[id].name + ' (' + x + '|' + y + ')');
 				$("#village_player").html(this.village[id].civ_name);
 				$("#village_ally").html(this.village[id].ally);
 				$("#village_bonus").html(
-					this.village[id].prod1_bonus + "% "
-							+ this.village[id].prod2_bonus + "% "
-							+ this.village[id].prod3_bonus + "%");
-			}
-			else {
-				$("#village_name").html(ev.lang['valley']+ ' (' + x + '|' + y + ')');
+						this.village[id].prod1_bonus + "% "
+								+ this.village[id].prod2_bonus + "% "
+								+ this.village[id].prod3_bonus + "%");
+
+			} else {
+				$("#village_name").html(
+						ev.lang['valley'] + ' (' + x + '|' + y + ')');
 				$("#village_player").html("");
 				$("#village_ally").html('');
 				$("#village_bonus").html('');
@@ -747,41 +764,42 @@ var ev = {
 			// if (ev.map.canhide)
 			$("#map_details").hide();
 		},
-		shift:function() {
-			t=new Date();
-			before=t.getTime();
-			map=$('.map');
-			for (var j=0,n=0;j<(ev.map.size[1]);j++) {
-				for (var i=0;i<ev.map.size[0];i++,n++) {
-					c=ev.map.getCoord(i,j);
-					id=ev.map.getIdFromCoord(c.x, c.y);
-					prev_class=map.eq(n).attr('class');
-					zoom=prev_class.match(/zoom-\d+/g);
-					map.eq(n).attr('class','map '+zoom+' area-'+(ev.map.data[id]-1));
-					map.eq(n).attr('title',id);
-					village=map.eq(n).children();
-					village.attr('class',zoom);
-					own=village.children();
-					own.attr('class',zoom);
+		shift : function() {
+			t = new Date();
+			before = t.getTime();
+			map = $('.map');
+			for ( var j = 0, n = 0; j < (ev.map.size[1]); j++) {
+				for ( var i = 0; i < ev.map.size[0]; i++, n++) {
+					c = ev.map.getCoord(i, j);
+					id = ev.map.getIdFromCoord(c.x, c.y);
+					prev_class = map.eq(n).attr('class');
+					zoom = prev_class.match(/zoom-\d+/g);
+					map.eq(n).attr('class',
+							'map ' + zoom + ' area-' + (ev.map.data[id] - 1));
+					// map.eq(n).attr('title',id);
+					village = map.eq(n).children();
+					village.attr('class', zoom);
+					own = village.children();
+					own.attr('class', zoom);
 					if (this.village[id]) {
 						village.addClass('area-26');
-						if (ev.civ.civ_id==this.village[id].civ_id) own.addClass('area-23');
+						if (ev.civ.civ_id == this.village[id].civ_id)
+							own.addClass('area-23');
 						else {
 							// @todo add ally or enemy own
 							own.addClass('map-null');
 						}
-					}
-					else {
+					} else {
 						village.addClass('map-null');
 						own.addClass('map-null');
 					}
-					
-					
-					//own area-23
+
+					// own area-23
 				}
 			}
-			t=new Date();
-			console.log('map shift exsecution time: ',(t.getTime()-before)," ms ");
+			t = new Date();
+			console.log('map shift exsecution time: ', (t.getTime() - before),
+					" ms ");
 		}
 	},
 	troops : {
@@ -1196,15 +1214,15 @@ var ev = {
 			this.request(server[i] + '/stats', 'post', {
 				ajax : 1
 			}, function(reponse) {
-				//$('#n_civ' + data.server).text(data.N_civ);
+				// $('#n_civ' + data.server).text(data.N_civ);
 				if (reponse.data.offline)
 					$('#button' + reponse.data.server).addClass('offline');
-				
+
 			});
 			$.ajax({
-					url : path + '/' + server[i] + '/processing',
-					timeout : 5000
-				});
+				url : path + '/' + server[i] + '/processing',
+				timeout : 5000
+			});
 		}
 	}
 };

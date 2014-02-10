@@ -1,3 +1,4 @@
+<div style="overflow: auto;height: 600px;">
 <?php
 $this->headTitle("Debug tool");
 if ($this->display) {
@@ -119,3 +120,5 @@ data</a></p>
 			array('module'=>$module,'controller'=>'debug','action'=>'deletelog'));
 	?>">delete
 log</a></p><?php } else $this->civ->refresh(array('queue'=>true));?>
+
+</div>

@@ -384,7 +384,7 @@ class S1_MovementsController extends Zend_Controller_Action
         if (!$_POST['ajax']) $this->_helper->redirector("index");
     }
     /**
-     * @todo cambiare sistema e basarsi sull'id
+     * 
      */
     public function gettimeAction ()
     {
@@ -393,21 +393,11 @@ class S1_MovementsController extends Zend_Controller_Action
         $x = (int) $_POST['x'];
         $y = (int) $_POST['y'];
         $vid=is_numeric($_POST['vid']) ? $_POST['vid'] :Model_map::getInstance()->getIdFromCoord($x, $y);
-        $village = $this->db->fetchRow(
-        "SELECT `civ_name`,`name`,
-       (IF (EXISTS (
-            SELECT `name` FROM `" .
-         ALLY_TABLE . "` WHERE `id`=`" . CIV_TABLE .
-         "`.`civ_ally` LIMIT 1
-           ) > 0,
-          ( SELECT `name` FROM `" .
-         ALLY_TABLE . "` WHERE `id`=`" . CIV_TABLE . "`.`civ_ally` LIMIT 1) , '-')
-) as `ally`  FROM `" . CIV_TABLE . "`,`" .
-         SERVER . "_map` WHERE `id`='$vid' AND `" . SERVER ."_map`.`civ_id`=`" . CIV_TABLE . "`.`civ_id`");
+        $village=Model_map::getInstance()->getVillageArray();
         $reply = array('data' => false, 'html' => false, 'javascript' => false, 
         'update' => array(
-        'ids' => array('village_player' => $village['civ_name'], 
-        'village_name' => $village['name'], 'village_ally' => $village['ally'])));
+        'ids' => array('village_player' => $village[$vid]['civ_name'], 
+        'village_name' => $village[$vid]['name'], 'village_ally' => $village[$vid]['ally'])));
         echo json_encode($reply);
         Zend_Controller_Action_HelperBroker::removeHelper('viewRenderer');
     }

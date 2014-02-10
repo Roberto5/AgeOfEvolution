@@ -550,7 +550,6 @@ class S1_ProcessingController extends Zend_Controller_Action
                  print_r($sup['defender'], true) . "' risorse raziate '" .
                  print_r($par['resource'], true) . "'");
                 break;
-             //@todo altri tipi si movimenti
         }
         return $finish;
     }

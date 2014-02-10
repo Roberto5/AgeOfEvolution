@@ -12,7 +12,7 @@ class RegController extends Zend_Controller_Action
     }
     public function indexAction ()
     {
-    	//@todo aggiunstare
+    	//@todo testare validazione email
     	global $messRegisterMail;
         $form = new Form_Register();
         $form->setAction($this->view->url(array('controller' => 'reg')));
@@ -21,7 +21,7 @@ class RegController extends Zend_Controller_Action
             $this->view->send = true;
             if ($form->isValid($_POST)) {
                 $this->view->type = 1;
-                $this->view->text = $this->t->_("registrazione avvenuta con successo");
+                $this->view->text = "[REG_SUCCESS]";
                 $post = $form->getValues();
                 $conf = Zend_Registry::get("config");
                 $code = "";

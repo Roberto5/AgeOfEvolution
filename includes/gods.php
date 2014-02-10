@@ -16,7 +16,7 @@ class master3 // Difensiva
 }
 class master4 // Economica
 {
-	static $prod_bonus = array('0' => array(0,0,5,0), '1' => array(0,0,50,0)); // array(null,%prod1,%prod2,%prod3)
+	static $prod_bonus = array('0' => array(0,5,0,0), '1' => array(0,50,0,0)); // array(null,%prod1,%prod2,%prod3)
 	static $troops_bonus = array('0' => array(0,0,0), '1' => array(0,0,10)); // array(%atk,%hpatk,%hpdef)
 }
 ?>

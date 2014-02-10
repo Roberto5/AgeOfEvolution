@@ -270,7 +270,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 					$bool = true;
 					if ($Troops_Array[$i]::$age != $this->getAge())
 						$bool = false;
-					//@todo altri controlli sulle truppe disponibili
+					//altri controlli sulle truppe disponibili
 					if ($Troops_Array[$i]::$condiction) {
 						$res = $Troops_Array[$i]::$condiction['research'];
 						$build = $Troops_Array[$i]::$condiction['build'];
@@ -753,6 +753,11 @@ class Model_civilta extends Zend_Db_Table_Abstract
 		
 		if ((is_string($y))&&($y=="id")) $vid=$x;
 		else $vid=Model_map::getInstance()->getIdFromCoord($x, $y);
+		$area=json_decode(file_get_contents(MAP_FILE),true);
+		//.layers[0].data
+		$log=Zend_Registry::get('log');
+		$log->debug($area['layers'][0]['data'][$vid],'area');
+		$bonus=Model_map::getInstance()->calcbonus($area['layers'][0]['data'][$vid]);
 		self::$_defaultDb->insert(SERVER.'_map', array(
 			'id'=>$vid
 			,'civ_id'=>$civ_id
@@ -769,6 +774,9 @@ class Model_civilta extends Zend_Db_Table_Abstract
 			,'production_3'=>prod3::$prod[0]
 			,'agg'=>mktime()
 			,'aggPop'=>mktime()
+			,'prod1_bonus'=>$bonus[0]
+			,'prod2_bonus'=>$bonus[1]
+			,'prod3_bonus'=>$bonus[2]
 		));
 		self::$_defaultDb->query("INSERT INTO `" . SERVER . "_building` (`village_id`,`type`,`liv`,`pos`,`pop`)
 				value ('" . $vid . "','1','0','0','1'), 
