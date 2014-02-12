@@ -56,6 +56,7 @@ PASS_LENG@La password deve contenere 8 caratteri
 PROFILE@Profilo
 RANDOM@Casuale
 RECOVER@Inserisci l'email dell'account da recuperare
+REFRESH@Aggiorna
 REG@Registrati
 REGLIKE@Registrato come
 REG_SUCCESS@Registrazione avvenuta con successo

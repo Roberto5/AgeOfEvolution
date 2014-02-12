@@ -22,7 +22,7 @@ class S1_BuildingController extends Zend_Controller_Action
     private $pos;
     private $p;
     private $log;
-    private $token;
+    //private $token;
     public function init ()
     {
         $this->civ = Model_civilta::getInstance();
@@ -35,7 +35,7 @@ class S1_BuildingController extends Zend_Controller_Action
         $this->t = Zend_Registry::get("translate");
         $this->db = Zend_Db_Table::getDefaultAdapter();
         $this->log = Zend_Registry::get("log");
-        $this->token = token_ctrl($this->getRequest()->getParams());
+        //$this->token = token_ctrl($this->getRequest()->getParams());
     }
     /**
      * The default action - show the home page
@@ -48,7 +48,7 @@ class S1_BuildingController extends Zend_Controller_Action
         $module = $this->getRequest()->getModuleName();
         $this->view->civ = $this->civ;
         $age = $this->civ->getAge();
-        $token = token_set("tokenB");
+        //$token = token_set("tokenB");
         $age = $this->civ->getAge();
         $display = '';
         if ($this->civ->village->building[$this->now]->data[$this->pos] != null) {
@@ -156,11 +156,11 @@ class S1_BuildingController extends Zend_Controller_Action
 			<td>' . date("H:i:s", $train[$i]['time']) . '</td></tr>';
                     }
                     $display .= "</table><br/>";
-                    $tokenc = token_set("tokenCo");
+                    //$tokenc = token_set("tokenCo");
                     $display .= $Building_Array[$type - 1]::$content . ' <h3>' .
                      $this->t->_('colonizzazioni') . ' ' . $n . '/' . $liv . '</h3>
                 	<form action="' . $this->_helper->url("traincolony", 
-                    "trainer", null, array('tokenCo' => $tokenc)) .
+                    "trainer", null/*, array('tokenCo' => $tokenc)*/) .
                      '" method="post"><div>' . $img->resource(3, 0);
                     for ($i = 0; $i < 3; $i ++)
                         $display .= ' ' . colony::$cost[$i] . ' ' .
@@ -169,16 +169,16 @@ class S1_BuildingController extends Zend_Controller_Action
                      $this->t->_('Assumi') . '" /></form>';
                     break;
                 case RESEARCH:
-                    $tokenRe = token_set("tokenRe");
+                    //$tokenRe = token_set("tokenRe");
                     $pr = $this->civ->pr;
                     $bpr = $this->civ->bpr;
                     $disp = $this->civ->research->dispRes();
                     global $research_array;
                     $display .= $this->t->_('Punti ricerca disponibili') . ' :' .
                      ($pr - $bpr) .
-                     '<script type="text/javascript">ev.token.tokenRe=\'' .
-                     $tokenRe . '\';</script>
-                	<table class="table-research">
+                     //'<script type="text/javascript">ev.token.tokenRe=\'' .
+                     //$tokenRe . '\';</script>'.
+                	'<table class="table-research">
                 	<thead>
                 		<tr>
                 			<th>' . $this->t->_('Nome') . '</th>
@@ -257,7 +257,7 @@ class S1_BuildingController extends Zend_Controller_Action
                 $display .= '<div><a href="' . $this->view->url(
                 array('module' => $this->req->getModuleName(), 
                 'controller' => 'building', 'action' => 'upgrade', 
-                'pos' => $this->pos, 'tokenB' => $token)) . '">' .
+                'pos' => $this->pos/*, 'tokenB' => $token*/)) . '">' .
                  $this->t->_($button) . '</a></div>';
             }
         } else { // costruzione edificio
@@ -302,7 +302,7 @@ class S1_BuildingController extends Zend_Controller_Action
                         $display .= '<div><a href="' . $this->view->url(
                         array('module' => $this->req->getModuleName(), 
                         'controller' => 'building', 'action' => 'build', 
-                        'pos' => $this->pos, 'tokenB' => $token, 'type' => $key)) .
+                        'pos' => $this->pos/*, 'tokenB' => $token*/, 'type' => $key)) .
                          '">' . $this->t->_($button) . '</a></div>';
                     }
                 }
@@ -320,7 +320,7 @@ class S1_BuildingController extends Zend_Controller_Action
         $this->civ->getAge(), $type - 1);
         $can = $this->civ->village->building[$this->now]->canBuild($p['cost'], 
         $this->civ->getResource(), 0, $this->pos,$type,$this->civ->getAge());
-        if (($can['bool']) && ($this->token['tokenB'])) {
+        if (($can['bool']) /*&& ($this->token['tokenB'])*/) {
         	$cost=$Building_Array[$type - 1]::$cost[0];
         	$cost[3]=0;
             $this->civ->aggResource($cost);
@@ -345,7 +345,7 @@ class S1_BuildingController extends Zend_Controller_Action
             if (! $can['bool'])
                 $this->view->error = $can['mess'];
         }
-        $this->civ->refresh->addToken('tokenB', token_set("tokenB"));
+        //$this->civ->refresh->addToken('tokenB', token_set("tokenB"));
         if (! $_POST['ajax'])
             $this->_helper->redirector("index", "index", 
             $this->req->getModuleName());
@@ -359,7 +359,7 @@ class S1_BuildingController extends Zend_Controller_Action
         $this->p['cost'], $this->civ->getResource(), $liv, $this->pos,0,$this->civ->getAge());
         $this->view->layout()->x = 300;
         $this->view->layout()->y = 200;
-        if (($can['bool']) && ($this->token['tokenB'])) {
+        if (($can['bool']) /*&& ($this->token['tokenB'])*/) {
             if (isset(
             $this->civ->village->building[$this->now]->data[$this->pos])) {
                 $type = $this->civ->village->building[$this->now]->data[$this->pos]['type'];
@@ -385,7 +385,7 @@ class S1_BuildingController extends Zend_Controller_Action
             if (! $can['bool'])
                 $this->view->error = $can['mess'];
         }
-        $this->civ->refresh->addToken('tokenB', token_set("tokenB"));
+        //$this->civ->refresh->addToken('tokenB', token_set("tokenB"));
         if (! $_POST['ajax'])
             $this->_helper->redirector("index", "index", 
             $this->req->getModuleName());
@@ -416,7 +416,7 @@ class S1_BuildingController extends Zend_Controller_Action
         $disp = $liv - $this->civ->getMercantBusy();
         $this->view->disp = $disp;
         $this->view->liv = $liv;
-        $this->view->token = token_set("tokenM");
+        //$this->view->token = token_set("tokenM");
         $this->view->travel = $this->civ->getMercantsTravel();
         $this->view->res = array($list[$this->now]['resource_1'], 
         $list[$this->now]['resource_2'], $list[$this->now]['resource_3']);
@@ -429,7 +429,7 @@ class S1_BuildingController extends Zend_Controller_Action
     {
         Zend_Layout::getMvcInstance()->disableLayout();
         $this->view->disp = $this->civ->dispTroops;
-        $this->view->token = token_set("tokenT");
+        //$this->view->token = token_set("tokenT");
         $this->view->training = $this->civ->training;
         $this->view->section = $this->getRequest()->getParam("section", 1);
         $this->view->age = $this->civ->getAge();
@@ -474,6 +474,6 @@ class S1_BuildingController extends Zend_Controller_Action
             $this->civ->refresh(array('order'=>true));
         } else
             $this->view->error = $this->_t->_('nessun edificio da demolire!');
-        $this->civ->refresh->addToken('tokenB', token_set("tokenB"));
+        //$this->civ->refresh->addToken('tokenB', token_set("tokenB"));
     }
 }

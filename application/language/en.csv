@@ -55,6 +55,7 @@ PASS_LENG@The password must be 8 characters
 PROFILE@Profile
 RANDOM@Random
 RECOVER@Insert the email of account to recover
+REFRESH@Refresh
 REG@Register
 REGLIKE@Registered like
 REG_SUCCESS@Registration was successful

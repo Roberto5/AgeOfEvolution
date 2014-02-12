@@ -129,13 +129,11 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
         $busy = (int) $this->civ->village->data[$now]['busy_pop'] + $this->civ->poptroop +
          $this->civ->popc;
         $maxP = $this->civ->village->building[$now]->getCapTot(HOUSE);
-        $r .= $busy . '<img src="' . $this->baseUrl .
-         '/common/images/popbusy.gif" alt="[' . $t->_("lavoratori") .
-         ']" title="' . $t->_("lavoratori") . '" width="16" height="16"/>/';
-        $n = 3;
+        
+        $r .= $busy . $this->view->image()->resource(3, $age).'/';
         $r .= ($maxP < $pop ? '<blink><span style="color:red;">' : '') . $pop .
          ($maxP < $pop ? '</span></blink>' : '');
-        $r .= $this->view->image()->resource($n, $age);
+        $r .= $this->view->image()->resource(4, $age);
         $r .= ' ' . $maxP . '<img src="' . $this->baseUrl .
          '/common/images/home.gif" alt="[' . $t->_('case') . ']" title="' .
          $t->_('case') . '" width="16" height="16"/></div></center>';

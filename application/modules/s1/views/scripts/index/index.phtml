@@ -95,6 +95,7 @@ if ($this->hasCivilty > 1) {
 		{"'.$t->_('invia mercanti (non implementato)').'":{onclick:ev.market,icon:"'.$this->baseUrl('/common/images/market.png').'"}}	
 	];
 	$(function () {
+    	ev.village.init();
 		$(".map").contextMenu(menu,{theme:"human"});
 		if (m=location.hash.match(/(-*\d+)\|(-*\d+)(@*)/)) {
         // #2|2-dsf

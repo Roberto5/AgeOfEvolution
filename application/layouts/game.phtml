@@ -15,14 +15,14 @@ if ($this->auth->hasIdentity()) {
 $iconSize=16;
 $this->myMenu() 
 	->add('[PROFILE]',"javascript:$('#profile').dialog('open');",null,null,8,'account',null,$this->path.'/common/images/pannello_utente.png',$iconSize,false)
-	->add('[CITY]',"javascript:ev.request('".$this->module."/index/village','post',{ajax:1});",null,null,9,null,null,$this->path.'/common/images/city.png',$iconSize,false)
+	->add('[CITY]',"javascript:ev.village.open(ev.focus.id);",null,null,9,null,null,$this->path.'/common/images/city.png',$iconSize,false)
 	->add('[MAP]',$this->module,'index','index',10,null,null,$this->path.'/common/images/mappa.gif',$iconSize,false)
 	->add('Report',"javascript:ev.request('".$this->module."/report','post',{ajax:1});",null,null,11,null,null,$this->path.'/common/images/report1.gif',$iconSize,false)
 	->add('[MESSAGES]',"javascript:ev.request('".$this->module."/message','post',{ajax:1});",null,null,12,null,null,$this->path.'/common/images/mess_read0.gif',$iconSize,false)
 	->add('[TOP]',"javascript:ev.request('".$this->module."/top','post',{ajax:1});",null,null,13,null,null,$this->path.'/common/images/top.png',$iconSize,false)
 	->add('Debug',$this->module,'debug',null,14,null,null,$this->path.'/common/images/tool.gif',$iconSize,false)
-	->add('Help',"javascript:ev.help('index');",null,null,99,null,null,$this->path.'/common/images/help.png',$iconSize,false);
-	
+	->add('Help',"javascript:ev.help('index');",null,null,99,null,null,$this->path.'/common/images/help.png',$iconSize,false)
+	->add('[REFRESH]',"javascript:ev.request(module+'/index/refresh','post',{ajax:1});",null,null,99,null,null,$this->path.'/common/images/refresh.gif',$iconSize,false);
 
  $width=$this->myMenu()->getPageCount()*28;
 

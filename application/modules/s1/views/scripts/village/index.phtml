@@ -2,18 +2,19 @@
 for ($i = 1; $i <= 5; $i++) {
 	$this->key["{res$i}"]=$this->image()->resource($i-1, $this->age);
 }
-$this->key["HOME"]=$this->image()->parse('home');
+//$this->key["{HOME}"]=$this->image()->parse('[home]');
 Zend_View_Filter_Tmpeng::addkey($this->key);
 ?>
-<div id="resbar5100" style="text-align: center;">
+<div id="cv{vid}">
+<div id="resbar{vid}" style="text-align: center;">
 	<h2>
-		Villaggio <span id="nameVillage5100"
-			ondblclick="ev.changeNameVillage(5100)"></span>
+		Villaggio <span id="nameVillage{vid}"
+			ondblclick="ev.village.changeName({vid})">{name}</span>
 	</h2>
 	<div>
-		risorse : &nbsp; &nbsp; <span class="resource"></span> {res1} &nbsp;
-		&nbsp; <span class="resource"></span> {res2} &nbsp; &nbsp; <span
-			class="resource"></span> {res3} &nbsp; &nbsp; 0{res4}/100{res5} 100 HOME
+		risorse : &nbsp; &nbsp; <span class="resource">0</span> {res1} &nbsp;
+		&nbsp; <span class="resource">0</span> {res2} &nbsp; &nbsp; <span
+			class="resource">0</span> {res3} &nbsp; &nbsp; 0{res4}/100{res5} 100 [home]
 	</div>
 </div>
 <span style="color: green;">Bonus difesa: 100%</span>
@@ -193,7 +194,7 @@ Zend_View_Filter_Tmpeng::addkey($this->key);
 </div>
 <br>
 <h3>costruzioni</h3>
-<div id="queue5100"></div>
+<div id="queue{vid}"></div>
 <h3>demolizioni</h3>
-<div id="destroy5100"></div>
-
+<div id="destroy{vid}"></div>
+</div>

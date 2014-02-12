@@ -39,3 +39,7 @@ windows's option
 * **id** $this->layout()->id windows's id
 * **button** $this->layout()->button boolean add button okon the windows
 * **error** $this->layout()->error boolean apply the error style
+
+image parsing
+
+$this->image()->parse('[tag|heigth|width|funntion()]');

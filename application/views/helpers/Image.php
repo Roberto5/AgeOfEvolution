@@ -48,7 +48,7 @@ class Zend_View_Helper_image extends Zend_View_Helper_Abstract
 			}
 		}
 		if ($src&&$alt)
-		return '<img src="'.$this->baseUrl . $src . '" alt="[' . $alt . ']" '.($title? 'title="' . $title .
+		return '<img src="'.$this->baseUrl . $src . '" alt="' . $alt . '" '.($title? 'title="' . $title .
          '"' : '').' width="' . $width . '" height="' . $heigth . '" '.$a.' />';
 		else return $this;
 	}
@@ -74,7 +74,6 @@ class Zend_View_Helper_image extends Zend_View_Helper_Abstract
 				$url = "pop.gif";
 				$title = $alt = $t->_("popolazione");
 			}
-			;
 		}
 		 
 		$src =  "/common/images/" . $url;
@@ -101,13 +100,13 @@ class Zend_View_Helper_image extends Zend_View_Helper_Abstract
 		$this->view = $view;
 	}
 	/**
-	 * sostituisce dei tag [tag] con delle immagini
+	 * sostituisce dei tag [tag]o [tag|heigth|width|funntion()] con delle immagini
 	 * @param String $text testo da sostituire
 	 * @return String testo sostituito con il codice html
 	 */
 	public function parse($text) {
 		foreach ($this->images as $key => $value) {
-			$pattern="/\[($key)\|(\d+)\|(\d+)\]|\[($key)\]|\[($key)\|(\d+)\|(\d+)\|([\w_\(\)\.]+)\]/";
+			$pattern="/\[($key)\|(\d+)\|(\d+)\]|\[($key)\]|\[($key)\|(\d+)\|(\d+)\|([\w_\(\)\.{\};]+)\]/";
 			$bool=preg_match($pattern, $text,$mat);
 			if ($bool) {
 				$h=$mat[3]+$mat[7];if ($h<1) $h=" ";

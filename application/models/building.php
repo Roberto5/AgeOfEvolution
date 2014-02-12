@@ -57,8 +57,9 @@ class Model_building extends Zend_Db_Table_Abstract
     {
         global $Building_Array;
         $AgeBonus = $age + 1;
+        $pop=isset($this->data[$pos])? $this->data[$pos]['pop'] :0;
         $prop = array('liv' => $this->getLiv($pos), 
-        'type' => $this->getType($pos),'pop'=>$this->data[$pos]['pop']);
+        'type' => $this->getType($pos),'pop'=>$pop);
         if (! $type)
             $type = $prop['type']-1;
         switch ($type+1) {
@@ -157,7 +158,7 @@ class Model_building extends Zend_Db_Table_Abstract
      */
     function getLiv ($pos)
     {
-        return $this->data[$pos]['liv'];
+        return isset($this->data[$pos]) ?$this->data[$pos]['liv']:0;
     }
     /**
      * ritorna i tipo della struttura

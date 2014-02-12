@@ -24,7 +24,7 @@ function resetres() {
 function counter()
 {
     // aggiornamento risorse
-    $resource=$("#cv"+ev.focus.id+" .resource");
+    $resource=$("#resbar"+ev.focus.id+" .resource");
     for (i=0;i<$resource.length;i++)
     {
         now=$resource.eq(i).text();

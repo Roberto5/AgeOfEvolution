@@ -141,9 +141,7 @@ var ev = {
 								// $('div.building').addClass("empty");
 								for (i = 0; i < ev.totpos; i++) {
 									if (b[i]) {
-										$(
-												'#cv' + ev.focus.id
-														+ ' div.building.pos'
+										$('#cv' + ev.focus.id+ ' div.building.pos'
 														+ i).removeClass(
 												"empty");
 										$(
@@ -483,36 +481,81 @@ var ev = {
 			location.reload();
 		});
 	},
-	changeNameVillage : function(vid) {
-		if (this.flagName) {
-			this.flagName = false;
-			n = $("#nameVillage" + vid).text();
-			$("#nameVillage" + vid)
-					.html(
-							'<form style="display:inline;" id="nameform"><input id="nameInput" size="10" value="'
-									+ n + '" /></form>');
-			$("#nameform").submit(
-					function() {
-						n = $("#nameInput").val();
-						$("#nameVillage" + vid).text(n);
-						data = {
-							id : vid,
-							name : n,
-							ajax : 1
-						};
-						ev.request(module + "/profile/changenamevillage",
-								"post", data, function(data) {
-									if (data.data == true)
-										$(document).trigger("quest", 1);
-								});
-						ev.flagName = true;
-					});
-			/*
-			 * $("#nameInput").keydown(function(e) { e.stopPropagation(); });
-			 */
+
+	// registrazione civiltà
+	village : {
+		template : '',
+		init : function() {
+			$.ajax({
+				url : path + '/' + module + '/village',
+				success : function(data) {
+					ev.village.template = data;
+				}
+			});
+		},
+		changeName : function(vid) {
+			if (this.flagName) {
+				this.flagName = false;
+				n = $("#nameVillage" + vid).text();
+				$("#nameVillage" + vid)
+						.html(
+								'<form style="display:inline;" id="nameform"><input id="nameInput" size="10" value="'
+										+ n + '" /></form>');
+				$("#nameform").submit(
+						function() {
+							n = $("#nameInput").val();
+							$("#nameVillage" + vid).text(n);
+							data = {
+								id : vid,
+								name : n,
+								ajax : 1
+							};
+							ev.request(module + "/profile/changenamevillage",
+									"post", data, function(data) {
+										if (data.data == true)
+											$(document).trigger("quest", 1);
+									});
+							ev.flagName = true;
+						});
+				/*
+				 * $("#nameInput").keydown(function(e) { e.stopPropagation();
+				 * });
+				 */
+			}
+		},
+		open : function(vid) {
+			content={};
+			content.text=this.template.replace(/\{vid\}/gi, vid);
+			content.title=ev.map.village[vid].name;
+			content.text=content.text.replace(/\{name\}/gi, content.title);
+			ev.focus.id=vid;
+			ev.windows({x:1000,y:740}, 'centre', content);
+			$('.building:not(.empty)','.village_view').contextMenu(ev.menubuilding,{theme:'human'});
+			$("div.drag").draggable({
+					revert : "invalid",
+					helper : "clone",
+					cursor : "move",
+			});
+			$("div.empty").droppable({
+					accept : ".drag",
+					drop : function(event, ui) {
+						$item=ui.draggable;
+						c=$item.attr("class")
+						$item.fadeOut(function() {
+							$(event.target).removeClass("empty");
+							$(event.target).addClass(c);
+							$('img',event.target).attr('title',$('img',$item).attr('title'));
+						});
+						//$item.appendTo($('#pannel'));
+						m=$(event.target).attr("class").match(/pos(\d+)/);
+						t=$item.find(".Btype").val();
+						ev.request(module+'/building/build/type/'+t+'/pos/'+m[1]+'/tokenB/'+ev.token.tokenB,'post',{ajax:1});
+					}
+			});
+			ev.request('s1/index/refresh','post',{ajax:1})
 		}
 	},
-	// registrazione civiltà
+
 	createciv : function() {
 		ev.request(module + "/index/createciv", "post", {
 			server : module,
@@ -678,10 +721,7 @@ var ev = {
 				name = ev.lang.valley;
 			}
 			if (this.village[id].civ_id == ev.civ.civ_id) {
-				// todo modificare
-				ev.request('s1/index/village', 'post', {
-					ajax : 1
-				});
+				ev.village.open(id);
 			} else {
 				text = '<div>' + ev.lang.village1
 						+ ' <a class="civ" href="#civ' + cid
