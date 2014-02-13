@@ -44,7 +44,7 @@ $acl->addResource('account','priv_zone');
 $acl->addResource("track","default");
 //altro
 $acl->addResource("debug");
-
+$acl->addResource('nobanner');
 
 //permessi del guest
 $acl->allow("guest","default");

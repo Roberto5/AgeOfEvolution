@@ -11,6 +11,12 @@ $this->action = $req->getActionName();
 $this->controller = $req->getControllerName();
 $this->ev = $config = Zend_Registry::get('config');
 $this->alerts = false;
+/**
+ * 
+ * Enter description here ...
+ * @var Zend_Acl
+ */
+$acl=Zend_Registry::get('acl');
 if ($this->auth->hasIdentity()&& $this->game) {
 	$age=Zend_Registry::get("age");
 	$par = "&s=" . ($age + 1);
@@ -266,11 +272,12 @@ echo $this->headTitle();
 		$banner.='<div id="hidad"><a href="#">[HIDE]</a></div>';
 	}
 	$banner.='</div>';
-	if ($this->game) echo $banner;
+	$nobanner=$acl->isAllowed(Model_role::getRole(),'nobanner');
+	if ($this->game && !$nobanner) echo $banner;
 	?>
 		<div id="container">
 			<?php 
-			if (!$this->game) echo $banner;
+			if (!$this->game && !$nobanner) echo $banner;
 			?>
 		
 			<div id="load"></div>
