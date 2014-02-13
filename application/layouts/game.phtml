@@ -38,10 +38,10 @@ $this->myMenu()
 if ($_COOKIE['nav_pannel']=='true') {
 	echo 'style="display:none;"';
 }?> id="nav_pannel"><div id="navpad">
-					<div id="freccia_su" class="arrow_up" onclick="ev.map.arrow('up')"></div>
-					<div id="freccia_sx" class="arrow_sx" onclick="ev.map.arrow('left')"></div>
-					<div id="freccia_giu" class="arrow_down" onclick="ev.map.arrow('down')"></div>
-					<div id="freccia_dx" class="arrow_dx" onclick="ev.map.arrow('right')"></div>
+					<div id="freccia_su" class="arrow_up" onmousedown="ev.map.arrow('up')" onmouseup="ev.map.arrow('stop')"></div>
+					<div id="freccia_sx" class="arrow_sx" onmousedown="ev.map.arrow('left')" onmouseup="ev.map.arrow('stop')"></div>
+					<div id="freccia_giu" class="arrow_down" onmousedown="ev.map.arrow('down')" onmouseup="ev.map.arrow('stop')"></div>
+					<div id="freccia_dx" class="arrow_dx" onmousedown="ev.map.arrow('right')" onmouseup="ev.map.arrow('stop')"></div>
 				</div>
 				<input id="x" class="number" size="3" maxlength="4" /> | <input id="y" class="number" size="3" maxlength="4" /> 
 				<button onclick="ev.map.centre[0]=parseInt($('#x').val());ev.map.centre[1]=parseInt($('#y').val());ev.map.shift();">OK</button>

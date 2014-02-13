@@ -36,12 +36,17 @@ $t = Zend_Registry::get("translate");
     	$("#map").draggable({
     		grid: [50,50],
     		revert: true,
+    		cursor:"move",
     		helper:function(){
     			return $(\'<div></div>\');
     		},
     		start: function(e,ui) {
     			ev.map.pos=ui.position;
     			ev.map.prev={top:0,left:0};
+    			ev.ondrag=true;
+    		},
+    		stop: function() {
+    			ev.ondrag=false;
     		},
     		drag:function(e,ui){
     			t=Math.round((ev.map.pos.top-ui.position.top)/50);

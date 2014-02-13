@@ -200,7 +200,7 @@ class S1_IndexController extends Zend_Controller_Action
     }
     public function sortAction ()
     {
-        $user = Zend_Registry::get("user");
+        $user = Model_user::getInstance();
         // ricevo l'array tramite post
         $list = $_POST['list'];
         if (is_array($list)) { //se è un array
@@ -208,7 +208,7 @@ class S1_IndexController extends Zend_Controller_Action
             foreach ($list as $key => $value) { //scorro l'array con foreach
                 $value = substr($value, 1); //$value="v1234" quindi tolgo la v per poter cercare l'id
                 //modifico il db inserendo nella tabella del villaggio la posizione nel vettore ricevuto
-                $this->_db->update(MAP_TABLE, 
+                $this->_db->update(SERVER.'_map', 
                 array('order_n' => $key), "`id`='$value'");
             }
         }

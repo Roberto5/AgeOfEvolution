@@ -37,6 +37,7 @@ var ev = {
 	// help function
 	helpCache : new Array(),
 	helpOpen : false,
+	ondrag:false,
 	// main function
 	request : function(target, Rtype, params, callback) {
 		if (Rtype == "zend") {
@@ -481,7 +482,6 @@ var ev = {
 			location.reload();
 		});
 	},
-
 	// registrazione civiltà
 	village : {
 		template : '',
@@ -519,6 +519,9 @@ var ev = {
 			}
 		},
 		open : function(vid) {
+			c=ev.map.getCoordFromId(vid);
+			ev.map.centre=[c.x,c.y];
+			ev.map.shift();
 			content={};
 			content.text=this.template.replace(/\{vid\}/gi, vid);
 			content.title=ev.map.village[vid].name;
@@ -613,6 +616,8 @@ var ev = {
 		prev:{top:0,left:0},
 		village : new Array(),
 		size : [ 24, 18, 50 ],
+		move:false,
+		timeout:300,
 		zoom : 0,
 		centre : [ 0, 0 ],
 		focus : {},
@@ -642,14 +647,14 @@ var ev = {
 		},
 		render : function() {
 			if (this.goRender > 1) {
-				this.shift(this.centre[0], this.centre[1]);
+				this.shift();
 				this.goRender = 0;
 			}
 		},
 		getCoordFromId : function(id) {
 			id = parseInt(id);
-			x = id % ev.max[0] - parseInt(ev.map[0] / 2);
-			y = parseInt(ev.map[1] / 2) - parseInt(id / ev.max[0]);
+			x = id % ev.max[0] - parseInt(ev.max[0] / 2);
+			y = parseInt(ev.max[1] / 2) - parseInt(id / ev.max[0]);
 			return {
 				'x' : x,
 				'y' : y
@@ -673,23 +678,46 @@ var ev = {
 			ev.map.get_village_info(x + ":" + y);
 		},
 		arrow : function(direction) {
+			if ((direction=="continue")&&this.move) {
+				direction=ev.map.move;
+			}
+			else {
+				ev.map.timeout=300;
+			}
+			
 			switch (direction) {
 			case 'up':
-				ev.map.centre[1]++;
+				ev.map.centre[1]++;this.move=direction;
 				break;
 			case 'down':
-				ev.map.centre[1]--;
+				ev.map.centre[1]--;this.move=direction;
 				break;
 			case 'right':
-				ev.map.centre[0]++;
+				ev.map.centre[0]++;this.move=direction;
 				break;
 			case 'left':
-				ev.map.centre[0]--;
+				ev.map.centre[0]--;this.move=direction;
+				break;
+			case 'stop':
+				ev.map.move=false;
 				break;
 			}
-			this.shift();
+			
+			if (this.move) {
+				setTimeout(function(){
+					ev.map.arrow('continue');
+				},ev.map.timeout);
+				if (ev.map.timeout>50) ev.map.timeout-=50;
+				ev.map.shift();
+			}
+			
 		},
 		get_village_info : function(i, j, n) {
+
+			if (ev.ondrag) {
+				ev.ondrag=false;
+				return false;
+			}
 			c = this.getCoord(i, j);
 			x = c.x;
 			y = c.y;
@@ -833,9 +861,9 @@ var ev = {
 					// own area-23
 				}
 			}
+			location.hash=this.centre[0]+'|'+this.centre[1];
 			t = new Date();
-			console.log('map shift exsecution time: ', (t.getTime() - before),
-					" ms ");
+			console.log('map shift exsecution time: ', (t.getTime() - before)," ms ");
 		}
 	},
 	troops : {
