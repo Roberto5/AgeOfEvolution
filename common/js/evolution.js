@@ -497,8 +497,7 @@ var ev = {
 			if (this.flagName) {
 				this.flagName = false;
 				n = $("#nameVillage" + vid).text();
-				$("#nameVillage" + vid)
-						.html(
+				$("#nameVillage" + vid).html(
 								'<form style="display:inline;" id="nameform"><input id="nameInput" size="10" value="'
 										+ n + '" /></form>');
 				$("#nameform").submit(
@@ -517,10 +516,6 @@ var ev = {
 									});
 							ev.flagName = true;
 						});
-				/*
-				 * $("#nameInput").keydown(function(e) { e.stopPropagation();
-				 * });
-				 */
 			}
 		},
 		open : function(vid) {
@@ -534,7 +529,7 @@ var ev = {
 			$("div.drag").draggable({
 					revert : "invalid",
 					helper : "clone",
-					cursor : "move",
+					cursor : "move"
 			});
 			$("div.empty").droppable({
 					accept : ".drag",
@@ -552,10 +547,9 @@ var ev = {
 						ev.request(module+'/building/build/type/'+t+'/pos/'+m[1]+'/tokenB/'+ev.token.tokenB,'post',{ajax:1});
 					}
 			});
-			ev.request('s1/index/refresh','post',{ajax:1})
+			ev.request('s1/index/refresh','post',{ajax:1});
 		}
 	},
-
 	createciv : function() {
 		ev.request(module + "/index/createciv", "post", {
 			server : module,
@@ -615,6 +609,8 @@ var ev = {
 	},
 	// map object
 	map : {
+		pos:{top:0,left:0},
+		prev:{top:0,left:0},
 		village : new Array(),
 		size : [ 24, 18, 50 ],
 		zoom : 0,
@@ -720,7 +716,7 @@ var ev = {
 				prod3_bonus = '-';
 				name = ev.lang.valley;
 			}
-			if (this.village[id].civ_id == ev.civ.civ_id) {
+			if ((this.village[id])&&(this.village[id].civ_id == ev.civ.civ_id)) {
 				ev.village.open(id);
 			} else {
 				text = '<div>' + ev.lang.village1

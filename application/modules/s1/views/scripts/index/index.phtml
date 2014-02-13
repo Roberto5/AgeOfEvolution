@@ -33,6 +33,35 @@ $t = Zend_Registry::get("translate");
     $(function(){
     	ev.map.init();
     	$("#modalwindows").dialog({modal:true});
+    	$("#map").draggable({
+    		grid: [50,50],
+    		revert: true,
+    		helper:function(){
+    			return $(\'<div></div>\');
+    		},
+    		start: function(e,ui) {
+    			ev.map.pos=ui.position;
+    			ev.map.prev={top:0,left:0};
+    		},
+    		drag:function(e,ui){
+    			t=Math.round((ev.map.pos.top-ui.position.top)/50);
+    			l=-Math.round((ev.map.pos.left-ui.position.left)/50);
+    			//console.log(l,t);
+    			bool=false;
+    			if (ev.map.prev.top!=t) {
+    				ev.map.centre[1]-=t-ev.map.prev.top;
+    				ev.map.prev.top=t;
+    				bool=true;
+    			}
+    			if (ev.map.prev.left!=l) {
+    				ev.map.centre[0]-=l-ev.map.prev.left;
+    				ev.map.prev.left=l;
+    				bool=true;
+    			}
+    			if (bool) ev.map.shift();
+    		},
+    		//cursorAt: { top: 25, left: 25 },
+    	})
     });
     ';
 $this->headScript()->captureEnd();
