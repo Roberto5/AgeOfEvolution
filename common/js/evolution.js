@@ -37,7 +37,7 @@ var ev = {
 	// help function
 	helpCache : new Array(),
 	helpOpen : false,
-	ondrag:false,
+	ondrag : false,
 	// main function
 	request : function(target, Rtype, params, callback) {
 		if (Rtype == "zend") {
@@ -142,7 +142,9 @@ var ev = {
 								// $('div.building').addClass("empty");
 								for (i = 0; i < ev.totpos; i++) {
 									if (b[i]) {
-										$('#cv' + ev.focus.id+ ' div.building.pos'
+										$(
+												'#cv' + ev.focus.id
+														+ ' div.building.pos'
 														+ i).removeClass(
 												"empty");
 										$(
@@ -497,7 +499,8 @@ var ev = {
 			if (this.flagName) {
 				this.flagName = false;
 				n = $("#nameVillage" + vid).text();
-				$("#nameVillage" + vid).html(
+				$("#nameVillage" + vid)
+						.html(
 								'<form style="display:inline;" id="nameform"><input id="nameInput" size="10" value="'
 										+ n + '" /></form>');
 				$("#nameform").submit(
@@ -519,38 +522,54 @@ var ev = {
 			}
 		},
 		open : function(vid) {
-			c=ev.map.getCoordFromId(vid);
-			ev.map.centre=[c.x,c.y];
+			c = ev.map.getCoordFromId(vid);
+			ev.map.centre = [ c.x, c.y ];
 			ev.map.shift();
-			content={};
-			content.text=this.template.replace(/\{vid\}/gi, vid);
-			content.title=ev.map.village[vid].name;
-			content.text=content.text.replace(/\{name\}/gi, content.title);
-			ev.focus.id=vid;
-			ev.windows({x:1000,y:740}, 'centre', content);
-			$('.building:not(.empty)','.village_view').contextMenu(ev.menubuilding,{theme:'human'});
+			content = {};
+			content.text = this.template.replace(/\{vid\}/gi, vid);
+			content.title = ev.map.village[vid].name;
+			content.text = content.text.replace(/\{name\}/gi, content.title);
+			ev.focus.id = vid;
+			ev.windows({
+				x : 1000,
+				y : 740
+			}, 'centre', content);
+			$('.building:not(.empty)', '.village_view').contextMenu(
+					ev.menubuilding, {
+						theme : 'human'
+					});
 			$("div.drag").draggable({
-					revert : "invalid",
-					helper : "clone",
-					cursor : "move"
+				revert : "invalid",
+				helper : "clone",
+				cursor : "move"
 			});
-			$("div.empty").droppable({
-					accept : ".drag",
-					drop : function(event, ui) {
-						$item=ui.draggable;
-						c=$item.attr("class")
-						$item.fadeOut(function() {
-							$(event.target).removeClass("empty");
-							$(event.target).addClass(c);
-							$('img',event.target).attr('title',$('img',$item).attr('title'));
-						});
-						//$item.appendTo($('#pannel'));
-						m=$(event.target).attr("class").match(/pos(\d+)/);
-						t=$item.find(".Btype").val();
-						ev.request(module+'/building/build/type/'+t+'/pos/'+m[1]+'/tokenB/'+ev.token.tokenB,'post',{ajax:1});
-					}
+			$("div.empty")
+					.droppable(
+							{
+								accept : ".drag",
+								drop : function(event, ui) {
+									$item = ui.draggable;
+									c = $item.attr("class");
+									$item.fadeOut(function() {
+										$(event.target).removeClass("empty");
+										$(event.target).addClass(c);
+										$('img', event.target).attr('title',
+												$('img', $item).attr('title'));
+									});
+									// $item.appendTo($('#pannel'));
+									m = $(event.target).attr("class").match(
+											/pos(\d+)/);
+									t = $item.find(".Btype").val();
+									ev.request(module + '/building/build/type/'
+											+ t + '/pos/' + m[1] + '/tokenB/'
+											+ ev.token.tokenB, 'post', {
+										ajax : 1
+									});
+								}
+							});
+			ev.request('s1/index/refresh', 'post', {
+				ajax : 1
 			});
-			ev.request('s1/index/refresh','post',{ajax:1});
 		}
 	},
 	createciv : function() {
@@ -612,12 +631,18 @@ var ev = {
 	},
 	// map object
 	map : {
-		pos:{top:0,left:0},
-		prev:{top:0,left:0},
+		pos : {
+			top : 0,
+			left : 0
+		},
+		prev : {
+			top : 0,
+			left : 0
+		},
 		village : new Array(),
 		size : [ 24, 18, 50 ],
-		move:false,
-		timeout:300,
+		move : false,
+		timeout : 300,
 		zoom : 0,
 		centre : [ 0, 0 ],
 		focus : {},
@@ -678,44 +703,48 @@ var ev = {
 			ev.map.get_village_info(x + ":" + y);
 		},
 		arrow : function(direction) {
-			if ((direction=="continue")&&this.move) {
-				direction=ev.map.move;
+			if ((direction == "continue") && this.move) {
+				direction = ev.map.move;
+			} else {
+				ev.map.timeout = 300;
 			}
-			else {
-				ev.map.timeout=300;
-			}
-			
+
 			switch (direction) {
 			case 'up':
-				ev.map.centre[1]++;this.move=direction;
+				ev.map.centre[1]++;
+				this.move = direction;
 				break;
 			case 'down':
-				ev.map.centre[1]--;this.move=direction;
+				ev.map.centre[1]--;
+				this.move = direction;
 				break;
 			case 'right':
-				ev.map.centre[0]++;this.move=direction;
+				ev.map.centre[0]++;
+				this.move = direction;
 				break;
 			case 'left':
-				ev.map.centre[0]--;this.move=direction;
+				ev.map.centre[0]--;
+				this.move = direction;
 				break;
 			case 'stop':
-				ev.map.move=false;
+				ev.map.move = false;
 				break;
 			}
-			
+
 			if (this.move) {
-				setTimeout(function(){
+				setTimeout(function() {
 					ev.map.arrow('continue');
-				},ev.map.timeout);
-				if (ev.map.timeout>50) ev.map.timeout-=50;
+				}, ev.map.timeout);
+				if (ev.map.timeout > 50)
+					ev.map.timeout -= 50;
 				ev.map.shift();
 			}
-			
+
 		},
 		get_village_info : function(i, j, n) {
 
 			if (ev.ondrag) {
-				ev.ondrag=false;
+				ev.ondrag = false;
 				return false;
 			}
 			c = this.getCoord(i, j);
@@ -744,7 +773,8 @@ var ev = {
 				prod3_bonus = '-';
 				name = ev.lang.valley;
 			}
-			if ((this.village[id])&&(this.village[id].civ_id == ev.civ.civ_id)) {
+			if ((this.village[id])
+					&& (this.village[id].civ_id == ev.civ.civ_id)) {
 				ev.village.open(id);
 			} else {
 				text = '<div>' + ev.lang.village1
@@ -828,7 +858,7 @@ var ev = {
 			// if (ev.map.canhide)
 			$("#map_details").hide();
 		},
-		shift : function() {
+		shift : function() {// area 56
 			t = new Date();
 			before = t.getTime();
 			map = $('.map');
@@ -838,32 +868,34 @@ var ev = {
 					id = ev.map.getIdFromCoord(c.x, c.y);
 					prev_class = map.eq(n).attr('class');
 					zoom = prev_class.match(/zoom-\d+/g);
-					map.eq(n).attr('class',
-							'map ' + zoom + ' area-' + (ev.map.data[id] - 1));
-					// map.eq(n).attr('title',id);
-					village = map.eq(n).children();
-					village.attr('class', zoom);
-					own = village.children();
-					own.attr('class', zoom);
-					if (this.village[id]) {
-						village.addClass('area-26');
-						if (ev.civ.civ_id == this.village[id].civ_id)
-							own.addClass('area-23');
-						else {
-							// @todo add ally or enemy own
+					if ((Math.abs(c.x) < (ev.max[0] / 2))
+							&& (Math.abs(c.y) < (ev.max[1] / 2))) {
+						map.eq(n).attr('class','map ' + zoom + ' area-'+ (ev.map.data[id] - 1));
+						village = map.eq(n).children();
+						village.attr('class', zoom);
+						own = village.children();
+						own.attr('class', zoom);
+						if (this.village[id]) {
+							village.addClass('area-26');
+							if (ev.civ.civ_id == this.village[id].civ_id)
+								own.addClass('area-23');
+							else {
+								// @todo add ally or enemy own
+								own.addClass('map-null');
+							}
+						} else {
+							village.addClass('map-null');
 							own.addClass('map-null');
 						}
-					} else {
-						village.addClass('map-null');
-						own.addClass('map-null');
-					}
-
+					} else // @todo creare una mappa sferica create a spheric map
+						map.eq(n).attr('class', 'map ' + zoom + ' area-56');
 					// own area-23
 				}
 			}
-			location.hash=this.centre[0]+'|'+this.centre[1];
+			location.hash = this.centre[0] + '|' + this.centre[1];
 			t = new Date();
-			console.log('map shift exsecution time: ', (t.getTime() - before)," ms ");
+			console.log('map shift exsecution time: ', (t.getTime() - before),
+					" ms ");
 		}
 	},
 	troops : {
