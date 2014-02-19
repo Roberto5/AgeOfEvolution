@@ -9,7 +9,7 @@ $title=str_replace("</title>", "", $title);
 if ($update->displaytroops) {//@todo rifare
 		global $NameTroops;
 		$text= '<h3><a href="'.$this->baseUrl().'/'.$module.'/movements">
-		' . $t->_('TRUPPE PRESENTI') . '</a>
+		' . $this->t->_('TRUPPE PRESENTI') . '</a>
 		</h3><div style="padding-left: 10px;padding-right: 10px;">
                 <ul style="padding-left: 0px;">';
 		for($i=0;$update->displaytroops[$i];$i++) {

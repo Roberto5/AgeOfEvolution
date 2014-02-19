@@ -109,7 +109,7 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
         $now = $this->civ->getCurrentVillage();
         $r = '<center><h2>' . ($this->civ->getAge() < 3 ? $t->_('Villaggio') : $t->_(
         'citt&aacute;')) .
-         ' <span id="nameVillage'.$now.'" ondblclick="ev.changeNameVillage(' . $now .
+         ' <span id="nameVillage'.$now.'" ondblclick="ev.village.changeName(' . $now .
          ')">' . $this->civ->village->data[$now]['name'] . '</span></h2>';
         $res = $this->civ->getResource();
         $r .= '<div>' . $t->_('risorse') . ' : &nbsp &nbsp ';
@@ -433,12 +433,12 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
                 $count = "00:00:0?";
                  //**************************************
             $param = unserialize($value['params']);
-            $r.= '<div> '.$this->view->image('/common/images/del.gif',$t->_('cancella'),null,16,16,array('onclick'=>'ev.build.deleteQueue('.$value['id'].');')).' '.
+            $r.= '<div> <a href="#'.$t->_('DELETE').'">'.$this->view->image('/common/images/del.gif',$t->_('DELETE'),null,16,16,array('onclick'=>'ev.build.deleteQueue('.$value['id'].');')).' '.
              Model_building::$name[$this->civ->getAge()][$param['type']] . $t->_(
             ' livello ') .
              ($this->civ->village->building[$now]->getLiv($param['pos']) + 1) .
              ' <span class="countDown">' . $count . '</span> ' . $t->_(
-            "finito il ") . date("H:i:s d/m/Y", $value['time']) . "</div>";
+            "finito il ") . date("H:i:s d/m/Y", $value['time']) . "</a></div>";
         }
         return $r;
     }

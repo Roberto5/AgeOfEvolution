@@ -58,36 +58,6 @@ $(document).ready(function(){
 				ev.request(module+'/index/sort','post',{ajax:1,'list':list});	
 			}
 		});
-		var debugmenu=[
-		       		{'riempi magazzini':{
-		       				onclick:function(){
-		       					ev.request(module+"/debug/fill","post",{ajax:1});
-		       		    	}
-		       			}
-		       		},
-		       		{'aggiorna produzione':{
-		       				onclick:function (){
-		       					ev.request(module+"/debug/aggprod","post",{ajax:1});
-		       				}
-		       			}
-		       		},
-		       		{'completa evento <?php echo $select;?> <button>OK</button>':function(menuItem,cmenu,e) {
-		       				$t=$(e.target);
-		       				if ($t.is('button')) {
-		       					$event=$(menuItem).find('select');
-		       					ev.request(module+"/debug/complete","post",{ajax:1,ev:$event.val(),vid:'this'})
-		       		            return true;
-		       		        }
-		       		        else return false;
-		       			}
-		       		},
-		       		{'aggiungi 100 abitanti':{
-		       				onclick:function (){
-		       					ev.request(module+"/debug/addpop","post",{ajax:1});
-		       				}
-		       			}
-		       		}
-		];
 		var reportmenu=[{'segna come letti':{
 				onclick:function () {
 					ev.request(module+"/report/read/all/1","post",{ajax:1});

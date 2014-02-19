@@ -63,14 +63,6 @@ class S1_IndexController extends Zend_Controller_Action
             $this->view->form = $form;
         }
     }
-    public function villageAction ()
-    {
-        $this->_helper->layout()->x = 1000;
-        $this->_helper->layout()->y = 740;
-        $this->view->own = true;
-        $this->view->civ = $this->civ;
-        $this->view->disp = $this->civ->village->building[$this->now]->getDispBuilding($this->civ->getAge());
-    }
     public function searchcivAction ()
     {
         Zend_Layout::getMvcInstance()->disableLayout();

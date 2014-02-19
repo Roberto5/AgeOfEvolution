@@ -130,6 +130,36 @@ $select.='</select>';
 ?>
 <script type="text/javascript">
 <!--
+var debugmenu=[
+	       		{'riempi magazzini':{
+	       				onclick:function(){
+	       					ev.request(module+"/debug/fill","post",{ajax:1});
+	       		    	}
+	       			}
+	       		},
+	       		{'aggiorna produzione':{
+	       				onclick:function (){
+	       					ev.request(module+"/debug/aggprod","post",{ajax:1});
+	       				}
+	       			}
+	       		},
+	       		{'completa evento <?php echo $select; ?> <button>OK</button>':function(menuItem,cmenu,e) {
+	       				$t=$(e.target);
+	       				if ($t.is('button')) {
+	       					$event=$(menuItem).find('select');
+	       					ev.request(module+"/debug/complete","post",{ajax:1,ev:$event.val(),vid:'this'})
+	       		            return true;
+	       		        }
+	       		        else return false;
+	       			}
+	       		},
+	       		{'aggiungi 100 abitanti':{
+	       				onclick:function (){
+	       					ev.request(module+"/debug/addpop","post",{ajax:1});
+	       				}
+	       			}
+	       		}
+	];
 $(document).ready(function(){
 //******************************************logger*******************************************************
 <?php

@@ -49,233 +49,202 @@ var ev = {
 		setTimeout(function() {
 			ev.loader();
 		}, 1000);
-		$
-				.ajax({
-					url : path + "/" + target,
-					data : params,
-					type : Rtype,
-					dataType : "json",
-					success : function(data, stato) {
-						ev.flagLoader = false;
-						ev.loader();
-						// open windows
-						if (data.html) {
-							cb = null;
-							if (data.html.close)
-								eval('cb=function(){' + data.html.close
-										+ '();};');
-							if (data.html.y)
-								h = data.html.y;
-							else
-								h = 600;
-							if (data.html.x)
-								w = data.html.x;
-							else
-								w = 800;
-							button = data.html.button ? {
-								'ok' : function() {
-									$(this).dialog('close');
-								}
-							} : null;
-							data.wid = ev.windows({
-								x : w,
-								y : h
-							}, "center", data.html, data.html.mod, false, cb,
-									button);
+		$.ajax({
+			url : path + "/" + target,
+			data : params,
+			type : Rtype,
+			dataType : "json",
+			success : function(data, stato) {
+				ev.flagLoader = false;
+				ev.loader();
+				// open windows
+				if (data.html) {
+					cb = null;
+					if (data.html.close)
+						eval('cb=function(){' + data.html.close + '();};');
+					if (data.html.y)
+						h = data.html.y;
+					else
+						h = 600;
+					if (data.html.x)
+						w = data.html.x;
+					else
+						w = 800;
+					button = data.html.button ? {
+						'ok' : function() {
+							$(this).dialog('close');
 						}
-						// update
-						if (data.update) {
-							if (data.update.ids) {
-								for ( var key in data.update.ids)
-									$("#" + key).html(data.update.ids[key]);
-								resetinit();
-								resetres();
-							}
-							if (data.update.master) {
-								src = $("#master").attr("src");
-								// mastera_n.png
-								src = src.substr(0, 8);
-								$("#master").attr("src",
-										src + data.update.master + '.png');
-							}
-							if (data.update.disable) {
-								for ( var key in data.update.disable)
-									$("#" + key).attr("disabled",
-											data.update.disable[key]);
-							}
-							if (data.update.attr) {
-								for ( var key in data.update.attr)
-									for ( var k in data.update.attr[key]) {
-										v = data.update.attr[key][k];
-										if ((k == 'src') || (k == 'href'))
-											v = path + v;
-										if (k == 'title') {
-											api = $('#' + key).data('tooltip');
-											$tip = api ? api.getTip() : false;
-											if ($tip)
-												$tip.text(v);
-											else {
-												$('#' + key).data('title', v);
-											}
-										} else
-											$('#' + key).attr(k, v);
-									}
-							}
-							if (data.update.token) {
-								for ( var key in data.update.token)
-									ev.token[key] = data.update.token[key];
-							}
-							if (data.update.dispB) {
-								for ( var key in data.update.dispB) {
-									value = data.update.dispB[key];
-									if (value)
-										$("#cv" + ev.focus.id + " #" + key)
-												.show();
-									else
-										$("#cv" + ev.focus.id + " #" + key)
-												.hide();
-								}
-							}
-							if (data.update.building) {
-								// $('div.building.pos3 img')
-								b = data.update.building;
-								// $('div.building').addClass("empty");
-								for (i = 0; i < ev.totpos; i++) {
-									if (b[i]) {
-										$(
-												'#cv' + ev.focus.id
-														+ ' div.building.pos'
-														+ i).removeClass(
-												"empty");
-										$(
-												'#cv' + ev.focus.id
-														+ ' div.building.pos'
-														+ i)
-												.addClass(b[i].type);
-										dat = $('.pos' + i).data('events');
-										if (dat) {
-											if (!dat.contextmenu)
-												$('.pos' + i).contextMenu(
-														ev.menubuilding, {
-															theme : 'human'
-														});
-										}
-										api = $(
-												'#cv' + ev.focus.id
-														+ ' div.building.pos'
-														+ i + ' img').data(
-												'tooltip');
-										$tip = api ? api.getTip() : false;
-										if ($tip)
-											$tip.text(b[i].title);
-										else {
-											$(
-													'#cv'
-															+ ev.focus.id
-															+ ' div.building.pos'
-															+ i + ' img').data(
-													'title', b[i].title);
-										}
-									} else {
-										$obj = $('#cv' + ev.focus.id
-												+ ' div.building.pos' + i);
-										$obj.removeClass();
-										$obj.addClass('building empty pos' + i);
-										api = $obj.data('tooltip');
-										$tip = api ? api.getTip() : false;
-										if ($tip)
-											$tip.text(ev.lang.buid);
-										else {
-											$obj.data('title', ev.lang.buid);
-										}
-									}
-								}
-								$(
-										"[title]:not(.context-menu div):not(.notooltip)")
-										.tooltip({
-											offset : [ -10, 0 ],
-											delay : 1,
-											predelay : 400
-										}).dynamic({
-											bottom : {
-												direction : 'down'
-											}
-										});
-							}
-							ev_array = [ '', 'inAttack', 'outAttack',
-									'marketM', 'inReinf', 'outReinf', 'reinf' ];
-							$('#evpan img').removeClass().addClass('icon');
-							$('#ev1').addClass('attackbn');
-							$('#ev2').addClass('attackbn');
-							$('#ev3').addClass('marketMbn');
-							$('#ev4').addClass('rinfobn');
-							$('#ev5').addClass('rinfobn');
-							$('#ev6').addClass('rinfobn');
-							for (i = 1; i <= 6; i++) {
-								str = $('#info' + i + ' div:eq(0)').text();
-								str = str.replace(/\d+/, '0');
-								$('#info' + i + ' div:eq(0)').text(str);
-								$('#info' + i + ' div:eq(1)').html(' ');
-							}
-							if (data.update.event) {
-								e = data.update.event;
-								for ( var i in e) {
-									$('#ev' + i).removeClass().addClass(
-											'icon ' + ev_array[i]);
-									str = $('#info' + i + ' div:eq(0)').text();
-									str = str.replace(/\d+/, e[i].n);
-									$('#info' + i + ' div:eq(0)').text(str);
-									$('#info' + i + ' div:eq(1)').html(
-											e[i].content);
-								}
-								// resetinit();
-							}
-							if (data.update.focus) {
-								$('.village_list').css("font-weight", "normal");
-								$('#v' + data.update.focus.id).css(
-										"font-weight", "bold");
-								ev.focus = data.update.focus;
-							}
-						}
-						if (data.javascript) {
-							/*
-							 * $script=$(data.javascript);
-							 * $("head").append($script);
-							 */
-							var s = document.createElement("script");
-							s.type = "text/javascript";
-							s.text = data.javascript;
-							document.getElementsByTagName("head")[0]
-									.appendChild(s);
-						}
-						if (callback)
-							callback(data, this);
-					},
-					error : function(request, state, error) {
-						ev.flagLoader = false;
-						ev.loader();
-						content = {
-							title : "ERROR",
-							text : '<span style="float: left; clear:both; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span>',
-							error : true
-						};
-						switch (request.status) {
-						case 500:
-							content.text += "internal error";
-							break;
-						case 404:
-							content.text += "page not found";
-							break;
-						default:
-							content.text = error;
-						}
-						content.text = '<div>' + content.text + '<div>';
-						wid = ev.windows({
-							x : 300,
-							y : 'auto'
-						}, "center", content, true, true);
+					} : null;
+					data.wid = ev.windows({
+						x : w,
+						y : h
+					}, "center", data.html, data.html.mod, false, cb, button);
+				}
+				// update
+				if (data.update) {
+					if (data.update.ids) {
+						for ( var key in data.update.ids)
+							$("#" + key).html(data.update.ids[key]);
+						resetinit();
+						resetres();
 					}
-				});
+					if (data.update.master) {
+						src = $("#master").attr("src");
+						// mastera_n.png
+						src = src.substr(0, 8);
+						$("#master").attr("src", src + data.update.master + '.png');
+					}
+					if (data.update.disable) {
+						for ( var key in data.update.disable)
+							$("#" + key).attr("disabled", data.update.disable[key]);
+					}
+					if (data.update.attr) {
+						for ( var key in data.update.attr)
+							for ( var k in data.update.attr[key]) {
+								v = data.update.attr[key][k];
+								if ((k == 'src') || (k == 'href'))
+									v = path + v;
+								if (k == 'title') {
+									api = $('#' + key).data('tooltip');
+									$tip = api ? api.getTip() : false;
+									if ($tip)
+										$tip.text(v);
+									else {
+										$('#' + key).data('title', v);
+									}
+								} else
+									$('#' + key).attr(k, v);
+							}
+					}
+					if (data.update.token) {
+						for ( var key in data.update.token)
+							ev.token[key] = data.update.token[key];
+					}
+					if (data.update.dispB) {
+						for ( var key in data.update.dispB) {
+							value = data.update.dispB[key];
+							if (value)
+								$("#cv" + ev.focus.id + " #" + key).show();
+							else
+								$("#cv" + ev.focus.id + " #" + key).hide();
+						}
+					}
+					if (data.update.building) {
+						// $('div.building.pos3 img')
+						b = data.update.building;
+						// $('div.building').addClass("empty");
+						for (i = 0; i < ev.totpos; i++) {
+							if (b[i]) {
+								place = $('#cv' + ev.focus.id + ' div.building.pos' + i);
+								place.removeClass("empty");
+								place.addClass(b[i].type);
+								dat = place.data('events');
+								if ((dat) && (!dat.contextmenu)) {
+									place.contextMenu(ev.menubuilding, {
+										theme : 'human'
+									});
+								} else
+									place.contextMenu(ev.menubuilding, {
+										theme : 'human'
+									});
+								api = place.data('tooltip');
+								$tip = api ? api.getTip() : false;
+								if ($tip)
+									$tip.text(b[i].title);
+								else {
+									place.attr('title', b[i].title);
+								}
+							} else {
+								$obj = $('#cv' + ev.focus.id + ' div.building.pos' + i);
+								$obj.removeClass();
+								$obj.addClass('building empty pos' + i);
+								api = $obj.data('tooltip');
+								$tip = api ? api.getTip() : false;
+								if ($tip)
+									$tip.text(ev.lang.buid);
+								else {
+									$obj.attr('title', ev.lang.buid);
+								}
+							}
+						}
+						$("[title]:not(.context-menu div):not(.notooltip)").tooltip({
+							offset : [ -10, 0 ],
+							delay : 1,
+							predelay : 400
+						}).dynamic({
+							bottom : {
+								direction : 'down'
+							}
+						});
+					}
+					ev_array = [ '', 'inAttack', 'outAttack', 'marketM', 'inReinf', 'outReinf', 'reinf' ];
+					$('#evpan img').removeClass().addClass('icon');
+					$('#ev1').addClass('attackbn');
+					$('#ev2').addClass('attackbn');
+					$('#ev3').addClass('marketMbn');
+					$('#ev4').addClass('rinfobn');
+					$('#ev5').addClass('rinfobn');
+					$('#ev6').addClass('rinfobn');
+					for (i = 1; i <= 6; i++) {
+						str = $('#info' + i + ' div:eq(0)').text();
+						str = str.replace(/\d+/, '0');
+						$('#info' + i + ' div:eq(0)').text(str);
+						$('#info' + i + ' div:eq(1)').html(' ');
+					}
+					if (data.update.event) {
+						e = data.update.event;
+						for ( var i in e) {
+							$('#ev' + i).removeClass().addClass('icon ' + ev_array[i]);
+							str = $('#info' + i + ' div:eq(0)').text();
+							str = str.replace(/\d+/, e[i].n);
+							$('#info' + i + ' div:eq(0)').text(str);
+							$('#info' + i + ' div:eq(1)').html(e[i].content);
+						}
+						// resetinit();
+					}
+					if (data.update.focus) {
+						$('.village_list').css("font-weight", "normal");
+						$('#v' + data.update.focus.id).css("font-weight", "bold");
+						ev.focus = data.update.focus;
+					}
+				}
+				if (data.javascript) {
+					/*
+					 * $script=$(data.javascript); $("head").append($script);
+					 */
+					var s = document.createElement("script");
+					s.type = "text/javascript";
+					s.text = data.javascript;
+					document.getElementsByTagName("head")[0].appendChild(s);
+				}
+				if (callback)
+					callback(data, this);
+			},
+			error : function(request, state, error) {
+				ev.flagLoader = false;
+				ev.loader();
+				content = {
+					title : "ERROR",
+					text : '<span style="float: left; clear:both; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span>',
+					error : true
+				};
+				switch (request.status) {
+				case 500:
+					content.text += "internal error";
+					break;
+				case 404:
+					content.text += "page not found";
+					break;
+				default:
+					content.text = error;
+				}
+				content.text = '<div>' + content.text + '<div>';
+				wid = ev.windows({
+					x : 300,
+					y : 'auto'
+				}, "center", content, true, true);
+			}
+		});
 	},
 	iconstak : new Array(),
 	windows : function(size, pos, content, mod, alerts, close, button) {
@@ -290,8 +259,7 @@ var ev = {
 						ev.showalert();
 					}
 				};
-				content.title += " (" + (alerts.i * 1 + 1) + "/" + alerts.n
-						+ ")";
+				content.title += " (" + (alerts.i * 1 + 1) + "/" + alerts.n + ")";
 			}
 		}
 		if (content.id) {
@@ -329,9 +297,7 @@ var ev = {
 				d_class += " ui-state-error";
 			}
 			$("body").append(
-					'<div class="ev-windows ui-widget-content" id="' + id
-							+ '" title="' + content.title + '"><p>'
-							+ content.text + '</p></div>');
+					'<div class="ev-windows ui-widget-content" id="' + id + '" title="' + content.title + '"><p>' + content.text + '</p></div>');
 
 			$("#" + id).dialog({
 				dialogClass : d_class,
@@ -366,13 +332,8 @@ var ev = {
 			});
 			$container = $('#' + id).parent();
 			if (content.error) {
-				$container
-						.find('div:eq(0)')
-						.addClass('ui-state-error')
-						.prepend(
-								'<span class="ui-icon ui-icon-alert" style="float:left;"></span> ');
-				$container.find('div.ui-dialog-buttonpane').removeClass(
-						'ui-widget-content');
+				$container.find('div:eq(0)').addClass('ui-state-error').prepend('<span class="ui-icon ui-icon-alert" style="float:left;"></span> ');
+				$container.find('div.ui-dialog-buttonpane').removeClass('ui-widget-content');
 			}
 			$container
 					.find('a[role="button"]')
@@ -426,10 +387,9 @@ var ev = {
 						temp.icon();
 					}
 				}
-				ev.request(module + '/index/refresh?vid=' + id.substring(2),
-						'post', {
-							ajax : 1
-						});
+				ev.request(module + '/index/refresh?vid=' + id.substring(2), 'post', {
+					ajax : 1
+				});
 			}
 		} else {// riduco ad icona
 			$("#" + id).dialog("option", "draggable", false);
@@ -496,29 +456,25 @@ var ev = {
 			});
 		},
 		changeName : function(vid) {
-			if (this.flagName) {
-				this.flagName = false;
+			if (ev.flagName) {
+				ev.flagName = false;
 				n = $("#nameVillage" + vid).text();
-				$("#nameVillage" + vid)
-						.html(
-								'<form style="display:inline;" id="nameform"><input id="nameInput" size="10" value="'
-										+ n + '" /></form>');
-				$("#nameform").submit(
-						function() {
-							n = $("#nameInput").val();
-							$("#nameVillage" + vid).text(n);
-							data = {
-								id : vid,
-								name : n,
-								ajax : 1
-							};
-							ev.request(module + "/profile/changenamevillage",
-									"post", data, function(data) {
-										if (data.data == true)
-											$(document).trigger("quest", 1);
-									});
-							ev.flagName = true;
-						});
+				$("#nameVillage" + vid).html(
+						'<form style="display:inline;" id="nameform"><input id="nameInput" size="10" value="' + n + '" /></form>');
+				$("#nameform").submit(function() {
+					n = $("#nameInput").val();
+					$("#nameVillage" + vid).text(n);
+					data = {
+						id : vid,
+						name : n,
+						ajax : 1
+					};
+					ev.request(module + "/profile/changenamevillage", "post", data, function(data) {
+						if (data.data == true)
+							$(document).trigger("quest", 1);
+					});
+					ev.flagName = true;
+				});
 			}
 		},
 		open : function(vid) {
@@ -534,39 +490,33 @@ var ev = {
 				x : 1000,
 				y : 740
 			}, 'centre', content);
-			$('.building:not(.empty)', '.village_view').contextMenu(
-					ev.menubuilding, {
-						theme : 'human'
-					});
+			$('.building:not(.empty)', '.village_view').contextMenu(ev.menubuilding, {
+				theme : 'human'
+			});
 			$("div.drag").draggable({
 				revert : "invalid",
 				helper : "clone",
 				cursor : "move"
 			});
-			$("div.empty")
-					.droppable(
-							{
-								accept : ".drag",
-								drop : function(event, ui) {
-									$item = ui.draggable;
-									c = $item.attr("class");
-									$item.fadeOut(function() {
-										$(event.target).removeClass("empty");
-										$(event.target).addClass(c);
-										$('img', event.target).attr('title',
-												$('img', $item).attr('title'));
-									});
-									// $item.appendTo($('#pannel'));
-									m = $(event.target).attr("class").match(
-											/pos(\d+)/);
-									t = $item.find(".Btype").val();
-									ev.request(module + '/building/build/type/'
-											+ t + '/pos/' + m[1] + '/tokenB/'
-											+ ev.token.tokenB, 'post', {
-										ajax : 1
-									});
-								}
-							});
+			$("div.empty").droppable({
+				accept : ".drag",
+				drop : function(event, ui) {
+					$item = ui.draggable;
+					c = $item.attr("class");
+					$item.fadeOut(function() {
+						$(event.target).removeClass("empty");
+						$(event.target).addClass(c);
+						$('img', event.target).attr('title', $('img', $item).attr('title'));
+					});
+					// $item.appendTo($('#pannel'));
+					m = $(event.target).attr("class").match(/pos(\d+)/);
+					t = $item.find(".Btype").val();
+					ev.request(module + '/building/build/type/' + t + '/pos/' + m[1] + '/tokenB/' + ev.token.tokenB, 'post', {
+						ajax : 1
+					});
+				}
+			});
+			$('#nameVillage'+vid).dblclick(function(){ev.village.changeName(vid);});
 			ev.request('s1/index/refresh', 'post', {
 				ajax : 1
 			});
@@ -686,14 +636,12 @@ var ev = {
 			};
 		},
 		getIdFromCoord : function(x, y) {
-			id = ev.max[0] * (parseInt(ev.max[1] / 2) - y) + x * 1
-					+ parseInt(ev.max[0] / 2);
+			id = ev.max[0] * (parseInt(ev.max[1] / 2) - y) + x * 1 + parseInt(ev.max[0] / 2);
 			return id;
 		},
 		hide_village_info : function() {
 			// ev.map.canhide=true;
-			location.hash = location.hash
-					.substring(0, location.hash.length - 1);
+			location.hash = location.hash.substring(0, location.hash.length - 1);
 		},
 		load_detail : function() {
 			text = location.hash;
@@ -773,28 +721,17 @@ var ev = {
 				prod3_bonus = '-';
 				name = ev.lang.valley;
 			}
-			if ((this.village[id])
-					&& (this.village[id].civ_id == ev.civ.civ_id)) {
+			if ((this.village[id]) && (this.village[id].civ_id == ev.civ.civ_id)) {
 				ev.village.open(id);
 			} else {
-				text = '<div>' + ev.lang.village1
-						+ ' <a class="civ" href="#civ' + cid
-						+ '" onclick="ev.request(module+\'/profile/index/cid/'
-						+ cid + '\',\'post\',{ajax:1});">' + civ_name
-						+ '</a><div>';
-				text += '<div>' + ev.lang.village2
-						+ ' <a class="ally" href="#ally' + civ_ally + '">'
-						+ ally + '</a></div>';
+				text = '<div>' + ev.lang.village1 + ' <a class="civ" href="#civ' + cid + '" onclick="ev.request(module+\'/profile/index/cid/' + cid
+						+ '\',\'post\',{ajax:1});">' + civ_name + '</a><div>';
+				text += '<div>' + ev.lang.village2 + ' <a class="ally" href="#ally' + civ_ally + '">' + ally + '</a></div>';
 				text += '<div>' + ev.lang.village3 + ': ' + busy_pop + '</div>';
-				text += '<div>' + ev.lang.village4 + ': ' + prod1_bonus + '% '
-						+ prod2_bonus + '% ' + prod3_bonus + '%</div>';
+				text += '<div>' + ev.lang.village4 + ': ' + prod1_bonus + '% ' + prod2_bonus + '% ' + prod3_bonus + '%</div>';
 				if (ev.civ.civ_id) {// @todo add more option
-					text += '<div><a href="#sendTroop'
-							+ id
-							+ '" onclick="ev.request(\''
-							+ module
-							+ '/movements/send\', \'post\', {type:\'attack\',ajax:1,vid:'
-							+ id + '});">' + ev.lang.village5 + '</a></div>';
+					text += '<div><a href="#sendTroop' + id + '" onclick="ev.request(\'' + module
+							+ '/movements/send\', \'post\', {type:\'attack\',ajax:1,vid:' + id + '});">' + ev.lang.village5 + '</a></div>';
 				} else {
 					if (!ev.map.village[id])
 						text += '<div><button onclick="$(\'input[name=sector]:eq(5)\').attr(\'checked\',true);$(\'#cx\').val(ev.map.focus.x);$(\'#cy\').val(ev.map.focus.y);$(\'#modalwindows\').dialog(\'open\')">'
@@ -825,18 +762,14 @@ var ev = {
 			y = c.y;
 			id = this.getIdFromCoord(x, y);
 			if (this.village[id]) {
-				$("#village_name").html(
-						this.village[id].name + ' (' + x + '|' + y + ')');
+				$("#village_name").html(this.village[id].name + ' (' + x + '|' + y + ')');
 				$("#village_player").html(this.village[id].civ_name);
 				$("#village_ally").html(this.village[id].ally);
 				$("#village_bonus").html(
-						this.village[id].prod1_bonus + "% "
-								+ this.village[id].prod2_bonus + "% "
-								+ this.village[id].prod3_bonus + "%");
+						this.village[id].prod1_bonus + "% " + this.village[id].prod2_bonus + "% " + this.village[id].prod3_bonus + "%");
 
 			} else {
-				$("#village_name").html(
-						ev.lang['valley'] + ' (' + x + '|' + y + ')');
+				$("#village_name").html(ev.lang['valley'] + ' (' + x + '|' + y + ')');
 				$("#village_player").html("");
 				$("#village_ally").html('');
 				$("#village_bonus").html('');
@@ -868,9 +801,8 @@ var ev = {
 					id = ev.map.getIdFromCoord(c.x, c.y);
 					prev_class = map.eq(n).attr('class');
 					zoom = prev_class.match(/zoom-\d+/g);
-					if ((Math.abs(c.x) < (ev.max[0] / 2))
-							&& (Math.abs(c.y) < (ev.max[1] / 2))) {
-						map.eq(n).attr('class','map ' + zoom + ' area-'+ (ev.map.data[id] - 1));
+					if ((Math.abs(c.x) < (ev.max[0] / 2)) && (Math.abs(c.y) < (ev.max[1] / 2))) {
+						map.eq(n).attr('class', 'map ' + zoom + ' area-' + (ev.map.data[id] - 1));
 						village = map.eq(n).children();
 						village.attr('class', zoom);
 						own = village.children();
@@ -887,15 +819,15 @@ var ev = {
 							village.addClass('map-null');
 							own.addClass('map-null');
 						}
-					} else // @todo creare una mappa sferica create a spheric map
+					} else
+						// @todo creare una mappa sferica create a spheric map
 						map.eq(n).attr('class', 'map ' + zoom + ' area-56');
 					// own area-23
 				}
 			}
 			location.hash = this.centre[0] + '|' + this.centre[1];
 			t = new Date();
-			console.log('map shift exsecution time: ', (t.getTime() - before),
-					" ms ");
+			console.log('map shift exsecution time: ', (t.getTime() - before), " ms ");
 		}
 	},
 	troops : {
@@ -924,9 +856,7 @@ var ev = {
 			});
 			function checkin($item) {
 				$item.fadeOut(function() {
-					var $list = $("ul", $('#' + id)).length ? $("ul", $('#'
-							+ id)) : $("<ul class='troops ui-helper-reset'/>")
-							.appendTo($('#' + id));
+					var $list = $("ul", $('#' + id)).length ? $("ul", $('#' + id)) : $("<ul class='troops ui-helper-reset'/>").appendTo($('#' + id));
 					ev.troops.addtroops($item.find('input.id_troop').val());
 					$item.appendTo($list).fadeIn();
 				});
@@ -1072,10 +1002,7 @@ var ev = {
 		}
 	},
 	changeimg : function(ogg) {
-		$(ogg).css(
-				'background',
-				'url(' + path + '/common/images/troops/t' + ogg.value
-						+ '.gif) no-repeat');
+		$(ogg).css('background', 'url(' + path + '/common/images/troops/t' + ogg.value + '.gif) no-repeat');
 	},
 	colony : function(menuItem, menu) {
 		coord = $(this).attr('alt');
@@ -1202,25 +1129,22 @@ var ev = {
 		upgrade : function() {
 			c = $(this).attr("class");
 			m = c.match(/pos([\d]{1,2})/);
-			ev.request(module + "/building/upgrade/tokenB/" + ev.token.tokenB
-					+ "/pos/" + m[1], "post", {
+			ev.request(module + "/building/upgrade/tokenB/" + ev.token.tokenB + "/pos/" + m[1], "post", {
 				ajax : "true"
 			});
 		},
 		destroy : function() {
 			c = $(this).attr("class");
 			m = c.match(/pos([\d]{1,2})/);
-			ev.request(module + "/building/destroy/tokenB/" + ev.token.tokenB
-					+ "/pos/" + m[1], "post", {
+			ev.request(module + "/building/destroy/tokenB/" + ev.token.tokenB + "/pos/" + m[1], "post", {
 				ajax : "true"
 			});
 		},
 		deleteQueue : function(eid) {
-			ev.request(module + "/index/delqueue/tokenB/" + ev.token.tokenB,
-					"post", {
-						id : eid,
-						ajax : "true"
-					});
+			ev.request(module + "/index/delqueue/tokenB/" + ev.token.tokenB, "post", {
+				id : eid,
+				ajax : "true"
+			});
 		}
 	},
 	report : {
