@@ -122,15 +122,50 @@ if ($this->hasCivilty > 1) {
 	
     $this->headScript()->captureStart();
 	echo '
-    var menu=[{"'.$t->_('rinforza').'":{onclick:ev.support,icon:"'.$this->baseUrl('/common/images/inrinfo.png').'"}},
-		{"'.$t->_('raid').'":{onclick:ev.raid,icon:"'.$this->baseUrl('/common/images/outattack.png').'"}},
-		{"'.$t->_('attacca').'":{onclick:ev.atk,icon:"'.$this->baseUrl('/common/images/inattack.png').'"}},
-		{"'.$t->_('colonizza').'":{onclick:ev.colony,icon:"'.$this->baseUrl('/common/images/pop.gif').'"}},
-		{"'.$t->_('invia mercanti (non implementato)').'":{onclick:ev.market,icon:"'.$this->baseUrl('/common/images/market.png').'"}}	
-	];
+    var menu={
+    	reinf: {
+    		name:"[rinforza]",
+    		callback:function(k,opt) {
+    			ev.support(opt);
+    		},
+    		icon:"icon inReinf"
+		},
+		raid: {
+			name:"[raid]",
+			callback:function(k,opt) {
+				ev.raid(opt)
+			},
+			icon:"icon outAttack"
+		},
+		atk: {
+			name:"[attacca]",
+			callback:function(k,opt) {
+				ev.atk(opt)
+			},
+			icon:"icon inAttack"
+		},
+		colony: {
+			name:"[colonizza]",
+			callback:function(k,opt) {
+				ev.colony(opt)
+			},
+			icon:"pop"
+		},
+		market: {
+			name:"[invia mercanti (non implementato)]",
+			callback:function(k,opt) {
+				ev.market(opt)
+			},
+			icon:"icon marketM",
+			disabled:true
+		}	
+	};
 	$(function () {
     	ev.village.init();
-		$(".map").contextMenu(menu,{theme:"human"});
+		$.contextMenu({
+			selector:".map",
+			items:menu
+		});
 		if (m=location.hash.match(/(-*\d+)\|(-*\d+)(@*)/)) {
         // #2|2-dsf
         console.log(m);

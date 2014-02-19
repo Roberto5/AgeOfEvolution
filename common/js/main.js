@@ -58,21 +58,36 @@ $(document).ready(function(){
 				ev.request(module+'/index/sort','post',{ajax:1,'list':list});	
 			}
 		});
-		var reportmenu=[{'segna come letti':{
-				onclick:function () {
-					ev.request(module+"/report/read/all/1","post",{ajax:1});
+		var reportmenu={
+				read:{
+					name:'segna come letti',
+					callback:function() {
+						ev.request(module+"/report/read/all/1","post",{ajax:1});
+					},
+					icon:'ui-icon ui-icon-check'
 				}
-			}
-		}];
-		var messagemenu=[{'segna come letti':{
-		           	onclick:function () {
+		};
+		var messagemenu={
+				read:{
+					name:'segna come letti',
+					callback:function() {
 		       			ev.request(module+"/message/read/all/1","post",{ajax:1});
-		       		}
+					},
+					icon:'ui-icon ui-icon-check'
 		       	}
-		       	}];
-		$('[rel=link-Report]').contextMenu(reportmenu,{theme:'human'});
-		$('[rel=link-MESSAGES]').contextMenu(messagemenu,{theme:'human'});
-		$('[rel=link-Debug]').contextMenu(debugmenu,{theme:'human'});
+		};
+		$.contextMenu({
+			selector:'[rel=link-Report]',
+			items:reportmenu
+		});
+		$.contextMenu({
+			selector:'[rel=link-MESSAGES]',
+			items:messagemenu
+		});
+		$.contextMenu({
+			selector:'[rel=link-Debug]',
+			items:debugmenu
+		});
 		//@todo aggiungere timeout per rinfrescare il banner
 		$('#hidad a').click(function() {$('#banner').hide();$('#hidad').prev().remove();});
 });

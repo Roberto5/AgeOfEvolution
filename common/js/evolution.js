@@ -139,14 +139,14 @@ var ev = {
 								place.removeClass("empty");
 								place.addClass(b[i].type);
 								dat = place.data('events');
-								if ((dat) && (!dat.contextmenu)) {
+								/*if ((dat) && (!dat.contextmenu)) {
 									place.contextMenu(ev.menubuilding, {
 										theme : 'human'
 									});
 								} else
 									place.contextMenu(ev.menubuilding, {
 										theme : 'human'
-									});
+									});*/
 								api = place.data('tooltip');
 								$tip = api ? api.getTip() : false;
 								if ($tip)
@@ -490,7 +490,9 @@ var ev = {
 				x : 1000,
 				y : 740
 			}, 'centre', content);
-			$('.building:not(.empty)', '.village_view').contextMenu(ev.menubuilding, {
+			$.contextMenu({
+				items:ev.menubuilding,
+				selector:'.building:not(.empty)',
 				theme : 'human'
 			});
 			$("div.drag").draggable({
@@ -1126,15 +1128,15 @@ var ev = {
 		});
 	},
 	build : {
-		upgrade : function() {
-			c = $(this).attr("class");
+		upgrade : function(obj) {
+			c = obj.$trigger.attr("class");
 			m = c.match(/pos([\d]{1,2})/);
 			ev.request(module + "/building/upgrade/tokenB/" + ev.token.tokenB + "/pos/" + m[1], "post", {
 				ajax : "true"
 			});
 		},
-		destroy : function() {
-			c = $(this).attr("class");
+		destroy : function(obj) {
+			c = obj.$trigger.attr("class");
 			m = c.match(/pos([\d]{1,2})/);
 			ev.request(module + "/building/destroy/tokenB/" + ev.token.tokenB + "/pos/" + m[1], "post", {
 				ajax : "true"
