@@ -16,6 +16,10 @@ class S1_VillageController extends Zend_Controller_Action
     	$this->_helper->layout->disableLayout();
     	$this->view->age=$this->civ->getAge();
     }
+ 	public function focusAction ()
+    {
+    	$this->civ->setCurrentVillage(intval($_POST['vid']));
+    }
    
 }
 

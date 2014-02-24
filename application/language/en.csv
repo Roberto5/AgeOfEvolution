@@ -5,6 +5,7 @@ ALNUM@This field must contain letter and number
 BUGDESC@Describe here the bug that you are find, an idea for improve the game or what you do not like.
 BUGIMG@if you want send image, host online and put here the link
 BUGTAG@The Tag help to find report similar
+CANTBUILD@You can't build here
 CATEGORY@Category
 CHANGEPASS@Change password
 CHOOSE@Choose

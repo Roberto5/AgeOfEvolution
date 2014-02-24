@@ -237,15 +237,8 @@ class Model_building extends Zend_Db_Table_Abstract
             $mess = $this->t->_("non hai abbastanza popolazione!");
             $bool = false;
         }
-        $param = array('pos' => $pos, 'village_id' => $this->village_id);
-        $params = serialize($param);
-        preg_match("/{+.+}/i", $params, $find);
-        $find = $find[0];
-        $find = str_replace("}", "", $find);
-        $find = str_replace("{", "", $find);
         if ($this->getDefaultAdapter()->fetchOne(
-        "SELECT count(*) FROM `" . EVENTS_TABLE . "` WHERE `params`LIKE '%" .
-         $find . "%' AND `type`='" . BILD_EVENT . "'")) {
+        "SELECT count(*) FROM `" . EVENTS_TABLE . "` WHERE `params` LIKE '%\"pos\";i:$pos%\"village_id\";i:".$this->village_id."%' AND `type`='" . BILD_EVENT . "'")) {
             $bool = false;
             $mess = $this->t->_("l'edificio &egrave; in costruzione");
         }

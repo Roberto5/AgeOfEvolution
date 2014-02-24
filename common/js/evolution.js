@@ -136,8 +136,7 @@ var ev = {
 						for (i = 0; i < ev.totpos; i++) {
 							if (b[i]) {
 								place = $('#cv' + ev.focus.id + ' div.building.pos' + i);
-								place.removeClass("empty");
-								place.addClass(b[i].type);
+								place.attr("class","building pos"+i+" "+b[i].type);
 								dat = place.data('events');
 								/*if ((dat) && (!dat.contextmenu)) {
 									place.contextMenu(ev.menubuilding, {
@@ -519,9 +518,7 @@ var ev = {
 				}
 			});
 			$('#nameVillage'+vid).dblclick(function(){ev.village.changeName(vid);});
-			ev.request('s1/index/refresh', 'post', {
-				ajax : 1
-			});
+			ev.request('s1/village/focus', 'post', {'vid':vid,ajax:1});
 		}
 	},
 	createciv : function() {
@@ -1131,7 +1128,7 @@ var ev = {
 		upgrade : function(obj) {
 			c = obj.$trigger.attr("class");
 			m = c.match(/pos([\d]{1,2})/);
-			ev.request(module + "/building/upgrade/tokenB/" + ev.token.tokenB + "/pos/" + m[1], "post", {
+			ev.request(module + "/building/upgrade/pos/" + m[1], "post", {
 				ajax : "true"
 			});
 		},

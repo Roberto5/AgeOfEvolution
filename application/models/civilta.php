@@ -186,7 +186,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 						$this->village_list[$value['id']] = $value;
 					}
 				}
-				$id = $this->getCurrentVillage();
+				$id = $this->currentVillage;
 				//code edifici
 				$where = array("`type`='1'",
 						"`params`LIKE'%\"village_id\";i:" . $id . "%'");
