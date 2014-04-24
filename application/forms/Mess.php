@@ -4,26 +4,6 @@ class Form_Mess extends Zend_Form
 {
     public function init()
     {
-    	/*$this->setDecorators(array(
-            'FormElements',
-            array('Description', array('tag' => 'div')),
-            array('HtmlTag', array('tag' => 'table')),
-            'Form'
-        ));
-        
-        $eldecorator=array(
-    'ViewHelper',
-    'Errors',
-    array(array('data' => 'HtmlTag'), array('tag' => 'td', 'class' => 'element')),
-    array('label', array('tag' => 'td')),
-    array(array('row' => 'HtmlTag'), array('tag' => 'tr')),
-);
-		$button=array(
-    'ViewHelper',
-    array(array('data' => 'HtmlTag'), array('tag' => 'td', 'class' => 'element')),
-    array(array('label' => 'HtmlTag'), array('tag' => 'td', 'placement' => 'prepend')),
-    array(array('row' => 'HtmlTag'), array('tag' => 'tr')),
-);*/
     	$dest=$this->createElement("text", "destinatario");
         $dest->setLabel("a:");
         $this->setDefaultTranslator(Zend_Registry::get("translate"));
@@ -46,16 +26,10 @@ class Form_Mess extends Zend_Form
         $ogg->addFilter("StringTrim")->addFilter("HtmlEntities")
         	->addValidator("StringLength",false,array('max' => 40));
         	//$ogg->setDecorators($eldecorator);
-        $attribs=array(
-    		'size'=>'20',
-    		'maxlength'=>'40'
-    	);
-    	
+        $attribs['maxlength']='40';
     	$ogg->setAttribs($attribs);
     	$ogg->setLabel("Oggetto:");
-    	
     	$ogg->getValidator("StringLength")->setMessage("l'oggetto deve avere una lunghezza minore di 30 caratteri");
-    	
     	$text=$this->createElement("textarea", "messaggio");
     	$text->setRequired(true)->addFilter("HtmlEntities",array('quotestyle'
 => ENT_QUOTES));
@@ -65,7 +39,5 @@ class Form_Mess extends Zend_Form
     	//$submit->setDecorators($button);
     	$this->addElements(array($dest,$ogg,$text,$submit));
     }
-
-
 }
 

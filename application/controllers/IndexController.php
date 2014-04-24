@@ -23,4 +23,4 @@ class IndexController extends Zend_Controller_Action {
 			$this->view->identity=false;
 	}
 }
-
+?>
