@@ -160,14 +160,23 @@ class S1_IndexController extends Zend_Controller_Action
     }
     public function delqueueAction ()
     {
-        $token = token_ctrl($this->_getAllParams());
-        if ($token['tokenB']) {
             global $building_array;
             $id = (int) $_POST['id'];
             $this->civ->ev->delete(
             "`id`='$id' AND `type`IN('" . DESTROY_EVENT . "','" . BILD_EVENT .
              "')");
-            $now = $this->civ->getCurrentVillage();
+            $new=array();
+            foreach ($this->civ->queue as $value) {
+            	if ($value['id']!=$id) $new[]=$value;
+            }
+            $this->civ->queue=$new;
+            $new=array();
+            foreach ($this->civ->destroy as $value) {
+            	if ($value['id']!=$id) $new[]=$value;
+            }
+            $this->civ->destroy=$new;
+            $this->civ->refresh();
+            /*$now = $this->civ->getCurrentVillage();
             $where = array("`type`='1'", 
             "`params`LIKE'%\"village_id\";i:" . $now . "%'");
             $queue = $this->civ->ev->getEvent($where);
@@ -179,9 +188,7 @@ class S1_IndexController extends Zend_Controller_Action
                 ->queue($queue));
             $this->civ->refresh->addIds("destroy", 
             $this->view->template()
-                ->queue($destroy));
-        }
-        $this->civ->refresh->addToken("tokenB", token_set("tokenB"));
+                ->queue($destroy));*/
     }
     /**
      * questa action serve solo per aggiornare la pagina via ajax.

@@ -25,7 +25,7 @@ SET time_zone = "+00:00";
 --
 
 INSERT INTO `s1_civ` (`civ_id`, `civ_name`, `civ_adjective`, `civ_ally`, `civ_age`, `des_civ`, `civ_pop`, `quest`, `state`, `read_quest`, `master`, `ev_ready`) VALUES
-(0, '-', '-', 0, 0, '', 2, 1, 0, 0, 1, 0);
+(0, '[BARBARIANS]', '[BARBARIANS]', 0, 0, '', 2, 1, 0, 0, 1, 0);
 
 --
 -- Dump dei dati per la tabella `site_track_cat`
@@ -39,7 +39,14 @@ INSERT INTO `site_track_cat` (`id`, `name`, `description`) VALUES
 --
 
 INSERT INTO `site_users` (`ID`, `username`, `password`, `email`, `active`, `code`, `description`, `code_time`) VALUES
-(1, 'anonimo', '', '', 0, '', '', 0);
+(1, '[ANONIMOUS]', '', '', 0, '', '', 0);
+
+--
+-- Dump dei dati per la tabella `s1_map`
+--
+
+INSERT INTO `s1_map` (`id`, `civ_id`, `name`, `capital`, `type`, `pop`, `busy_pop`, `resource_1`, `resource_2`, `resource_3`, `production_1`, `production_2`, `production_3`, `agg`, `aggPop`, `order_n`, `defence`, `prod1_bonus`, `prod2_bonus`, `prod3_bonus`) VALUES
+(5100, 0, '[CENTRALMARKET]', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 100, 100, 100);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

@@ -39,6 +39,9 @@ var ev = {
 	helpOpen : false,
 	ondrag : false,
 	// main function
+	refresh :function () {
+		this.request(module+'/index/refresh','post',{ajax:1});
+	},
 	request : function(target, Rtype, params, callback) {
 		if (Rtype == "zend") {
 			for ( var key in params)
@@ -159,10 +162,12 @@ var ev = {
 								$obj.addClass('building empty pos' + i);
 								api = $obj.data('tooltip');
 								$tip = api ? api.getTip() : false;
-								if ($tip)
-									$tip.text(ev.lang.buid);
+								if (!$tip && !api)
+									$obj.attr('title', ev.lang.build);
+									
 								else {
-									$obj.attr('title', ev.lang.buid);
+									api.show();api.hide();
+									api.getTip().text(ev.lang.build);
 								}
 							}
 						}
@@ -173,6 +178,14 @@ var ev = {
 						}).dynamic({
 							bottom : {
 								direction : 'down'
+							}
+						});
+						$('.village_view div:not(.empty):not(.pos0):not(.pos1):not(.pos2):not(.pos3)').each(function(){
+							try {
+								$(this).droppable('destroy');
+							}catch(e)
+							{
+								
 							}
 						});
 					}
@@ -501,6 +514,7 @@ var ev = {
 			});
 			$("div.empty").droppable({
 				accept : ".drag",
+				hoverClass: "draghover",
 				drop : function(event, ui) {
 					$item = ui.draggable;
 					c = $item.attr("class");
@@ -512,7 +526,7 @@ var ev = {
 					// $item.appendTo($('#pannel'));
 					m = $(event.target).attr("class").match(/pos(\d+)/);
 					t = $item.find(".Btype").val();
-					ev.request(module + '/building/build/type/' + t + '/pos/' + m[1] + '/tokenB/' + ev.token.tokenB, 'post', {
+					ev.request(module + '/building/build/type/' + t + '/pos/' + m[1] /*+ '/tokenB/' + ev.token.tokenB*/, 'post', {
 						ajax : 1
 					});
 				}
@@ -688,15 +702,21 @@ var ev = {
 			}
 
 		},
-		get_village_info : function(i, j, n) {
+		get_village_info : function(i, j,coords) {
 
 			if (ev.ondrag) {
 				ev.ondrag = false;
 				return false;
 			}
-			c = this.getCoord(i, j);
-			x = c.x;
-			y = c.y;
+			if (coords) {
+				x=i;y=j;
+			}
+			else {
+				c = this.getCoord(i, j);
+				x = c.x;
+				y = c.y;
+			}
+			
 			id = this.getIdFromCoord(x, y);
 			location.hash = "#" + x + "|" + y + "@";
 			if (ev.map.village[id]) {
@@ -1140,7 +1160,7 @@ var ev = {
 			});
 		},
 		deleteQueue : function(eid) {
-			ev.request(module + "/index/delqueue/tokenB/" + ev.token.tokenB, "post", {
+			ev.request(module + "/index/delqueue/", "post", {
 				id : eid,
 				ajax : "true"
 			});

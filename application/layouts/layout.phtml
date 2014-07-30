@@ -79,10 +79,16 @@ if ($this->module=='admin') {
 	,'controller'=>'maintenance'
 	,'order'=>11
 	,'resource'=>'admin'
+	))->add(array('label'=>'Log'
+	,'module'=>'admin'
+	,'controller'=>'maintenance'
+	,'action'=>'log'
+	,'order'=>12
+	,'resource'=>'admin'
 	))->add(array('label'=>'F.a.q'
 	,'module'=>'admin'
 	,'controller'=>'faq'
-	,'order'=>12
+	,'order'=>13
 	,'resource'=>'admin'
 	));
 }

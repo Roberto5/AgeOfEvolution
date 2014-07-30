@@ -364,7 +364,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 			$this->refresh->addIds('queue'.$this->currentVillage,
 					$tmp->queue($this->queue, $option['order']));
 			$this->refresh->addIds('destroy'.$this->currentVillage,
-					$tmp->queue($this->destroy, $option['order']));
+					$tmp->queue($this->destroy, $option['order'],true));
 			//aggiorno la barra risorse
 			$this->refresh->addIds('resbar'.$this->currentVillage, $tmp->resourceBar());
 			$this->refresh->addDispB(

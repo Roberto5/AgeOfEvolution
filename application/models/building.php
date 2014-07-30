@@ -45,7 +45,10 @@ class Model_building extends Zend_Db_Table_Abstract
         $this->civ_id = $civ_id;
         $this->village_id = $village_id;
         $this->getAdapter()->setFetchMode(Zend_Db::FETCH_ASSOC);
-        $this->data= $this->fetchAll("`village_id`='" . $village_id ."'","pos");
+        $data=$this->fetchAll("`village_id`='" . $village_id ."'","pos");
+        foreach ($data as $value) {
+        	$this->data[$value['pos']]=$value;
+        }
         $this->t = Zend_Registry::get("translate");
     }
     /**
@@ -106,7 +109,7 @@ class Model_building extends Zend_Db_Table_Abstract
     function getCapTot ($storagetype = STORAGE1)
     {
         global $Building_Array;
-        $build = $this->data->toArray();
+        $build = $this->data;
         $storage = 0;
         for ($i = 0; $i <= TOTBUILDING; $i ++) {
             if ($build[$i]['type'] == $storagetype) {
@@ -180,7 +183,7 @@ class Model_building extends Zend_Db_Table_Abstract
         $arrayBuilding = null;
         for ($i = 0; $i < TOT_TYPE_BUILING; $i ++) {
             $bool = true;
-            $build = $this->data->toArray();
+            $build = $this->data;
             $existing = false;
             $exit = false;
             $pos = 0;

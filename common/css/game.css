@@ -213,25 +213,6 @@ table.troopers th {
 	vertical-align:middle;
 	text-align:center;
 }
-.building {
-    width: 100px;
-    height: 100px;
-}
-.building:hover {
-    border: 1px solid red;
-}
-.village_view {
-    /*background-image: url() ;*/
-    height: 350px;
-    width: 650px;
-    overflow: hidden;
-    position: relative;
-    margin-top: 30px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-
 /* Mappa */
 .map, .map div, .map div div {
     padding: 0px;
@@ -295,11 +276,33 @@ table.troopers th {
 	background-position:-150px -50px;
 }
 /* posizione degli edifici*/
+
+.building {
+    width: 100px;
+    height: 100px;
+}
+.building:hover {
+    border: 1px solid red;
+}
+.village_view {
+    /*background-image: url() ;*/
+    height: 350px;
+    width: 650px;
+    overflow: hidden;
+    position: relative;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+}
 .empty {
     border: none;
     background-image: url('PATH/common/images/empty1.png');
 }
 .empty:hover {
+    border: none;
+    background-image: url('PATH/common/images/empty.png');
+}
+.draghover {
     border: none;
     background-image: url('PATH/common/images/empty.png');
 }

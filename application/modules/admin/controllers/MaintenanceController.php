@@ -10,8 +10,6 @@ class Admin_MaintenanceController extends Zend_Controller_Action
     {
         if (Zend_Registry::isRegistered("param"))
             $this->param = Zend_Registry::get("param");
-        $this->view->myMenu()
-        ->add('Log','admin','maintenance','log',10,null,null,null,$iconSize,false);
     }
     public function indexAction ()
     {

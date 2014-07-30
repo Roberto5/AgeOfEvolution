@@ -111,7 +111,7 @@ $this->headScript()->captureEnd();
             				class="map zoom-'.$this->zoom['dim'].'" id="map_village_' . $i .
                  '_'.$j.'" onmouseover="ev.map.details('.($i-1).','.($j-1).','.$n++.');" 
             				onmouseout="ev.map.hide_map_details();" 
-            				onclick="if (!ev.drag) ev.map.get_village_info('.($i-1).','.($j-1).','.$n++.'); else ev.drag=false;" alt="'.($n-1).'" ><div class="zoom-'.$this->zoom['dim'].' map-null"><!--vilage--><div class="zoom-'.$this->zoom['dim'].' map-null"><!--flag--></div></div></div>';
+            				onclick="if (!ev.drag) ev.map.get_village_info('.($i-1).','.($j-1).',false); else ev.drag=false;" alt="'.($n-1).'" ><div class="zoom-'.$this->zoom['dim'].' map-null"><!--vilage--><div class="zoom-'.$this->zoom['dim'].' map-null"><!--flag--></div></div></div>';
             	$gap-=50;
             }
         }

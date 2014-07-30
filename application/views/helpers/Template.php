@@ -265,9 +265,9 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
             }
         }
         if ($link) {
-            $module = Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
-            $r = '<a class="village" href="' . $this->baseUrl .
-             "/$module/index/index/vid/" . $id . '">' . $name . '</a>';
+        	$c=Model_map::getInstance()->getCoordFromId($id);
+            //$module = Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
+            $r = '<a class="village" href="#" onclick="ev.map.centre=['.$c['x'].','.$c['y'].'];ev.map.shift();ev.map.get_village_info('.$c['x'].','.$c['y'].',true);ev.map.focus={x:'.$c['x'].',y:'.$c['y'].'};">' . $name . '</a>';
         } else
             $r = $name;
         return $r;
@@ -414,7 +414,7 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
         $html .= '</div>';
         return $html;
     }
-    function queue ($queue=array(),$order=false)
+    function queue ($queue=array(),$order=false,$destroy=false)
     {
     	
     	$t=Zend_Registry::get("translate");
@@ -436,7 +436,7 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
             $r.= '<div> <a href="#'.$t->_('DELETE').'">'.$this->view->image('/common/images/del.gif',$t->_('DELETE'),null,16,16,array('onclick'=>'ev.build.deleteQueue('.$value['id'].');')).' '.
              Model_building::$name[$this->civ->getAge()][$param['type']] . $t->_(
             ' livello ') .
-             ($this->civ->village->building[$now]->getLiv($param['pos']) + 1) .
+             ($this->civ->village->building[$now]->getLiv($param['pos']) + ($destroy ? 0 : 1)) .
              ' <span class="countDown">' . $count . '</span> ' . $t->_(
             "finito il ") . date("H:i:s d/m/Y", $value['time']) . "</a></div>";
         }

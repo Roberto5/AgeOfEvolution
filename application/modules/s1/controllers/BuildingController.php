@@ -51,7 +51,7 @@ class S1_BuildingController extends Zend_Controller_Action
 		//$token = token_set("tokenB");
 		$age = $this->civ->getAge();
 		$display = '';
-		if ($this->civ->village->building[$this->now]->data[$this->pos] != null) {
+		if (isset($this->civ->village->building[$this->now]->data[$this->pos])) {
 			//visualizza edificio
 			$this->p = $this->civ->village->building[$this->now]->getproperty(
 			$this->pos, $this->civ->getAge());
@@ -254,10 +254,9 @@ class S1_BuildingController extends Zend_Controller_Action
 			if (! $can['bool'])
 			$display .= '<div class="gray">' . $can['mess'] . '</div>';
 			else {
-				$display .= '<div><a href="' . $this->view->url(
-				array('module' => $this->req->getModuleName(),
-                'controller' => 'building', 'action' => 'upgrade', 
-                'pos' => $this->pos/*, 'tokenB' => $token*/)) . '">' .
+				$display .= '<div><a href="#" onclick="ev.request(module + \'/building/upgrade/pos/'.$this->pos.'\', \'post\', {
+				ajax : \'true\'
+			});$(this).parent().parent().dialog(\'close\');">' .
 				$this->t->_($button) . '</a></div>';
 			}
 		} else { // costruzione edificio
@@ -299,11 +298,9 @@ class S1_BuildingController extends Zend_Controller_Action
 					$display .= '<div class="gray">' . $can['mess'] .
                          '</div>';
 					else {
-						$display .= '<div><a href="' . $this->view->url(
-						array('module' => $this->req->getModuleName(),
-                        'controller' => 'building', 'action' => 'build', 
-                        'pos' => $this->pos/*, 'tokenB' => $token*/, 'type' => $key)) .
-                         '">' . $this->t->_($button) . '</a></div>';
+						$display .= '<div><a href="#" onclick="ev.request(module + \'/building/build/pos/'.$this->pos.'/type/'.$key.'\', \'post\', {
+				ajax : \'true\'
+			},function(){ev.refresh();});$(this).parent().parent().dialog(\'close\');">' . $this->t->_($button) . '</a></div>';
 					}
 				}
 			}
@@ -321,9 +318,6 @@ class S1_BuildingController extends Zend_Controller_Action
 		$can = $this->civ->village->building[$this->now]->canBuild($p['cost'],
 		$this->civ->getResource(), 0, $this->pos,$type,$this->civ->getAge());
 		if (($can['bool']) /*&& ($this->token['tokenB'])*/) {
-			$cost=$Building_Array[$type - 1]::$cost[0];
-			$cost[3]=0;
-			$this->civ->aggResource($cost);
 			$error=FALSE;
 			try {
 				Zend_Db_Table::getDefaultAdapter()->query(
@@ -334,7 +328,11 @@ class S1_BuildingController extends Zend_Controller_Action
 			catch (Zend_Db_Exception $e) {
 				$this->view->error="[CANTBUILD]";
 				$error=true;
-			}if (!$error) {
+			}
+			$cost=$Building_Array[$type - 1]::$cost[0];
+			$cost[3]=0;
+			$this->civ->aggResource($cost);
+			if (!$error) {
 				$this->civ->village->building[$this->now]->data[$this->pos]=array('liv'=>0,'type'=>$type);
 				$this->civ->village->building[$this->now]->addQueue($p['time'],
 				$type, $this->pos, $this->civ->getCurrentVillage());
@@ -347,7 +345,8 @@ class S1_BuildingController extends Zend_Controller_Action
 				 $this->civ->refresh->addIds('queue', $tmp->queue($queue, true));
 				 $this->civ->refresh->addIds('resbar', $tmp->resourceBar());*/
 				$this->civ->queue=$queue;
-				$this->civ->refresh(array('order'=>true));}
+				$this->civ->refresh(array('order'=>true));
+			}
 		} else {
 			if (! $can['bool'])
 			$this->view->error = $can['mess'];
@@ -462,11 +461,12 @@ class S1_BuildingController extends Zend_Controller_Action
 			array('pos' => $this->pos, 'village_id' => $this->now,
             'type' => $this->civ->village->building[$this->now]->getType(
 			$this->pos), 'civ_id' => $this->civ->cid, 'pop' => $pop));
-			$this->civ->ev->insert(
+			$id=$this->civ->ev->insert(
 			array('type' => DESTROY_EVENT, 'time' => (time() + 1200),
             'params' => $param));
+			
 			$destroy = $this->civ->destroy->toArray();
-			$destroy[] = array('params' => $param, 'type' => DESTROY_EVENT,
+			$destroy[] = array('id'=>$id,'params' => $param, 'type' => DESTROY_EVENT,
             'time' => (time() + 1200));
 			/*require_once APPLICATION_PATH . '/views/helpers/template.php';
 			 $tmp = new Zend_View_Helper_template();

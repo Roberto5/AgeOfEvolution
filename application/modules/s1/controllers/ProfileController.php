@@ -19,21 +19,21 @@ class S1_ProfileController extends Zend_Controller_Action {
 
 	public function indexAction() {
 		$uid=$this->getRequest()
-			->getParam("uid", 0);
+			->getParam("uid", -1);
 		$cid=$this->getRequest()
-			->getParam("cid", 0);
+			->getParam("cid", -1);
 		//profilo user principale
-		if (!$uid && !$cid) {
+		if ($uid==-1 && $cid==-1) {
 			$this->view->user=Zend_Registry::get("user");
 			$this->view->civ=Zend_Registry::get("civ");
 			$this->view->type=1;
 		}
-		elseif ($uid) { //profilo user generico
+		elseif ($uid!=-1) { //profilo user generico
 			$this->view->user=$this->db->fetchRow(
 					"SELECT * FROM `" . USERS_TABLE . "` WHERE `ID`='$uid'");
 			$this->view->type=2;
 		}
-		elseif ($cid) { //profilo civ generico
+		elseif ($cid!=-1) { //profilo civ generico
 			$this->view->civ=$this->db->fetchRow(
 					"SELECT * FROM `" . CIV_TABLE . "` WHERE `civ_id`='" . $cid . "'");
 			$this->view->type=3;
@@ -41,9 +41,8 @@ class S1_ProfileController extends Zend_Controller_Action {
 					"SELECT `ID`,`username` FROM `" . USERS_TABLE . "`,`" . RELATION_USER_CIV_TABLE . "` WHERE `civ_id`='$cid' AND `user_id`=`ID`");
 			
 			$this->view->sharer=$sharer;
-			//@todo ottimizzare
 			$this->view->village_list=$this->db->fetchAssoc(
-					"SELECT * FROM `" . SERVER. "_vilage` WHERE `civ_id`='$cid'");
+					"SELECT * FROM `" . SERVER. "_map` WHERE `civ_id`='$cid'");
 		}
 	}
 	public function changenamevillageAction() {
