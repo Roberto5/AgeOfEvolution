@@ -86,8 +86,8 @@ class Zend_View_Helper_template
          $civ->popc;
         $maxP = $civ->village->building[$now]->getCapTot(HOUSE);
         $r .= $busy . '<img src="' . $this->baseUrl .
-         '/common/images/popbusy.gif" alt="[' . $t->_("lavoratori") .
-         ']" title="' . $t->_("lavoratori") . '" width="16" height="16"/>/';
+         '/common/images/popbusy.gif" alt="[' . $t->_("WORKER") .
+         ']" title="' . $t->_("WORKER") . '" width="16" height="16"/>/';
         $n = 3;
         $r .= ($maxP < $pop ? '<blink><span style="color:red;">' : '') . $pop .
          ($maxP < $pop ? '</span></blink>' : '');

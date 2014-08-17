@@ -68,11 +68,11 @@ class Zend_View_Helper_image extends Zend_View_Helper_Abstract
 		} else {
 			if ($n==3) {
 				$url = "popbusy.gif";
-				$title = $alt = $t->_("Lavoratori");
+				$title = $alt = $t->_("WORKER");
 			}
 			else {
 				$url = "pop.gif";
-				$title = $alt = $t->_("popolazione");
+				$title = $alt = $t->_("POP");
 			}
 		}
 		 

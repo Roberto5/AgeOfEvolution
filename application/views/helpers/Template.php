@@ -126,8 +126,9 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
             $r .= ' &nbsp &nbsp ';
         }
         $pop = (int) $this->civ->village->data[$now]['pop'] + $this->civ->poptroop;
-        $busy = (int) $this->civ->village->data[$now]['busy_pop'] + $this->civ->poptroop +
+        $busy = (int) $this->civ->village->busy[$now] + $this->civ->poptroop +
          $this->civ->popc;
+        //Zend_Registry::get('log')->debug($this->civ->village->busy[$now],'data array');
         $maxP = $this->civ->village->building[$now]->getCapTot(HOUSE);
         
         $r .= $busy . $this->view->image()->resource(3, $age).'/';

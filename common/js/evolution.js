@@ -1145,6 +1145,8 @@ var ev = {
 		});
 	},
 	build : {
+		pop:0,
+		flagpop:false,
 		upgrade : function(obj) {
 			c = obj.$trigger.attr("class");
 			m = c.match(/pos([\d]{1,2})/);

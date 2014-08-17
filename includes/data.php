@@ -189,7 +189,7 @@ class main extends structure
     public static $param = array('rid');
 
     public static $maxPop = array(
-        1,
+        5,
         10,
         20,
         40,
@@ -923,7 +923,7 @@ class prod1 extends structure
     public static $param = array('prod');
 
     public static $maxPop = array(
-        1,
+        3,
         10,
         20,
         40,
@@ -1109,7 +1109,7 @@ class prod2 extends structure
     public static $param = array('prod');
 
     public static $maxPop = array(
-        1,
+        3,
         10,
         20,
         40,
@@ -1295,7 +1295,7 @@ class prod3 extends structure
     public static $param = array('prod');
 
     public static $maxPop = array(
-        1,
+        3,
         10,
         20,
         40,
@@ -1650,14 +1650,14 @@ class market extends structure
 
     public static $multiple_at_level20 = true;
 
-    public static $maxPop = array(
+   /* public static $maxPop = array(
         2,
         10,
         20,
         30,
         40,
         50
-        );
+        );*/
 
     public function getContent($liv)
     {
@@ -1997,7 +1997,7 @@ class research extends structure
         );
 
     public static $maxPop = array(
-        1,
+        5,
         10,
         15,
         20,

@@ -1,13 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 3.4.10.1deb1
+-- version 4.0.10deb1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generato il: Nov 24, 2013 alle 00:13
--- Versione del server: 5.5.34
--- Versione PHP: 5.3.10-1ubuntu3.8
+-- Generato il: Ago 17, 2014 alle 15:48
+-- Versione del server: 5.5.38-0ubuntu0.14.04.1
+-- Versione PHP: 5.5.9-1ubuntu4.3
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
@@ -50,14 +50,6 @@ CREATE TABLE `s1_ally_pacts` (
   KEY `id_ally2` (`id_ally2`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- RELATIONS FOR TABLE `s1_ally_pacts`:
---   `id_ally1`
---       `s1_ally` -> `id`
---   `id_ally2`
---       `s1_ally` -> `id`
---
-
 -- --------------------------------------------------------
 
 --
@@ -71,12 +63,6 @@ CREATE TABLE `s1_ally_permissions` (
   `value` int(1) NOT NULL,
   PRIMARY KEY (`civ_id`,`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- RELATIONS FOR TABLE `s1_ally_permissions`:
---   `civ_id`
---       `s1_civ` -> `civ_id`
---
 
 -- --------------------------------------------------------
 
@@ -93,12 +79,6 @@ CREATE TABLE `s1_building` (
   `pop` int(9) NOT NULL,
   PRIMARY KEY (`village_id`,`pos`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- RELATIONS FOR TABLE `s1_building`:
---   `village_id`
---       `s1_map` -> `id`
---
 
 -- --------------------------------------------------------
 
@@ -136,7 +116,6 @@ CREATE TABLE `s1_data_map` (
 ,`name` varchar(30)
 ,`capital` int(1)
 ,`type` int(1)
-,`busy_pop` float
 ,`prod1_bonus` int(3)
 ,`prod2_bonus` int(3)
 ,`prod3_bonus` int(3)
@@ -144,6 +123,7 @@ CREATE TABLE `s1_data_map` (
 ,`civ_age` int(1)
 ,`civ_ally` int(5)
 ,`ally` varchar(30)
+,`busypop` decimal(32,0)
 );
 -- --------------------------------------------------------
 
@@ -158,7 +138,7 @@ CREATE TABLE `s1_events` (
   `time` int(30) NOT NULL,
   `params` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -174,7 +154,6 @@ CREATE TABLE `s1_map` (
   `capital` int(1) NOT NULL,
   `type` int(1) NOT NULL DEFAULT '0',
   `pop` float NOT NULL,
-  `busy_pop` float NOT NULL,
   `resource_1` float NOT NULL,
   `resource_2` float NOT NULL,
   `resource_3` float NOT NULL,
@@ -192,12 +171,6 @@ CREATE TABLE `s1_map` (
   KEY `name` (`name`),
   KEY `civ_id` (`civ_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
-
---
--- RELATIONS FOR TABLE `s1_map`:
---   `civ_id`
---       `s1_civ` -> `civ_id`
---
 
 -- --------------------------------------------------------
 
@@ -218,14 +191,6 @@ CREATE TABLE `s1_mess` (
   KEY `mittente` (`mittente`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- RELATIONS FOR TABLE `s1_mess`:
---   `destinatario`
---       `s1_civ` -> `civ_id`
---   `mittente`
---       `site_users` -> `ID`
---
-
 -- --------------------------------------------------------
 
 --
@@ -239,14 +204,6 @@ CREATE TABLE `s1_mess_read` (
   PRIMARY KEY (`id`,`user`),
   KEY `user` (`user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- RELATIONS FOR TABLE `s1_mess_read`:
---   `id`
---       `s1_mess` -> `id`
---   `user`
---       `site_users` -> `ID`
---
 
 -- --------------------------------------------------------
 
@@ -267,14 +224,6 @@ CREATE TABLE `s1_offer` (
   KEY `vid` (`vid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- RELATIONS FOR TABLE `s1_offer`:
---   `civ_id`
---       `s1_civ` -> `civ_id`
---   `vid`
---       `s1_map` -> `id`
---
-
 -- --------------------------------------------------------
 
 --
@@ -288,12 +237,6 @@ CREATE TABLE `s1_option` (
   `value` text NOT NULL,
   PRIMARY KEY (`civ_id`,`option`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- RELATIONS FOR TABLE `s1_option`:
---   `civ_id`
---       `s1_civ` -> `civ_id`
---
 
 -- --------------------------------------------------------
 
@@ -341,13 +284,7 @@ CREATE TABLE `s1_report` (
   `id` int(5) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   KEY `civ` (`civ`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
-
---
--- RELATIONS FOR TABLE `s1_report`:
---   `civ`
---       `s1_civ` -> `civ_id`
---
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -363,14 +300,6 @@ CREATE TABLE `s1_report_read` (
   KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- RELATIONS FOR TABLE `s1_report_read`:
---   `user`
---       `site_users` -> `ID`
---   `id`
---       `s1_report` -> `id`
---
-
 -- --------------------------------------------------------
 
 --
@@ -385,12 +314,6 @@ CREATE TABLE `s1_research` (
   `enable` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`civ_id`,`rid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- RELATIONS FOR TABLE `s1_research`:
---   `civ_id`
---       `s1_civ` -> `civ_id`
---
 
 -- --------------------------------------------------------
 
@@ -409,16 +332,6 @@ CREATE TABLE `s1_troopers` (
   KEY `village_now` (`village_now`),
   KEY `village_prev` (`village_prev`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- RELATIONS FOR TABLE `s1_troopers`:
---   `civ_id`
---       `s1_civ` -> `civ_id`
---   `village_now`
---       `s1_map` -> `id`
---   `village_prev`
---       `s1_map` -> `id`
---
 
 -- --------------------------------------------------------
 
@@ -447,14 +360,6 @@ CREATE TABLE `site_alerts_read` (
   PRIMARY KEY (`id`,`user`),
   KEY `user` (`user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- RELATIONS FOR TABLE `site_alerts_read`:
---   `id`
---       `site_alerts` -> `aid`
---   `user`
---       `site_users` -> `ID`
---
 
 -- --------------------------------------------------------
 
@@ -495,7 +400,7 @@ CREATE TABLE `site_faq` (
   `question` varchar(100) NOT NULL,
   `reply` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -511,12 +416,6 @@ CREATE TABLE `site_option` (
   PRIMARY KEY (`user_id`,`option`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- RELATIONS FOR TABLE `site_option`:
---   `user_id`
---       `site_users` -> `ID`
---
-
 -- --------------------------------------------------------
 
 --
@@ -529,12 +428,6 @@ CREATE TABLE `site_role` (
   `role` varchar(40) NOT NULL,
   PRIMARY KEY (`uid`,`role`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- RELATIONS FOR TABLE `site_role`:
---   `uid`
---       `site_users` -> `ID`
---
 
 -- --------------------------------------------------------
 
@@ -576,14 +469,6 @@ CREATE TABLE `site_track` (
   KEY `category` (`category`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- RELATIONS FOR TABLE `site_track`:
---   `uid`
---       `site_users` -> `ID`
---   `category`
---       `site_track_cat` -> `id`
---
-
 -- --------------------------------------------------------
 
 --
@@ -597,14 +482,6 @@ CREATE TABLE `site_track_assoc_tag` (
   PRIMARY KEY (`id`,`tid`),
   KEY `tid` (`tid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- RELATIONS FOR TABLE `site_track_assoc_tag`:
---   `id`
---       `site_track` -> `id`
---   `tid`
---       `site_track_tag` -> `id`
---
 
 -- --------------------------------------------------------
 
@@ -668,12 +545,6 @@ CREATE TABLE `site_user_civ` (
   PRIMARY KEY (`user_id`,`server`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- RELATIONS FOR TABLE `site_user_civ`:
---   `user_id`
---       `site_users` -> `ID`
---
-
 -- --------------------------------------------------------
 
 --
@@ -698,7 +569,7 @@ CREATE TABLE `temp` (
 --
 DROP TABLE IF EXISTS `s1_data_map`;
 
-CREATE VIEW `s1_data_map` AS select `s1_map`.`id` AS `id`,`s1_map`.`civ_id` AS `civ_id`,`s1_map`.`name` AS `name`,`s1_map`.`capital` AS `capital`,`s1_map`.`type` AS `type`,`s1_map`.`busy_pop` AS `busy_pop`,`s1_map`.`prod1_bonus` AS `prod1_bonus`,`s1_map`.`prod2_bonus` AS `prod2_bonus`,`s1_map`.`prod3_bonus` AS `prod3_bonus`,`s1_civ`.`civ_name` AS `civ_name`,`s1_civ`.`civ_age` AS `civ_age`,`s1_civ`.`civ_ally` AS `civ_ally`,(select `s1_ally`.`name` from `s1_ally` where (`s1_ally`.`id` = `s1_civ`.`civ_ally`)) AS `ally` from (`s1_map` join `s1_civ`) where (`s1_map`.`civ_id` = `s1_civ`.`civ_id`);
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `s1_data_map` AS select `s1_map`.`id` AS `id`,`s1_map`.`civ_id` AS `civ_id`,`s1_map`.`name` AS `name`,`s1_map`.`capital` AS `capital`,`s1_map`.`type` AS `type`,`s1_map`.`prod1_bonus` AS `prod1_bonus`,`s1_map`.`prod2_bonus` AS `prod2_bonus`,`s1_map`.`prod3_bonus` AS `prod3_bonus`,`s1_civ`.`civ_name` AS `civ_name`,`s1_civ`.`civ_age` AS `civ_age`,`s1_civ`.`civ_ally` AS `civ_ally`,(select `s1_ally`.`name` from `s1_ally` where (`s1_ally`.`id` = `s1_civ`.`civ_ally`)) AS `ally`,(select sum(`s1_building`.`pop`) from `s1_building` where (`s1_building`.`village_id` = `s1_map`.`id`)) AS `busypop` from (`s1_map` join `s1_civ`) where (`s1_map`.`civ_id` = `s1_civ`.`civ_id`);
 
 --
 -- Limiti per le tabelle scaricate

@@ -15,6 +15,7 @@ class Model_village extends Zend_Db_Table_Abstract
     private $id;
     public $data = array();
     private $cid;
+    public $busy=array();
     /**
      * costruzioni
      * @var array|Model_building
@@ -30,6 +31,15 @@ class Model_village extends Zend_Db_Table_Abstract
         foreach ($rows->toArray() as $value) {
         	$this->data[$value['id']]=$value;
         	$this->building[$value['id']] = new Model_building($this->cid, $value['id']);
+        	$busy=0;
+        	foreach ($this->building[$value['id']]->data as $v) {
+        		$busy+=$v['pop'];
+        		
+        	}
+        	//Zend_Registry::get('log')->debug($busy,'busy');
+        	$this->data[$value['id']]['busy_pop']=$busy;
+        	$this->busy[$value['id']]=$busy;
+        	//Zend_Registry::get('log')->debug($this->data[$value['id']],'data village creatin');
         }
     }
     /**
@@ -102,6 +112,7 @@ class Model_village extends Zend_Db_Table_Abstract
     {
         if (! $id)
             $id = $this->id;
+        unset($this->data[$id]['busy_pop']);
         $this->update($this->data[$id],"`id`='$id'");
     }
 }

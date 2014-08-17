@@ -574,7 +574,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 				HOUSE);
 		$popT = $this->poptroop;
 		$busypop = $this->village->data[$this->currentVillage]['busy_pop'];
-		//$this->log->log("bsypop $busypop",Zend_Log::DEBUG);
+		//$this->log->debug($busypop,'busy pop');
 		$negativ = $popT + $busypop - $maxP;
 		if ($negativ < 0)
 			$negativ = 0;

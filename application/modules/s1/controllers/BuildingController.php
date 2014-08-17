@@ -22,6 +22,7 @@ class S1_BuildingController extends Zend_Controller_Action
 	private $pos;
 	private $p;
 	private $log;
+	private $building;
 	//private $token;
 	public function init ()
 	{
@@ -30,8 +31,8 @@ class S1_BuildingController extends Zend_Controller_Action
 		$this->req = $this->getRequest();
 		$this->pos = intval($this->req->getParam("pos", 0));
 		if (is_numeric($this->req->getParam('t')))
-		$this->pos = $this->civ->village->building[$this->now]->getBildForType(
-		$this->req->getParam('t'));
+		$this->pos = $this->civ->village->building[$this->now]->getBildForType($this->req->getParam('t'));
+		$this->building=$this->civ->village->building[$this->now];
 		$this->t = Zend_Registry::get("translate");
 		$this->db = Zend_Db_Table::getDefaultAdapter();
 		$this->log = Zend_Registry::get("log");
@@ -229,6 +230,39 @@ class S1_BuildingController extends Zend_Controller_Action
 					}
 					$display .= '</table>';
 					break;
+				case PROD1:
+				case PROD2:
+				case PROD3:
+				case MAIN: $display.='<div>[POP] <input style="margin: 0 10px;" id="pop" type="number" min="1" max="'.$Building_Array[$type - 1]::$maxPop[$this->civ->getAge()].'" value="'.$this->building->data[$this->pos]['pop'].'">
+				<div id="popslide" style="display: inline-block;width: 300px;"></div>
+				</div>
+				<script type="text/javascript">
+					<!--
+					pop=$("#pop");
+					slide=$("#popslide");
+					slide.slider({ 
+						min: 1,
+						max: '.$Building_Array[$type - 1]::$maxPop[$this->civ->getAge()].',
+						value : '.$this->building->data[$this->pos]['pop'].',
+						slide: function(event,ui) {
+							pop[0].value=ui.value;
+							ev.build.pop=ui.value;
+							if (!ev.build.flagpop) {
+								ev.build.flagpop=true;
+								setTimeout(function(){ev.build.flagpop=false;ev.request(module+"/building/pop/pos/'.$this->pos.'","post",{pop:ev.build.pop});},1000);
+							}
+						}
+					});
+					pop.change(function(){
+						slide.slider( "value", this.value);
+						ev.build.pop=this.value;
+						if (!ev.build.flagpop) {
+							ev.build.flagpop=true;
+							setTimeout(function(){ev.build.flagpop=false;ev.request(module+"/building/pop/pos/'.$this->pos.'","post",{pop:ev.build.pop});},1000);
+						}
+					});
+					//-->
+				</script>';
 				default:
 					$display .= $Building_Array[$type - 1]::getContent($liv);
 					break;
@@ -476,5 +510,18 @@ class S1_BuildingController extends Zend_Controller_Action
 		} else
 		$this->view->error = $this->_t->_('nessun edificio da demolire!');
 		//$this->civ->refresh->addToken('tokenB', token_set("tokenB"));
+	}
+	public function popAction()
+	{
+		global $Building_Array;
+		$this->_helper->layout->setLayout("ajax");
+		$this->_helper->viewRenderer->setNoRender(true);
+		$pop=intval($_POST['pop']);
+		$type = $this->civ->village->building[$this->now]->data[$this->pos]['type'];
+		if (($pop<=$Building_Array[$type - 1]::$maxPop[$this->civ->getAge()])&&($pop>0)) {
+			$this->building->data[$this->pos]['pop']=$pop;
+			$this->log->debug("pop $pop query `pos`='".$this->pos."' and `village_id`='".$this->now."'","query");
+			$this->building->update(array('pop'=>$pop), "`pos`='".$this->pos."' and `village_id`='".$this->now."'");
+		}
 	}
 }

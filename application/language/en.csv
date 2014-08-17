@@ -55,6 +55,7 @@ ONWAIT@On wait
 OWNER@Owner
 PASS_ERR@Password wrong
 PASS_LENG@The password must be 8 characters
+POP@Population
 PROFILE@Profile
 RANDOM@Random
 RECOVER@Insert the email of account to recover
@@ -84,4 +85,5 @@ WARNING@Warning
 WELLCOME@Welcome
 WEST@West
 WITHDRAW@withdraw
+WORKER@Worker
 WRITE@Write your message here
