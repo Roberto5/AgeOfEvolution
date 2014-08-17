@@ -3,7 +3,12 @@ for ($i = 1; $i <= 5; $i++) {
 	$this->key["{res$i}"]=$this->image()->resource($i-1, $this->age);
 }
 //$this->key["{HOME}"]=$this->image()->parse('[home]');
+for ($i = 1; $i <= 10; $i++) {
+	$this->key["{building$i}"]=Model_building::$name[$this->age][$i+1];
+}
+
 Zend_View_Filter_Tmpeng::addkey($this->key);
+
 ?>
 <div id="cv{vid}">
 <div id="resbar{vid}" style="text-align: center;">
@@ -24,70 +29,70 @@ Zend_View_Filter_Tmpeng::addkey($this->key);
 		style="z-index: 200;">
 		<a href="#"><input type="hidden" class="Btype" value="2"><img
 			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
-			alt="caverna dello sciamano"> </a>
+			alt="{building1}" title="{building1}"> </a>
 	</div>
 	<div style="height: 10px;"></div>
 	<div id="3" class="building drag storage2 ui-draggable"
 		style="z-index: 200;">
 		<a href="#"><input type="hidden" class="Btype" value="3"><img
 			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
-			alt="dispensa"> </a>
+			alt="{building2}" title="{building2}"> </a>
 	</div>
 	<div style="height: 10px;"></div>
 	<div id="4" class="building drag prod1 ui-draggable"
 		style="z-index: 200;">
 		<a href="#"><input type="hidden" class="Btype" value="4"><img
 			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
-			alt="cava di pietra"> </a>
+			alt="{building3}" title="{building3}"> </a>
 	</div>
 	<div style="height: 10px;"></div>
 	<div id="5" class="building drag prod2 ui-draggable"
 		style="z-index: 200;">
 		<a href="#"><input type="hidden" class="Btype" value="5"><img
 			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
-			alt="allevamento"> </a>
+			alt="{building4}" title="{building4}"> </a>
 	</div>
 	<div style="height: 10px;"></div>
 	<div id="6" class="building drag prod3 ui-draggable"
 		style="z-index: 200;">
 		<a href="#"><input type="hidden" class="Btype" value="6"><img
 			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
-			alt="segheria"> </a>
+			alt="{building5}" title="{building5}"> </a>
 	</div>
 	<div style="height: 10px;"></div>
 	<div id="7" class="building drag house ui-draggable"
 		style="z-index: 200;">
 		<a href="#"><input type="hidden" class="Btype" value="7"><img
 			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
-			alt="palafitte"> </a>
+			alt="{building6}" title="{building6}"> </a>
 	</div>
 	<div style="height: 10px;"></div>
 	<div id="8" class="building drag market ui-draggable"
 		style="z-index: 200; display: none;">
 		<a href="#"><input type="hidden" class="Btype" value="8"><img
 			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
-			alt="tenda del mercante"> </a>
+			alt="{building7}" title="{building7}"> </a>
 	</div>
 	<div style="height: 10px;"></div>
 	<div id="9" class="building drag barrack ui-draggable"
 		style="z-index: 200; display: none;">
 		<a href="#"><input type="hidden" class="Btype" value="9"><img
 			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
-			alt="barrack"> </a>
+			alt="{building8}" title="{building8}"> </a>
 	</div>
 	<div style="height: 10px;"></div>
 	<div id="10" class="building drag command ui-draggable"
 		style="z-index: 200; display: none;">
 		<a href="#"><input type="hidden" class="Btype" value="10"><img
 			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
-			alt="command"> </a>
+			alt="{building9}" title="{building9}"> </a>
 	</div>
 	<div style="height: 10px;"></div>
 	<div id="11" class="building drag research ui-draggable"
 		style="z-index: 200; display: none;">
 		<a href="#"><input type="hidden" class="Btype" value="11"><img
 			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
-			alt="research"> </a>
+			alt="{building10}" title="{building10}"> </a>
 	</div>
 </div>
 <div class="village_view">
