@@ -39,7 +39,7 @@ class Model_event extends Zend_Db_Table_Abstract
     }
     
     /**
-     * ritorna gliveventi
+     * ritorna gli eventi
      * @param array $where
      */
     public function getEvent ($where = null, $order = array('time ASC','id ASC'))

@@ -57,13 +57,10 @@ class S1_BuildingController extends Zend_Controller_Action
 			$this->p = $this->civ->village->building[$this->now]->getproperty(
 			$this->pos, $this->civ->getAge());
 			$type = $this->civ->village->building[$this->now]->data[$this->pos]['type'];
-			$liv = $this->civ->village->building[$this->now]->data[$this->pos]['liv'];
-			$name = Model_building::$name[$this->civ->getAge()][$this->civ->village->building[$this->now]->data[$this->pos]['type']] .
-             " " . $this->t->_("livello") . " " . $liv;
-			$button = $this->t->_("aumenta al livello") . " " . ($liv + 1);
+			$name = Model_building::$name[$this->civ->getAge()][$this->civ->village->building[$this->now]->data[$this->pos]['type']];
 			$a = "u";
 			$display .= '<h2>' .
-			Model_building::$name[$this->civ->getAge()][$type] . ' liv ' . $liv .
+			Model_building::$name[$this->civ->getAge()][$type].
              '</h2>';
 			$display .= $Building_Array[$type - 1]::$Description[$this->civ->getAge()] .
              '<br/>';
@@ -159,7 +156,9 @@ class S1_BuildingController extends Zend_Controller_Action
 					$display .= "</table><br/>";
 					//$tokenc = token_set("tokenCo");
 					$display .= $Building_Array[$type - 1]::$content . ' <h3>' .
-					$this->t->_('colonizzazioni') . ' ' . $n . '/' . $liv . '</h3>
+					//@todo rifare
+					$ricerca=1;
+					$this->t->_('colonizzazioni') . ' ' . $n . '/' . $ricerca . '</h3>
                 	<form action="' . $this->_helper->url("traincolony", 
                     "trainer", null/*, array('tokenCo' => $tokenc)*/) .
                      '" method="post"><div>' . $img->resource(3, 0);
@@ -202,8 +201,7 @@ class S1_BuildingController extends Zend_Controller_Action
 							}
 							foreach ($require['build'] as $value) {
 								$req .= '<li>' .
-								Model_building::$name[$this->civ][$value['type']] .
-                                 ' liv ' . $value['liv'] . '</li';
+								Model_building::$name[$this->civ][$value['type']] .'</li>';
 							}
 						}
 						//$require=print_r($require,true);
@@ -264,7 +262,8 @@ class S1_BuildingController extends Zend_Controller_Action
 					//-->
 				</script>';
 				default:
-					$display .= $Building_Array[$type - 1]::getContent($liv);
+					//@todo rifare per toglere livelli
+					$display .= $Building_Array[$type - 1]::getContent(1);
 					break;
 			}
 			$display .= '<div>' . $this->t->_("Costo") . ' : ';
@@ -282,8 +281,8 @@ class S1_BuildingController extends Zend_Controller_Action
 			}
 			$time = $this->p['time'];
 			$can = $this->civ->village->building[$this->now]->canBuild(
-			$this->p['cost'], $this->civ->getResource(), $this->p['liv'],
-			$this->pos, 0,$age,$this->p['maxliv']);
+			$this->p['cost'], $this->civ->getResource(), 
+			$this->pos, 0,$age);
 			$display .= ' ' . timeStampToString($time) . '</div>';
 			if (! $can['bool'])
 			$display .= '<div class="gray">' . $can['mess'] . '</div>';
@@ -356,7 +355,7 @@ class S1_BuildingController extends Zend_Controller_Action
 			try {
 				Zend_Db_Table::getDefaultAdapter()->query(
             "INSERT INTO `" . SERVER . "_building` SET `village_id`='" .
-				$this->now . "' , `type`='" . $type . "' , `liv`='0' , `pos`='" .
+				$this->now . "' , `type`='" . $type . "' , `pos`='" .
 				$this->pos . "'");
 			}
 			catch (Zend_Db_Exception $e) {
@@ -367,7 +366,7 @@ class S1_BuildingController extends Zend_Controller_Action
 			$cost[3]=0;
 			$this->civ->aggResource($cost);
 			if (!$error) {
-				$this->civ->village->building[$this->now]->data[$this->pos]=array('liv'=>0,'type'=>$type);
+				$this->civ->village->building[$this->now]->data[$this->pos]=array('type'=>$type);
 				$this->civ->village->building[$this->now]->addQueue($p['time'],
 				$type, $this->pos, $this->civ->getCurrentVillage());
 				$queue = $this->civ->getQueue()->toArray();
@@ -390,7 +389,7 @@ class S1_BuildingController extends Zend_Controller_Action
 		$this->_helper->redirector("index", "index",
 		$this->req->getModuleName());
 	}
-	public function upgradeAction ()
+	/*public function upgradeAction ()
 	{
 		$this->p = $this->civ->village->building[$this->now]->getproperty(
 		$this->pos, $this->civ->getAge());
@@ -399,7 +398,7 @@ class S1_BuildingController extends Zend_Controller_Action
 		$this->p['cost'], $this->civ->getResource(), $liv, $this->pos,0,$this->civ->getAge());
 		$this->view->layout()->x = 300;
 		$this->view->layout()->y = 200;
-		if (($can['bool']) /*&& ($this->token['tokenB'])*/) {
+		if ($can['bool']) {
 			if (isset($this->civ->village->building[$this->now]->data[$this->pos])) {
 				$type = $this->civ->village->building[$this->now]->data[$this->pos]['type'];
 				$this->p['cost'][3]=0;
@@ -410,11 +409,6 @@ class S1_BuildingController extends Zend_Controller_Action
 				$queue = $this->civ->getQueue()->toArray();
 				$param = serialize(array('pos' => $this->pos, 'village_id' => $this->now));
 				$queue[] = array('params' => $param,'time' => (time() + $this->p['time']));
-				/*require_once APPLICATION_PATH .
-				 '/views/helpers/template.php';
-				 $tmp = new Zend_View_Helper_template();
-				 $this->civ->refresh->addIds('queue', $tmp->queue($queue, true));
-				 $this->civ->refresh->addIds('resbar', $tmp->resourceBar());*/
 				$this->civ->queue=$queue;
 				$this->civ->refresh(array('order'=>true));
 			}
@@ -423,7 +417,7 @@ class S1_BuildingController extends Zend_Controller_Action
 		}
 		//$this->civ->refresh->addToken('tokenB', token_set("tokenB"));
 		if (! $_POST['ajax']) $this->_helper->redirector("index", "index",$this->req->getModuleName());
-	}
+	}*/
 	public function marketAction ()
 	{
 		Zend_Layout::getMvcInstance()->disableLayout();
@@ -446,11 +440,11 @@ class S1_BuildingController extends Zend_Controller_Action
          "` WHERE `type`='2' AND `" . CIV_TABLE . "`.`civ_id`=`" . OFFER_TABLE .
          "`.`civ_id` ORDER BY `rapport` LIMIT 10");
 		$pos = $this->civ->village->building[$this->now]->getBildForType(MARKET);
-		$liv = $this->civ->village->building[$this->now]->getLiv($pos);
-		$disp = $liv - $this->civ->getMercantBusy();
+		//@todo rifare con popolazione
+		$mercants=1;
+		$disp = $mercants - $this->civ->getMercantBusy();
 		$this->view->disp = $disp;
-		$this->view->liv = $liv;
-		//$this->view->token = token_set("tokenM");
+		$this->view->mercants = $mercants;
 		$this->view->travel = $this->civ->getMercantsTravel();
 		$this->view->res = array($list[$this->now]['resource_1'],
 		$list[$this->now]['resource_2'], $list[$this->now]['resource_3']);

@@ -435,10 +435,7 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
                  //**************************************
             $param = unserialize($value['params']);
             $r.= '<div> <a href="#'.$t->_('DELETE').'">'.$this->view->image('/common/images/del.gif',$t->_('DELETE'),null,16,16,array('onclick'=>'ev.build.deleteQueue('.$value['id'].');')).' '.
-             Model_building::$name[$this->civ->getAge()][$param['type']] . $t->_(
-            ' livello ') .
-             ($this->civ->village->building[$now]->getLiv($param['pos']) + ($destroy ? 0 : 1)) .
-             ' <span class="countDown">' . $count . '</span> ' . $t->_(
+             Model_building::$name[$this->civ->getAge()][$param['type']] .' <span class="countDown">' . $count . '</span> ' . $t->_(
             "finito il ") . date("H:i:s d/m/Y", $value['time']) . "</a></div>";
         }
         return $r;

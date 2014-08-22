@@ -144,34 +144,33 @@ class S1_ProcessingController extends Zend_Controller_Action
         $age = $civ['civ_age'];
         //info edifici
         $build = $this->_db->fetchAssoc(
-        "SELECT `pos`,`village_id`,`type`,`liv`,`pop` FROM `" . SERVER .
+        "SELECT `pos`,`village_id`,`type`,`pop`,`built` FROM `" . SERVER .
          "_building` WHERE `village_id`='" . $param['village_id'] . "'");
         $ctrl = $build;
-        $build[$param['pos']]['liv'] ++;
+        $build[$param['pos']]['built'] =true;
         //aggiornamento popolazione
         foreach ($build as $key => $value) {
-            //pop min liv(liv+1)/2
-            $s = $value['liv'] * ($value['liv'] + 1) / 2;
+            //pop min
+            $minpop = $Building_Array[$value['type'] - 1]::$minPop[$age];
             //popo max 
-            $maxpop = $s *
-             $Building_Array[$value['type'] - 1]::$maxPop[$age];
+            $maxpop = $Building_Array[$value['type'] - 1]::$maxPop[$age];
             if ($value['pop'] > $maxpop) {
                 $build[$key]['pop'] = $maxpop;
             }
             // pop minima
-            if ($value['pop'] < $s) {
-                $build[$key]['pop'] = $s;
+            if ($value['pop'] < $minpop) {
+                $build[$key]['pop'] = $minpop;
             }
         }
         $dif_pop = 0;
         foreach ($build as $key => $value) {
             if (($value['pop'] != $ctrl[$key]['pop']) ||
-             ($value['liv'] != $ctrl[$key]['liv'])) {
+             ($value['built'] != $ctrl[$key]['built'])) {
                 $this->_log->debug(
                 "pop aggiornata: '" . $value['pop'] . "' pop precedente '" .
                  $ctrl[$key]['pop'] . "'\n
-        		liv aggiornato '" . $value['liv'] . "' live prec '" .
-                 $ctrl[$key]['liv'] . "'");
+        		costruzione aggiornato '" . $value['built'] . "' costruzione prec '" .
+                 $ctrl[$key]['built'] . "'");
                 $this->_db->update(SERVER.'_building', $value, 
                 "`village_id`='" . $param['village_id'] . "' AND `pos`='" .
                  $value['pos'] . "'");
@@ -181,7 +180,7 @@ class S1_ProcessingController extends Zend_Controller_Action
         Model_civilta::aggProd($param['village_id']);
         Model_civilta::aggResourceById($param['village_id']);
         // se costruisco il senato allora aggiorno la captale
-        if (($build[$param['pos']]['type'] == COMMAND)&&($build[$param['pos']]['liv'] < 2)) {
+        if (($build[$param['pos']]['type'] == COMMAND)&&($build[$param['pos']]['built'] )) {
             // cerco il senato e lo cancello
             $village = $this->_db->fetchCol(
             "SELECT `id` FROM `" . SERVER . "_map` WHERE `civ_id`='" .
@@ -588,13 +587,12 @@ class S1_ProcessingController extends Zend_Controller_Action
         "SELECT `id` FROM `" . SERVER . "_map` WHERE `civ_id`='" . $param['cid'] .
          "'");
         $n = count($vids);
-        $liv = $this->_db->fetchOne(
-        "SELECT `liv` FROM `" . SERVER . "_building` WHERE `type`='" . COMMAND .
-         "' AND `village_id`IN('" . implode("','", $vids) . "')");
+        //@todo modificare con la ricerca
+        $disp=1;
         $cords = array($this->map->getCoordFromId($param['village_B']),$this->map->getCoordFromId($param['village_A']));
         
-        $this->_log->debug(array($cords, $liv, $n));
-        if (($liv > $n) && (!isset($this->map->city[$param['village_B']]))) {
+        $this->_log->debug(array($cords, $disp, $n));
+        if (($disp > $n) && (!isset($this->map->city[$param['village_B']]))) {
             Model_civilta::addVillage($cords[0]['x'], $cords[0]['y'], 
             $param['cid']);
             $this->_db->query(

@@ -10,7 +10,6 @@ abstract class troops {
      * ['build']
      *      [1]
      *          ['type']
-     *          ['liv']
      * ['research']
      *      [1]
      *          ['type']
@@ -130,14 +129,13 @@ class arco extends troops {
      * ['build']
      *      [1]
      *          ['type']
-     *          ['liv']
      * ['research']
      *      [1]
      *          ['type']
      *          ['liv']
      * @var array $condiction
      */
-    public static $condiction=array('research'=>array(array('type'=>RES_ARCO,'liv'=>1)),'build'=>array(array('type'=>BARRACK,'liv'=>5)));
+    public static $condiction=array('research'=>array(array('type'=>RES_ARCO,'liv'=>1)),'build'=>array(array('type'=>BARRACK)));
     public static function specialEffect($param) {
     	return array();
     }

@@ -54,55 +54,54 @@ class Model_building extends Zend_Db_Table_Abstract
     /**
      * restituisce un arrai con le proprietà di una struttura
      * @param int $pos >0
-     * @return Array  liv,type,rid,cost,time,capacity,prod,maxliv
+     * @return Array  type,rid,cost,time,capacity,prod
      */
     function getproperty ($pos, $age, $type = false)
     {
         global $Building_Array;
         $AgeBonus = $age + 1;
         $pop=isset($this->data[$pos])? $this->data[$pos]['pop'] :0;
-        $prop = array('liv' => $this->getLiv($pos), 
-        'type' => $this->getType($pos),'pop'=>$pop);
+        $prop = array('type' => $this->getType($pos),'pop'=>$pop);
         if (! $type)
             $type = $prop['type']-1;
         switch ($type+1) {
             case MAIN:
-                $prop['rid'] = main::$rid[$prop['liv']];
+                $prop['rid'] = main::$rid;
                 break;
             case STORAGE1:
-                $prop['capacity'] = storage1::$capacity[$prop['liv']] * $AgeBonus;
+                $prop['capacity'] = storage1::$capacity * $AgeBonus;
                 break;
             case STORAGE2:
-                $prop['capacity'] = storage2::$capacity[$prop['liv']];
+                $prop['capacity'] = storage2::$capacity;
                 break;
             case PROD1:
-                $prop['prod'] = prod1::$prod[$prop['liv']] * $AgeBonus;
+                $prop['prod'] = prod1::$prod * $AgeBonus;
                 break;
             case PROD2:
-                $prop['prod'] = prod2::$prod[$prop['liv']] * $AgeBonus;
+                $prop['prod'] = prod2::$prod * $AgeBonus;
                 break;
             case PROD3:
-                $prop['prod'] = prod3::$prod[$prop['liv']] * $AgeBonus;
+                $prop['prod'] = prod3::$prod * $AgeBonus;
                 break;
             case HOUSE:
-                $prop['capacity'] = house::$capacity[$prop['liv']] * $AgeBonus;
+                $prop['capacity'] = house::$capacity * $AgeBonus;
                 break;
             case MARKET:
             	
                 break;
             case BARRACK:
-                $prop['rid'] = barrack::$rid[$prop['liv']];
+                $prop['rid'] = barrack::$rid;
                 
         }
+        $prop['slotForPop']=$Building_Array[$type]::$slotForPop[$age];
         $prop['maxpop'] = $Building_Array[$type]::$maxPop[$age] * $AgeBonus;
-        $prop['maxliv'] = $Building_Array[$type]::$maxliv[$age];
-        $prop['cost'] = $Building_Array[$type]::$cost[$prop['liv'] + 1];
-        $cost = $prop['cost'][0] + $prop['cost'][1] + $prop['cost'][2];
+        $cost = $Building_Array[$type]::$cost[0] + $Building_Array[$type]::$cost[1] + $Building_Array[$type]::$cost[2];
         $prop['time'] = intval($cost / $this->getMainBuildingReduction() * 3600);
         return $prop;
     }
     /**
      * restituisce la capacità totale
+     * * @todo rifare con ricerca!
      * @param int $storagetype
      * @return int
      */
@@ -113,8 +112,7 @@ class Model_building extends Zend_Db_Table_Abstract
         $storage = 0;
         for ($i = 0; $i <= TOTBUILDING; $i ++) {
             if ($build[$i]['type'] == $storagetype) {
-                $liv = $this->getLiv($i);
-                $storage += $Building_Array[$storagetype - 1]::$capacity[$liv];
+                $storage += $Building_Array[$storagetype - 1]::$capacity;
             }
         }
         if ($storage == 0) {
@@ -130,11 +128,12 @@ class Model_building extends Zend_Db_Table_Abstract
     }
     /**
      * ritorna la riduzione del main building del villaggio selezionato
+     * @todo rifare con ricerca!
      * @return float
      */
     function getMainBuildingReduction ()
     {
-        return main::$rid[$this->getLiv(0)];
+        return main::$rid;
     }
     /**
      * aggiunge una struttura in coda
@@ -153,15 +152,6 @@ class Model_building extends Zend_Db_Table_Abstract
         $this->getDefaultAdapter()->query(
         "INSERT INTO `" . EVENTS_TABLE . "` SET `time`='" . $finish .
          "' , `type`='1', `params`='" . $params . "'");
-    }
-    /**
-     * ritorna il livello della struttura
-     * @param int $pos
-     * @return int
-     */
-    function getLiv ($pos)
-    {
-        return isset($this->data[$pos]) ?$this->data[$pos]['liv']:0;
     }
     /**
      * ritorna i tipo della struttura
@@ -192,23 +182,16 @@ class Model_building extends Zend_Db_Table_Abstract
                 if ($build[$po]['type'] == ($i + 1)) {
                     $existing = true;
                     $pos = $po;
-                    if ($this->getLiv($po) == "20")
-                        $exit = true;
                 }
-            if (($existing) && ! (($Building_Array[$i]::$multiple_at_level20) && ($this->getLiv(
-            $pos) == "20") || $Building_Array[$i]::$multiple))
+            if (($existing) && !$Building_Array[$i]::$multiple)
                 $bool = false;
                  // controllo requisiti
             if ($Building_Array[$i]::$require != null) {
-                //$require[$n]['type'] $require[$n]['liv'] $require['age']
                 if ($Building_Array[$i]::$require['age'] <= $age) {
                     $req = $Building_Array[$i]::$require;
                     for ($r = 0; ($req[$r]) && ($bool); $r ++) {
                         $p = $this->getBildForType($req[$r]['type']);
-                        if ($p >= 0) {
-                            if ($this->getLiv($p) < $req[$r]['liv'])
-                                $bool = false;
-                        } else
+                        if ($p < 0) 
                             $bool = false;
                     }
                 } else
@@ -223,11 +206,10 @@ class Model_building extends Zend_Db_Table_Abstract
     /**
      * controlla se l'edificio è costruibile
      * @param Array $costArray
-     * @param int liv
      * @param int max
      * @return bool
      */
-    function canBuild ($costArray, $resource, $liv, $pos,$type,$age, $max = 20)
+    function canBuild ($costArray, $resource, $pos,$type,$age, $max = 20)
     {
         $bool = true;
         for ($i = 0; ($i < 3) && ($bool); $i ++) {
@@ -245,16 +227,10 @@ class Model_building extends Zend_Db_Table_Abstract
             $bool = false;
             $mess = $this->t->_("l'edificio &egrave; in costruzione");
         }
-        if ($liv >= $max) {
-            $bool = false;
-            $mess = $this->t->_("l'edificio &egrave; al livello massimo");
-        }
         if ($type<1) $disp[$type]=true;
         else
         $disp=$this->getDispBuilding($age);
         $bool=($bool && $disp[$type]);
-        
-        
         return array('bool' => $bool, 'mess' => $mess);
     }
     /**

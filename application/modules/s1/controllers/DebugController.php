@@ -123,32 +123,10 @@ class S1_DebugController extends Zend_Controller_Action {
 		Zend_Controller_Action_HelperBroker::removeHelper('viewRenderer');
 	}
 
-	public function all20Action() {
-		$civ=Model_civilta::getInstance();
-		$now=$civ->getCurrentVillage();
-		Zend_Db_Table::getDefaultAdapter()->query(
-				"UPDATE `" . SERVER . "_building` SET `liv`='20' WHERE `village_id`='" . $now . "'");
-		Zend_Db_Table::getDefaultAdapter()->query(
-				"UPDATE `" . SERVER . "_map` SET `pop`=`pop`+'2000' WHERE `id`='" . $now . "'");
-		$this->view->text="done";
-		$this->view->display=true;
-		$this->log->notice("villaggio $now portato a liv 20");
-		echo $this->view->render("debug/index.phtml");
-		Zend_Controller_Action_HelperBroker::removeHelper('viewRenderer');
-	}
-
 	public function resetvilAction() {
 		$vid=Model_civilta::getInstance()->getCurrentVillage();
 		$this->db->query(
 				"DELETE FROM `s1_building` WHERE `village_id`='" . $vid . "'");
-		$this->db->query(
-				"INSERT INTO `" . SERVER . "_building` (`village_id`,`type`,`liv`,`pos`) value ('" . $vid . "','1','0','0')");
-		$this->db->query(
-				"INSERT INTO `" . SERVER . "_building` (`village_id`,`type`,`liv`,`pos`) value ('" . $vid . "','4','0','1')");
-		$this->db->query(
-				"INSERT INTO `" . SERVER . "_building` (`village_id`,`type`,`liv`,`pos`) value ('" . $vid . "','5','0','2')");
-		$this->db->query(
-				"INSERT INTO `" . SERVER . "_building` (`village_id`,`type`,`liv`,`pos`) value ('" . $vid . "','6','0','3')");
 		$this->db->update(SERVER.'_map', array('busy_pop'=>'0','pop'=>'100','name'=>'Nuovo Villaggio'),"`id`='$vid'");
 		$this->view->text="done";
 		$this->view->display=true;

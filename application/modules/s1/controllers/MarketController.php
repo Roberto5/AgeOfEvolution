@@ -43,8 +43,9 @@ class S1_MarketController extends Zend_Controller_Action
                 'y' => $coord['y']));
                 $time = getTime($dist, mercants::$speed[$this->civ->getAge()]);
                 //mercanti presenti
-                $disp = $this->civ->village->building[$now]->getLiv(
-                $this->civ->village->building[$now]->getBildForType(MARKET)) -
+                //@todo rifare con la popolazione
+                $mercants=1;
+                $disp = $mercants -
                  $this->civ->getMercantBusy();
                 if ($disp > 0) {
                     //controllo capacità mercanti
@@ -90,9 +91,9 @@ class S1_MarketController extends Zend_Controller_Action
                 $rap = $data['rap'];
                 $now = $this->civ->getCurrentVillage();
                 //mercanti presenti
-                $disp = $this->civ->village->building[$now]->getLiv(
-                $this->civ->village->building[$now]->getBildForType(MARKET)) -
-                 $this->civ->getMercantBusy();
+                //@todo rifare con popolazione
+                $mercants=1;
+                $disp =$mercants - $this->civ->getMercantBusy();
                 if ($disp > 0) {
                     //controllo capacità
                     $cap = $disp *

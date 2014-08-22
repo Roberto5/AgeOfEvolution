@@ -35,7 +35,7 @@ class S1_TrainerController extends Zend_Controller_Action
             $this->civ->getAge());
             foreach ($totrain as $key => $value) {
                 if ($value > 0) {
-                    $max = $p['liv'] * $p['maxpop'];
+                    $max = $p['pop']*$p['slotForPop'];
                     if ($value > $max)
                         $value = $max;
                     if (in_array($key, $this->civ->dispTroops)) {

@@ -409,9 +409,7 @@ class S1_MovementsController extends Zend_Controller_Action
         $nump = (int) $_POST['num'];
         $n = count($this->civ->village_list);
         $vids = array_keys($this->civ->village_list);
-        $liv = $this->db->fetchOne(
-        "SELECT `liv` FROM `" . SERVER . "_building` WHERE `type`='" . COMMAND .
-         "' AND `village_id`IN('" . implode("','", $vids) . "')");
+        $disp=1;
         $now = $this->civ->getCurrentVillage();
         $num = $this->db->fetchOne(
         "SELECT `numbers` FROM `" . TROOPERS .
@@ -437,7 +435,7 @@ class S1_MovementsController extends Zend_Controller_Action
                 $text = $nump . ' ' . $this->t->_('coloni inviati con successo');
             }
         } else {
-            if ($liv <= $n)
+            if ($disp <= $n)
                 $text = $this->t->_(
                 'Non puoi colonizzare altre citta se non aumenti il') . ' ' .
                  Model_building::$name[$this->civ->getAge()][COMMAND] . ' ';

@@ -257,8 +257,8 @@ class Model_civilta extends Zend_Db_Table_Abstract
 				foreach ($this->village_list as $key => $value) {
 					$pos = $this->village->building[$key]->getBildForType(RESEARCH);
 					if ($pos > 0) {
-						$liv = $this->village->building[$key]->getLiv($pos);
-						$this->pr += research::$pr[$liv];
+						//@todo rifare con la popolazione
+						$this->pr += research::$pr;
 					}
 				}
 				$this->research = new Model_research($this->cid);
@@ -287,12 +287,6 @@ class Model_civilta extends Zend_Db_Table_Abstract
 										$value['type']);
 								if ($pos < 0)
 									$bool = false;
-								else {
-									$liv = $this->village->building[$this->currentVillage]->getLiv(
-											$pos);
-									if ($liv < $value['liv'])
-										$bool = false;
-								}
 							}
 						}
 					}
@@ -375,8 +369,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 			//aggiorno gli edifici
 			global $Building_Array;
 			foreach ($this->village->building[$this->currentVillage]->data as $key => $value) {
-				$title = Model_building::$name[$this->getAge()][$value['type']] .
-				' liv ' . $value['liv'];
+				$title = Model_building::$name[$this->getAge()][$value['type']];
 				$this->refresh->addBuilding($key, $Building_Array[$value['type'] - 1],
 						$title);
 			}
@@ -564,8 +557,8 @@ class Model_civilta extends Zend_Db_Table_Abstract
 		$popc = 0;
 		for ($i = 0; $i < count($queue); $i ++) {
 			$param = unserialize($queue[$i]['params']);
-			$popc += $this->village->building[$this->currentVillage]->getLiv(
-					$param['pos']) + 1;
+			//@todo aggiungere pop del centro villaggio
+			$popc += 1;
 		}
 		$this->popc = $popc;
 		//$this->log->log("popc $popc",Zend_Log::DEBUG);
@@ -706,13 +699,13 @@ class Model_civilta extends Zend_Db_Table_Abstract
 		foreach ($build as $key => $value) {
 			switch ($value['type']) {
 				case PROD1:
-					$prod[1] += prod1::$prod[$value['liv']];
+					$prod[1] += prod1::$prod;
 					break;
 				case PROD2:
-					$prod[2] += prod2::$prod[$value['liv']];
+					$prod[2] += prod2::$prod;
 					break;
 				case PROD3:
-					$prod[3] += prod3::$prod[$value['liv']];
+					$prod[3] += prod3::$prod;
 					break;
 			}
 		}
@@ -778,11 +771,11 @@ class Model_civilta extends Zend_Db_Table_Abstract
 			,'prod2_bonus'=>$bonus[1]
 			,'prod3_bonus'=>$bonus[2]
 		));
-		self::$_defaultDb->query("INSERT INTO `" . SERVER . "_building` (`village_id`,`type`,`liv`,`pos`,`pop`)
-				value ('" . $vid . "','1','0','0','1'), 
-				('" . $vid . "','4','0','1','0'),
-				('" . $vid . "','5','0','2','0'),
-				('" . $vid . "','6','0','3','0')");//main liv 1 
+		self::$_defaultDb->query("INSERT INTO `" . SERVER . "_building` (`village_id`,`type`,`pos`,`pop`)
+				value ('" . $vid . "','1','0','1'), 
+				('" . $vid . "','4','1','0'),
+				('" . $vid . "','5','2','0'),
+				('" . $vid . "','6','3','0')");
 	}
 	/**
 	 * crea coordinate casuali polari che poi saranno convertite in  cartesiane
@@ -1053,10 +1046,8 @@ class Model_civilta extends Zend_Db_Table_Abstract
 		$popc = 0;
 		for ($i = 0; $queue[$i]; $i ++) {
 			$param = unserialize($queue[$i]['params']);
-			$liv = Zend_Db_Table::getDefaultAdapter()->fetchOne(
-					"SELECT `liv` FROM `" . SERVER . "_building` WHERE `pos`='" .
-					$param['pos'] . "' AND `village_id`='" . $param['village_id'] . "'");
-			$popc += $liv + 1;
+					//@todo aggiungere popolazione del centro villaggio
+			$popc +=  1;
 		}
 		// popolazione nelle strutture
 		$build = Zend_Db_Table::getDefaultAdapter()->fetchAll(
@@ -1117,7 +1108,8 @@ class Model_civilta extends Zend_Db_Table_Abstract
 				"' AND `type`='" . $storagetype . "'");
 		$storage = 0;
 		for ($i = 0; $build[$i]; $i ++) {
-			$storage += $Building_Array[$storagetype - 1]::$capacity[$build[$i]['liv']];
+			//@todo aggiungere ricerca
+			$storage += $Building_Array[$storagetype - 1]::$capacity;
 		}
 		if ($storage == 0) {
 			if ($storagetype == STORAGE1) {

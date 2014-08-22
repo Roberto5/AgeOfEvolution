@@ -12,7 +12,6 @@ if ($this->id) {
      static $require = array();
      static $multiple_at_level20 = false;
      static $multiple = false;
-     static $maxliv = Array();
      static $content = "";
      static $Description = Array();
      static $param = Array();
@@ -27,7 +26,7 @@ if ($this->id) {
     	$help.='<ul>';
     	foreach ($Building_Array[$id]::$require as $key=>$req) {
     		if (is_array($req)) {
-    			$help.='<li>'.Model_building::$name[$this->age][$req['type']].' liv '.$req['liv'].'</li>';
+    			$help.='<li>'.Model_building::$name[$this->age][$req['type']].'</li>';
     		}
     		else $help.='<li>'.$t->_('et&aacute;').':'.Model_civilta::getCivAge(($req+1)).'</li>';
     	}
@@ -42,7 +41,6 @@ if ($this->id) {
     <table>
     	<thead>
     		<tr>
-    			<th>liv</th>
     			<th>'.$this->image()->resource(0,$this->age).'</th>
     			<th>'.$this->image()->resource(1,$this->age).'</th>
     			<th>'.$this->image()->resource(2,$this->age).'</th>
@@ -53,20 +51,19 @@ if ($this->id) {
     		</tr>
     	<thead>
     	<tbody>';
-    for ($i = 0; $i <= $Building_Array[$id]::$maxliv[$this->age]; $i++) {
-    	$tot=($Building_Array[$id]::$cost[$i][0]+$Building_Array[$id]::$cost[$i][1]+$Building_Array[$id]::$cost[$i][2]);
+   
+    	$tot=($Building_Array[$id]::$cost[0]+$Building_Array[$id]::$cost[1]+$Building_Array[$id]::$cost[2]);
     	$time=intval($tot/main::$rid[1]*3600);
     	$help.='<tr>
-    			<td>'.$i.'</td>
-    			<td>'.$Building_Array[$id]::$cost[$i][0].'</td>
-    			<td>'.$Building_Array[$id]::$cost[$i][1].'</td>
-    			<td>'.$Building_Array[$id]::$cost[$i][2].'</td>
+    			<td>'.$Building_Array[$id]::$cost[0].'</td>
+    			<td>'.$Building_Array[$id]::$cost[1].'</td>
+    			<td>'.$Building_Array[$id]::$cost[2].'</td>
     			<td>'.$tot.'</td>
-    			<td>'.$Building_Array[$id]::$cost[$i][3].'</td>
+    			<td>'.$Building_Array[$id]::$cost[3].'</td>
     			<td>'.timeStampToString($time).'</td>
-    			<td>'.$prod['prod'][$i].'</td>
+    			<td>'.$prod['prod'].'</td>
     		</tr>';
-    }
+    
     		
     	$help.='</tbody>
     </table>';
