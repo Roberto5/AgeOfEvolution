@@ -171,15 +171,7 @@ var ev = {
 								}
 							}
 						}
-						$("[title]:not(.context-menu div):not(.notooltip)").tooltip({
-							offset : [ -10, 0 ],
-							delay : 1,
-							predelay : 400
-						}).dynamic({
-							bottom : {
-								direction : 'down'
-							}
-						});
+						$("[title]:not(.context-menu div):not(.notooltip)").tooltip();
 						$('.village_view div:not(.empty):not(.pos0):not(.pos1):not(.pos2):not(.pos3)').each(function(){
 							try {
 								$(this).droppable('destroy');
@@ -361,15 +353,7 @@ var ev = {
 				$("#" + this.id).removeClass("ui-state-hover");
 			});
 			$("#minus" + id).click(ev.togglewin);
-			$("[title]:not(.context-menu div):not(.notooltip)").tooltip({
-				offset : [ -10, 0 ],
-				delay : 1,
-				predelay : 400
-			}).dynamic({
-				bottom : {
-					direction : 'down'
-				}
-			});
+			$("[title]:not(.context-menu div):not(.notooltip)").tooltip();
 			ev.flagicon[id] = false;
 			this[content.title + "open"] = true;
 		}

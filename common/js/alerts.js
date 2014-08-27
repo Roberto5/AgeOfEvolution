@@ -34,7 +34,7 @@ function removeEditor(editor1)
 	// sent to the server or used in any other way.
     id2=editor1.name.substr(5,1);
     testo2=editor.getData();
-    title=$("#title"+id2).val()
+    title=$("#title"+id2).val();
     if (id2!='0') {
     	$( '#testo'+id2 ).html(testo2);
     	$('#titolo'+id2).text(title);

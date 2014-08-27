@@ -49,7 +49,7 @@ $(function(){
 					type : "post" 
 				}
 			}
-		},
+		}
 	});// perche ricarica??
 	$('.profile').submit(function(e){
 		return false;
@@ -74,7 +74,7 @@ $(function(){
 			Cancel : function() {
 				$(this).dialog("close");
 			}
-		},
+		}
 	});
 	
 });
