@@ -28,6 +28,15 @@
                 equalTo: "#adminpass"
             });
             checkRequire();
+            $.ajax({
+            	url:"include.php",
+            	dataType:"json",
+            	success: function(data) {
+            		for (var i in data) {
+            			add(data[i].name,data[i].type);
+            		}
+            	}
+            });
         });
         function checkRequire() {
             $.ajax({
@@ -49,17 +58,30 @@
         }
         function send() {
             if ($('#conf').valid()) {
-                input = $('#conf input:not([type=checkbox])');
+                input = $('#conf input:not([type=checkbox]):not(#file)');
                 value = {};
-                for (var i in input) {
+                for (var i=0;i<input.length;i++) {
                     v = input.eq(i);
                     value[v.attr('id')] = v.val();
                 }
-                input = $('#conf input[type=checkbox]');
-                for (var i in input) {
+                input = $('#conf input[type=checkbox]:not(.js):not(.css)');
+                for (var i=0;i<input.length;i++) {
                     v = input[i];
                     value[v.id] = v.checked ? 1 : 0;
                 }
+                js=$('.js:checked');
+                css=$('.css:checked');
+                fileJs=[];
+                fileCss=[];
+                console.log(js);
+                for (var i=0;i<js.length;i++) {
+                	fileJs.push(js.eq(i).val());
+                }
+                for (var i=0;i<css.length;i++) {
+                	fileCss.push(css.eq(i).val());
+                }
+                value.js=fileJs;
+                value.css=fileCss;
                 console.log(value);
                 $.ajax({
                     url: "install.php",
@@ -74,6 +96,9 @@
                     }
                 });
             }
+        }
+        function add(name,type) {
+        	$('<div><input type="checkbox" checked="checked" class="'+type+'" value="'+name+'">'+name+'</div>').appendTo('#'+type);
         }
     </script>
     <style>
@@ -117,36 +142,37 @@
         </div>
         <div id="tabs-2">
             <form id="conf">
+            <input id="dbconfig" checked="checked" type="checkbox" onclick="bool=$('#dbconfig:checked').length ? false :true;$('.dbconfig').each(function(){this.disabled=bool});"> add db config
                 <h2>DB credenzial</h2>
-                <p>
+                	
                     <div>Host
-                        <input required="required" name="host" id="host" value="localhost">
+                        <input class="dbconfig" required="required" name="host" id="host" value="localhost">
                     </div>
                     <div>Username
-                        <input required="required" name="dbuser" id="dbuser" value="ageofevolution">
+                        <input class="dbconfig" required="required" name="dbuser" id="dbuser" value="ageofevolution">
                     </div>
                     <div>Password
-                        <input id="dbpass" name="dbpass" type=password>
+                        <input class="dbconfig" id="dbpass" name="dbpass" type=password>
                     </div>
                     <div>DB name
-                        <input required="required" name="dbname" id="dbname" value="my_ageofevolution">
+                        <input class="dbconfig" required="required" name="dbname" id="dbname" value="my_ageofevolution">
                     </div>
-                </p>
+                    
                 <h2>Admin game credential</h2>
-                <p>
+                
                     <div>Admin username
-                        <input required="required" id="admin" name="admin">
+                        <input class="dbconfig" required="required" id="admin" name="admin">
                     </div>
                     <div>Admin password
-                        <input class="password" required="required" name="adminpass" id="adminpass" type="password">retype
-                        <input name="pass2" class="password" required="required" id="pass2" type="password">
+                        <input class="dbconfig" class="password" required="required" name="adminpass" id="adminpass" type="password">retype
+                        <input class="dbconfig" name="pass2" class="password" required="required" id="pass2" type="password">
                     </div>
                     <div>Admin email
-                        <input type="email" required="required" id="adminemail" name="adminemail">
+                        <input class="dbconfig" type="email" required="required" id="adminemail" name="adminemail">
                     </div>
-                </p>
+                
                 <h2>script option</h2>
-                <p>
+                
                     <div>script path
                         <input required="required" name="path" id="path" value="/AgeOfEvolution">
                     </div>
@@ -154,10 +180,10 @@
                         <input required="required" name="url" id="url" value="http://localhost/">
                     </div>
                     <div>script runnig in local machine
-                        <input name="local" id="local" type="checkbox" value="1" checked="true">
+                        <input name="local" id="local" type="checkbox" value="1" checked="checked">
                     </div>
                     <div>debug mode
-                        <input id="debug" name="debug" type="checkbox" value="1" checked="true">
+                        <input id="debug" name="debug" type="checkbox" value="1" checked="checked">
                     </div>
                     <div>email validation
                         <input id="email" name="email" type="checkbox" value="1">
@@ -165,7 +191,17 @@
                     <div>detect mobile device (experimental)
                         <input id="mobile" name="mobile" type="checkbox" value="1">
                     </div>
-                </p>
+                <h2>include file(advance)</h2>
+                <select id="type">
+                	<option value="js">javascript</option>
+                	<option value="css">css</option>
+                </select>
+                <input id="file">
+                <button onclick="add($('#file').val(),$('#type').val());return false;">add</button>
+                <div id="js"><h3>javascript</h3>
+                </div>
+                <div id="css"><h3>css</h3>
+                </div>
             </form>
             <button onclick="send()">send</button>
         </div>
