@@ -1,5 +1,6 @@
 <?php
 try {
+	if (is_file('../application/configs/application.ini')) throw new Exception("Config file exist");
 	function compress_config($parent,$child=array()) {
 		foreach ($parent as $key => $value) {
 			if (isset($child[$key])) {

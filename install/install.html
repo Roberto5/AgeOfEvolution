@@ -43,7 +43,8 @@
                 url: "require.php",
                 dataType: 'json',
                 success: function(data) {
-                    
+                    if (typeof data === 'string') alert(data);
+                    else {
                         for (var k in data) {
                             if (data[k]) { $("#"+k).removeClass('ui-icon-circle-close').addClass('ui-icon-circle-check');
                                           $("#"+k).parent().addClass('ui-state-highlight').removeClass('ui-state-error');
@@ -52,7 +53,7 @@
                                   $("#"+k).parent().removeClass('ui-state-highlight').addClass('ui-state-error');
                                  }
                         }
-                    
+                    }
                 }
             });
         }
