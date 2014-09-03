@@ -107,16 +107,7 @@ var ev = {
 								v = data.update.attr[key][k];
 								if ((k == 'src') || (k == 'href'))
 									v = path + v;
-								if (k == 'title') {
-									api = $('#' + key).data('tooltip');
-									$tip = api ? api.getTip() : false;
-									if ($tip)
-										$tip.text(v);
-									else {
-										$('#' + key).data('title', v);
-									}
-								} else
-									$('#' + key).attr(k, v);
+								$('#' + key).attr(k, v);
 							}
 					}
 					if (data.update.token) {
@@ -140,8 +131,8 @@ var ev = {
 							if (b[i]) {
 								place = $('#cv' + ev.focus.id + ' div.building.pos' + i);
 								place.attr("class","building pos"+i+" "+b[i].type);
-								dat = place.data('events');
-								/*if ((dat) && (!dat.contextmenu)) {
+								/*dat = place.data('events');
+								if ((dat) && (!dat.contextmenu)) {
 									place.contextMenu(ev.menubuilding, {
 										theme : 'human'
 									});
@@ -149,26 +140,12 @@ var ev = {
 									place.contextMenu(ev.menubuilding, {
 										theme : 'human'
 									});*/
-								api = place.data('tooltip');
-								$tip = api ? api.getTip() : false;
-								if ($tip)
-									$tip.text(b[i].title);
-								else {
-									place.attr('title', b[i].title);
-								}
+								place.attr('title', b[i].title);
 							} else {
 								$obj = $('#cv' + ev.focus.id + ' div.building.pos' + i);
 								$obj.removeClass();
 								$obj.addClass('building empty pos' + i);
-								api = $obj.data('tooltip');
-								$tip = api ? api.getTip() : false;
-								if (!$tip && !api)
-									$obj.attr('title', ev.lang.build);
-									
-								else {
-									api.show();api.hide();
-									api.getTip().text(ev.lang.build);
-								}
+								$obj.attr('title', ev.lang.build);
 							}
 						}
 						$("[title]:not(.context-menu div):not(.notooltip)").tooltip();

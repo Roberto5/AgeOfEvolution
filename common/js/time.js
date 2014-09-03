@@ -32,7 +32,7 @@ function counter()
         now=parseInt(now);
         if(now>=storage) new_val=storage;
         else {
-            prod=$resource.eq(i).data("title")/3600;
+            prod=$resource.eq(i).attr("title")/3600;
             if (init<3) {
                 res[i]=now;
                 init++;

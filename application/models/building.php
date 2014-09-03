@@ -96,6 +96,7 @@ class Model_building extends Zend_Db_Table_Abstract
         $prop['slotForPop']=$Building_Array[$type]::$slotForPop[$age];
         $prop['maxpop'] = $Building_Array[$type]::$maxPop[$age] * $AgeBonus;
         $cost = $Building_Array[$type]::$cost[0] + $Building_Array[$type]::$cost[1] + $Building_Array[$type]::$cost[2];
+        $prop['cost']=$Building_Array[$type]::$cost;
         $prop['time'] = intval($cost / $this->getMainBuildingReduction() * 3600);
         return $prop;
     }
@@ -176,12 +177,10 @@ class Model_building extends Zend_Db_Table_Abstract
             $build = $this->data;
             $existing = false;
             $exit = false;
-            $pos = 0;
             // controllo esistenza
-            for ($po = 0; ($po <= TOTBUILDING) && (! $exit); $po ++)
+            for ($po = 0; ($po <= TOTBUILDING) && (! $existing); $po ++)
                 if ($build[$po]['type'] == ($i + 1)) {
                     $existing = true;
-                    $pos = $po;
                 }
             if (($existing) && !$Building_Array[$i]::$multiple)
                 $bool = false;
@@ -209,15 +208,15 @@ class Model_building extends Zend_Db_Table_Abstract
      * @param int max
      * @return bool
      */
-    function canBuild ($costArray, $resource, $pos,$type,$age, $max = 20)
+    function canBuild ($costArray, $resource, $pos,$type,$age)
     {
         $bool = true;
         for ($i = 0; ($i < 3) && ($bool); $i ++) {
-            if ($costArray[$i] > $resource[$i])
+            if ($costArray[$i] > $resource[$i]) {
                 $bool = false;
+                $mess = $this->t->_("non hai le risorse necessarie!");
+    		}
         }
-        if (! $bool)
-            $mess = $this->t->_("non hai le risorse necessarie!");
         if ($costArray[3] > ($resource[3] - $resource[4])) {
             $mess = $this->t->_("non hai abbastanza popolazione!");
             $bool = false;
@@ -230,7 +229,10 @@ class Model_building extends Zend_Db_Table_Abstract
         if ($type<1) $disp[$type]=true;
         else
         $disp=$this->getDispBuilding($age);
-        $bool=($bool && $disp[$type]);
+        if (!$disp[$type]) {
+        	$mess="[NOTDISP]";
+        	$bool=false;
+        }
         return array('bool' => $bool, 'mess' => $mess);
     }
     /**

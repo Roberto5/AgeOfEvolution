@@ -121,7 +121,7 @@ class storage1 extends structure
     public static $param = array('capacity');
 
     public static $content = 'capacit&agrave;: {0} <br/>al prossimo : [0]<br/>';
-
+	public static $multiple = true;
     public function getContent($param)
     {
         $text=storage1::$content;
@@ -152,7 +152,7 @@ class storage2 extends structure
     public static $param = array('capacity');
 
     public static $content = 'capacit&agrave;: {0} <br/>al prossimo : [0]<br/>';
-
+	public static $multiple = true;
     public function getContent($param)
     {
         $text=storage2::$content;

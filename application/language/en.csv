@@ -3,9 +3,11 @@ ADD@Add
 ALERTS@Alerts
 ALNUM@This field must contain letter and number
 BARBARIANS@Barbarians
+BLACKMARKET@Black Market
 BUGDESC@Describe here the bug that you are find, an idea for improve the game or what you do not like.
 BUGIMG@if you want send image, host online and put here the link
 BUGTAG@The Tag help to find report similar
+BUILD@Build
 CANTBUILD@You can't build here
 CATEGORY@Category
 CENTRALMARKET@Central Market
@@ -15,6 +17,7 @@ CIVLESS@Civilization less
 CIVONSERVER@Civilization on server
 CLOSE@Close
 CONTACT@Contact us
+COST@Cost
 CREATE@Create
 CREATECIV@Create a new civilization
 CTRL_MAIL@Email send , control your email
@@ -22,6 +25,7 @@ DATA_ERROR@Data Error
 DELETE@Delete
 DESCRIPTION2@Description
 DESCRIPTION@description
+DISMISS@Dismiss
 EAST@East
 EDIT@Edit
 EMAIL_CONTACT@Contact from email
@@ -47,6 +51,7 @@ NAME@Nome
 NEWVIL@New village
 NOCIV@You haven't Civilization in this server
 NORTH@North
+NOTDISP@Not available
 NOTLIKE@Not Like
 NOTREG@Not Registered
 OBJECT@object
@@ -57,6 +62,7 @@ PASS_ERR@Password wrong
 PASS_LENG@The password must be 8 characters
 POP@Population
 PROFILE@Profile
+PROMOTE@Promote
 RANDOM@Random
 RECOVER@Insert the email of account to recover
 REFRESH@Refresh
@@ -75,6 +81,7 @@ STATUS@Status
 SUCCESS@login success
 TARGET@Target
 TOTALUSER@Total users
+TRAIN@Train
 USERNAME@Username :
 USERONLINE@Users online
 USER_NOT_FOUND@Username not found

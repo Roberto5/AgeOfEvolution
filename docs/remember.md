@@ -10,6 +10,11 @@ not render the view phtml
 -----------
     $this->_helper->viewRenderer->setNoRender(true);
   
+Translate
+-----------
+	[TRANSLATESYMBOL]
+
+
 Layout Ajax
 =======
 add data 

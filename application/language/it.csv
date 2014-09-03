@@ -3,9 +3,11 @@ ADD@Aggiungi
 ALERTS@Avvisi
 ALNUM@Questo campo deve contenere solo lettere e numeri
 BARBARIANS@Barbari
+BLACKMARKET@Mercato Nero
 BUGDESC@Descrivi qui il bug che hai trovato, un idea per migliorare il gioco o quello che non ti piace. cerca di essere chiaro e di compilare bene il form
 BUGIMG@Se vuoi inviarci immagini caricale su un host online e metti qui l&apos;indirizzo
 BUGTAG@Il Tag serve per etichettare la segnalazione e ricercare segnalazioni simili
+BUILD@Costruisci
 CANTBUILD@Non puoi costruire qui
 CATEGORY@Categoria
 CENTRALMARKET@Mercato Centrale
@@ -15,6 +17,7 @@ CIVLESS@Senza civilt&agrave;
 CIVONSERVER@Civilt&agrave; presenti
 CLOSE@Chiudi
 CONTACT@Contattaci
+COST@Costo
 CREATE@Crea
 CREATECIV@Crea una nuova civilt&agrave;
 CTRL_MAIL@Email inviata con successo, controlla la casella di posta
@@ -22,6 +25,7 @@ DATA_ERROR@Errore nei dati
 DELETE@Cancella
 DESCRIPTION2@Descrizione
 DESCRIPTION@descrizione del sito
+DISMISS@Congeda
 EAST@Est
 EDIT@Modifica
 EMAIL_CONTACT@Contattaci per email
@@ -48,6 +52,7 @@ NAME@Nome
 NEWVIL@Nuovo villaggio
 NOCIV@Non hai una civilt&agrave; in questo server
 NORTH@Nord
+NOTDISP@Non disponibile
 NOTLIKE@Critiche
 NOTREG@Non registrato
 OBJECT@oggetto
@@ -58,6 +63,7 @@ PASS_ERR@Password errata
 PASS_LENG@La password deve contenere 8 caratteri
 POP@Popolazione
 PROFILE@Profilo
+PROMOTE@Promuovi
 RANDOM@Casuale
 RECOVER@Inserisci l'email dell'account da recuperare
 REFRESH@Aggiorna
@@ -77,6 +83,7 @@ SUCCESS@login eseguito con successo
 TARGET@Obbiettivo
 TOTALUSER@Utenti totali
 The two given tokens do not match@I due campi non coincidono
+TRAIN@Addestra
 USERNAME@Nome utente :
 USERONLINE@Utenti online
 USER_NOT_FOUND@Username inesistente
