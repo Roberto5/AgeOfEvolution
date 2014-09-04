@@ -53,7 +53,7 @@ if ($this->id) {
     	<tbody>';
    
     	$tot=($Building_Array[$id]::$cost[0]+$Building_Array[$id]::$cost[1]+$Building_Array[$id]::$cost[2]);
-    	$time=intval($tot/main::$rid[1]*3600);
+    	$time=intval($tot/main::$rid*3600);
     	$help.='<tr>
     			<td>'.$Building_Array[$id]::$cost[0].'</td>
     			<td>'.$Building_Array[$id]::$cost[1].'</td>

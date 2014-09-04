@@ -81,138 +81,153 @@ else {
 			array('section' => '3'));
 			$this->key['{blackmarket}']=$this->_helper->url("market", null, null,
 			array('section' => '4'));
-?>
+			?>
 <div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="tabs">
-<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-<li><a href="{send}">[SEND]</a></li>
-<li><a href="{buy}">[BUY]</a></li>
-<li><a href="{sell}">[SELL]</a></li>
-<li><a href="{blackmarket}">[BLACKMARKET]</a></li>
-</ul>
-
-</div>';
-<?php 
-			break;
-		case BARRACK:
-			$this->key['{train}']=$this->_helper->url("barrak", null, null,
-			array('section' => '1'));
-			$this->key['{promote}']=$this->_helper->url("barrak", null, null,
-			array('section' => '2'));
-			$this->key['{dismiss}']=$this->_helper->url("barrak", null, null,
-			array('section' => '3'));
-?>
-<div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="tabs">
-<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-<li><a href="{train}">[TRAIN]</a></li>
-<li><a href="{promote}">[PROMOTE]</a></li>
-<li><a href="{dismiss}">[DISMISS]</a></li>
-</ul>
+	<ul
+		class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+		<li><a href="{send}">[SEND]</a></li>
+		<li><a href="{buy}">[BUY]</a></li>
+		<li><a href="{sell}">[SELL]</a></li>
+		<li><a href="{blackmarket}">[BLACKMARKET]</a></li>
+	</ul>
 
 </div>
-<?php 
+';
+			<?php
 			break;
-		case COMMAND:
-			$n = count($this->civ->village_list);
-			$img = new Zend_View_Helper_image();
-			$train = $this->civ->training;
-			global $NameTroops, $Troops_Array;
-			echo  '<script type="text/javascript">resetinit();</script>
+case BARRACK:
+	$this->key['{train}']=$this->_helper->url("barrak", null, null,
+	array('section' => '1'));
+	$this->key['{promote}']=$this->_helper->url("barrak", null, null,
+	array('section' => '2'));
+	$this->key['{dismiss}']=$this->_helper->url("barrak", null, null,
+	array('section' => '3'));
+	?>
+<div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="tabs">
+	<ul
+		class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+		<li><a href="{train}">[TRAIN]</a></li>
+		<li><a href="{promote}">[PROMOTE]</a></li>
+		<li><a href="{dismiss}">[DISMISS]</a></li>
+	</ul>
+
+</div>
+	<?php
+	break;
+case COMMAND:
+	$n = count($this->civ->village_list);
+	$img = new Zend_View_Helper_image();
+	$train = $this->civ->training;
+	global $NameTroops, $Troops_Array;
+	$this->headScript()->appendScript('resetinit();');
+	?>
 <table class="troopers" style="margin-left: 10px;">
-<thead><td></td>
-<td>' . $this->t->_("numero") . '</td>
-<td>' . $this->t->_("durata") . '</td>
-<td>' . $this->t->_("finito") . '</td></thead>';
-			for ($i = 0; $train[$i]; $i ++) {
-				$params = unserialize($train[$i]['params']);
-				$dif = $train[$i]['time'] - mktime();
-				if ($dif <= 0)
-				$dif = "00:00:0?";
-				if ($params['trooper_id'] == 4)
-				echo '<tr><td>' .
-				$img->image()->Troop($params['trooper_id']) . '</td>
+	<thead>
+		<tr>
+			<th></th>
+			<th>[NUMBER]</th>
+			<th>[TIME]</th>
+			<th>[END]</th>
+		</tr>
+	</thead>
+	<?php
+	for ($i = 0; $train[$i]; $i ++) {
+		$params = unserialize($train[$i]['params']);
+		$dif = $train[$i]['time'] - mktime();
+		if ($dif <= 0)
+		$dif = "00:00:0?";
+		if ($params['trooper_id'] == 4)
+		echo '<tr><td>' .$img->image()->Troop($params['trooper_id']) . '</td>
 <td>' . $params['num'] . '</td>
 <td><span class="countDown">' . $dif . '</span> </td>
 <td>' . date("H:i:s", $train[$i]['time']) . '</td></tr>';
-			}
-			echo "</table><br/>";
-			//$tokenc = token_set("tokenCo");
-			echo $Building_Array[$type - 1]::$content . ' <h3>' .
-			//@todo rifare
-			$ricerca=1;
-			$this->t->_('colonizzazioni') . ' ' . $n . '/' . $ricerca . '</h3>
-<form action="' . $this->_helper->url("traincolony",
-"trainer", null) .
-'" method="post"><div>' . $img->resource(3, 0);
-			for ($i = 0; $i < 3; $i ++)
-			echo ' ' . colony::$cost[$i] . ' ' .
-			$img->resource($i, $age);
-			echo ' <input class="number" name="num" size="4"/></div><input type="submit" value="' .
-			$this->t->_('Assumi') . '" /></form>';
-			break;
-		case RESEARCH:
-			$pr = $this->civ->pr;
-			$bpr = $this->civ->bpr;
-			$disp = $this->civ->research->dispRes();
-			global $research_array;
-			echo $this->t->_('Punti ricerca disponibili') . ' :' .
-			($pr - $bpr) .
+	}
+	?>
+</table>
+	<?php
+	echo $Building_Array[$type - 1]::$content;
+	$ricerca=$this->civ->research->data[RES_LEADERSHIP]['liv'];
+	$this->key['{n}']=$n;
+	$this->key['{r}']=$ricerca;
+	$this->key['{url}']=$this->_helper->url("traincolony",
+"trainer", null);
+	$this->key['{img}']=$img->resource(3, 0);
+?>
+{content}
+<h3>[COLO] {n}/{r}</h3>
+<form action="{url}" method="post">
+	<div>{img}
+	<?php 
+	for ($i = 0; $i < 3; $i ++)
+	echo ' ' . colony::$cost[$i].' '.$img->resource($i, $age);
+	?>
+		<input class="number" name="num" size="4"/><input type="submit" value="[TRAIN]" />
+	</div>
+</form>
+<?php 
+	break;
+case RESEARCH:
+	$pr = $this->civ->pr;
+	$bpr = $this->civ->bpr;
+	$disp = $this->civ->research->dispRes();
+	global $research_array;
+	echo '[POINTDISP] :' .
+	($pr - $bpr) .
 '<table class="table-research">
 <thead>
 <tr>
-<th>' . $this->t->_('Nome') . '</th>
-<th>' .
-			$this->t->_('Descrizione') . '</th>
-<th>' . $this->t->_('Livello') . '</th>
-<th>' . $this->t->_('Costo') . '</th>
+<th>[NAME]</th>
+<th>[DESCRIPTION2]</th>
+<th>[LIV]</th>
+<th>[COST]</th>
 <th></th>
 </tr>
 </thead>';
-			foreach ($research_array as $ty => $res) {
-				$require = $res::$require;
-				$req = "";
-				if ($require) {
-					$req = '<div>' . $this->t->_('Richiede') . ':<ul>';
-					foreach ($require['research'] as $value) {
-						$req .= '<li>' .
-						$research_array[$value['type']]::$name . ' liv ' .
-						$value['liv'] . '</li>';
-					}
-					foreach ($require['build'] as $value) {
-						$req .= '<li>' .
-						Model_building::$name[$this->civ][$value['type']] .'</li>';
-					}
-				}
-				//$require=print_r($require,true);
-				$livr = (int) $this->civ->research->data[$ty]['liv'];
-				$label = $livr > 0 ? $this->t->_('Aumenta') : $this->t->_(
+	foreach ($research_array as $ty => $res) {
+		$require = $res::$require;
+		$req = "";
+		if ($require) {
+			$req = '<div>[REQUIRE]:<ul>';
+			foreach ($require['research'] as $value) {
+				$req .= '<li>' .
+				$research_array[$value['type']]::$name . ' liv ' .
+				$value['liv'] . '</li>';
+			}
+			foreach ($require['build'] as $value) {
+				$req .= '<li>' .
+				Model_building::$name[$this->civ][$value['type']] .'</li>';
+			}
+		}
+		$livr = (int) $this->civ->research->data[$ty]['liv'];
+		$label = $livr > 0 ? $this->t->_('Aumenta') : $this->t->_(
 'Ricerca');
-				if ($res::$livmax[$age] <=
-				$this->civ->research->data[$ty]['liv'])
-				$label = $this->t->_('livello massimo');
-				if ($disp[$res])
-				$attr = 'onclick="ev.research(' . $ty . ');"';
-				else
-				$attr = 'disabled="disabled"';
-				echo '
+		if ($res::$livmax[$age] <=
+		$this->civ->research->data[$ty]['liv'])
+		$label = '[LIV] [MAX]';
+		if ($disp[$res])
+		$attr = 'onclick="ev.research(' . $ty . ');"';
+		else
+		$attr = 'disabled="disabled"';
+		echo '
 <tr>
 <td>' . $res::$name . '</td>
 <td>' . $res::$description . $req . '</td>
 <td id="liv' . $ty . '">' .
-				$livr . '</td>
+		$livr . '</td>
 <td>' . $res::$cost[$livr] . '</td>
 <td><button id="button' . $ty .
 '" ' . $attr . '>' . $label . '</button></td>
 </tr>';
-			}
-			echo '</table>';
-			break;
-		case PROD1:
-		case PROD2:
-		case PROD3:
-		case MAIN: echo '<div>[POP] <input style="margin: 0 10px;" id="pop" type="number" min="1" max="'.$Building_Array[$type - 1]::$maxPop[$age].'" value="'.$this->building->data[$this->pos]['pop'].'">
+	}
+	echo '</table>';
+	break;
+case PROD1:
+case PROD2:
+case PROD3:
+case MAIN: echo '<div>[POP] <input style="margin: 0 10px;" id="pop" type="number" min="1" max="'.$Building_Array[$type - 1]::$maxPop[$age].'" value="'.$this->building->data[$this->pos]['pop'].'">
 <div id="popslide" style="display: inline-block;width: 300px;"></div>
 </div>';
-		$this->headScript()->appendScript('pop=$("#pop");
+$this->headScript()->appendScript('pop=$("#pop");
 slide=$("#popslide");
 slide.slider({
 min: 1,
@@ -235,10 +250,10 @@ ev.build.flagpop=true;
 setTimeout(function(){ev.build.flagpop=false;ev.request(module+"/building/pop/pos/'.$this->pos.'","post",{pop:ev.build.pop});},1000);
 }
 });');
-		default:
-			//@todo rifare per toglere livelli
-			echo $Building_Array[$type - 1]::getContent(1);
-			break;
+default:
+	//@todo rifare per toglere livelli
+	echo $Building_Array[$type - 1]::getContent(1);
+	break;
 	}
 	//*/
 }

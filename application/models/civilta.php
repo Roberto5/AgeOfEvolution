@@ -1106,10 +1106,11 @@ class Model_civilta extends Zend_Db_Table_Abstract
 		$build = Zend_Db_Table::getDefaultAdapter()->fetchAll(
 				"SELECT * FROM `" . SERVER . "_building` WHERE `village_id`='" . $id .
 				"' AND `type`='" . $storagetype . "'");
+		$civ=self::getAdapter()->fetchOne("SELECT `civ_id` FROM `" . SERVER . "_map` WHERE `id`='$id'");
+		$res=new Model_research($civ);
 		$storage = 0;
 		for ($i = 0; $build[$i]; $i ++) {
-			//@todo aggiungere ricerca
-			$storage += $Building_Array[$storagetype - 1]::$capacity;
+			$storage += $Building_Array[$storagetype - 1]::$capacity+$Building_Array[$storagetype - 1]::$capacity*($res->data[RES_STORAGE]['liv']*0.1);
 		}
 		if ($storage == 0) {
 			if ($storagetype == STORAGE1) {

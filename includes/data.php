@@ -59,9 +59,6 @@ class main extends structure
 
 class barrack extends structure
 {
-
-    public static $rid = 0;
-
     public static $cost = array(
             100,
             150,

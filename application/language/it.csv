@@ -1,7 +1,9 @@
 ACCOUNT@Account
 ADD@Aggiungi
+AGE@Età
 ALERTS@Avvisi
 ALNUM@Questo campo deve contenere solo lettere e numeri
+ATK@Attacco
 BARBARIANS@Barbari
 BLACKMARKET@Mercato Nero
 BUGDESC@Descrivi qui il bug che hai trovato, un idea per migliorare il gioco o quello che non ti piace. cerca di essere chiaro e di compilare bene il form
@@ -16,6 +18,7 @@ CHOOSE@Scegli
 CIVLESS@Senza civilt&agrave;
 CIVONSERVER@Civilt&agrave; presenti
 CLOSE@Chiudi
+COLO@Colonizzazioni
 CONTACT@Contattaci
 COST@Costo
 CREATE@Crea
@@ -30,7 +33,7 @@ EAST@Est
 EDIT@Modifica
 EMAIL_CONTACT@Contattaci per email
 ENTER@Entra
-E_FATAL@Fatal Error, contattare l'admin
+E_FATLEADERSHIP_DESAL@Fatal Error, contattare l'admin
 FAILURE@login fallito
 FEATURES@Caratteristiche
 FINDCIV@Cerca una civilt&agrave; in cui entrare.
@@ -42,10 +45,13 @@ IDEA@Idea
 IDEAL@Ideali del gioco
 INSERT@Inserisci
 LANGUAGE@Il tuo linguaggio non è supportato, puoi aggiungere una traguzione andando su
+LEADERSHIP_DES@Aumentando la tua leadership potrai comandare molti villaggi.
+LIV@Livello
 LOGOUT@Logout eseguito con successo
 LOGorEMAIL@lasciaci un email per essere ricontattato oppure fai
 LOST_PASS@Hai dimenticato la password?
 MAINTENAINCE@Manutenzione
+MAX@Massimo
 MAP@Mappa
 Missing captcha fields@Compilare il campo captcha
 NAME@Nome
@@ -61,15 +67,19 @@ ONWAIT@in attesa
 OWNER@Proprietario
 PASS_ERR@Password errata
 PASS_LENG@La password deve contenere 8 caratteri
+POINTDISP@Punti ricerca disponibili
 POP@Popolazione
 PROFILE@Profilo
 PROMOTE@Promuovi
+RARCO_DES@questa ricerca ti permetter&agrave; di addestrare gli arceri.
+RARCO_NAME@Arco corto
 RANDOM@Casuale
 RECOVER@Inserisci l'email dell'account da recuperare
 REFRESH@Aggiorna
 REG@Registrati
 REGLIKE@Registrato come
 REG_SUCCESS@Registrazione avvenuta con successo
+REQUIRE@Richiede
 RESEND@Il tuo account non è attivo, puoi reinviare l'email di attivazione tramite il modulo qua sotto
 SCREENSHOOT@Screen shoot
 SEARCH@Cerca
@@ -79,6 +89,8 @@ SERVERTIME@Ora del server
 SHARER@Sharer
 SOUTH@Sud
 STATUS@Stato
+STORAGE@Immagazzinamento
+STORAGE_DES@Aumenta la capacità di immagazzinamento.
 SUCCESS@login eseguito con successo
 TARGET@Obbiettivo
 TOTALUSER@Utenti totali

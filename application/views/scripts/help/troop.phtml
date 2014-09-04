@@ -6,20 +6,20 @@ if ($this->id) {
     $id = $this->id - 1;
     $time = intval(
     ($Troops_Array[$id]::$cost[0] + $Troops_Array[$id]::$cost[1] +
-     $Troops_Array[$id]::$cost[2]) / barrack::$rid[1] * 3600);
+     $Troops_Array[$id]::$cost[2]));
     $help .= '<div style="border:1px solid black;"><p>' .
      $this->image()->troop($id) . "</p>";
     $help .= '<table>
     <tr>
-        <td><b>' . $t->_("Età") . ':</b></td>
+        <td><b>[AGE]:</b></td>
         <td>' . $Troops_Array[$id]::$age . '</td>
     </tr>
     <tr>
-        <td><b>' . $t->_("Attacco") . ':</b></td>
+        <td><b>[ATK]:</b></td>
         <td>' . $Troops_Array[$id]::$atk . '</td>
     </tr>
     <tr>
-        <td><b>' . $t->_("Hp") . ':</b></td>
+        <td><b>Hp:</b></td>
         <td>' . $Troops_Array[$id]::$hp . '</td>
     </tr>
     <tr>
@@ -39,7 +39,7 @@ if ($this->id) {
         <td>' . $Troops_Array[$id]::$speed . '</td>
     </tr>
     <tr>
-        <td><b>' . $t->_("Costo") . ':</b></td>
+        <td><b>[COST]:</b></td>
         <td>';
     for ($i = 0; $i < 3; $i ++) {
         $help .= $Troops_Array[$id]::$cost[$i] . ' ' .
@@ -61,8 +61,7 @@ if ($this->id) {
     </tr>
     <tr>
     <tr>
-        <td><b>' . $t->_("POP") .
-     ':</b></td>
+        <td><b>[POP]:</b></td>
         <td>' .
      $Troops_Array[$id]::$cost[3] . '' .
      $this->image()->resource(3, $Troops_Array[$id]::$age) . '</td>

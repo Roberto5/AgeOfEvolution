@@ -1,7 +1,9 @@
 ACCOUNT@Account
 ADD@Add
+AGE@Age
 ALERTS@Alerts
 ALNUM@This field must contain letter and number
+ATK@Attack
 BARBARIANS@Barbarians
 BLACKMARKET@Black Market
 BUGDESC@Describe here the bug that you are find, an idea for improve the game or what you do not like.
@@ -16,6 +18,7 @@ CHOOSE@Choose
 CIVLESS@Civilization less
 CIVONSERVER@Civilization on server
 CLOSE@Close
+COLO@Colonizzations
 CONTACT@Contact us
 COST@Cost
 CREATE@Create
@@ -42,11 +45,14 @@ IDEA@Idea
 IDEAL@Ideal of game
 INSERT@Insert
 LANGUAGE@Your language is not supported, you can add a translate on
+LEADERSHIP_DES@Increasing your leadership you can command more villages.
+LIV@Level
 LOGOUT@You are Logout 
 LOGorEMAIL@leave a email for be contact or do
 LOST_PASS@You are lost the password?
 MAINTENAINCE@Maintenaince
 MAP@Map
+MAX@Maximum
 NAME@Nome
 NEWVIL@New village
 NOCIV@You haven't Civilization in this server
@@ -60,15 +66,19 @@ ONWAIT@On wait
 OWNER@Owner
 PASS_ERR@Password wrong
 PASS_LENG@The password must be 8 characters
+POINTDISP@Punti ricerca disponibili
 POP@Population
 PROFILE@Profile
 PROMOTE@Promote
+RARCO_DES@With this research you can rain archers
+RARCO_NAME@Short bow
 RANDOM@Random
 RECOVER@Insert the email of account to recover
 REFRESH@Refresh
 REG@Register
 REGLIKE@Registered like
 REG_SUCCESS@Registration was successful
+REQUIRE@Require
 RESEND@the your account isn't active, you can resend the activation email with this form
 SCREENSHOOT@Screen shoot
 SEARCH@search
@@ -78,6 +88,8 @@ SERVERTIME@Server's time
 SHARER@Sharer
 SOUTH@South
 STATUS@Status
+STORAGE@Storage
+STORAGE_DES@Increase the storage capacity.
 SUCCESS@login success
 TARGET@Target
 TOTALUSER@Total users
