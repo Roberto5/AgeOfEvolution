@@ -758,13 +758,12 @@ class Model_civilta extends Zend_Db_Table_Abstract
 			,'capital'=>$cap
 			,'type'=>$type
 			,'pop'=>20
-			,'busy_pop'=>0
 			,'resource_1'=>START_RES
 			,'resource_2'=>START_RES
 			,'resource_3'=>START_RES
-			,'production_1'=>prod1::$prod[0]
-			,'production_2'=>prod2::$prod[0]
-			,'production_3'=>prod3::$prod[0]
+			,'production_1'=>prod1::$prod
+			,'production_2'=>prod2::$prod
+			,'production_3'=>prod3::$prod
 			,'agg'=>mktime()
 			,'aggPop'=>mktime()
 			,'prod1_bonus'=>$bonus[0]
