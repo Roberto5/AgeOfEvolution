@@ -1,0 +1,9 @@
+//random1.tmx
+//random2.tmx
+//random3.tmx
+random4.tmx
+rules_set.tmx
+area1/rules.txt
+area2/rules.txt
+area3/rules.txt
+area4/rules.txt

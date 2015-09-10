@@ -1,4 +1,205 @@
-<br /><br />
-<div id="view-content">
-	<p>View script for controller <b>Village</b> and script/action name <b>index</b></p>
+<?php
+for ($i = 1; $i <= 5; $i++) {
+	$this->key["{res$i}"]=$this->image()->resource($i-1, $this->age);
+}
+//$this->key["{HOME}"]=$this->image()->parse('[home]');
+for ($i = 1; $i <= 10; $i++) {
+	$this->key["{building$i}"]=Model_building::$name[$this->age][$i+1];
+}
+
+Zend_View_Filter_Tmpeng::addkey($this->key);
+
+?>
+<div id="cv{vid}">
+<div id="resbar{vid}" style="text-align: center;">
+	<h2>
+		Villaggio <span id="nameVillage{vid}"
+			ondblclick="ev.village.changeName({vid})">{name}</span>
+	</h2>
+	<div>
+		risorse : &nbsp; &nbsp; <span class="resource">0</span> {res1} &nbsp;
+		&nbsp; <span class="resource">0</span> {res2} &nbsp; &nbsp; <span
+			class="resource">0</span> {res3} &nbsp; &nbsp; 0{res4}/100{res5} 100 [home]
+	</div>
+</div>
+<span id="bonus difesa"></span>
+<div class="pannel">
+	<div style="height: 10px;"></div>
+	<div id="2" class="building drag storage1 ui-draggable"
+		style="z-index: 200;">
+		<a href="#"><input type="hidden" class="Btype" value="2"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="{building1}" title="{building1}"> </a>
+	</div>
+	<div style="height: 10px;"></div>
+	<div id="3" class="building drag storage2 ui-draggable"
+		style="z-index: 200;">
+		<a href="#"><input type="hidden" class="Btype" value="3"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="{building2}" title="{building2}"> </a>
+	</div>
+	<div style="height: 10px;"></div>
+	<div id="4" class="building drag prod1 ui-draggable"
+		style="z-index: 200;">
+		<a href="#"><input type="hidden" class="Btype" value="4"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="{building3}" title="{building3}"> </a>
+	</div>
+	<div style="height: 10px;"></div>
+	<div id="5" class="building drag prod2 ui-draggable"
+		style="z-index: 200;">
+		<a href="#"><input type="hidden" class="Btype" value="5"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="{building4}" title="{building4}"> </a>
+	</div>
+	<div style="height: 10px;"></div>
+	<div id="6" class="building drag prod3 ui-draggable"
+		style="z-index: 200;">
+		<a href="#"><input type="hidden" class="Btype" value="6"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="{building5}" title="{building5}"> </a>
+	</div>
+	<div style="height: 10px;"></div>
+	<div id="7" class="building drag house ui-draggable"
+		style="z-index: 200;">
+		<a href="#"><input type="hidden" class="Btype" value="7"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="{building6}" title="{building6}"> </a>
+	</div>
+	<div style="height: 10px;"></div>
+	<div id="8" class="building drag market ui-draggable"
+		style="z-index: 200; display: none;">
+		<a href="#"><input type="hidden" class="Btype" value="8"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="{building7}" title="{building7}"> </a>
+	</div>
+	<div style="height: 10px;"></div>
+	<div id="9" class="building drag barrack ui-draggable"
+		style="z-index: 200; display: none;">
+		<a href="#"><input type="hidden" class="Btype" value="9"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="{building8}" title="{building8}"> </a>
+	</div>
+	<div style="height: 10px;"></div>
+	<div id="10" class="building drag command ui-draggable"
+		style="z-index: 200; display: none;">
+		<a href="#"><input type="hidden" class="Btype" value="10"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="{building9}" title="{building9}"> </a>
+	</div>
+	<div style="height: 10px;"></div>
+	<div id="11" class="building drag research ui-draggable"
+		style="z-index: 200; display: none;">
+		<a href="#"><input type="hidden" class="Btype" value="11"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="{building10}" title="{building10}"> </a>
+	</div>
+</div>
+<div class="village_view">
+	<div class="building pos0 main">
+		<a href="#" onclick="ev.request('<?php echo SERVER;?>/building/show/pos/0','post',{ajax:1});"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="focolare"> </a>
+	</div>
+	<div class="building pos1 prod1">
+		<a href="#" onclick="ev.request('<?php echo SERVER;?>/building/show/pos/1','post',{ajax:1});"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="cava di pietra"> </a>
+	</div>
+	<div class="building pos2 prod2">
+		<a href="#" onclick="ev.request('<?php echo SERVER;?>/building/show/pos/2','post',{ajax:1});"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="allevamento"> </a>
+	</div>
+	<div class="building pos3 prod3">
+		<a href="#" onclick="ev.request('<?php echo SERVER;?>/building/show/pos/3','post',{ajax:1});"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="segheria"> </a>
+	</div>
+	<div class="building pos4 empty ui-droppable">
+		<a href="#" onclick="ev.request('<?php echo SERVER;?>/building/show/pos/4','post',{ajax:1});"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="costruisci"> </a>
+	</div>
+	<div class="building pos5 empty ui-droppable">
+		<a href="#" onclick="ev.request('<?php echo SERVER;?>/building/show/pos/5','post',{ajax:1});"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="costruisci"> </a>
+	</div>
+	<div class="building pos6 empty ui-droppable">
+		<a href="#" onclick="ev.request('<?php echo SERVER;?>/building/show/pos/6','post',{ajax:1});"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="costruisci"> </a>
+	</div>
+	<div class="building pos7 empty ui-droppable">
+		<a href="#"  onclick="ev.request('<?php echo SERVER;?>/building/show/pos/7','post',{ajax:1});"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="costruisci"> </a>
+	</div>
+	<div class="building pos8 empty ui-droppable">
+		<a href="#" onclick="ev.request('<?php echo SERVER;?>/building/show/pos/8','post',{ajax:1});"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="costruisci"> </a>
+	</div>
+	<div class="building pos9 empty ui-droppable">
+		<a href="#" onclick="ev.request('<?php echo SERVER;?>/building/show/pos/9','post',{ajax:1});"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="costruisci"> </a>
+	</div>
+	<div class="building pos10 empty ui-droppable">
+		<a href="#" onclick="ev.request('<?php echo SERVER;?>/building/show/pos/10','post',{ajax:1});"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="costruisci"> </a>
+	</div>
+	<div class="building pos11 empty ui-droppable">
+		<a href="#" onclick="ev.request('<?php echo SERVER;?>/building/show/pos/11','post',{ajax:1});"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="costruisci"> </a>
+	</div>
+	<div class="building pos12 empty ui-droppable">
+		<a href="#" onclick="ev.request('<?php echo SERVER;?>/building/show/pos/12','post',{ajax:1});"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="costruisci"> </a>
+	</div>
+	<div class="building pos13 empty ui-droppable">
+		<a href="#" onclick="ev.request('<?php echo SERVER;?>/building/show/pos/13','post',{ajax:1});"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="costruisci"> </a>
+	</div>
+	<div class="building pos14 empty ui-droppable">
+		<a href="#" onclick="ev.request('<?php echo SERVER;?>/building/show/pos/14','post',{ajax:1});"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="costruisci"> </a>
+	</div>
+	<div class="building pos15 empty ui-droppable">
+		<a href="#" onclick="ev.request('<?php echo SERVER;?>/building/show/pos/15','post',{ajax:1});"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="costruisci"> </a>
+	</div>
+	<div class="building pos16 empty ui-droppable">
+		<a href="#" onclick="ev.request('<?php echo SERVER;?>/building/show/pos/16','post',{ajax:1});"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="costruisci"> </a>
+	</div>
+	<div class="building pos17 empty ui-droppable">
+		<a href="#" onclick="ev.request('<?php echo SERVER;?>/building/show/pos/17','post',{ajax:1});"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="costruisci"> </a>
+	</div>
+	<div class="building pos18 empty ui-droppable">
+		<a href="#" onclick="ev.request('<?php echo SERVER;?>/building/show/pos/18','post',{ajax:1});"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="costruisci"> </a>
+	</div>
+	<div class="building pos19 empty ui-droppable">
+		<a href="#" onclick="ev.request('<?php echo SERVER;?>/building/show/pos/19','post',{ajax:1});"><img
+			src="/AgeOfEvolution/common/images/void.png" width="100" height="100"
+			alt="costruisci"> </a>
+	</div>
+</div>
+<br>
+<h3>costruzioni</h3>
+<div id="queue{vid}"></div>
+<h3>demolizioni</h3>
+<div id="destroy{vid}"></div>
 </div>

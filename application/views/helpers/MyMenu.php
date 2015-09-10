@@ -20,7 +20,7 @@ class Zend_View_Helper_MyMenu extends Zend_View_Helper_Abstract
      * 
      * @var Array
      */
-    public $page=array();
+    static public $page=array();
     /**
      * 
      * @var Zend_Acl
@@ -34,7 +34,7 @@ class Zend_View_Helper_MyMenu extends Zend_View_Helper_Abstract
     {
     	if (is_array($config)) {
     		if ($config['page']) {
-    			$this->page=$config['page'];
+    			self::$page=$config['page'];
     		}
     		if ($config['acl']) {
     			$this->acl=$config['acl'];
@@ -43,7 +43,7 @@ class Zend_View_Helper_MyMenu extends Zend_View_Helper_Abstract
     			$this->acl=Zend_Registry::get("acl");
     		}
     		if (!$config['page'] && !$config['acl']) {
-    			$this->page=$config;
+    			self::$page=$config;
     		}
     	}
     	else $this->acl=Zend_Registry::get("acl");
@@ -61,7 +61,7 @@ class Zend_View_Helper_MyMenu extends Zend_View_Helper_Abstract
      * @return Zend_View_Helper_MyMenu
      */
     public function add($label,$module=NULL,$controller=NULL,$action=NULL,$order=NULL,$resource=NULL,$privilege=NULL,$icon=null,$iconSize=null,$text=null) {
-    	if (is_array($label)) $this->page[]=$label;
+    	if (is_array($label)) self::$page[]=$label;
     	else {
     		$nav=array('label'=>$label
 				,'order'=>$order
@@ -84,7 +84,7 @@ class Zend_View_Helper_MyMenu extends Zend_View_Helper_Abstract
     			$nav['controller']=$controller;
     			$nav['action']=$action;
     		}
-    		$this->page[]=$nav;
+    		self::$page[]=$nav;
     	}
     		
     	return $this;
@@ -96,7 +96,7 @@ class Zend_View_Helper_MyMenu extends Zend_View_Helper_Abstract
     public function render() {    	
     	try
     	{
-    		$menu=new Zend_Navigation($this->page);
+    		$menu=new Zend_Navigation(self::$page);
     		$this->view->navigation($menu)
     			->setAcl($this->acl)
     			->setRole(Model_Role::getRole());
@@ -129,7 +129,7 @@ class Zend_View_Helper_MyMenu extends Zend_View_Helper_Abstract
      * @return int
      */
     public function getPageCount() {
-    	return count($this->page);
+    	return count(self::$page);
     }
     /**
      * Sets the view field 

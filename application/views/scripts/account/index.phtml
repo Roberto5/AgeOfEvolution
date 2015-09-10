@@ -40,11 +40,11 @@ foreach ($this->option as $key => $value) {
   <tr>
     <td class="button" colspan="3"><button>[CHANGEPASS]</button> <button>[DELETE] account</button></td>
   </tr>
-  <tr class="password">
+  <tr class="passwordpanel">
   	<td>[OLD_PASS] :</td>
   	<td colspan="2"><input name="password" type="password" /></td>
   </tr>
-  <tr class="password">
+  <tr class="passwordpanel">
   	<td><input id="password" name="new" type="password" /></td>
   	<td colspan="2"><input name="new2" type="password" /></td>
   </tr>
@@ -63,8 +63,8 @@ $t=Zend_Registry::get("translate");
 	echo $this->pass->getElement("newpass2")->render();
 	/*<h3><?php echo $t->_("Cambia password");?></h3>
 <div><?php echo $t->_("Vecchia password");?>:<input name="pass"  size="10" type="password" /></div>
-<div><?php echo $t->_("Nuova password");?>:<input name="newpass" class="password" size="10" type="password" /></div>
-<?php echo $t->_("Ripeti");?>:<input name="newpass2" class="password" size="10" type="password" />
+<div><?php echo $t->_("Nuova password");?>:<input name="newpass" class="passwordpanel" size="10" type="password" /></div>
+<?php echo $t->_("Ripeti");?>:<input name="newpass2" class="passwordpanel" size="10" type="password" />
 ?>
 <h3><?php echo $t->_("Cambia email");?></h3>
 <div><input disabled="disabled" name="email" size="10"/></div>
@@ -80,7 +80,7 @@ echo '<h3>' . $t->_('ordinamento dei villaggi') . '</h3>
         <option value="2" ' . $sel[2] . '>'.$t->_("alfabetico").'</option>
         <option value="3" ' . $sel[3] . '>'.$t->_("distanza").'</option>
 		<option value="4" ' . $sel[4] . '>'.$t->_("personalizzato").'</option>
-        <option value="5" ' . $sel[5] . '>'.$t->_("popolazione").'</option>
+        <option value="5" ' . $sel[5] . '>'.$t->_("POP").'</option>
         </select>
 	<span id="opt1" '.($sel[3] ? 'style="display:none"' : '').'>
         <input name="orderT" class="opt1" type="radio" value="0" ' . $selt[0] . ' />' . $t->_('ascendente') . '

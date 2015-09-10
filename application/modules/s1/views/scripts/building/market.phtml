@@ -90,7 +90,7 @@ switch ($this->section) {
 
 	
 	<div style="height: 20px; font-size: 20px;"><span style="position: relative; left: 60%;">'.$t->_('capacit&aacute;').':'.mercants::$capacity[$this->age].' '.$t->_('disponibilit&aacute;').':' .
-         $this->disp . '/' . $this->liv . '</span></div>
+         $this->disp . '/' . $this->mercants . '</span></div>
 ' . $div_mercant .
          '
 	<div style="height: 20px;"></div>
@@ -218,13 +218,13 @@ switch ($this->section) {
         $html= '
 
 <div style="height: 20px; font-size: 20px;"><span style="position: relative; left: 80%;">' .
-         $this->disp . '/' . $this->liv . '</span></div>
+         $this->disp . '/' . $this->mercants . '</span></div>
 ' . $div_offer ;
         break;
     case 3:
     	$html= '
 <div style="height: 20px; font-size: 20px;"><span style="position: relative; left: 80%;">' .
- $this->disp . '/' . $this->liv .
+ $this->disp . '/' . $this->mercants .
  '</span></div>
 <form name="sell" action="' .$this->url(array('controller'=>'market','action'=>'sell','tokenM'=>$this->token ))
  . '" method="POST">

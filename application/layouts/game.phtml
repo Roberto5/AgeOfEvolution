@@ -7,20 +7,22 @@ $log=Zend_Registry::get("log");
 $x="0";$y="0";
 if ($this->auth->hasIdentity()) {
 	$civ=Model_civilta::getInstance();
-	$x=$civ->village->data[$civ->getCurrentVillage()]['x'];
-	$y=$civ->village->data[$civ->getCurrentVillage()]['y'];
+	$id=$civ->village->data[$civ->getCurrentVillage()]['id'];
+	$coord=Model_map::getInstance()->getCoordFromId($is);
+	$x=$coord['x'];
+	$y=$coord['y'];
 }
 $iconSize=16;
 $this->myMenu() 
 	->add('[PROFILE]',"javascript:$('#profile').dialog('open');",null,null,8,'account',null,$this->path.'/common/images/pannello_utente.png',$iconSize,false)
-	->add('[CITY]',"javascript:ev.request('".$this->module."/index/village','post',{ajax:1});",null,null,9,null,null,$this->path.'/common/images/city.png',$iconSize,false)
+	->add('[CITY]',"javascript:ev.village.open(ev.focus.id);",null,null,9,null,null,$this->path.'/common/images/city.png',$iconSize,false)
 	->add('[MAP]',$this->module,'index','index',10,null,null,$this->path.'/common/images/mappa.gif',$iconSize,false)
 	->add('Report',"javascript:ev.request('".$this->module."/report','post',{ajax:1});",null,null,11,null,null,$this->path.'/common/images/report1.gif',$iconSize,false)
 	->add('[MESSAGES]',"javascript:ev.request('".$this->module."/message','post',{ajax:1});",null,null,12,null,null,$this->path.'/common/images/mess_read0.gif',$iconSize,false)
 	->add('[TOP]',"javascript:ev.request('".$this->module."/top','post',{ajax:1});",null,null,13,null,null,$this->path.'/common/images/top.png',$iconSize,false)
 	->add('Debug',$this->module,'debug',null,14,null,null,$this->path.'/common/images/tool.gif',$iconSize,false)
-	;
-	
+	->add('Help',"javascript:ev.help('index');",null,null,99,null,null,$this->path.'/common/images/help.png',$iconSize,false)
+	->add('[REFRESH]',"javascript:ev.request(module+'/index/refresh','post',{ajax:1});",null,null,99,null,null,$this->path.'/common/images/refresh.gif',$iconSize,false);
 
  $width=$this->myMenu()->getPageCount()*28;
 
@@ -36,12 +38,13 @@ $this->myMenu()
 if ($_COOKIE['nav_pannel']=='true') {
 	echo 'style="display:none;"';
 }?> id="nav_pannel"><div id="navpad">
-					<div id="freccia_su" class="arrow_up" onclick="ev.map.arrow('up')"></div>
-					<div id="freccia_sx" class="arrow_sx" onclick="ev.map.arrow('left')"></div>
-					<div id="freccia_giu" class="arrow_down" onclick="ev.map.arrow('down')"></div>
-					<div id="freccia_dx" class="arrow_dx" onclick="ev.map.arrow('right')"></div>
+					<div id="freccia_su" class="arrow_up" onmousedown="ev.map.arrow('up')" onmouseup="ev.map.arrow('stop')"></div>
+					<div id="freccia_sx" class="arrow_sx" onmousedown="ev.map.arrow('left')" onmouseup="ev.map.arrow('stop')"></div>
+					<div id="freccia_giu" class="arrow_down" onmousedown="ev.map.arrow('down')" onmouseup="ev.map.arrow('stop')"></div>
+					<div id="freccia_dx" class="arrow_dx" onmousedown="ev.map.arrow('right')" onmouseup="ev.map.arrow('stop')"></div>
 				</div>
-				<input id="x" class="number" size="3" maxlength="4" /> | <input id="y" class="number" size="3" maxlength="4" /> <button onclick="ev.map.position($('#x').val(),$('#y').val() );">OK</button>
+				<input id="x" class="number" size="3" maxlength="4" /> | <input id="y" class="number" size="3" maxlength="4" /> 
+				<button onclick="ev.map.centre[0]=parseInt($('#x').val());ev.map.centre[1]=parseInt($('#y').val());ev.map.shift();">OK</button>
 				</div>
 			</div>
 			<div id="destra">
@@ -50,7 +53,6 @@ if ($_COOKIE['nav_pannel']=='true') {
 if ($_COOKIE['right_pannel']=='true') {
 	echo 'style="display:none;"';
 }
-$log->debug($_COOKIE);
 ?>><?php echo $this->partial('right.phtml');?></div>
 				<div style="text-align :center;" class="ui-state-default" onmouseover="$(this).removeClass('ui-state-default').addClass('ui-state-hover');" 
 				onmouseout="$(this).removeClass('ui-state-hover').addClass('ui-state-default');" 

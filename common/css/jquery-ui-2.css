@@ -8,6 +8,17 @@
  * http://docs.jquery.com/UI/Theming/API
  */
 
+.ui-tooltip {
+	padding: 8px;
+	position: absolute;
+	z-index: 9999;
+	max-width: 300px;
+	-webkit-box-shadow: 0 0 5px #aaa;
+	box-shadow: 0 0 5px #aaa;
+}
+body .ui-tooltip {
+	border-width: 2px;
+}
 /* Layout helpers
 ----------------------------------*/
 .ui-helper-hidden { display: none; }
@@ -59,26 +70,26 @@
 .ui-widget { font-family: roman,Verdana,Arial,sans-serif; font-size: 1.1em; }
 .ui-widget .ui-widget { font-size: 1em; }
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: roman,Verdana,Arial,sans-serif; font-size: 1em; }
-.ui-widget-content { border: 1px solid #e00000; background: #ffffff url(images/ui-bg_fine-grain_75_ffffff_60x60.png) 50% 50% repeat; color: #222222; }
+.ui-widget-content { border: 1px solid #e00000; background: #ffffff url(PATH/common/images/jquery-ui/ui-bg_fine-grain_75_ffffff_60x60.png) 50% 50% repeat; color: #222222; }
 .ui-widget-content a { color: #222222; }
-.ui-widget-header { border: 1px solid #e00000; background: #e00000 url(images/ui-bg_highlight-soft_75_e00000_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold; }
+.ui-widget-header { border: 1px solid #e00000; background: #e00000 url(PATH/common/images/jquery-ui/ui-bg_highlight-soft_75_e00000_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold; }
 .ui-widget-header a { color: #222222; }
 
 /* Interaction states
 ----------------------------------*/
-.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { border: 1px solid #000000; background: #e00000 url(images/ui-bg_fine-grain_75_e00000_60x60.png) 50% 50% repeat; font-weight: normal; color: #000000; }
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { border: 1px solid #000000; background: #e00000 url(PATH/common/images/jquery-ui/ui-bg_fine-grain_75_e00000_60x60.png) 50% 50% repeat; font-weight: normal; color: #000000; }
 .ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #000000; text-decoration: none; }
-.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { border: 1px solid #e00000; background: #e00000 url(images/ui-bg_glass_75_e00000_1x400.png) 50% 50% repeat-x; font-weight: normal; color: #ffffff; }
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { border: 1px solid #e00000; background: #e00000 url(PATH/common/images/jquery-ui/ui-bg_glass_75_e00000_1x400.png) 50% 50% repeat-x; font-weight: normal; color: #ffffff; }
 .ui-state-hover a, .ui-state-hover a:hover { color: #ffffff; text-decoration: none; }
-.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { border: 1px solid #e00000; background: #e00000 url(images/ui-bg_glass_65_e00000_1x400.png) 50% 50% repeat-x; font-weight: normal; color: #000000; }
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { border: 1px solid #e00000; background: #e00000 url(PATH/common/images/jquery-ui/ui-bg_glass_65_e00000_1x400.png) 50% 50% repeat-x; font-weight: normal; color: #000000; }
 .ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited { color: #000000; text-decoration: none; }
 .ui-widget :active { outline: none; }
 
 /* Interaction Cues
 ----------------------------------*/
-.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight  {border: 1px solid #bbd7b7; background: #bbd7b7 url(images/ui-bg_diagonals-medium_55_bbd7b7_40x40.png) 50% 50% repeat; color: #2e472f; }
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight  {border: 1px solid #bbd7b7; background: #bbd7b7 url(PATH/common/images/jquery-ui/ui-bg_diagonals-medium_55_bbd7b7_40x40.png) 50% 50% repeat; color: #2e472f; }
 .ui-state-highlight a, .ui-widget-content .ui-state-highlight a,.ui-widget-header .ui-state-highlight a { color: #2e472f; }
-.ui-state-error, .ui-widget-content .ui-state-error, .ui-widget-header .ui-state-error {border: 1px solid #cd0a0a; background: #c18a8c url(images/ui-bg_diagonals-medium_95_c18a8c_40x40.png) 50% 50% repeat; color: #cd0a0a; }
+.ui-state-error, .ui-widget-content .ui-state-error, .ui-widget-header .ui-state-error {border: 1px solid #cd0a0a; background: #c18a8c url(PATH/common/images/jquery-ui/ui-bg_diagonals-medium_95_c18a8c_40x40.png) 50% 50% repeat; color: #cd0a0a; }
 .ui-state-error a, .ui-widget-content .ui-state-error a, .ui-widget-header .ui-state-error a { color: #cd0a0a; }
 .ui-state-error-text, .ui-widget-content .ui-state-error-text, .ui-widget-header .ui-state-error-text { color: #cd0a0a; }
 .ui-priority-primary, .ui-widget-content .ui-priority-primary, .ui-widget-header .ui-priority-primary { font-weight: bold; }
@@ -89,14 +100,14 @@
 ----------------------------------*/
 
 /* states and images */
-.ui-icon { width: 16px; height: 16px; background-image: url(images/ui-icons_222222_256x240.png); }
-.ui-widget-content .ui-icon {background-image: url(images/ui-icons_222222_256x240.png); }
-.ui-widget-header .ui-icon {background-image: url(images/ui-icons_222222_256x240.png); }
-.ui-state-default .ui-icon { background-image: url(images/ui-icons_000000_256x240.png); }
-.ui-state-hover .ui-icon, .ui-state-focus .ui-icon {background-image: url(images/ui-icons_ffffff_256x240.png); }
-.ui-state-active .ui-icon {background-image: url(images/ui-icons_000000_256x240.png); }
-.ui-state-highlight .ui-icon {background-image: url(images/ui-icons_0f9f28_256x240.png); }
-.ui-state-error .ui-icon, .ui-state-error-text .ui-icon {background-image: url(images/ui-icons_cd0a0a_256x240.png); }
+.ui-icon { width: 16px; height: 16px; background-image: url(PATH/common/images/jquery-ui/ui-icons_222222_256x240.png); }
+.ui-widget-content .ui-icon {background-image: url(PATH/common/images/jquery-ui/ui-icons_222222_256x240.png); }
+.ui-widget-header .ui-icon {background-image: url(PATH/common/images/jquery-ui/ui-icons_222222_256x240.png); }
+.ui-state-default .ui-icon { background-image: url(PATH/common/images/jquery-ui/ui-icons_000000_256x240.png); }
+.ui-state-hover .ui-icon, .ui-state-focus .ui-icon {background-image: url(PATH/common/images/jquery-ui/ui-icons_ffffff_256x240.png); }
+.ui-state-active .ui-icon {background-image: url(PATH/common/images/jquery-ui/ui-icons_000000_256x240.png); }
+.ui-state-highlight .ui-icon {background-image: url(PATH/common/images/jquery-ui/ui-icons_0f9f28_256x240.png); }
+.ui-state-error .ui-icon, .ui-state-error-text .ui-icon {background-image: url(PATH/common/images/jquery-ui/ui-icons_cd0a0a_256x240.png); }
 
 /* positioning */
 .ui-icon-carat-1-n { background-position: 0 0; }
@@ -286,8 +297,8 @@
 .ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br { -moz-border-radius-bottomright: 5px; -webkit-border-bottom-right-radius: 5px; -khtml-border-bottom-right-radius: 5px; border-bottom-right-radius: 5px; }
 
 /* Overlays */
-.ui-widget-overlay { background: #000000 url(images/ui-bg_diagonals-medium_65_000000_40x40.png) 50% 50% repeat; opacity: .30;filter:Alpha(Opacity=30); }
-.ui-widget-shadow { margin: -8px 0 0 -8px; padding: 8px; background: #000000 url(images/ui-bg_flat_0_000000_40x100.png) 50% 50% repeat-x; opacity: .30;filter:Alpha(Opacity=30); -moz-border-radius: 8px; -khtml-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; }/*
+.ui-widget-overlay { background: #000000 url(PATH/common/images/jquery-ui/ui-bg_diagonals-medium_65_000000_40x40.png) 50% 50% repeat; opacity: .30;filter:Alpha(Opacity=30); }
+.ui-widget-shadow { margin: -8px 0 0 -8px; padding: 8px; background: #000000 url(PATH/common/images/jquery-ui/ui-bg_flat_0_000000_40x100.png) 50% 50% repeat-x; opacity: .30;filter:Alpha(Opacity=30); -moz-border-radius: 8px; -khtml-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; }/*
  * jQuery UI Resizable 1.8.16
  *
  * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)

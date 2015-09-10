@@ -57,11 +57,24 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		// Add autoloader empty namespace
 		$autoLoader = Zend_Loader_Autoloader::getInstance();
 		$resourceLoader = new Zend_Loader_Autoloader_Resource(
-				array('basePath' => APPLICATION_PATH, 'namespace' => '',
-						'resourceTypes' => array(
-								'form' => array('path' => 'forms/', 'namespace' => 'Form_'),
-								'model' => array('path' => 'models/', 'namespace' => 'Model_'),
-								'plugin' => array('path' => 'plugin/', 'namespace' => 'Plugin_'))));
+			array('basePath' => APPLICATION_PATH,
+			      'namespace' => '',
+			      'resourceTypes' => array(
+					'form' => array(
+						'path' => 'forms/',
+						'namespace' => 'Form_'
+					),
+						'model' => array(
+						'path' => 'models/',
+						'namespace' => 'Model_'
+					),
+					'plugin' => array(
+						'path' => 'plugin/',
+						'namespace' => 'Plugin_'
+						)
+					)
+				)
+			);
 		// viene restituto l'oggetto per essere utilizzato e memorizzato nel bootstrap
 		return $autoLoader;
 	}
@@ -141,8 +154,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$acl = null;
 		include_once (APPLICATION_PATH . "/models/acl.php");
 		$front = Zend_Controller_Front::getInstance();
-		$front->registerPlugin(new Plugin_acl_controller($acl))->registerPlugin(new Plugin_myTmpEng(Zend_Controller_Action_HelperBroker::getStaticHelper(
-				'ViewRenderer')));
+		$front->registerPlugin(new Plugin_acl_controller($acl))
+			->registerPlugin(new Plugin_myTmpEng(Zend_Controller_Action_HelperBroker::getStaticHelper('ViewRenderer')));
 		Zend_Registry::set("acl", $acl);
 	}
 	/**
@@ -224,7 +237,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 				 $client = new Zend_Http_Client();
 				 $client->setConfig(array('timeout'=>5));
 				 //@todo migliorare
-				if (APPLICATION_ENV!="production") $uri=Zend_Uri_Http::factory("http://localhost/AgeOfEvolution/$module/processing?ep=1");
+				if (APPLICATION_ENV!="production")
+					$uri=Zend_Uri_Http::factory("http://localhost/AgeOfEvolution/$module/processing?ep=1");
 				else $uri=Zend_Uri_Http::factory("http://ageofevolution.altervista.org/$module/processing?ep=1");
 				$client->setUri($uri);
 				try{
@@ -256,10 +270,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$layout = Zend_Layout::getMvcInstance();
 		if ($_POST['nolayout']||$_GET['nolayout']) $layout->disableLayout();
 		elseif (($_POST['ajax'])||($_GET['ajax'])) $layout->setLayout("ajax");
-		elseif ($module!='default') $layout->getView()->game=true;//$layout->setLayout("game");
+		elseif ($module!='default') $layout->getView()->game=true;
 		return $layout;
 	}
-	//*/
-	
 }
 

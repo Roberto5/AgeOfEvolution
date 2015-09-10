@@ -4,5 +4,8 @@ if ($this->layout()->data==1) {
 	$this->headTitle('Success');
 	$this->layout()->close='location.reload';
 }
-else $this->headTitle('Error');
+else {
+	$this->headTitle('Error');
+	$this->layout()->error=true;
+}
 ?>

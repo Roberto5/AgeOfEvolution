@@ -8,11 +8,11 @@
 body{
     font-family: arial,sans-serif;
     background-color: white;
-    background-image: url('../images/sfondo_antica.jpg');
+    background-image: url('PATH/common/images/sfondo_antica.jpg');
     color: black;
 }
 div#header{
-    background-image: url('../images/title_antica.jpg');
+    background-image: url('PATH/common/images/title_antica.jpg');
 }
 div#container{
     border-left: 4px solid red;
@@ -41,7 +41,7 @@ div#footer a{
 }
 div#destra{
     color: black;
-	background-image: url('../images/sfondo_antica.jpg');
+	background-image: url('PATH/common/images/sfondo_antica.jpg');
     border: 1px solid red;
 }
 div#sinistra{
@@ -64,93 +64,93 @@ button {
 
 #info {
 	border: 2px solid red;
-	background-image:url('../images/sfondo_antica.jpg');
+	background-image:url('PATH/common/images/sfondo_antica.jpg');
 }
 
 /* immagini strutture */
 
 .village_view{
-    background-image: url('../images/Antica/ground.gif');
+    background-image: url('PATH/common/images/Antica/ground.gif');
 }
 
 .main {
-    background-image: url('../images/Antica/main.png');
+    background-image: url('PATH/common/images/Antica/main.png');
 }
 .storage1 {
-    background-image: url('../images/Antica/storage1.png');
+    background-image: url('PATH/common/images/Antica/storage1.png');
 }
 .storage2 {
-    background-image: url('../images/Antica/storage2.png');
+    background-image: url('PATH/common/images/Antica/storage2.png');
 }
 .prod1 {
-    background-image: url('../images/Antica/prod1.png');
+    background-image: url('PATH/common/images/Antica/prod1.png');
 }
 .prod2 {
-    background-image: url('../images/Antica/prod2.png');
+    background-image: url('PATH/common/images/Antica/prod2.png');
 }
 .prod3 {
-    background-image: url('../images/Antica/prod3.png');
+    background-image: url('PATH/common/images/Antica/prod3.png');
 }
 .house {
-    background-image: url('../images/Antica/house.png');
+    background-image: url('PATH/common/images/Antica/house.png');
 }
 .market {
-    background-image: url('../images/Antica/market.png');
+    background-image: url('PATH/common/images/Antica/market.png');
 }
 .barrack {
-    background-image: url('../images/Antica/barrack.png');
+    background-image: url('PATH/common/images/Antica/barrack.png');
 }
 .command {
-    background-image: url('../images/Antica/command.png');
+    background-image: url('PATH/common/images/Antica/command.png');
 }
 .research {
-    background-image: url('../images/Antica/research.png');
+    background-image: url('PATH/common/images/Antica/research.png');
 }
 .mainbn {
-    background-image: url('../images/Antica/mainbn.png');
+    background-image: url('PATH/common/images/Antica/mainbn.png');
 }
 .storage1bn {
-    background-image: url('../images/Antica/storage1bn.png');
+    background-image: url('PATH/common/images/Antica/storage1bn.png');
 }
 .storage2bn {
-    background-image: url('../images/Antica/storage2bn.png');
+    background-image: url('PATH/common/images/Antica/storage2bn.png');
 }
 .prod1bn {
-    background-image: url('../images/Antica/prod1bn.png');
+    background-image: url('PATH/common/images/Antica/prod1bn.png');
 }
 .prod2bn {
-    background-image: url('../images/Antica/prod2bn.png');
+    background-image: url('PATH/common/images/Antica/prod2bn.png');
 }
 .prod3bn {
-    background-image: url('../images/Antica/prod3bn.png');
+    background-image: url('PATH/common/images/Antica/prod3bn.png');
 }
 .housebn {
-    background-image: url('../images/Antica/housebn.png');
+    background-image: url('PATH/common/images/Antica/housebn.png');
 }
 .marketbn {
-    background-image: url('../images/Antica/marketbn.png');
+    background-image: url('PATH/common/images/Antica/marketbn.png');
 }
 .barrackbn {
-    background-image: url('../images/Antica/barrackbn.png');
+    background-image: url('PATH/common/images/Antica/barrackbn.png');
 }
 .commandbn {
-    background-image: url('../images/Antica/commandbn.png');
+    background-image: url('PATH/common/images/Antica/commandbn.png');
 }
 .researchbn {
-    background-image: url('../images/Antica/researchbn.png');
+    background-image: url('PATH/common/images/Antica/researchbn.png');
 }
 /*navpad*/
 .arrow_up {
-    background-image: url('../images/Antica/up.png');
+    background-image: url('PATH/common/images/Antica/up.png');
 }
 .arrow_sx {
-    background-image: url('../images/Antica/sx.png');
+    background-image: url('PATH/common/images/Antica/sx.png');
 }
 .arrow_dx {
-    background-image: url('../images/Antica/dx.png');
+    background-image: url('PATH/common/images/Antica/dx.png');
 }
 .arrow_down {
-    background-image: url('../images/Antica/down.png');
+    background-image: url('PATH/common/images/Antica/down.png');
 }
 .arrow_up:hover {
     border: 1px dotted black;
@@ -166,6 +166,6 @@ button {
 }
 #movemap {
     color: black;
-	background-image: url('../images/sfondo_antica.jpg');
+	background-image: url('PATH/common/images/sfondo_antica.jpg');
     border: 1px solid red;
 }

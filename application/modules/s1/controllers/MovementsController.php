@@ -231,6 +231,7 @@ class S1_MovementsController extends Zend_Controller_Action
     }
     public function sendAction ()
     {
+    	$map=Model_map::getInstance();
         $this->view->type = $this->getRequest()->getParam("type", "attack");
         $this->view->token = sha1(auth());
         Zend_Auth::getInstance()->getStorage()->set("tokenMov", 
@@ -242,8 +243,7 @@ class S1_MovementsController extends Zend_Controller_Action
         $tr = null;
         $id = (int) $this->getRequest()->getParam("vid", 0);
         if ($id > 0)
-            $coord = $this->db->fetchRow(
-            "SELECT `x`,`y` FROM `" . MAP_TABLE . "` WHERE `id`='" . $id . "'");
+            $coord = $map->getCoordFromId($id);
         $this->log->log($this->civ->troopers->troopers_now, Zend_Log::DEBUG);
         if ($this->civ->troopers->troopers_now) {
             foreach ($this->civ->troopers->troopers_now as $key => $value) {
@@ -262,6 +262,7 @@ class S1_MovementsController extends Zend_Controller_Action
     public function dosendAction ()
     {
         global $Troops_Array;
+        $map=Model_map::getInstance();
         $user = Zend_Auth::getInstance()->getIdentity();
         if (($_POST['tokenMov'] == $user->tokenMov) && ($user->tokenMov)) {
             for ($i = 0; $i < TOT_TYPE_TROOPS; $i ++) {
@@ -269,9 +270,7 @@ class S1_MovementsController extends Zend_Controller_Action
                     $t[$i] = $_POST['t' . $i];
             }
             $coord = array('x' => $_POST['x'], 'y' => $_POST['y']);
-            $idv = $this->db->fetchOne(
-            "SELECT `id` FROM `" . MAP_TABLE . "` WHERE `x`='" . $coord['x'] .
-             "' AND `y`='" . $coord['y'] . "'");
+            $idv = $map->getIdFromCoord($coord['x'],$coord['y']);
             // controllo id valido
             if ($idv) {
                 //tempo di attraversata */
@@ -384,46 +383,38 @@ class S1_MovementsController extends Zend_Controller_Action
         }
         if (!$_POST['ajax']) $this->_helper->redirector("index");
     }
+    /**
+     * 
+     */
     public function gettimeAction ()
     {
         Zend_Layout::getMvcInstance()->disableLayout();
+        //compatibility layer
         $x = (int) $_POST['x'];
         $y = (int) $_POST['y'];
-        $village = $this->db->fetchRow(
-        "SELECT `civ_name`,`name`,
-       (IF (EXISTS (
-            SELECT `name` FROM `" .
-         ALLY_TABLE . "` WHERE `id`=`" . CIV_TABLE .
-         "`.`civ_ally` LIMIT 1
-           ) > 0,
-          ( SELECT `name` FROM `" .
-         ALLY_TABLE . "` WHERE `id`=`" . CIV_TABLE . "`.`civ_ally` LIMIT 1) , '-')
-) as `ally`  FROM `" . CIV_TABLE . "`,`" .
-         MAP_TABLE . "` WHERE `x`='$x' AND `y`='$y' AND `" . MAP_TABLE .
-         "`.`civ_id`=`" . CIV_TABLE . "`.`civ_id`");
+        $vid=is_numeric($_POST['vid']) ? $_POST['vid'] :Model_map::getInstance()->getIdFromCoord($x, $y);
+        $village=Model_map::getInstance()->getVillageArray();
         $reply = array('data' => false, 'html' => false, 'javascript' => false, 
         'update' => array(
-        'ids' => array('village_player' => $village['civ_name'], 
-        'village_name' => $village['name'], 'village_ally' => $village['ally'])));
+        'ids' => array('village_player' => $village[$vid]['civ_name'], 
+        'village_name' => $village[$vid]['name'], 'village_ally' => $village[$vid]['ally'])));
         echo json_encode($reply);
         Zend_Controller_Action_HelperBroker::removeHelper('viewRenderer');
     }
     public function colonyAction ()
     {
+    	$map=Model_map::getInstance();
         Zend_Layout::getMvcInstance()->disableLayout();
         $id = (int) $this->getRequest()->getParam("id");
         $nump = (int) $_POST['num'];
         $n = count($this->civ->village_list);
         $vids = array_keys($this->civ->village_list);
-        $liv = $this->db->fetchOne(
-        "SELECT `liv` FROM `" . BUILDING_TABLE . "` WHERE `type`='" . COMMAND .
-         "' AND `village_id`IN('" . implode("','", $vids) . "')");
+        $disp=1;
         $now = $this->civ->getCurrentVillage();
         $num = $this->db->fetchOne(
         "SELECT `numbers` FROM `" . TROOPERS .
          "` WHERE `village_prev`='$now' AND `village_now`='$now' AND `trooper_id`='4'");
-        $coord = $this->db->fetchRow(
-        "SELECT `x`,`y`,`civ_id` FROM `" . MAP_TABLE . "` WHERE `id`='$id'");
+        $coord =$map->getCoordFromId($id);
         if ($nump >= 100) {
             if ($nump > $num)
                 $nump = $num;
@@ -444,11 +435,11 @@ class S1_MovementsController extends Zend_Controller_Action
                 $text = $nump . ' ' . $this->t->_('coloni inviati con successo');
             }
         } else {
-            if ($liv <= $n)
+            if ($disp <= $n)
                 $text = $this->t->_(
                 'Non puoi colonizzare altre citta se non aumenti il') . ' ' .
                  Model_building::$name[$this->civ->getAge()][COMMAND] . ' ';
-            elseif ($coord['civ_id']) {
+            elseif (isset($map->city[$id])) {
                 $text = $this->t->_('Esiste già un villaggio qui.');
             } else {
                 $rand = rand(1, 1000);

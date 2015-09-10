@@ -1,14 +1,11 @@
 <?php
-$t = Zend_Registry::get('translate');
-echo $t->_('ciao') . ' ' .
- ($this->identity ? $this->identity->username : $t->_('visitatore'));
+echo '[WELLCOME] ' .
+ ($this->identity ? $this->identity->username : '[GUEST]');
 if ($this->identity) {//******************************** utente connesso
     ?>
-<h3><?php
-    echo $t->_('Seleziona un server');
-    ?></h3>
+<h3>[SELECT_SERVER]</h3>
 <?php
-    $status = array('senza civiltà', 'in attesa', 'sharer', 'owner');
+    $status = array('CIVLESS', 'ONWAIT', 'SHARER', 'OWNER');
     global $server;
     $s = array();
     $client = new Zend_Http_Client();
@@ -17,16 +14,14 @@ if ($this->identity) {//******************************** utente connesso
             $s[] = $value['server'];
             echo '<div><button id="button' . $value['server'] . '" class="img server" onclick="location.href=\'' .
              $this->url(array('module' => $value['server'])) . '\'"><div>server ' .
-             $value['server'] . '</div> ' . $t->_('stato: iscritto come') . ' ' .
-             $t->_($status[$value['status']]) . ' <div>'.$t->_('civiltà presenti'). ':<span id="n_civ' . $value['server'] . '"></span></div></button></div>';
+             $value['server'] . '</div> [STATUS]:[REGLIKE] [' .$status[$value['status']] . '] <div>[CIVONSERVER]:<span class="N_civ"></span></div><div>[VILONSERVER]:<span class="N_village"></span></div></button></div>';
         }
     }
     $list = array_diff($server, $s);
     if ($list) {
         foreach ($list as $value) {
             echo '<div><button id="button' . $value . '" class="img server reg" onclick="location.href=\'' .
-             $this->url(array('module' => $value)) . '\'"><div>server ' . $value . '</div> ' .
-             $t->_('stato: non iscritto') .' '.$t->_('civiltà presenti'). ':<span id="n_civ' . $value . '"></span></button></div>';
+             $this->url(array('module' => $value)) . '\'"><div>server ' . $value . '</div> [STATUS]:[NOTREG] [CIVONSERVER]:<span id="n_civ' . $value . '"></span></button></div>';
         }
     }
     $this->headScript()->captureStart();
@@ -55,18 +50,10 @@ $this->headScript()->captureEnd();
 
 <div class="ui-tabs ui-widget ui-widget-content ui-corner-all" id="tabs">
 	<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
-    	<li><a href="ideals.html"><?php
-    echo $t->_('ideali del gioco');
-    ?></a></li>
-		<li><a href="propriety.html"><?php
-    echo $t->_('caratteristiche');
-    ?></a></li>
-    	<li><a href="aiuto.html"><?php
-    echo $t->_('come aiutarci');
-    ?></a></li>
-		<li><a href="#screen"><?php
-    echo $t->_('Screen shoot');
-    ?></a></li>
+    	<li><a href="ideals.html">[IDEAL]</a></li>
+		<li><a href="propriety.html">[FEATURES]</a></li>
+    	<li><a href="aiuto.html">[HOWHELP]</a></li>
+		<li><a href="#screen">[SCREENSHOOT]</a></li>
 	</ul>
 	<div id="screen"><?php
 $list = array();
@@ -83,6 +70,7 @@ while ($file = readdir($dp)) {
     $i++;
 }
 echo '</tr></table>';
+
 ?></div>
 </div>
 

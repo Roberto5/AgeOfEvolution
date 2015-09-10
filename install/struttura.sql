@@ -1,13 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 3.4.11.1deb1
+-- version 4.0.10deb1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generato il: Mar 17, 2013 alle 18:51
--- Versione del server: 5.5.29
--- Versione PHP: 5.4.6-1ubuntu1.2
+-- Generato il: Ago 17, 2014 alle 15:48
+-- Versione del server: 5.5.38-0ubuntu0.14.04.1
+-- Versione PHP: 5.5.9-1ubuntu4.3
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `my_evolutionbg`
+-- Database: `my_ageofevolution`
 --
 
 -- --------------------------------------------------------
@@ -102,8 +102,29 @@ CREATE TABLE `s1_civ` (
   `ev_ready` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`civ_id`),
   KEY `ally` (`civ_ally`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
+--
+-- Struttura stand-in per le viste `s1_data_map`
+--
+DROP VIEW IF EXISTS `s1_data_map`;
+CREATE TABLE `s1_data_map` (
+`id` int(5)
+,`civ_id` int(5)
+,`name` varchar(30)
+,`capital` int(1)
+,`type` int(1)
+,`prod1_bonus` int(3)
+,`prod2_bonus` int(3)
+,`prod3_bonus` int(3)
+,`civ_name` varchar(30)
+,`civ_age` int(1)
+,`civ_ally` int(5)
+,`ally` varchar(30)
+,`busypop` decimal(32,0)
+);
 -- --------------------------------------------------------
 
 --
@@ -117,7 +138,7 @@ CREATE TABLE `s1_events` (
   `time` int(30) NOT NULL,
   `params` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -133,7 +154,6 @@ CREATE TABLE `s1_map` (
   `capital` int(1) NOT NULL,
   `type` int(1) NOT NULL DEFAULT '0',
   `pop` float NOT NULL,
-  `busy_pop` float NOT NULL,
   `resource_1` float NOT NULL,
   `resource_2` float NOT NULL,
   `resource_3` float NOT NULL,
@@ -142,19 +162,15 @@ CREATE TABLE `s1_map` (
   `production_3` int(9) NOT NULL,
   `agg` int(30) NOT NULL,
   `aggPop` int(30) NOT NULL,
-  `x` int(4) NOT NULL DEFAULT '0',
-  `y` int(4) NOT NULL DEFAULT '0',
   `order_n` int(3) NOT NULL DEFAULT '0',
-  `zone` int(1) NOT NULL DEFAULT '0',
   `defence` int(3) NOT NULL DEFAULT '100',
   `prod1_bonus` int(3) NOT NULL DEFAULT '100',
   `prod2_bonus` int(3) NOT NULL DEFAULT '100',
   `prod3_bonus` int(3) NOT NULL DEFAULT '100',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `x` (`x`,`y`),
   KEY `name` (`name`),
   KEY `civ_id` (`civ_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -546,6 +562,15 @@ CREATE TABLE `temp` (
   PRIMARY KEY (`x`,`y`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- --------------------------------------------------------
+
+--
+-- Struttura per la vista `s1_data_map`
+--
+DROP TABLE IF EXISTS `s1_data_map`;
+
+CREATE VIEW `s1_data_map` AS select `s1_map`.`id` AS `id`,`s1_map`.`civ_id` AS `civ_id`,`s1_map`.`name` AS `name`,`s1_map`.`capital` AS `capital`,`s1_map`.`type` AS `type`,`s1_map`.`prod1_bonus` AS `prod1_bonus`,`s1_map`.`prod2_bonus` AS `prod2_bonus`,`s1_map`.`prod3_bonus` AS `prod3_bonus`,`s1_civ`.`civ_name` AS `civ_name`,`s1_civ`.`civ_age` AS `civ_age`,`s1_civ`.`civ_ally` AS `civ_ally`,(select `s1_ally`.`name` from `s1_ally` where (`s1_ally`.`id` = `s1_civ`.`civ_ally`)) AS `ally`,(select sum(`s1_building`.`pop`) from `s1_building` where (`s1_building`.`village_id` = `s1_map`.`id`)) AS `busypop` from (`s1_map` join `s1_civ`) where (`s1_map`.`civ_id` = `s1_civ`.`civ_id`);
+
 --
 -- Limiti per le tabelle scaricate
 --
@@ -554,8 +579,8 @@ CREATE TABLE `temp` (
 -- Limiti per la tabella `s1_ally_pacts`
 --
 ALTER TABLE `s1_ally_pacts`
-  ADD CONSTRAINT `s1_ally_pacts_ibfk_2` FOREIGN KEY (`id_ally2`) REFERENCES `s1_ally` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `s1_ally_pacts_ibfk_1` FOREIGN KEY (`id_ally1`) REFERENCES `s1_ally` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `s1_ally_pacts_ibfk_1` FOREIGN KEY (`id_ally1`) REFERENCES `s1_ally` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `s1_ally_pacts_ibfk_2` FOREIGN KEY (`id_ally2`) REFERENCES `s1_ally` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `s1_ally_permissions`
@@ -579,22 +604,22 @@ ALTER TABLE `s1_map`
 -- Limiti per la tabella `s1_mess`
 --
 ALTER TABLE `s1_mess`
-  ADD CONSTRAINT `s1_mess_ibfk_2` FOREIGN KEY (`mittente`) REFERENCES `site_users` (`ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `s1_mess_ibfk_1` FOREIGN KEY (`destinatario`) REFERENCES `s1_civ` (`civ_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `s1_mess_ibfk_1` FOREIGN KEY (`destinatario`) REFERENCES `s1_civ` (`civ_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `s1_mess_ibfk_2` FOREIGN KEY (`mittente`) REFERENCES `site_users` (`ID`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `s1_mess_read`
 --
 ALTER TABLE `s1_mess_read`
-  ADD CONSTRAINT `s1_mess_read_ibfk_2` FOREIGN KEY (`user`) REFERENCES `site_users` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `s1_mess_read_ibfk_1` FOREIGN KEY (`id`) REFERENCES `s1_mess` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `s1_mess_read_ibfk_1` FOREIGN KEY (`id`) REFERENCES `s1_mess` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `s1_mess_read_ibfk_2` FOREIGN KEY (`user`) REFERENCES `site_users` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `s1_offer`
 --
 ALTER TABLE `s1_offer`
-  ADD CONSTRAINT `s1_offer_ibfk_2` FOREIGN KEY (`vid`) REFERENCES `s1_map` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `s1_offer_ibfk_1` FOREIGN KEY (`civ_id`) REFERENCES `s1_civ` (`civ_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `s1_offer_ibfk_1` FOREIGN KEY (`civ_id`) REFERENCES `s1_civ` (`civ_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `s1_offer_ibfk_2` FOREIGN KEY (`vid`) REFERENCES `s1_map` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `s1_option`
@@ -612,8 +637,8 @@ ALTER TABLE `s1_report`
 -- Limiti per la tabella `s1_report_read`
 --
 ALTER TABLE `s1_report_read`
-  ADD CONSTRAINT `s1_report_read_ibfk_2` FOREIGN KEY (`id`) REFERENCES `s1_report` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `s1_report_read_ibfk_1` FOREIGN KEY (`user`) REFERENCES `site_users` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `s1_report_read_ibfk_1` FOREIGN KEY (`user`) REFERENCES `site_users` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `s1_report_read_ibfk_2` FOREIGN KEY (`id`) REFERENCES `s1_report` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `s1_research`
@@ -625,16 +650,16 @@ ALTER TABLE `s1_research`
 -- Limiti per la tabella `s1_troopers`
 --
 ALTER TABLE `s1_troopers`
-  ADD CONSTRAINT `s1_troopers_ibfk_3` FOREIGN KEY (`village_prev`) REFERENCES `s1_map` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `s1_troopers_ibfk_1` FOREIGN KEY (`civ_id`) REFERENCES `s1_civ` (`civ_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `s1_troopers_ibfk_2` FOREIGN KEY (`village_now`) REFERENCES `s1_map` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `s1_troopers_ibfk_2` FOREIGN KEY (`village_now`) REFERENCES `s1_map` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `s1_troopers_ibfk_3` FOREIGN KEY (`village_prev`) REFERENCES `s1_map` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `site_alerts_read`
 --
 ALTER TABLE `site_alerts_read`
-  ADD CONSTRAINT `site_alerts_read_ibfk_2` FOREIGN KEY (`user`) REFERENCES `site_users` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `site_alerts_read_ibfk_1` FOREIGN KEY (`id`) REFERENCES `site_alerts` (`aid`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `site_alerts_read_ibfk_1` FOREIGN KEY (`id`) REFERENCES `site_alerts` (`aid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `site_alerts_read_ibfk_2` FOREIGN KEY (`user`) REFERENCES `site_users` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `site_option`
@@ -652,15 +677,15 @@ ALTER TABLE `site_role`
 -- Limiti per la tabella `site_track`
 --
 ALTER TABLE `site_track`
-  ADD CONSTRAINT `site_track_ibfk_2` FOREIGN KEY (`category`) REFERENCES `site_track_cat` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `site_track_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `site_users` (`ID`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `site_track_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `site_users` (`ID`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  ADD CONSTRAINT `site_track_ibfk_2` FOREIGN KEY (`category`) REFERENCES `site_track_cat` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `site_track_assoc_tag`
 --
 ALTER TABLE `site_track_assoc_tag`
-  ADD CONSTRAINT `site_track_assoc_tag_ibfk_2` FOREIGN KEY (`tid`) REFERENCES `site_track_tag` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `site_track_assoc_tag_ibfk_1` FOREIGN KEY (`id`) REFERENCES `site_track` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `site_track_assoc_tag_ibfk_1` FOREIGN KEY (`id`) REFERENCES `site_track` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `site_track_assoc_tag_ibfk_2` FOREIGN KEY (`tid`) REFERENCES `site_track_tag` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `site_user_civ`

@@ -21,11 +21,11 @@ class S1_IndexController extends Zend_Controller_Action
     public $now;
     function init ()
     {
-        $log = Zend_Registry::get("log");
+        
         if (Zend_Registry::isRegistered("civ"))
             $civ = Zend_Registry::get("civ");
         else {
-            $log->log("civ non trovato", Zend_Log::CRIT);
+            $this->_log->log("civ non trovato", Zend_Log::CRIT);
             $e = new Zend_Exception();
             exit();
         }
@@ -45,31 +45,23 @@ class S1_IndexController extends Zend_Controller_Action
             $this->view->civ = $this->civ;
             $map=new Model_map();
     		if ($vid) {
-    			$v=$this->_db->fetchRow("SELECT * FROM `".MAP_TABLE."` WHERE `id`='$vid'");
-    			$this->view->x=$v['x'];
-    			$this->view->y=$v['y'];
+    			$coord=Model_map::getInstance()->getCoordFromId($vid);
+    			$this->view->x=$coord['x'];
+    			$this->view->y=$coord['y'];
     			$this->view->vid=true;
     		}
     		else {
-    			$now = $this->civ->getCurrentVillage();
-    			$this->view->x=$this->civ->village->data[$now]['x'];
-    			$this->view->y=$this->civ->village->data[$now]['y'];
+    			$now = Model_map::getInstance()->getCoordFromId($this->civ->getCurrentVillage());
+    			$this->view->x=$now['x'];
+    			$this->view->y=$now['y'];
     		}
     		//$this->view->village=$map->getVillageArray($this->view->x,$this->view->y,intval($zoom['x']/2),intval($zoom['y']/2),$zoom['x']);
-    		$this->view->table= $map->getMapTable($zoom['dim'],$zoom['y'],$zoom['x']);
+    		//$this->view->table= $map->getMapTable($zoom['dim'],$zoom['y'],$zoom['x']);
         } else {
             $this->view->hasCivilty = false;
             $form = new Form_Regciv();
             $this->view->form = $form;
         }
-    }
-    public function villageAction ()
-    {
-        $this->_helper->layout()->x = 1000;
-        $this->_helper->layout()->y = 740;
-        $this->view->own = true;
-        $this->view->civ = $this->civ;
-        $this->view->disp = $this->civ->village->building[$this->now]->getDispBuilding($this->civ->getAge());
     }
     public function searchcivAction ()
     {
@@ -90,7 +82,7 @@ class S1_IndexController extends Zend_Controller_Action
     {
         Zend_Layout::getMvcInstance()->disableLayout();
         $id = (int) $_POST['id'];
-        $civ = Zend_Registry::get("civ");
+        $civ = Model_civilta::getInstance();
         $auth = Zend_Auth::getInstance();
         $r = $civ->subscrive($id, $auth->getIdentity()->user_id, false);
         $mess = $r ? "iscrizione inviata con successo, attendi l'attivazione da parte della civiltà" : "iscrizione non riuscita";
@@ -98,72 +90,93 @@ class S1_IndexController extends Zend_Controller_Action
         'update' => array('ids' => array('mess' => $mess)));
         echo json_encode($reply);
     }
+    public function unsubscriveAction() {
+    	Zend_Layout::getMvcInstance()->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        $id=Zend_Auth::getInstance()->getIdentity()->user_id;
+        $this->_db->delete(RELATION_USER_CIV_TABLE,"`user_id`='$id'"); 
+        echo json_encode(array('data'=>null,'html'=>null,'javascript'=>null,'update'=>null));       
+    }
     public function createcivAction ()
     {
+    	try {
+    	$this->_helper->viewRenderer->setNoRender(true);
         Zend_Layout::getMvcInstance()->disableLayout();
         $req = $this->getRequest()->getParams();
-        error_reporting(E_ERROR | E_WARNING | E_PARSE);
-        $name = $req['name'];
-        $agg = $req['agg'];
-        $alnum = new Zend_Validate_Alnum();
-        if (($alnum->isValid($name)) && ($alnum->isValid($agg))) {
-            $sector = (int) $_POST['sector'];
-            $x[0] = 0;
-            $x[1] = 2;
-            $x[2] = 1;
-            $x[3] = 1;
-            $x[4] = 2;
-            $y[0] = 0;
-            $y[1] = 2;
-            $y[2] = 2;
-            $y[3] = 1;
-            $y[4] = 1;
-            $n = $this->db->fetchOne(
-            "SELECT count(*) 
-        	FROM `" . CIV_TABLE . "` 
-        	WHERE `civ_name`='" . $name . "'");
-            if ($n) {
-                $risposta['bool'] = false;
-                $risposta['mess'] = $name . " " .
-                 $this->t->_("esiste gi&aacute;!");
-            } else {
-                Model_civilta::register(
-                array('civ_name' => $name, 'civ_adjective' => $agg));
-                $id = $this->db->fetchOne(
-                "SELECT `civ_id` 
-            	FROM `" . CIV_TABLE . "` 
-            	WHERE `civ_name`='" . $name . "'");
-                $auth = Zend_Auth::getInstance();
-                $param = new Model_params();
-                Zend_Registry::set("param", $param);
-                Model_civilta::subscrive($id, $auth->getIdentity()->user_id);
-                $coord = Model_civilta::randomcoord($x[$sector], $y[$sector]);
-                Model_civilta::addVillage($coord['x'], $coord['y'], $id, 1);
-                $risposta = $this->t->_(
-                "civilt&aacute; iscritta con successo! ricaricare la pagina");
-            }
+        $form=new Form_Regciv();
+        $error=false;
+        if ($form->isValid($_POST)) {
+        	$data=$form->getValues();
+            $sector = $data['sector'];
+            $name=$data['name'];
+            $agg = $data['agg'];
+            $x=(int)$data['cx'];
+        	$y=(int)$data['cy'];
+            $cx[5] = 0;
+            $cx[1] = 2;
+            $cx[2] = 1;
+            $cx[3] = 1;
+            $cx[4] = 2;
+            $cy[5] = 0;
+            $cy[1] = 2;
+            $cy[2] = 2;
+            $cy[3] = 1;
+            $cy[4] = 1;
+            Model_civilta::register(array('civ_name' => $name, 'civ_adjective' => $agg));
+            $id = $this->db->fetchOne("SELECT `civ_id` FROM `" . CIV_TABLE . "` WHERE `civ_name`='" . $name . "'");
+            $auth = Zend_Auth::getInstance();
+            $param = new Model_params();
+            Zend_Registry::set("param", $param);
+            $bool=$this->db->fetchOne("SELECT `id` FROM `".SERVER."_map` WHERE `id`='".Model_map::getInstance()->getIdFromCoord($x, $y)."'");
+            if ($bool && ($sector==6)) 
+            	$sector=5;
+            switch ($sector) {
+            	case 6: 
+            		break;
+            	default:$coord = Model_civilta::randomcoord($cx[$sector], $cy[$sector]);
+            		$x=$coord['x'];$y=$coord['y'];
+            		break;
+            };
+            Model_civilta::addVillage($x, $y, $id, 1);
+                $risposta = $this->_t->_('REG_SUCCESS');
+            Model_civilta::subscrive($id, $auth->getIdentity()->user_id);
         } else {
-            $risposta = $name . " " . $agg . " " . $this->t->_(
-            "il nome e l'aggettivo devono contenere solo lettere o numeri");
+        	$error=true;
+        	$risposta = "";
+        	foreach ($form->getMessages() as $key => $value) {
+        		foreach ($value as $mess) {
+        			$risposta.='<div>'.$key.':'.$mess.'</div>';
+        		}
+        	}
         }
         echo json_encode(
         array(
-        'html' => array('title' => $this->t->_('Attenzione'), 'text' => $risposta), 
-        'data' => false, 'update' => false, 'javascript' => false));
+        'html' => array('title' => $this->_t->_('WARNING'), 'text' => $risposta,'x'=>200,'y'=>200,'error'=>$error,'button'=>true), 
+        'data' => false, 'update' => false, 'javascript' => 'setTimeout(function() {location.reload()},3000)'));
+    	}
+    	catch (Exception $e) {
+    		echo $e;
+    	}
     }
     public function delqueueAction ()
     {
-        $token = token_ctrl($this->_getAllParams());
-        if ($token['tokenB']) {
             global $building_array;
             $id = (int) $_POST['id'];
-            $this->_log->debug(
-            "`id`='$id' AND `type`IN('" . DESTROY_EVENT . "','" . BILD_EVENT .
-             "')");
             $this->civ->ev->delete(
             "`id`='$id' AND `type`IN('" . DESTROY_EVENT . "','" . BILD_EVENT .
              "')");
-            $now = $this->civ->getCurrentVillage();
+            $new=array();
+            foreach ($this->civ->queue as $value) {
+            	if ($value['id']!=$id) $new[]=$value;
+            }
+            $this->civ->queue=$new;
+            $new=array();
+            foreach ($this->civ->destroy as $value) {
+            	if ($value['id']!=$id) $new[]=$value;
+            }
+            $this->civ->destroy=$new;
+            $this->civ->refresh();
+            /*$now = $this->civ->getCurrentVillage();
             $where = array("`type`='1'", 
             "`params`LIKE'%\"village_id\";i:" . $now . "%'");
             $queue = $this->civ->ev->getEvent($where);
@@ -175,9 +188,7 @@ class S1_IndexController extends Zend_Controller_Action
                 ->queue($queue));
             $this->civ->refresh->addIds("destroy", 
             $this->view->template()
-                ->queue($destroy));
-        }
-        $this->civ->refresh->addToken("tokenB", token_set("tokenB"));
+                ->queue($destroy));*/
     }
     /**
      * questa action serve solo per aggiornare la pagina via ajax.
@@ -188,7 +199,7 @@ class S1_IndexController extends Zend_Controller_Action
     }
     public function sortAction ()
     {
-        $user = Zend_Registry::get("user");
+        $user = Model_user::getInstance();
         // ricevo l'array tramite post
         $list = $_POST['list'];
         if (is_array($list)) { //se è un array
@@ -196,7 +207,7 @@ class S1_IndexController extends Zend_Controller_Action
             foreach ($list as $key => $value) { //scorro l'array con foreach
                 $value = substr($value, 1); //$value="v1234" quindi tolgo la v per poter cercare l'id
                 //modifico il db inserendo nella tabella del villaggio la posizione nel vettore ricevuto
-                $this->_db->update(MAP_TABLE, 
+                $this->_db->update(SERVER.'_map', 
                 array('order_n' => $key), "`id`='$value'");
             }
         }

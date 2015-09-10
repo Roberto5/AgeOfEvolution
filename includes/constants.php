@@ -55,12 +55,15 @@ define("COLONY_REPORT", "6");
 
 //ricerche
 define("RES_ARCO", 1);
-$research_array=array('1'=>'Rarco');
+define("RES_LEADERSHIP",2);
+define("RES_STORAGE",3);
+$research_array=array('1'=>'Rarco','2'=>'Rleadership','3'=>'Rstorage');
 
 //altre costanti
 define("VILLAGE_IMAGE_FILE", "common/images/villaggi.php");
 define("MAX_EV","100");
 define("MAP_ADD","3");
+
 
 define("OWNER", 3);
 define("SHARER", 2);

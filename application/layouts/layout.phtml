@@ -11,6 +11,12 @@ $this->action = $req->getActionName();
 $this->controller = $req->getControllerName();
 $this->ev = $config = Zend_Registry::get('config');
 $this->alerts = false;
+/**
+ *
+ * Enter description here ...
+ * @var Zend_Acl
+ */
+$acl=Zend_Registry::get('acl');
 if ($this->auth->hasIdentity()&& $this->game) {
 	$age=Zend_Registry::get("age");
 	$par = "&s=" . ($age + 1);
@@ -23,77 +29,87 @@ $this->servertime='<span id="timestamp" style="display:none">' . mktime() .'000<
  */
 $view=$this;
 if ($this->auth->hasIdentity()) {
-    $this->alerts=Model_alerts::getAlerts();
+	$this->alerts=Model_alerts::getAlerts();
 }
 if (! $this->alerts)
-    $this->alerts[0] = false;
+$this->alerts[0] = false;
 //$menu=new Zend_View_Helper_MyMenu();
 //*******************************************init menu
 $iconSize=16;
 $this->path=$this->baseUrl();
 $this->myMenu()
-	->add('Home','default','index','index',1,null,null,$this->path.'/common/images/home.png',$iconSize,false)
-	->add('Forum','forum',null,null,2,null,null,$this->path.'/common/images/forum.ico',$iconSize,false)
-	->add('Wiki','wiki',null,null,3,null,null,$this->path.'/common/images/wiki-icon.png',$iconSize,false)
-	->add('Login',"javascript:$('#login').dialog('open');",null,null,4,'login','index',$this->path.'/common/images/login.gif',$iconSize,false)
-	->add('[REG]',"javascript:$('#reg').dialog('open');",null,null,5,'reg','index',$this->path.'/common/images/add.png',$iconSize,false)
-	->add('Logout','javascript:ev.logout();','','',6,'login','logout',$this->path.'/common/images/logout.png',$iconSize,false)
-	->add('[ACCOUNT]',"javascript:$('#account').dialog('open');",null,null,7,'account',null,$this->path.'/common/images/modacc.png',$iconSize,false)
-	->add('[BUG]','javascript:ev.bugreport();',null,null,20,'priv_zone',null,$this->path.'/common/images/bug.png',$iconSize,false)
-	->add(array('label'=>'Admin'
-			,'module'=>'admin'
-			//,'controller'=>'index'
-			//,'action'=>'index'
-			,'order'=>100
-			,'resource'=>'admin'
-			,'icon'=>$this->path.'/common/images/village/corona.gif'
-			,'iconSize'=>$iconSize
-			,'text'=>false
-		)
-	)
-	->add('Help',"javascript:ev.help('index');",null,null,99,null,null,$this->path.'/common/images/help.png',$iconSize,false);
+->add('Home','default','index','index',1,null,null,$this->path.'/common/images/home.png',$iconSize,false)
+->add('Forum','forum',null,null,2,null,null,$this->path.'/common/images/forum.ico',$iconSize,false)
+->add('Wiki','wiki',null,null,3,null,null,$this->path.'/common/images/wiki-icon.png',$iconSize,false)
+->add('Login',"javascript:$('#login').dialog('open');",null,null,4,'login','index',$this->path.'/common/images/login.gif',$iconSize,false)
+->add('[REG]',"javascript:$('#reg').dialog('open');",null,null,5,'reg','index',$this->path.'/common/images/add.png',$iconSize,false)
+->add('Logout','javascript:ev.logout();','','',6,'login','logout',$this->path.'/common/images/logout.png',$iconSize,false)
+->add('[ACCOUNT]',"javascript:$('#account').dialog('open');",null,null,7,'account',null,$this->path.'/common/images/modacc.png',$iconSize,false)
+->add('Feedback','javascript:ev.bugreport();',null,null,20,'priv_zone',null,$this->path.'/common/images/bug.png',$iconSize,false)
+->add(array('label'=>'Admin'
+,'module'=>'admin'
+//,'controller'=>'index'
+//,'action'=>'index'
+,'order'=>100
+,'resource'=>'admin'
+,'icon'=>$this->path.'/common/images/village/corona.gif'
+,'iconSize'=>$iconSize
+,'text'=>false
+)
+);
 
 if ($this->module=='admin') {
 	$this->myMenu()->add(array('label'=>'[MKDATA]'
-					,'module'=>'admin'
-					,'controller'=>'mkdata'
-					,'order'=>8
-					,'resource'=>'admin'
+	,'module'=>'admin'
+	,'controller'=>'mkdata'
+	,'order'=>8
+	,'resource'=>'admin'
 	))->add(array('label'=>'[ALERTS]'
-					,'module'=>'admin'
-					,'controller'=>'track'
-					,'order'=>9
-					,'resource'=>'admin'
+	,'module'=>'admin'
+	,'controller'=>'alerts'
+	,'order'=>9
+	,'resource'=>'admin'
+	))->add(array('label'=>'[TRACKS]'
+	,'module'=>'admin'
+	,'controller'=>'track'
+	,'order'=>9
+	,'resource'=>'admin'
 	))->add(array('label'=>'[MAP]'
-					,'module'=>'admin'
-					,'controller'=>'generate'
-					,'order'=>10
-					,'resource'=>'admin'
+	,'module'=>'admin'
+	,'controller'=>'generate'
+	,'order'=>10
+	,'resource'=>'admin'
 	))->add(array('label'=>'[MAINTENAINCE]'
-					,'module'=>'admin'
-					,'controller'=>'maintenance'
-					,'order'=>11
-					,'resource'=>'admin'
+	,'module'=>'admin'
+	,'controller'=>'maintenance'
+	,'order'=>11
+	,'resource'=>'admin'
+	))->add(array('label'=>'Log'
+	,'module'=>'admin'
+	,'controller'=>'maintenance'
+	,'action'=>'log'
+	,'order'=>12
+	,'resource'=>'admin'
 	))->add(array('label'=>'F.a.q'
-					,'module'=>'admin'
-					,'controller'=>'faq'
-					,'order'=>12
-					,'resource'=>'admin'
+	,'module'=>'admin'
+	,'controller'=>'faq'
+	,'order'=>13
+	,'resource'=>'admin'
 	));
 }
 
-//feed 
+//feed
 
 if ($this->ev->local) $news='<li>le news non funzionano in locale</li>';
 else{
 	try {
-    	$feed =Zend_Feed::import('http://blogpagliaccio.wordpress.com/category/progetti/age-of-evolution/feed/');
+		$feed =Zend_Feed::import('http://blogpagliaccio.wordpress.com/category/progetti/age-of-evolution/feed/');
 	} catch (Zend_Feed_Exception $e) {
-    // feed import failed
-   		$feed=array();
+		// feed import failed
+		$feed=array();
 	}
 	$news="";
-// Loop over each channel item and store relevant data
+	// Loop over each channel item and store relevant data
 	foreach ($feed as $item) {
 		$date=new DateTime($item->pubDate());
 		$news.='<li><span>'.$date->format("d/m/Y").'</span> <a href="'.$item->link().'">'.$item->title().'</a></li>';
@@ -103,27 +119,67 @@ else{
 ?>
 <!DOCTYPE HTML>
 <html>
-	<head>
-		<meta name="DESCRIPTION" content="browser game gratuito, gestionale in cui i giocatori comandano civiltà, portandole ad evolversi dalla preistoria fino al futuro" />
-		<meta name="KEYWORDS" content="browsergame,strategia,gestionale,evoluzione,gratis" />
-		<link rel="shortcut icon" href="<?php echo $this->baseUrl(); ?>/favicon.ico" />	
+<head>
+<meta name="DESCRIPTION"
+	content="browser game gratuito, gestionale in cui i giocatori comandano civiltà, portandole ad evolversi dalla preistoria fino al futuro" />
+<meta name="KEYWORDS"
+	content="browsergame,strategia,gestionale,evoluzione,gratis" />
+<link rel="shortcut icon"
+	href="<?php echo $this->baseUrl(); ?>/favicon.ico" />
 <?php
 // js e css script
-		echo $this->headLink()->prependStylesheet(
-		$this->baseUrl() . '/common/css/css.php'.($this->game? '?l=g':'').($par?$par:''));
+echo $this->headLink()->prependStylesheet(
+$this->baseUrl('css') .($this->game? '?l=g':'').($par?$par:''));
+echo $this->headStyle();
 echo $this->headScript()->prependFile($this->baseUrl('js'));
 
 $complete=new Form_Complete();
 $ev=$complete->getElement("ev");
-$select='<select>';
+$select="";
 foreach ($ev->getMultiOptions() as $key => $value) {
-	$select.='<option value="'.$key.'">'.$value.'</value>';
+	$select.= "'$key':'$value',";
 }
-$select.='</select>';
-
+$select=substr($select, 0,-1);
 ?>
 <script type="text/javascript">
 <!--
+var debugmenu={
+		fill: {
+			name:'riempi magazzini',
+			callback:function(k,opt){
+				ev.request(module+"/debug/fill","post",{ajax:1});
+			}
+		},
+		update: {
+			name:'aggiorna produzione',
+			callback:function(k,opt){
+				ev.request(module+"/debug/aggprod","post",{ajax:1});
+			}
+	    },
+	    complete : {
+		    type:'select',
+		    options:{<?php echo $select;?>},
+		    events:{
+			    click:function(e){
+				    evid=e.srcElement.value;
+				    console.log(evid);
+				    ev.request(module+"/debug/complete","post",{ajax:1,ev:evid,vid:'this'});
+				}
+			},
+		    name:'completa evento'
+	    },
+	    addabt: {
+		    name:'aggiungi 100 abitanti',
+		    callback:function(){
+				ev.request(module+"/debug/addpop","post",{ajax:1});
+			}
+		}
+};
+	    /*   		
+	       		
+	       		
+	       		
+	*/
 $(document).ready(function(){
 //******************************************logger*******************************************************
 <?php
@@ -157,41 +213,34 @@ $(document).ready(function(){
 		        $cate .= '<option value="' . $value['id'] . '" title="' .
 		         $value['description'] . '">' . $value['name'] . '</option>';
 		    }
-		    $content = array('title' => '[bugreport]', 
+		    $content = array('title' => 'Feedback', 
 		    'text' => ('
 		<div id="report"></div>
 		<div id="form">
 			<div id="type">
 				<input type="radio" id="type1" name="type" checked="checked" value="bug" /><label for="type1">' .
-		     $this->image('/common/images/bug.png', 'bug', null, 32, 32) .
+		     $this->image('/common/images/bug.png', 'Bug', 'Bug', 32, 32) .
 		     '</label>
 				<input type="radio" id="type2" name="type"  value="idea" /><label for="type2">' .
-		     $this->image('/common/images/idea.gif', '[idee]', null, 32, 32) .
+		     $this->image('/common/images/idea.gif', '[IDEA]', '[IDEA]', 32, 32) .
 		     '</label>
 				<input type="radio" id="type3" name="type" value="notlike" /><label for="type3">' .
-		     $this->image('/common/images/notlike.gif', '[lamentele]', null, 32, 
+		     $this->image('/common/images/notlike.gif', '[NOTLIKE]', '[NOTLIKE]', 32, 
 		    32) . '</label>
 			</div>
-			<div>
+			<div>[CATEGORY]
 				<select id="category">' . $cate .
 		     '</select>
 			</div>
-			<div>tags : <span id="itag"></span> <input id="tag" />
+			<div title="[BUGTAG]">tags : <span id="itag"></span> <input id="tag"/>
 			<button onclick="ev.addtag($(\'#tag\').val());">' .
-		     '[inserisci/elimina]' .
+		     '[INSERT]/[DELETE]' .
 		     '</button></div>
-			<textarea cols="42" rows="14" style="border:1px solid black;" id="description">' . 
-		    '[descrivi qui il bug che hai trovato, un idea per migliorare il gioco o quello che non ti piace.
-			cerca di essere chiaro e di compilare bene il form]' .
-		     '</textarea>
-			<div>' .
-		     
-		    '[se vuoi inviarci immagini caricale su un host online e metti qui l&apos;indirizzo]' .
-		     '</div>
-			<div><input id="link" /></div>
+			<textarea cols="42" rows="14" style="border:1px solid black;" id="description" placeholder="[BUGDESC]"></textarea>
+			<div>Link:<input id="link"  placeholder="[BUGIMG]" /></div>
 			<div style="float: right;"><button onclick="ev.sendbug()">' .
-		     '[invia]' . '</button></div>
-		</div><script type="text/javascript">$("#type").buttonset();$("button").button();
+		     '[SEND]' . '</button></div>
+		</div><script type="text/javascript">$("#type").buttonset();initbutton();
 		$(function() {
 		var cache = {},
 		lastXhr;
@@ -229,8 +278,18 @@ if ($this->game) {
 	global $Building_Array;
 	echo "ev.classbuilding=".json_encode($Building_Array).";";
 	?>
-	ev.menubuilding=[{'[UPGRADE]':{onclick:ev.build.upgrade,icon:path+'/common/images/add.png'}},
-		          {'[DESTROY]':{onclick:ev.build.destroy,icon:path+'/common/images/del.gif'}}];
+	ev.menubuilding={
+			up:{
+				name:'[UPGRADE]',
+				callback:function(key,opt){ev.build.upgrade(opt);},
+				icon:'ui-icon ui-icon-triangle-1-n'
+			},
+		    dest:{
+			    name:'[DESTROY]',
+			    callback:function(key,opt){ev.build.destroy(opt);},
+			    icon:'ui-icon ui-icon-close'
+			}
+	};
 	$(document).bind('quest',ev.quest.questhandler);
 	$(document).ready(function(){
 		<?php
@@ -245,11 +304,14 @@ if ($this->game) {
 		?>
 	});
 	ev.age=<?php echo intval(( $civ ? $civ->getAge() : '0'));?>;
-	<?php if ($civ) {?>ev.focus.x=<?php echo intval($civ->village->data[$civ->getCurrentVillage()]['x']);?>;
-	ev.focus.y=<?php echo intval($civ->village->data[$civ->getCurrentVillage()]['y']);?>;
-	ev.focus.id=<?php echo intval($civ->getCurrentVillage());?>;
 	ev.max=[<?php echo MAX_X;?>,<?php echo MAX_Y;?>];
-	ev.civ=<?php echo json_encode($civ->data);?>;
+	<?php if ($civ->data) { $id=$civ->village->data[$civ->getCurrentVillage()]['id'];
+	$xy=Model_map::getInstance()->getCoordFromId($id);
+	?>ev.focus.x=<?php echo intval($xy['x']);?>;
+	ev.focus.y=<?php echo intval($xy['y']);?>;
+	ev.focus.id=<?php echo intval($civ->getCurrentVillage());?>;
+	ev.totpos=<?php echo intval(TOTBUILDING)?>;
+	ev.civ=<?php echo json_encode($civ->data->toArray());?>;
 	<?php }?>
 	ev.quest.flagquest=<?php echo ($canshow? "true" : "false");?>;
 	<?php 
@@ -260,98 +322,110 @@ if ($this->game) {
 <?php
 echo $this->headTitle();
 ?>
-	</head>
-	<body>
-	<?php 
-	$banner='<div id="banner">';
-	if (!$this->ev->local) {//banner
-	}
-	if ($this->game) {
-		$banner.='<div id="hidad"><a href="#">[HIDE]</a></div>';
-	}
-	$banner.='</div>';
-	if ($this->game) echo $banner;
-	?>
-		<div id="container">
-			<?php 
-			if (!$this->game) echo $banner;
-			?>
-		
-			<div id="load"></div>
-			
-			<?php 
-			
-			if ($this->game) {
-				echo $view->render('game.phtml');
-			}
-			else echo $view->render('home.phtml');
-			?>
-			
-			<div id="content">      
-<?php 
-echo $this->layout()->content;
-?>
-			</div>
-			<?php if ($this->game) echo $view->render('footer.phtml'); else echo '<div id="push"></div>';?>
-			
-		</div><?php 	if (!$this->game) echo $view->render('footer.phtml');?> 
-<?php 
-if ($this->module=="default") {
-	echo ' <div id="login" title="Login">';
-	$login=new Form_LoginForm();
-	//$login->setAction($this->url(array('controller'=>'login')));
-	echo $login.'</div>
-			<div id="reg" title="[REG]">';
-	$reg=new Form_Register();
-	$reg->setAction($this->url(array('controller'=>'reg')));
-	echo $reg.'</div>';
+</head>
+<body>
+<?php
+$banner='<div id="banner">';
+if (!$this->ev->local) {//banner
 }
- // account
-		if ($this->auth->hasIdentity()) {
-			$v=new Zend_View();
-			$v->option=array(
-					//'prova'=>array(
-					//		'name'=>'[PROVA]',
-					//		'value'=>'prova',
-					//		'label'=>''//if null display value
-					//		'type'=>'Input'// default or Select or Textarea
-					//		'option'=>array())
-			);
-			$user=Model_user::getInstance();
-			$v->addFilter('Tmpeng')->addFilterPath(APPLICATION_PATH.'/plugin');
-			$v->setScriptPath(APPLICATION_PATH.'/views/scripts/account/');
-			$key=array('NICK'=>$user->data['username'],'EMAIL'=>$user->data['email']);
-			Zend_View_Filter_Tmpeng::addkey($key);
-			echo '<div id="account" title="[ACCOUNT]">'.$v->render('index.phtml').'</div>';
+if ($this->game) {
+	$banner.='<div id="hidad"><a href="#">[HIDE]</a></div>';
+}
+$banner.='</div>';
+$nobanner=$acl->isAllowed(Model_role::getRole(),'nobanner');
+if ($this->game && !$nobanner) echo $banner;
+?>
+	<div id="container">
+	<?php
+	if (!$this->game && !$nobanner) echo $banner;
+	?>
+
+		<div id="load"></div>
+
+		<?php
+			
+		if ($this->game) {
+			echo $view->render('game.phtml');
 		}
+		else echo $view->render('home.phtml');
 		?>
-		<div id="credits">
-<h3><a href="http://blogpagliaccio.wordpress.com" target="_blanc" >Pagliaccio</a></h3>
-<p>
-    Ideatore, amministratore e realizzatore del gioco. Programmatore php, javascript.
-</p>
-<h3><a href="http://leonardosite.altervista.org" target="_blanc" >Leonardo I</a></h3>
-<p>
-    Co-amministratore e realizzatore del gioco. Programmatore php, javascript.
-</p>
+
+		<div id="content">
+		<?php
+		echo $this->layout()->content;
+		?>
+		</div>
+		<?php if ($this->game) echo $view->render('footer.phtml'); else echo '<div id="push"></div>';?>
+
+	</div>
+	<?php 	if (!$this->game) echo $view->render('footer.phtml');?>
+	<?php
+	if ($this->module=="default") {
+		echo ' <div id="login" title="Login">';
+		$login=new Form_LoginForm();
+		//$login->setAction($this->url(array('controller'=>'login')));
+		echo $login.'</div>
+			<div id="reg" title="[REG]">';
+		$reg=new Form_Register();
+		$reg->setAction($this->url(array('controller'=>'reg')));
+		echo $reg.'</div>';
+	}
+	// account
+	if ($this->auth->hasIdentity()) {
+		$v=new Zend_View();
+		$v->option=array(
+		//'prova'=>array(
+		//		'name'=>'[PROVA]',
+		//		'value'=>'prova',
+		//		'label'=>''//if null display value
+		//		'type'=>'Input'// default or Select or Textarea
+		//		'option'=>array())
+		);
+		$user=Model_user::getInstance();
+		$v->addFilter('Tmpeng')->addFilterPath(APPLICATION_PATH.'/plugin');
+		$v->setScriptPath(APPLICATION_PATH.'/views/scripts/account/');
+		$key=array('NICK'=>$user->data['username'],'EMAIL'=>$user->data['email']);
+		Zend_View_Filter_Tmpeng::addkey($key);
+		echo '<div id="account" title="[ACCOUNT]">'.$v->render('index.phtml').'</div>';
+	}
+	?>
+	<div id="credits">
+		<h3>
+			<a href="http://blogpagliaccio.wordpress.com" target="_blanc">Pagliaccio</a>
+		</h3>
+		<p>Ideatore, amministratore e realizzatore del gioco. Programmatore
+			php, javascript.</p>
+		<h3>
+			<a href="http://leonardosite.altervista.org" target="_blanc">Leonardo
+				I</a>
+		</h3>
+		<p>Co-amministratore e realizzatore del gioco. Programmatore php,
+			javascript.</p>
 
 
 
-<h3>ringraziamo i segunti tool per il supporto dato:</h3>
+		<h3>ringraziamo i segunti tool per il supporto dato:</h3>
 
-    <a href="http://validator.w3.org/check?uri=referer">
-        <img
-        src="http://www.w3.org/Icons/valid-xhtml10"
-        alt="Valid XHTML 1.0 Transitional" height="31" width="88" />
-    </a>
+		<a href="http://validator.w3.org/check?uri=referer"> <img
+			src="http://www.w3.org/Icons/valid-xhtml10"
+			alt="Valid XHTML 1.0 Transitional" height="31" width="88" /> </a> <a
+			href="http://www.linux.org"><img
+			src="<?php echo $this->baseUrl()?>/common/images/linux_icon.gif"
+			alt="linux" height="60" width="65" /> </a> <a
+			href="http://apache.org/"><img
+			src="<?php echo $this->baseUrl()?>/common/images/apache_icon.gif"
+			alt="apache" height="50" width="72" /> </a> <a
+			href="http://www.mysql.it"><img
+			src="<?php echo $this->baseUrl()?>/common/images/mysql_icon.gif"
+			alt="mysql" height="37" width="63" /> </a> <a
+			href="http://www.php.net"><img
+			src="<?php echo $this->baseUrl()?>/common/images/php_icon.gif"
+			alt="php" height="35" width="44" /> </a> <a
+			href="http://www.zend.com/"><img
+			src="<?php echo $this->baseUrl()?>/common/images/zend.png" alt="zend"
+			height="50" width="50" /> </a>
 
-<a href="http://www.linux.org"><img src="<?php echo $this->baseUrl()?>/common/images/linux_icon.gif" alt="linux" height="60" width="65" /></a>
-<a href="http://apache.org/"><img src="<?php echo $this->baseUrl()?>/common/images/apache_icon.gif" alt="apache" height="50" width="72" /></a>
-<a href="http://www.mysql.it"><img src="<?php echo $this->baseUrl()?>/common/images/mysql_icon.gif" alt="mysql" height="37" width="63" /></a>
-<a href="http://www.php.net"><img src="<?php echo $this->baseUrl()?>/common/images/php_icon.gif" alt="php" height="35" width="44" /></a>
-<a href="http://www.zend.com/"><img src="<?php echo $this->baseUrl()?>/common/images/zend.png" alt="zend" height="50" width="50" /></a>
+	</div>
 
-</div>
-
-	</body>
+</body>
 </html>

@@ -5,7 +5,7 @@ input.error {
 	border:2px solid red;
 }
 /*profile*/
-.password {
+.passwordpanel {
 	display:none;
 }
 
@@ -83,7 +83,7 @@ margin: 0 10px 0 0;
 
 /*icone*/
 .icon {
-	background-image:url('../images/icon.png');
+	background-image:url('PATH/common/images/icon.png');
 	height:16px;
 	width:16px;
 	dispay:block;
@@ -103,6 +103,18 @@ margin: 0 10px 0 0;
 .silver {
 	background-position: -48px -64px;
 }
+.iconinline {
+	display:inline-block;
+}
+.flag {
+	background-image:url('PATH/common/images/flag.png');
+	height:16px;
+	width:16px;
+	dispay:block;
+}
+.it {
+	background-position: -16px 0px;
+}
 /*tag*/
 
 /*link decoration */
@@ -116,6 +128,9 @@ blockquote {
 }
 img{
 	border:0px;
+}
+button.img {
+	border-radius:4px;
 }
 abbr {
 	cursor: help;
@@ -131,12 +146,12 @@ button:hover{
     border: 1px solid black;
 }
 button.polls.yes {
-    background-image: url('../images/ok.gif');
+    background-image: url('PATH/common/images/ok.gif');
     width: 12px;
     height: 12px;
 }
 button.polls.no{
-    background-image: url('../images/del.gif');
+    background-image: url('PATH/common/images/del.gif');
     width: 12px;
     height: 12px;
 }
@@ -146,7 +161,7 @@ button.polls {
 
 /*style template*/
 #error{
-    background-image: url("../images/important.png");
+    background-image: url("PATH/common/images/important.png");
     background-repeat: no-repeat;
     position:relative; 
     min-height: 40px;
@@ -159,7 +174,7 @@ button.polls {
     padding-right: 5px;
 }
 #done {
-    background-image: url("../images/button_ok.gif");
+    background-image: url("PATH/common/images/button_ok.gif");
     background-repeat: no-repeat;
     position:relative; 
     min-height: 40px;
@@ -196,7 +211,7 @@ button.polls {
   width: 50%;
   padding: 16px;
   border: 10px solid #3B3B3B;
-  /*background: url(../images/center.jpg);*/
+  /*background: url(PATH/common/images/center.jpg);*/
   background-color: black;
   z-index:1002;
   overflow: auto;
@@ -214,7 +229,7 @@ button.polls {
   width: 50%;
   padding: 16px;
   border: 10px solid #3B3B3B;
-  /*background: url(../images/center.jpg);*/
+  /*background: url(PATH/common/images/center.jpg);*/
   background-color: black;
   z-index:1002;
   overflow: auto;
@@ -236,7 +251,7 @@ a.switch.on{
   position: absolute;
   height: 100%;
   width: 1200px;
-  background-image: url(../images/loader_earth.gif);
+  background-image: url(PATH/common/images/loader_earth.gif);
   background-position: center;
   background-repeat: no-repeat;
   background-color:black;
@@ -265,7 +280,7 @@ table.admin td {
 }
 table.admin th {
         border: 1px solid #CCC;
-	background-image: url(../images/table_bg.png);
+	background-image: url(PATH/common/images/table_bg.png);
 	padding-left: 7px;
 	padding-top: 2px;
 	vertical-align:middle;

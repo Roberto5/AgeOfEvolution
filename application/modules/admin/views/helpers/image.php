@@ -44,7 +44,7 @@ class Zend_View_Helper_image
             $title = $alt = $nameR[$age][$n];
         } else {
             $url = "pop.gif";
-            $title = $alt = $t->_("popolazione");
+            $title = $alt = $t->_("POP");
         }
        
         $src = $this->baseUrl . "/common/images/" . $url;

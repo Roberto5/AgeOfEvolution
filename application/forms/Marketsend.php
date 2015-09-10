@@ -8,7 +8,6 @@ class Form_Marketsend extends Zend_Form
     	$civ=Model_civilta::getInstance();
     	$now=$civ->getCurrentVillage();
     	$reso=array($civ->village->data[$now]['resource_1'],$civ->village->data[$now]['resource_2'],$civ->village->data[$now]['resource_3']);
-    	Zend_Registry::get("log")->debug($reso);
     	for ($i = 0; $i < 3; $i++) {
     		$res=$this->createElement("text", "res".($i+1));
         	$res->addFilter("StringTrim")->addValidator("digits")
@@ -23,7 +22,7 @@ class Form_Marketsend extends Zend_Form
                 $options[$key]=$key;
         $village->addMultiOptions($options);
         $village->addValidator("Db_RecordExists",null,
-        	array('table' => MAP_TABLE, 'field' => 'id','exclude'=>"`civ_id`='".$civ->cid."'"))->setRequired(true);
+        	array('table' => SERVER.'_map', 'field' => 'id','exclude'=>"`civ_id`='".$civ->cid."'"))->setRequired(true);
         $village->getValidator("Db_RecordExists")->setMessage("seleziona uno dei tuoi villaggi!");
         $this->addElement($village);
     }

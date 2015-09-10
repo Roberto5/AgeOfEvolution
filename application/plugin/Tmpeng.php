@@ -7,15 +7,10 @@ class Zend_View_Filter_Tmpeng //implements Zend_Filter_Interface
 		foreach (self::$key as $key => $value) {
 			$buffer=str_replace($key, $value, $buffer);
 		}
-		//$log=Zend_Registry::get('log');
 		$n=preg_match_all('/\[\w+?\]/',$buffer,$word);
 		if ($n) $buffer=$this->translate($buffer, $word[0]);
-		//	$log->debug($word,'word');
-		//$log->debug($buffer,'buffer');
-	//	file_put_contents('/var/www/preg2', print_r(self::$key,true).' 
-	//			****  
-	//			'.$buffer,FILE_APPEND);
-		
+		$img=new Zend_View_Helper_image();
+		$buffer=$img->parse($buffer);
 		return $buffer;
 	}
 	public function translate($buffer,$word) {

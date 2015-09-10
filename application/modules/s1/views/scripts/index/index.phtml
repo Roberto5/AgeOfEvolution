@@ -1,20 +1,11 @@
 <?php
-$this->headTitle("s1");
+$x=$this->x;
+$y=$this->y;
+$module = Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
+$this->headTitle($module);
 $this->headTitle("index");
 $t = Zend_Registry::get("translate");
-$module = Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
-if ($this->hasCivilty > 1) {
-    //lascia spazio alla mappa 24x18
-    
-    //$cache=$this->village['cache'];
-    /*foreach ($this->village['cache'] as $x => $value) {
-    	foreach ($value as $y => $v) {
-    		$cache[$x][$y]=$v;
-    	}
-    }*/
-    $x=$this->x;
-    $y=$this->y;
-    $this->headScript()->captureStart();
+ $this->headScript()->captureStart();
     
     echo 'function keyDown(event) {
     if (event.which == null)
@@ -24,101 +15,194 @@ if ($this->hasCivilty > 1) {
     y=ev.map.centre[1];
     bool=true;
     switch (key) {
-        case 37:x--;
+        case 37:ev.map.centre[0]--;
         break;
-        case 38:y++;
+        case 38:ev.map.centre[1]++;
         break;
-        case 39:x++;
+        case 39:ev.map.centre[0]++;
         break;
-        case 40:y--;
+        case 40:ev.map.centre[1]--;
         break;
         default:bool=false;
     }
-    if (bool) {ev.map.position(x,y);return false;}
+    if (bool) {ev.map.shift();return false;}
 	}
-$(document).keydown(keyDown);
+	$(document).keydown(keyDown);
 	ev.map.centre=['.intval($x).','.intval($y).'];
-	ev.map.init=['.intval($x).','.intval($y).'];
-    
     ev.map.size=['.intval($this->zoom['x']).','.intval($this->zoom['y']).','.$this->zoom['dim'].'];
-    
-    var menu=[{"'.$t->_('rinforza').'":{onclick:ev.support,icon:"'.$this->baseUrl('/common/images/inrinfo.png').'"}},
-		{"'.$t->_('raid').'":{onclick:ev.raid,icon:"'.$this->baseUrl('/common/images/outattack.png').'"}},
-		{"'.$t->_('attacca').'":{onclick:ev.atk,icon:"'.$this->baseUrl('/common/images/inattack.png').'"}},
-		{"'.$t->_('colonizza').'":{onclick:ev.colony,icon:"'.$this->baseUrl('/common/images/pop.gif').'"}},
-		{"'.$t->_('invia mercanti (non implementato)').'":{onclick:ev.market,icon:"'.$this->baseUrl('/common/images/market.png').'"}}	
-	];
+    $(function(){
+    	ev.map.init();
+    	$("#modalwindows").dialog({modal:true});
+    	$("#map").draggable({
+    		grid: [50,50],
+    		revert: true,
+    		cursor:"move",
+    		helper:function(){
+    			return $(\'<div></div>\');
+    		},
+    		start: function(e,ui) {
+    			ev.map.pos=ui.position;
+    			ev.map.prev={top:0,left:0};
+    			ev.ondrag=true;
+    		},
+    		stop: function() {
+    			ev.ondrag=false;
+    		},
+    		drag:function(e,ui){
+    			t=Math.round((ev.map.pos.top-ui.position.top)/50);
+    			l=-Math.round((ev.map.pos.left-ui.position.left)/50);
+    			//console.log(l,t);
+    			bool=false;
+    			if (ev.map.prev.top!=t) {
+    				ev.map.centre[1]-=t-ev.map.prev.top;
+    				ev.map.prev.top=t;
+    				bool=true;
+    			}
+    			if (ev.map.prev.left!=l) {
+    				ev.map.centre[0]-=l-ev.map.prev.left;
+    				ev.map.prev.left=l;
+    				bool=true;
+    			}
+    			if (bool) ev.map.shift();
+    		},
+    		//cursorAt: { top: 25, left: 25 },
+    	})
+    });
+    ';
+$this->headScript()->captureEnd();
+?>
+<div id="map_details" style="display: none; position:absolute;z-index:200;">
+<table>
+	<thead>
+		<tr>
+			<th colspan="2" id="village_name">[Valle Inabitat]</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>[Civilt&aacute;]:</td>
+			<td id="village_player">-</td>
+		</tr>
+		<tr>
+			<td>[Alleanza]:</td>
+			<td id="village_ally">-</td>
+		</tr>
+		<tr>
+			<td>[POP]:</td>
+			<td id="village_popol">-</td>
+		</tr>
+		<tr>
+			<td>[Bonus]:</td>
+			<td id="village_bonus"></td>
+		</tr>
+		<!-- add more options -->
+	
+		<!-- <tr>
+			<td colspan="2"><a href="#" id="send_link">[Invia truppe]</a></td>
+		</tr> -->
+	</tbody>
+</table>
+</div>
+<div id="map" style="position:absolute;width: 1200px; height: 900px;top:0;"><?php         
+        $gap=0;$n=0;
+        for($j=1;$j<=$this->zoom['y'];$j++) {
+            for ($i=1;$i<=$this->zoom['x'];$i++) {
+            	echo '<div style="position:relative;left:'.(($i-1)*$this->zoom['dim']).'px;top:'.($gap+($j-1)*$this->zoom['dim']).'px;" 
+            				class="map zoom-'.$this->zoom['dim'].'" id="map_village_' . $i .
+                 '_'.$j.'" onmouseover="ev.map.details('.($i-1).','.($j-1).','.$n++.');" 
+            				onmouseout="ev.map.hide_map_details();" 
+            				onclick="if (!ev.drag) ev.map.get_village_info('.($i-1).','.($j-1).',false); else ev.drag=false;" alt="'.($n-1).'" ><div class="zoom-'.$this->zoom['dim'].' map-null"><!--vilage--><div class="zoom-'.$this->zoom['dim'].' map-null"><!--flag--></div></div></div>';
+            	$gap-=50;
+            }
+        }
+?></div>
+<?php 
+
+if ($this->hasCivilty > 1) {
+	
+    $this->headScript()->captureStart();
+	echo '
+    var menu={
+    	reinf: {
+    		name:"[rinforza]",
+    		callback:function(k,opt) {
+    			ev.support(opt);
+    		},
+    		icon:"icon inReinf"
+		},
+		raid: {
+			name:"[raid]",
+			callback:function(k,opt) {
+				ev.raid(opt)
+			},
+			icon:"icon outAttack"
+		},
+		atk: {
+			name:"[attacca]",
+			callback:function(k,opt) {
+				ev.atk(opt)
+			},
+			icon:"icon inAttack"
+		},
+		colony: {
+			name:"[colonizza]",
+			callback:function(k,opt) {
+				ev.colony(opt)
+			},
+			icon:"pop"
+		},
+		market: {
+			name:"[invia mercanti (non implementato)]",
+			callback:function(k,opt) {
+				ev.market(opt)
+			},
+			icon:"icon marketM",
+			disabled:true
+		}	
+	};
 	$(function () {
-		$(".map_village").contextMenu(menu,{theme:"human"});
+    	ev.village.init();
+		$.contextMenu({
+			selector:".map",
+			items:menu
+		});
 		if (m=location.hash.match(/(-*\d+)\|(-*\d+)(@*)/)) {
         // #2|2-dsf
         console.log(m);
         	x=parseInt(m[1]);
         	y=parseInt(m[2]);
         	console.log(x,y);
-            ev.map.position(x,y,m[3]? ev.map.get_village_info:null);
+        	ev.map.centre=[x,y];
+            //ev.map.shift();
         	
-		}else ev.map.position('.$x.','.$y.');
+		}
 			'.($this->vid ? 'location.hash = "#'.$this->x.'|'.$this->y.'";ev.map.load_detail();':'').'
-		
 	});';
     $this->headScript()->captureEnd();
-    echo '<div id="map_details" style="display: none; position:absolute;z-index:200;">
-<table>
-	<thead>
-		<tr>
-			<th colspan="2" id="village_name">'.$t->_("Valle Inabitata").'</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<td>'.$t->_("Civilt&aacute;").':</td>
-			<td id="village_player">-</td>
-		</tr>
-		<tr>
-			<td>'.$t->_("Alleanza").':</td>
-			<td id="village_ally">-</td>
-		</tr>
-		<tr>
-			<td>'.$t->_("Popolazione").':</td>
-			<td id="village_popol">-</td>
-		</tr>
-		<tr>
-			<td>'.$t->_("Bonus").':</td>
-			<td id="village_bonus"></td>
-		</tr>
-		<tr>
-			<td colspan="2"><a href="#" id="send_link">'.$t->_("Invia truppe").'</a></td>
-		</tr>
-	</tbody>
-</table>
-</div>';
-    echo '<div id="map" style="position:absolute;width: 1200px; height: 900px;top:0;">';
-    echo $this->table.'</div>';
+
     
 } elseif ($this->hasCivilty == 1) {
-    echo '<h1>' . $t->_('sei in attesa') . '</h1>' .
-     $t->_('la civilt&aacute; a cui ti sei iscritto non ti ha ancora attivato');
+	?><div id="modalwindows" title="[ONWAIT]"  class="notooltip">
+		[WAITFORCIV]
+		<button onclick="ev.request(module+'/index/unsubscrive','get',null,function(){location.reload();});">[WITHDRAW]</button>
+    </div>
+     <?php 
 } else {
     ?>
-non hai civilt&agrave;
-<p><strong>unisciti ad una civilt&agrave;</strong> <br />
-<input type="hidden" value="0" id="start" /> <input id="civ_name" size="20" maxlength="30" />
-<button onclick="ev.SearchCiv(0)"><?php
-    echo $t->_("Cerca");
-    ?></button>
-</p>
-<div id="result"></div>
-
-<h2>crea una nuova civilt&agrave;</h2>
-<span id="load"></span>
-<center>
-<div id="mess">
+<div id="modalwindows" class="notooltip" title="[NOCIV]">
+	<h3>[FINDCIV]</h3>
+	<input type="hidden" value="0" id="start" /><input id="civ_name" size="20" maxlength="30" />
+	<button onclick="ev.SearchCiv(0)">[SEARCH]</button>
+	<div id="result"></div>
+	
+	<h3>[CREATECIV]</h3>
+	<span id="load"></span>
+	<div id="mess">
 	<?php
-    echo $this->form;
+    	echo $this->form;
     ?>
+	</div>
 </div>
-</center>
 <?php
 }
 ?>   

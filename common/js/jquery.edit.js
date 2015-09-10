@@ -1,5 +1,7 @@
-/*
- * 
+/**
+ * @param String|Object options
+ * @param String key
+ * @param String value
  */
 
 (function($) {
@@ -35,7 +37,7 @@
 							break;
 						case 'function':
 							config.edit();
-							break
+							break;
 						default:
 						}
 					}

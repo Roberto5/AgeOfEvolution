@@ -19,21 +19,21 @@ class S1_ProfileController extends Zend_Controller_Action {
 
 	public function indexAction() {
 		$uid=$this->getRequest()
-			->getParam("uid", 0);
+			->getParam("uid", -1);
 		$cid=$this->getRequest()
-			->getParam("cid", 0);
+			->getParam("cid", -1);
 		//profilo user principale
-		if (!$uid && !$cid) {
+		if ($uid==-1 && $cid==-1) {
 			$this->view->user=Zend_Registry::get("user");
 			$this->view->civ=Zend_Registry::get("civ");
 			$this->view->type=1;
 		}
-		elseif ($uid) { //profilo user generico
+		elseif ($uid!=-1) { //profilo user generico
 			$this->view->user=$this->db->fetchRow(
 					"SELECT * FROM `" . USERS_TABLE . "` WHERE `ID`='$uid'");
 			$this->view->type=2;
 		}
-		elseif ($cid) { //profilo civ generico
+		elseif ($cid!=-1) { //profilo civ generico
 			$this->view->civ=$this->db->fetchRow(
 					"SELECT * FROM `" . CIV_TABLE . "` WHERE `civ_id`='" . $cid . "'");
 			$this->view->type=3;
@@ -42,7 +42,7 @@ class S1_ProfileController extends Zend_Controller_Action {
 			
 			$this->view->sharer=$sharer;
 			$this->view->village_list=$this->db->fetchAssoc(
-					"SELECT * FROM `" . MAP_TABLE. "` WHERE `civ_id`='$cid'");
+					"SELECT * FROM `" . SERVER. "_map` WHERE `civ_id`='$cid'");
 		}
 	}
 	public function changenamevillageAction() {
@@ -52,7 +52,7 @@ class S1_ProfileController extends Zend_Controller_Action {
 		$input->setDefaultEscapeFilter(new Zend_Filter_Callback("addslashes"));
 		$vid=$input->getEscaped('id');
 		$name=$input->getEscaped('name');
-		$this->db->query("UPDATE `".MAP_TABLE."` SET `name`='$name' WHERE `id`='$vid'");
+		$this->db->query("UPDATE `".SERVER."_map` SET `name`='$name' WHERE `id`='$vid'");
 		$civ=Model_civilta::getInstance();
 		$civ->refresh->addIds('vid'.$vid, $name);
 		$update=array('ids'=>array('vid'.$vid=>$name));
@@ -65,7 +65,6 @@ class S1_ProfileController extends Zend_Controller_Action {
 		$cid=Model_civilta::getInstance()->cid;
 		$bool=token_ctrl($this->getRequest()->getParams());
 		$this->view->token=token_set("tokenP");
-		$this->log->debug($_POST);
 		if ($this->getRequest()->isPost()&&$bool['tokenP']) {
 			$this->db->query("UPDATE `".USERS_TABLE."` SET `des_user`='".htmlentities($_POST['des_user'],ENT_QUOTES)."' WHERE `ID`='$id'");
 			$this->db->query("UPDATE `".CIV_TABLE."` SET `des_civ`='".htmlentities($_POST['des_civ'],ENT_QUOTES)."' WHERE `civ_id`='$cid'");

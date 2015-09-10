@@ -35,8 +35,8 @@ if ($this->section == 1) {
         $tadd = intval($tot / $this->p['rid']*3600);
         echo $res[$i] . ' '.$this->image()->resource(3,$this->age).'
 			' . timeStampToString($tadd) . ' ';
-        //max con le risorse
-                $max = $this->p['liv'] * $this->p['maxpop'];
+        //max con le risorse @todo rifare con la popolazione
+                $max = $this->p['pop']*$p['slotForPop'];
                 $temp = $max;
                 for ($i = 0; $i < 3; $i ++) {
                     $reso = "resource_" . ($i + 1);

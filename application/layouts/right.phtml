@@ -76,7 +76,6 @@ if ($auth->hasIdentity() && ($module != "default") && ($module != "admin") &&
         if ($n && ($i < 5)&&($i!=2)) {
             foreach ($item[$i]['array'] as $value) {
                 $param = unserialize($value['params']);
-                //$log->debug($param);
                 $time = $value['time'] - mktime();
                 $info .= '<div> ' . $t->_('da') . ' ' .
                  $this->template()->village($param['village_A']) . ' ' .
@@ -86,7 +85,6 @@ if ($auth->hasIdentity() && ($module != "default") && ($module != "admin") &&
             }
         }
         elseif (($i==2)&&($n))  {
-        	$log->debug($item[$i]['array']);
         	foreach ($in as $value) {
         		$param = unserialize($value['params']);
         		$time = $value['time'] - mktime();
@@ -108,7 +106,6 @@ if ($auth->hasIdentity() && ($module != "default") && ($module != "admin") &&
         }
          elseif ($n) {
             $troop =is_array( $item[$i]['array']) ? $item[$i]['array'] : $item[$i]['array']->toArray();
-            $log->debug($troop);
             $j = 0;
             $v = $troop[0]['village_now'];
             $name = $troop[0]['name'];
@@ -185,8 +182,9 @@ if ($auth->hasIdentity() && ($module != "default") && ($module != "admin") &&
     //******************lista villaggi***************
     //$log->log("now $now",Zend_Log::DEBUG);
     foreach ($list as $key => $value) {
+    	$coord=Model_map::getInstance()->getCoordFromId($value['id']);
         $display .= '<li class="village_list" id="v' . $value['id'] . '" '.($now==$key? 'style="font-weight:bold;"':'').'><a id="vid' . $value['id'] . '" href="#'.
-             $value['x'] . '|'.$value['y'].'@" onclick="ev.map.get_village_info({x:'.$value['x'] . ',y:'.$value['y'].'})">' . $value['name'] . "(" . $value['x'] . "|" . $value['y'] .
+             $coord['x'] . '|'.$coord['y'].'@" onclick="ev.village.open('.$value['id'].')">' . $value['name'] . "(" . $coord['x'] . "|" . $coord['y'] .
              ")</a></li>";
     }
     echo '<ol id="vlist">' . $display . '</ol>';

@@ -49,7 +49,7 @@ class S1_DebugController extends Zend_Controller_Action {
 	}
 	public function addpopAction() {
 		$vid=Model_civilta::getInstance()->getCurrentVillage();
-		$this->db->query("UPDATE `".MAP_TABLE."` SET `pop`=`pop`+'100' WHERE `id`='$vid'");
+		$this->db->query("UPDATE `".SERVER."_map` SET `pop`=`pop`+'100' WHERE `id`='$vid'");
 		$this->log->notice("aggiunti 100 abitanti in $vid");
 		$this->view->text="done";
 		$this->view->display=true;
@@ -115,9 +115,6 @@ class S1_DebugController extends Zend_Controller_Action {
 		$id=$civ->getCurrentVillage();
 		$sto1=$civ->village->building[$id]->getCapTot();
 		$sto2=$civ->village->building[$id]->getCapTot(STORAGE2);
-		/*Zend_Db_Table::getDefaultAdapter()->query(
-				"UPDATE `".MAP_TABLE."` SET `resource_1`='" . $sto1 . "' , `resource_2`='" . $sto2 . "' , `resource_3`='" . $sto2 . "' WHERE `id`='" . $id . "'");
-		*/
 		$civ->aggResource(array($sto1,$sto2,$sto2),true);
 		$this->view->text="done";
 		$this->view->display=true;
@@ -126,33 +123,11 @@ class S1_DebugController extends Zend_Controller_Action {
 		Zend_Controller_Action_HelperBroker::removeHelper('viewRenderer');
 	}
 
-	public function all20Action() {
-		$civ=Model_civilta::getInstance();
-		$now=$civ->getCurrentVillage();
-		Zend_Db_Table::getDefaultAdapter()->query(
-				"UPDATE `" . BUILDING_TABLE . "` SET `liv`='20' WHERE `village_id`='" . $now . "'");
-		Zend_Db_Table::getDefaultAdapter()->query(
-				"UPDATE `" . MAP_TABLE . "` SET `pop`=`pop`+'2000' WHERE `id`='" . $now . "'");
-		$this->view->text="done";
-		$this->view->display=true;
-		$this->log->notice("villaggio $now portato a liv 20");
-		echo $this->view->render("debug/index.phtml");
-		Zend_Controller_Action_HelperBroker::removeHelper('viewRenderer');
-	}
-
 	public function resetvilAction() {
 		$vid=Model_civilta::getInstance()->getCurrentVillage();
 		$this->db->query(
 				"DELETE FROM `s1_building` WHERE `village_id`='" . $vid . "'");
-		$this->db->query(
-				"INSERT INTO `" . BUILDING_TABLE . "` (`village_id`,`type`,`liv`,`pos`) value ('" . $vid . "','1','0','0')");
-		$this->db->query(
-				"INSERT INTO `" . BUILDING_TABLE . "` (`village_id`,`type`,`liv`,`pos`) value ('" . $vid . "','4','0','1')");
-		$this->db->query(
-				"INSERT INTO `" . BUILDING_TABLE . "` (`village_id`,`type`,`liv`,`pos`) value ('" . $vid . "','5','0','2')");
-		$this->db->query(
-				"INSERT INTO `" . BUILDING_TABLE . "` (`village_id`,`type`,`liv`,`pos`) value ('" . $vid . "','6','0','3')");
-		$this->db->update(MAP_TABLE, array('busy_pop'=>'0','pop'=>'100','name'=>'Nuovo Villaggio'),"`id`='$vid'");
+		$this->db->update(SERVER.'_map', array('busy_pop'=>'0','pop'=>'100','name'=>'Nuovo Villaggio'),"`id`='$vid'");
 		$this->view->text="done";
 		$this->view->display=true;
 		$this->log->notice("villaggio resettato in $vid");

@@ -44,14 +44,15 @@ switch ($this->type) {
     		<tr>
       			<th><?php echo $t->_("Nome");?></th>
       			<th><?php echo $t->_("Coordinate");?></th>
-      			<th><?php echo $t->_("popolazione");?></th>
+      			<th><?php echo $t->_("POP");?></th>
       			<th><?php echo $t->_("Ordine personalizzato");?></th>
     		</tr>
 <?php 
 $list = $this->civ->village_list;
 foreach ($list as $key=>$value) {
+	$c=Model_map::getInstance()->getCoordFromId($value['id']);
     echo '<tr><td>'.$this->template()->village($key,$value['name']) . "</td>
-	<td>(" . $value['x'] . "|" . $value['y'] . ')</td>
+	<td>(" . $c['x'] . "|" . $c['y'] . ')</td>
         <td>'.$value['busy_pop'].'</td>
 	<td>' . $value['order_n'] .  '</td></tr>';
 }
@@ -120,13 +121,14 @@ foreach ($list as $key=>$value) {
     		<tr>
       			<th><?php echo $t->_("Nome");?></th>
       			<th><?php echo $t->_("Coordinate");?></th>
-      			<th><?php echo $t->_("popolazione");?></th>
+      			<th><?php echo $t->_("POP");?></th>
     		</tr>
 <?php 
 $list = $this->village_list;
 foreach ($list as $key=>$value) {
+	$c=Model_map::getInstance()->getCoordFromId($value['id']);
     echo '<tr><td>' .$this->template()->village($key,$value['name'])."</td>
-	<td>(" . $value['x'] . "|" . $value['y'] . ')</td>
+	<td>(" . $c['x'] . "|" . $c['y'] . ')</td>
         <td>'.$value['busy_pop'].'</td></tr>';
 }
 ?></table></center><?php 

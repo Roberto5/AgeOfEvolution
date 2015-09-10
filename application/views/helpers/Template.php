@@ -109,7 +109,7 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
         $now = $this->civ->getCurrentVillage();
         $r = '<center><h2>' . ($this->civ->getAge() < 3 ? $t->_('Villaggio') : $t->_(
         'citt&aacute;')) .
-         ' <span id="nameVillage'.$now.'" ondblclick="ev.changeNameVillage(' . $now .
+         ' <span id="nameVillage'.$now.'" ondblclick="ev.village.changeName(' . $now .
          ')">' . $this->civ->village->data[$now]['name'] . '</span></h2>';
         $res = $this->civ->getResource();
         $r .= '<div>' . $t->_('risorse') . ' : &nbsp &nbsp ';
@@ -126,16 +126,15 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
             $r .= ' &nbsp &nbsp ';
         }
         $pop = (int) $this->civ->village->data[$now]['pop'] + $this->civ->poptroop;
-        $busy = (int) $this->civ->village->data[$now]['busy_pop'] + $this->civ->poptroop +
+        $busy = (int) $this->civ->village->busy[$now] + $this->civ->poptroop +
          $this->civ->popc;
+        //Zend_Registry::get('log')->debug($this->civ->village->busy[$now],'data array');
         $maxP = $this->civ->village->building[$now]->getCapTot(HOUSE);
-        $r .= $busy . '<img src="' . $this->baseUrl .
-         '/common/images/popbusy.gif" alt="[' . $t->_("lavoratori") .
-         ']" title="' . $t->_("lavoratori") . '" width="16" height="16"/>/';
-        $n = 3;
+        
+        $r .= $busy . $this->view->image()->resource(3, $age).'/';
         $r .= ($maxP < $pop ? '<blink><span style="color:red;">' : '') . $pop .
          ($maxP < $pop ? '</span></blink>' : '');
-        $r .= $this->view->image()->resource($n, $age);
+        $r .= $this->view->image()->resource(4, $age);
         $r .= ' ' . $maxP . '<img src="' . $this->baseUrl .
          '/common/images/home.gif" alt="[' . $t->_('case') . ']" title="' .
          $t->_('case') . '" width="16" height="16"/></div></center>';
@@ -262,15 +261,14 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
             if ($this->villagename[$id])
                 $name = $this->villagename[$id];
             else {
-                $name = Zend_Db_Table::getDefaultAdapter()->fetchOne(
-                "SELECT `name` FROM `" . MAP_TABLE . "` WHERE `id`='$id'");
+                $name = Model_map::getInstance()->city[$id];
                 $this->villagename[$id] = $name;
             }
         }
         if ($link) {
-            $module = Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
-            $r = '<a class="village" href="' . $this->baseUrl .
-             "/$module/index/index/vid/" . $id . '">' . $name . '</a>';
+        	$c=Model_map::getInstance()->getCoordFromId($id);
+            //$module = Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
+            $r = '<a class="village" href="#" onclick="ev.map.centre=['.$c['x'].','.$c['y'].'];ev.map.shift();ev.map.get_village_info('.$c['x'].','.$c['y'].',true);ev.map.focus={x:'.$c['x'].',y:'.$c['y'].'};">' . $name . '</a>';
         } else
             $r = $name;
         return $r;
@@ -417,7 +415,7 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
         $html .= '</div>';
         return $html;
     }
-    function queue ($queue=array(),$order=false)
+    function queue ($queue=array(),$order=false,$destroy=false)
     {
     	
     	$t=Zend_Registry::get("translate");
@@ -436,12 +434,9 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
                 $count = "00:00:0?";
                  //**************************************
             $param = unserialize($value['params']);
-            $r.= '<div> '.$this->view->image('/common/images/del.gif',$t->_('cancella'),null,16,16,array('onclick'=>'ev.build.deleteQueue('.$value['id'].');')).' '.
-             Model_building::$name[$this->civ->getAge()][$param['type']] . $t->_(
-            ' livello ') .
-             ($this->civ->village->building[$now]->getLiv($param['pos']) + 1) .
-             ' <span class="countDown">' . $count . '</span> ' . $t->_(
-            "finito il ") . date("H:i:s d/m/Y", $value['time']) . "</div>";
+            $r.= '<div> <a href="#'.$t->_('DELETE').'">'.$this->view->image('/common/images/del.gif',$t->_('DELETE'),null,16,16,array('onclick'=>'ev.build.deleteQueue('.$value['id'].');')).' '.
+             Model_building::$name[$this->civ->getAge()][$param['type']] .' <span class="countDown">' . $count . '</span> ' . $t->_(
+            "finito il ") . date("H:i:s d/m/Y", $value['time']) . "</a></div>";
         }
         return $r;
     }

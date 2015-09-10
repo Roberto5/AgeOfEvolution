@@ -24,7 +24,7 @@ function resetres() {
 function counter()
 {
     // aggiornamento risorse
-    $resource=$("#cv"+ev.focus.id+" .resource");
+    $resource=$("#resbar"+ev.focus.id+" .resource");
     for (i=0;i<$resource.length;i++)
     {
         now=$resource.eq(i).text();
@@ -32,7 +32,7 @@ function counter()
         now=parseInt(now);
         if(now>=storage) new_val=storage;
         else {
-            prod=$resource.eq(i).data("title")/3600;
+            prod=$resource.eq(i).attr("title")/3600;
             if (init<3) {
                 res[i]=now;
                 init++;

@@ -47,10 +47,7 @@ class TrackController extends Zend_Controller_Action
                 $this->db->insert("site_track_tag", array('name' => $newt[$i]));
                 $newid[] = $this->db->lastInsertId();
             }
-            $this->log->debug($tid);
-            $this->log->debug($newid);
             $tid = array_merge($tid, $newid);
-            $this->log->debug($tid);
             $data = array_diff($data, array('tag' => $data['tag']));
             $ref=$_SERVER['HTTP_REFERER'];
             $ua=$_SERVER['HTTP_USER_AGENT'];

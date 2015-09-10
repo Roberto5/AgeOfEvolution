@@ -75,11 +75,16 @@ class Model_refresh {
 	}
 	/**
 	 * aggiunge gli id
-	 * @param string $key
+	 * @param string|array $key
 	 * @param mixed $value
 	 */
-	function addIds($key,$value) {
-		$this->ids[$key]=$value;
+	function addIds($key,$value=null) {
+		if (is_array($key)) {
+			foreach ($key as $k => $v) {
+				$this->ids[$k]=$v;
+			}
+		}
+		else $this->ids[$key]=$value;
 		self::$instance=$this;
 	}
 	/**

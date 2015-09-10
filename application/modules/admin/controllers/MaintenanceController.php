@@ -10,8 +10,6 @@ class Admin_MaintenanceController extends Zend_Controller_Action
     {
         if (Zend_Registry::isRegistered("param"))
             $this->param = Zend_Registry::get("param");
-        $this->_helper->layout()->nav = array(
-        'log' => array('url' => "admin/maintenance/log"));
     }
     public function indexAction ()
     {

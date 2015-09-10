@@ -33,6 +33,11 @@ require_once 'Zend/View/Abstract.php';
  * @package    Zend_View
  * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @method String baseUrl() get base url
+ * @method String url(url) make url
+ * @method Zend_Layout layout() get layout
+ * @method String paginationControl()
+ * @method Zend_View_Helper_Navigation navigation()
  */
 class Zend_View extends Zend_View_Abstract
 {

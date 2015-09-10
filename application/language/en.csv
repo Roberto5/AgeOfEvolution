@@ -1,42 +1,108 @@
-DESCRIPTION@description
-USERNAME@Username :
-ALNUM@This field must contain letter and number
-PASS_LENG@The password must be 8 characters
-ENTER@Enter
-SUCCESS@login success
-LOGOUT@You are Logout 
-FAILURE@Login failed
-PASS_ERR@Password wrong
-LOST_PASS@You are lost the password?
-USER_NOT_FOUND@Username not found
-GUEST@Guest
-CREATE@Create
-EDIT@Edit
-REG@Register
-E_FATAL@Fatal Error, contact the admin
-LOGorEMAIL@leave a email for be contact or do
-OBJECT@object
-WRITE@Write your message here
-CONTACT@Contact us
-EMAIL_CONTACT@Contact from email
-FORM_CONTACT@Or compile this form
-CTRL_MAIL@Email send , control your email
-RECOVER@Insert the email of account to recover
-RESEND@the your account isn't active, you can resend the activation email with this form
-NAME@Nome
-DESCRIPTION2@Description
-ADD@Add
-DELETE@Delete
-TARGET@Target
-DATA_ERROR@Data Error
-PROFILE@Profile
-CHANGEPASS@Change password
-OLD_PASS@Old password
-HOSTED@The source can find on
-CLOSE@Close
-LANGUAGE@Your language is not supported, you can add a translate on
 ACCOUNT@Account
+ADD@Add
+AGE@Age
+ALERTS@Alerts
+ALNUM@This field must contain letter and number
+ATK@Attack
+BARBARIANS@Barbarians
+BLACKMARKET@Black Market
+BUGDESC@Describe here the bug that you are find, an idea for improve the game or what you do not like.
+BUGIMG@if you want send image, host online and put here the link
+BUGTAG@The Tag help to find report similar
+BUILD@Build
+CANTBUILD@You can't build here
+CATEGORY@Category
+CENTRALMARKET@Central Market
+CHANGEPASS@Change password
+CHOOSE@Choose
+CIVLESS@Civilization less
+CIVONSERVER@Civilization on server
+CLOSE@Close
+COLO@Colonizzations
+CONTACT@Contact us
+COST@Cost
+CREATE@Create
+CREATECIV@Create a new civilization
+CTRL_MAIL@Email send , control your email
+DATA_ERROR@Data Error
+DELETE@Delete
+DESCRIPTION2@Description
+DESCRIPTION@description
+DISMISS@Dismiss
+EAST@East
+EDIT@Edit
+EMAIL_CONTACT@Contact from email
+ENTER@Enter
+E_FATAL@Fatal Error, contact the admin
+FAILURE@Login failed
+FEATURES@Features
+FINDCIV@Find a civilization for enter.
+FORM_CONTACT@Or compile this form
+GUEST@Guest
+HOSTED@The source can find on
+HOWHELP@How help us
+IDEA@Idea
+IDEAL@Ideal of game
+INSERT@Insert
+LANGUAGE@Your language is not supported, you can add a translate on
+LEADERSHIP_DES@Increasing your leadership you can command more villages.
+LIV@Level
+LOGOUT@You are Logout 
+LOGorEMAIL@leave a email for be contact or do
+LOST_PASS@You are lost the password?
+MAINTENAINCE@Maintenaince
+MAP@Map
+MAX@Maximum
+NAME@Nome
+NEWVIL@New village
+NOCIV@You haven't Civilization in this server
+NORTH@North
+NOTDISP@Not available
+NOTLIKE@Not Like
+NOTREG@Not Registered
+OBJECT@object
+OLD_PASS@Old password
+ONWAIT@On wait
+OWNER@Owner
+PASS_ERR@Password wrong
+PASS_LENG@The password must be 8 characters
+POINTDISP@Punti ricerca disponibili
+POP@Population
+PROFILE@Profile
+PROMOTE@Promote
+RARCO_DES@With this research you can rain archers
+RARCO_NAME@Short bow
+RANDOM@Random
+RECOVER@Insert the email of account to recover
+REFRESH@Refresh
+REG@Register
+REGLIKE@Registered like
+REG_SUCCESS@Registration was successful
+REQUIRE@Require
+RESEND@the your account isn't active, you can resend the activation email with this form
+SCREENSHOOT@Screen shoot
+SEARCH@search
+SELECT_SERVER@Select a Server
+SEND@Send
 SERVERTIME@Server's time
+SHARER@Sharer
+SOUTH@South
+STATUS@Status
+STORAGE@Storage
+STORAGE_DES@Increase the storage capacity.
+SUCCESS@login success
+TARGET@Target
 TOTALUSER@Total users
+TRAIN@Train
+USERNAME@Username :
 USERONLINE@Users online
+USER_NOT_FOUND@Username not found
 VERSION@Version
+VIEW@View
+VILONSERVER@Village on server
+WARNING@Warning
+WELLCOME@Welcome
+WEST@West
+WITHDRAW@withdraw
+WORKER@Worker
+WRITE@Write your message here

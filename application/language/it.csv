@@ -1,45 +1,111 @@
-Value is required and can't be empty@Il campo deve essere pieno
-The two given tokens do not match@I due campi non coincidono
-Missing captcha fields@Compilare il campo captcha
-DESCRIPTION@descrizione del sito
-USERNAME@Nome utente :
-ALNUM@Questo campo deve contenere solo lettere e numeri
-PASS_LENG@La password deve contenere 8 caratteri
-ENTER@Entra
-SUCCESS@login eseguito con successo
-LOGOUT@Logout eseguito con successo
-FAILURE@login fallito
-PASS_ERR@Password errata
-LOST_PASS@Hai dimenticato la password?
-USER_NOT_FOUND@Username inesistente
-GUEST@Visitatore
-CREATE@Crea
-EDIT@Modifica
-REG@Registrati
-E_FATAL@Fatal Error, contattare l'admin
-LOGorEMAIL@lasciaci un email per essere ricontattato oppure fai
-OBJECT@oggetto
-WRITE@Scrivi il tuo messaggio qui
-CONTACT@Contattaci
-EMAIL_CONTACT@Contattaci per email
-FORM_CONTACT@Oppure compila questo modulo
-CTRL_MAIL@Email inviata con successo, controlla la casella di posta
-RECOVER@Inserisci l'email dell'account da recuperare
-RESEND@Il tuo account non è attivo, puoi reinviare l'email di attivazione tramite il modulo qua sotto
-NAME@Nome
-DESCRIPTION2@Descrizione
-ADD@Aggiungi
-DELETE@Cancella
-TARGET@Obbiettivo
-DATA_ERROR@Errore nei dati
-PROFILE@Profilo
-CHANGEPASS@Cambia password
-OLD_PASS@Vecchia password
-HOSTED@i sorgenti si possono trovare su
-CLOSE@Chiudi
-LANGUAGE@Il tuo linguaggio non è supportato, puoi aggiungere una traguzione andando su
 ACCOUNT@Account
+ADD@Aggiungi
+AGE@Età
+ALERTS@Avvisi
+ALNUM@Questo campo deve contenere solo lettere e numeri
+ATK@Attacco
+BARBARIANS@Barbari
+BLACKMARKET@Mercato Nero
+BUGDESC@Descrivi qui il bug che hai trovato, un idea per migliorare il gioco o quello che non ti piace. cerca di essere chiaro e di compilare bene il form
+BUGIMG@Se vuoi inviarci immagini caricale su un host online e metti qui l&apos;indirizzo
+BUGTAG@Il Tag serve per etichettare la segnalazione e ricercare segnalazioni simili
+BUILD@Costruisci
+CANTBUILD@Non puoi costruire qui
+CATEGORY@Categoria
+CENTRALMARKET@Mercato Centrale
+CHANGEPASS@Cambia password
+CHOOSE@Scegli
+CIVLESS@Senza civilt&agrave;
+CIVONSERVER@Civilt&agrave; presenti
+CLOSE@Chiudi
+COLO@Colonizzazioni
+CONTACT@Contattaci
+COST@Costo
+CREATE@Crea
+CREATECIV@Crea una nuova civilt&agrave;
+CTRL_MAIL@Email inviata con successo, controlla la casella di posta
+DATA_ERROR@Errore nei dati
+DELETE@Cancella
+DESCRIPTION2@Descrizione
+DESCRIPTION@descrizione del sito
+DISMISS@Congeda
+EAST@Est
+EDIT@Modifica
+EMAIL_CONTACT@Contattaci per email
+ENTER@Entra
+E_FATLEADERSHIP_DESAL@Fatal Error, contattare l'admin
+FAILURE@login fallito
+FEATURES@Caratteristiche
+FINDCIV@Cerca una civilt&agrave; in cui entrare.
+FORM_CONTACT@Oppure compila questo modulo
+GUEST@Visitatore
+HOSTED@i sorgenti si possono trovare su
+HOWHELP@Come aiutarci
+IDEA@Idea
+IDEAL@Ideali del gioco
+INSERT@Inserisci
+LANGUAGE@Il tuo linguaggio non è supportato, puoi aggiungere una traguzione andando su
+LEADERSHIP_DES@Aumentando la tua leadership potrai comandare molti villaggi.
+LIV@Livello
+LOGOUT@Logout eseguito con successo
+LOGorEMAIL@lasciaci un email per essere ricontattato oppure fai
+LOST_PASS@Hai dimenticato la password?
+MAINTENAINCE@Manutenzione
+MAX@Massimo
+MAP@Mappa
+Missing captcha fields@Compilare il campo captcha
+NAME@Nome
+NEWVIL@Nuovo villaggio
+NOCIV@Non hai una civilt&agrave; in questo server
+NORTH@Nord
+NOTDISP@Non disponibile
+NOTLIKE@Critiche
+NOTREG@Non registrato
+OBJECT@oggetto
+OLD_PASS@Vecchia password
+ONWAIT@in attesa
+OWNER@Proprietario
+PASS_ERR@Password errata
+PASS_LENG@La password deve contenere 8 caratteri
+POINTDISP@Punti ricerca disponibili
+POP@Popolazione
+PROFILE@Profilo
+PROMOTE@Promuovi
+RARCO_DES@questa ricerca ti permetter&agrave; di addestrare gli arceri.
+RARCO_NAME@Arco corto
+RANDOM@Casuale
+RECOVER@Inserisci l'email dell'account da recuperare
+REFRESH@Aggiorna
+REG@Registrati
+REGLIKE@Registrato come
+REG_SUCCESS@Registrazione avvenuta con successo
+REQUIRE@Richiede
+RESEND@Il tuo account non è attivo, puoi reinviare l'email di attivazione tramite il modulo qua sotto
+SCREENSHOOT@Screen shoot
+SEARCH@Cerca
+SELECT_SERVER@Seleziona un Server
+SEND@Invia
 SERVERTIME@Ora del server
+SHARER@Sharer
+SOUTH@Sud
+STATUS@Stato
+STORAGE@Immagazzinamento
+STORAGE_DES@Aumenta la capacità di immagazzinamento.
+SUCCESS@login eseguito con successo
+TARGET@Obbiettivo
 TOTALUSER@Utenti totali
+The two given tokens do not match@I due campi non coincidono
+TRAIN@Addestra
+USERNAME@Nome utente :
 USERONLINE@Utenti online
+USER_NOT_FOUND@Username inesistente
 VERSION@Versione
+VIEW@Visualizza
+VILONSERVER@Villaggi presenti
+Value is required and can't be empty@Il campo deve essere pieno
+WARNING@Attenzione
+WELLCOME@Benvenuto
+WEST@Ovest
+WITHDRAW@ritira
+WORKER@Lavoratori
+WRITE@Scrivi il tuo messaggio qui

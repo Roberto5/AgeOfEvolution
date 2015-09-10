@@ -1,4 +1,10 @@
 <?php
+header('Content-Type: text/javascript; charset: UTF-8');
+header('Cache-Control: must-revalidate');
+header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $this->expire) . ' GMT');
+//header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $this->mtime) . ' GMT');
+
+
 $this->key=array(
 		'REVISION'=>REVISION
 );

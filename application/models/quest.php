@@ -90,8 +90,6 @@ class Model_quest extends Zend_Db_Table_Abstract
     function tag_open ($parser, $tag, $attributes)
     {
         $this->tag = $tag;
-        //debug("attribute", $attributes, "quest", 66, $this->bool);
-        //debug("tag", $tag, "quest", 67, $this->bool);
         if (($attributes['ID'] == $this->age) && ($tag == "AGE"))
             $this->save_quest2 = true;
         if (($attributes['N'] == $this->n) && ($tag == "QUEST") &&
@@ -103,7 +101,6 @@ class Model_quest extends Zend_Db_Table_Abstract
             if ($tag == "REWARD")
                 $this->REWARD = $attributes;
         }
-         //debug("bool", $this->save_quest, "quest", 73, $this->bool);
     }
     /**
      *
@@ -226,74 +223,37 @@ class Model_quest extends Zend_Db_Table_Abstract
              ($Building_Array[$i] != $this->CONDICTION['PARAM']); $i ++);
             $pos = $this->civ->village->building[$this->civ->getCurrentVillage()]->getBildForType(
             $i + 1);
-            $a = ($pos < 0 ? false : $this->civ->village->building[$this->civ->getCurrentVillage()]->getLiv(
-            $pos));
+            $a = $pos < 0 ? false : true;
         } else {
             switch ($this->CONDICTION['PARAM']) {
                 case "village":
                     $a = $this->civ->village->data[$this->civ->getCurrentVillage()]['name'];
                     break;
                 case "prod":
-                    if (substr($this->CONDICTION['TYPE'], 0, 1) == "L") {
+                   
                         $pos = $this->civ->village->building[$this->civ->getCurrentVillage()]->getBildForType(
                         PROD1);
-                        $a = ($pos < 0 ? 0 : $this->civ->building[$this->civ->getCurrentVillage()]->getLiv(
-                        $pos));
+                        $a = ($pos < 0 ? 0 : 1);
                         $pos = $this->civ->village->building[$this->civ->getCurrentVillage()]->getBildForType(
                         PROD2);
-                        $t = ($pos < 0 ? 0 : $this->civ->building[$this->civ->getCurrentVillage()]->getLiv(
-                        $pos));
-                        if ($a < $t)
-                            $a = $t;
-                        $pos = $this->civ->village->building[$this->civ->getCurrentVillage()]->getBildForType(
-                        PROD3);
-                        $t = ($pos < 0 ? 0 : $this->civ->village->building[$this->civ->getCurrentVillage()]->getLiv(
-                        $pos));
-                        if ($a < $t)
-                            $a = $t;
-                    } else {
-                        $pos = $this->civ->village->building[$this->civ->getCurrentVillage()]->getBildForType(
-                        PROD1);
-                        $a = ($pos < 0 ? 0 : $this->civ->village->building[$this->civ->getCurrentVillage()]->getLiv(
-                        $pos));
-                        $pos = $this->civ->village->building[$this->civ->getCurrentVillage()]->getBildForType(
-                        PROD2);
-                        $t = ($pos < 0 ? 0 : $this->civ->village->building[$this->civ->getCurrentVillage()]->getLiv(
-                        $pos));
+                        $t = ($pos < 0 ? 0 : 1);
                         if ($a > $t)
                             $a = $t;
                         $pos = $this->civ->village->building[$this->civ->getCurrentVillage()]->getBildForType(
                         PROD3);
-                        $t = ($pos < 0 ? 0 : $this->civ->village->building[$this->civ->getCurrentVillage()]->getLiv(
-                        $pos));
+                        $t = ($pos < 0 ? 0 : 1);
                         if ($a > $t)
                             $a = $t;
-                    }
                     break;
                 case "storage":
-                    if (substr($this->CONDICTION['TYPE'], 0, 1) == "L") {
                         $pos = $this->civ->village->building[$this->civ->getCurrentVillage()]->getBildForType(
                         STORAGE1);
-                        $a = ($pos < 0 ? 0 : $this->civ->village->building[$this->civ->getCurrentVillage()]->getLiv(
-                        $pos));
+                        $a = ($pos < 0 ? 0 : 1);
                         $pos = $this->civ->village->building[$this->civ->getCurrentVillage()]->getBildForType(
                         STORAGE2);
-                        $t = ($pos < 0 ? 0 : $this->civ->village->building[$this->civ->getCurrentVillage()]->getLiv(
-                        $pos));
-                        if ($a < $t)
-                            $a = $t;
-                    } else {
-                        $pos = $this->civ->village->building[$this->civ->getCurrentVillage()]->getBildForType(
-                        STORAGE1);
-                        $a = ($pos < 0 ? 0 : $this->civ->village->building[$this->civ->getCurrentVillage()]->getLiv(
-                        $pos));
-                        $pos = $this->civ->village->building[$this->civ->getCurrentVillage()]->getBildForType(
-                        STORAGE2);
-                        $t = ($pos < 0 ? 0 : $this->civ->village->building[$this->civ->getCurrentVillage()]->getLiv(
-                        $pos));
+                        $t = ($pos < 0 ? 0 : 1);
                         if ($a > $t)
                             $a = $t;
-                    }
                     break;
                 case "attack":
                     $a = $this->civ->option->get("attack", false);

@@ -58,12 +58,11 @@ class Model_research extends Zend_Db_Table_Abstract
                     foreach ($res::$require['build'] as $value) {
                     	$b=$civ->village->building[$civ->getCurrentVillage()];
                     	$pos=$b->getBildForType($value['type']);
-                        if ($b->getLiv($pos) < $value['liv'])
+                        if ($pos<0)
                             $bool = false;
                     }
                 
             }
-            $this->log->debug($res::$livmax[$civ->getAge()]);
             if (($bool)&&($res::$livmax[$civ->getAge()]<=$this->data[$type]['liv'])) $bool=false;
             $disp[$res]=$bool;
         }

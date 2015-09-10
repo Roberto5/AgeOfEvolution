@@ -9,7 +9,9 @@ var ita = {
 	village5 : 'invia truppe',
 	village6 : 'invia mercanti',
 	build : 'costruisci',
-	sea : 'mare'
+	sea : 'mare',
+	valley : 'valle neutrale',
+	select : 'Seleziona'
 };
 var ev = {
 	focus : {},
@@ -35,7 +37,11 @@ var ev = {
 	// help function
 	helpCache : new Array(),
 	helpOpen : false,
+	ondrag : false,
 	// main function
+	refresh :function () {
+		this.request(module+'/index/refresh','post',{ajax:1});
+	},
 	request : function(target, Rtype, params, callback) {
 		if (Rtype == "zend") {
 			for ( var key in params)
@@ -46,238 +52,186 @@ var ev = {
 		setTimeout(function() {
 			ev.loader();
 		}, 1000);
-		$
-				.ajax({
-					url : path + "/" + target,
-					data : params,
-					type : Rtype,
-					dataType : "json",
-					success : function(data, stato) {
-						ev.flagLoader = false;
-						ev.loader();
-						// open windows
-						if (data.html) {
-							cb = null;
-							if (data.html.close)
-								eval('cb=function(){' + data.html.close
-										+ '();};');
-							if (data.html.y)
-								h = data.html.y;
-							else
-								h = 600;
-							if (data.html.x)
-								w = data.html.x;
-							else
-								w = 800;
-							data.wid = ev.windows({
-								x : w,
-								y : h
-							}, "center", data.html, data.html.mod, false, cb);
+		$.ajax({
+			url : path + "/" + target,
+			data : params,
+			type : Rtype,
+			dataType : "json",
+			success : function(data, stato) {
+				ev.flagLoader = false;
+				ev.loader();
+				// open windows
+				if (data.html) {
+					cb = null;
+					if (data.html.close)
+						eval('cb=function(){' + data.html.close + '();};');
+					if (data.html.y)
+						h = data.html.y;
+					else
+						h = 600;
+					if (data.html.x)
+						w = data.html.x;
+					else
+						w = 800;
+					button = data.html.button ? {
+						'ok' : function() {
+							$(this).dialog('close');
 						}
-						// update
-						if (data.update) {
-							if (data.update.ids) {
-								for ( var key in data.update.ids)
-									$("#" + key).html(data.update.ids[key]);
-								resetinit();
-								resetres();
-							}
-							if (data.update.master) {
-								src = $("#master").attr("src");
-								// mastera_n.png
-								src = src.substr(0, 8);
-								$("#master").attr("src",
-										src + data.update.master + '.png');
-							}
-							if (data.update.disable) {
-								for ( var key in data.update.disable)
-									$("#" + key).attr("disabled",
-											data.update.disable[key]);
-							}
-							if (data.update.attr) {
-								for ( var key in data.update.attr)
-									for ( var k in data.update.attr[key]) {
-										v = data.update.attr[key][k];
-										if ((k == 'src') || (k == 'href'))
-											v = path + v;
-										if (k == 'title') {
-											api =$('#' + key).data('tooltip')
-											$tip = api ? api.getTip() : false;
-											if ($tip)
-												$tip.text(v);
-											else {
-												$('#' + key).data('title', v);
-											}
-										} else
-											$('#' + key).attr(k, v);
-									}
-							}
-							if (data.update.token) {
-								for ( var key in data.update.token)
-									ev.token[key] = data.update.token[key];
-							}
-							if (data.update.dispB) {
-								for ( var key in data.update.dispB) {
-									value = data.update.dispB[key];
-									if (value)
-										$("#cv" + ev.focus.id + " #" + key)
-												.show();
-									else
-										$("#cv" + ev.focus.id + " #" + key)
-												.hide();
-								}
-							}
-							if (data.update.building) {
-								// $('div.building.pos3 img')
-								b = data.update.building;
-								// $('div.building').addClass("empty");
-								for (i = 0; i < ev.totpos; i++) {
-									if (b[i]) {
-										$(
-												'#cv' + ev.focus.id
-														+ ' div.building.pos'
-														+ i).removeClass(
-												"empty");
-										$(
-												'#cv' + ev.focus.id
-														+ ' div.building.pos'
-														+ i)
-												.addClass(b[i].type);
-										dat = $('.pos' + i).data('events');
-										if (dat) {
-											if (!dat.contextmenu)
-												$('.pos' + i).contextMenu(
-														ev.menubuilding, {
-															theme : 'human'
-														});
-										}
-										api = $(
-												'#cv' + ev.focus.id
-														+ ' div.building.pos'
-														+ i + ' img').data(
-												'tooltip');
-										$tip = api ? api.getTip() : false;
-										if ($tip)
-											$tip.text(b[i].title);
-										else {
-											$(
-													'#cv'
-															+ ev.focus.id
-															+ ' div.building.pos'
-															+ i + ' img').data(
-													'title', b[i].title);
-										}
-									} else {
-										$obj = $('#cv' + ev.focus.id
-												+ ' div.building.pos' + i)
-										$obj.removeClass();
-										$obj.addClass('building empty pos' + i);
-										api = $obj.data('tooltip');
-										$tip = api ? api.getTip() : false;
-										if ($tip)
-											$tip.text(ev.lang.buid);
-										else {
-											$obj.data('title', ev.lang.buid);
-										}
-									}
-								}
-								$("[title]:not(.context-menu div)").tooltip({
-									offset : [ -10, 0 ],
-									delay : 1,
-									predelay : 400
-								}).dynamic({
-									bottom : {
-										direction : 'down'
-									}
-								});
-							}
-							ev_array = [ '', 'inAttack', 'outAttack',
-									'marketM', 'inReinf', 'outReinf', 'reinf' ];
-							$('#evpan img').removeClass().addClass('icon');
-							$('#ev1').addClass('attackbn');
-							$('#ev2').addClass('attackbn');
-							$('#ev3').addClass('marketMbn');
-							$('#ev4').addClass('rinfobn');
-							$('#ev5').addClass('rinfobn');
-							$('#ev6').addClass('rinfobn');
-							for (i = 1; i <= 6; i++) {
-								str = $('#info' + i + ' div:eq(0)').text();
-								str = str.replace(/\d+/, '0');
-								$('#info' + i + ' div:eq(0)').text(str);
-								$('#info' + i + ' div:eq(1)').html(' ');
-							}
-							if (data.update.event) {
-								e = data.update.event;
-								for ( var i in e) {
-									$('#ev' + i).removeClass().addClass(
-											'icon ' + ev_array[i]);
-									str = $('#info' + i + ' div:eq(0)').text();
-									str = str.replace(/\d+/, e[i].n);
-									$('#info' + i + ' div:eq(0)').text(str);
-									$('#info' + i + ' div:eq(1)').html(
-											e[i].content);
-								}
-								// resetinit();
-							}
-							if (data.update.focus) {
-								$('.village_list').css("font-weight", "normal");
-								$('#v' + data.update.focus.id).css(
-										"font-weight", "bold");
-								ev.focus = data.update.focus;
-							}
-						}
-						if (data.javascript) {
-							/*
-							 * $script=$(data.javascript);
-							 * $("head").append($script);
-							 */
-							var s = document.createElement("script");
-							s.type = "text/javascript";
-							s.text = data.javascript;
-							document.getElementsByTagName("head")[0]
-									.appendChild(s);
-						}
-						if (callback)
-							callback(data,this);
-					},
-					error : function(request, state, error) {
-						ev.flagLoader = false;
-						ev.loader();
-						content = {
-							title : "ERROR",
-							text : '<span style="float: left; clear:both; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span>'
-						};
-						switch (request.status) {
-						case 500:
-							content.text += "internal error";
-							break;
-						case 404:
-							content.text += "page not found";
-							break;
-						default:
-							content.text = error;
-						}
-						wid = ev.windows({
-							x : 300,
-							y : 200
-						}, "center", content, true, true);
-						$(
-								'div[aria-labelledby="ui-dialog-title-windows'
-										+ wid + '"]').removeClass(
-								"ui-widget-content");
-						$(
-								'div[aria-labelledby="ui-dialog-title-windows'
-										+ wid + '"]')
-								.addClass("ui-state-error");
+					} : null;
+					data.wid = ev.windows({
+						x : w,
+						y : h
+					}, "center", data.html, data.html.mod, false, cb, button);
+				}
+				// update
+				if (data.update) {
+					if (data.update.ids) {
+						for ( var key in data.update.ids)
+							$("#" + key).html(data.update.ids[key]);
+						resetinit();
+						resetres();
 					}
-				});
+					if (data.update.master) {
+						src = $("#master").attr("src");
+						// mastera_n.png
+						src = src.substr(0, 8);
+						$("#master").attr("src", src + data.update.master + '.png');
+					}
+					if (data.update.disable) {
+						for ( var key in data.update.disable)
+							$("#" + key).attr("disabled", data.update.disable[key]);
+					}
+					if (data.update.attr) {
+						for ( var key in data.update.attr)
+							for ( var k in data.update.attr[key]) {
+								v = data.update.attr[key][k];
+								if ((k == 'src') || (k == 'href'))
+									v = path + v;
+								$('#' + key).attr(k, v);
+							}
+					}
+					if (data.update.token) {
+						for ( var key in data.update.token)
+							ev.token[key] = data.update.token[key];
+					}
+					if (data.update.dispB) {
+						for ( var key in data.update.dispB) {
+							value = data.update.dispB[key];
+							if (value)
+								$("#cv" + ev.focus.id + " #" + key).show();
+							else
+								$("#cv" + ev.focus.id + " #" + key).hide();
+						}
+					}
+					if (data.update.building) {
+						// $('div.building.pos3 img')
+						b = data.update.building;
+						// $('div.building').addClass("empty");
+						for (i = 0; i < ev.totpos; i++) {
+							if (b[i]) {
+								place = $('#cv' + ev.focus.id + ' div.building.pos' + i);
+								place.attr("class","building pos"+i+" "+b[i].type);
+								/*dat = place.data('events');
+								if ((dat) && (!dat.contextmenu)) {
+									place.contextMenu(ev.menubuilding, {
+										theme : 'human'
+									});
+								} else
+									place.contextMenu(ev.menubuilding, {
+										theme : 'human'
+									});*/
+								place.attr('title', b[i].title);
+							} else {
+								$obj = $('#cv' + ev.focus.id + ' div.building.pos' + i);
+								$obj.removeClass();
+								$obj.addClass('building empty pos' + i);
+								$obj.attr('title', ev.lang.build);
+							}
+						}
+						$("[title]:not(.context-menu div):not(.notooltip)").tooltip();
+						$('.village_view div:not(.empty):not(.pos0):not(.pos1):not(.pos2):not(.pos3)').each(function(){
+							try {
+								$(this).droppable('destroy');
+							}catch(e)
+							{
+								
+							}
+						});
+					}
+					ev_array = [ '', 'inAttack', 'outAttack', 'marketM', 'inReinf', 'outReinf', 'reinf' ];
+					$('#evpan img').removeClass().addClass('icon');
+					$('#ev1').addClass('attackbn');
+					$('#ev2').addClass('attackbn');
+					$('#ev3').addClass('marketMbn');
+					$('#ev4').addClass('rinfobn');
+					$('#ev5').addClass('rinfobn');
+					$('#ev6').addClass('rinfobn');
+					for (i = 1; i <= 6; i++) {
+						str = $('#info' + i + ' div:eq(0)').text();
+						str = str.replace(/\d+/, '0');
+						$('#info' + i + ' div:eq(0)').text(str);
+						$('#info' + i + ' div:eq(1)').html(' ');
+					}
+					if (data.update.event) {
+						e = data.update.event;
+						for ( var i in e) {
+							$('#ev' + i).removeClass().addClass('icon ' + ev_array[i]);
+							str = $('#info' + i + ' div:eq(0)').text();
+							str = str.replace(/\d+/, e[i].n);
+							$('#info' + i + ' div:eq(0)').text(str);
+							$('#info' + i + ' div:eq(1)').html(e[i].content);
+						}
+						// resetinit();
+					}
+					if (data.update.focus) {
+						$('.village_list').css("font-weight", "normal");
+						$('#v' + data.update.focus.id).css("font-weight", "bold");
+						ev.focus = data.update.focus;
+					}
+				}
+				if (data.javascript) {
+					/*
+					 * $script=$(data.javascript); $("head").append($script);
+					 */
+					var s = document.createElement("script");
+					s.type = "text/javascript";
+					s.text = data.javascript;
+					document.getElementsByTagName("head")[0].appendChild(s);
+				}
+				if (callback)
+					callback(data, this);
+			},
+			error : function(request, state, error) {
+				ev.flagLoader = false;
+				ev.loader();
+				content = {
+					title : "ERROR",
+					text : '<span style="float: left; clear:both; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span>',
+					error : true
+				};
+				switch (request.status) {
+				case 500:
+					content.text += "internal error";
+					break;
+				case 404:
+					content.text += "page not found";
+					break;
+				default:
+					content.text = error;
+				}
+				content.text = '<div>' + content.text + '<div>';
+				wid = ev.windows({
+					x : 300,
+					y : 'auto'
+				}, "center", content, true, true);
+			}
+		});
 	},
 	iconstak : new Array(),
-	windows : function(size, pos, content, mod, alerts, close) {
+	windows : function(size, pos, content, mod, alerts, close, button) {
 		if (typeof (content.text) != 'string')
 			content.text = content.text.toString();
 		var i;
-		button = null;
 		if (alerts) {
 			if ((alerts.n - alerts.i) > 1) {
 				button = {
@@ -286,10 +240,8 @@ var ev = {
 						ev.showalert();
 					}
 				};
-				content.title += " (" + (alerts.i * 1 + 1) + "/" + alerts.n
-						+ ")";
-			} else
-				button = null;
+				content.title += " (" + (alerts.i * 1 + 1) + "/" + alerts.n + ")";
+			}
 		}
 		if (content.id) {
 			$open = $('.ev-windows');
@@ -299,7 +251,7 @@ var ev = {
 					temp = {
 						icon : ev.togglewin,
 						id : "minus" + wid
-					}
+					};
 					temp.icon();
 				}
 			}
@@ -316,16 +268,20 @@ var ev = {
 				temp = {
 					icon : ev.togglewin,
 					id : "minus" + id
-				}
+				};
 				temp.icon();
 			}
 			$win.dialog("moveToTop");
 		} else {
+			d_class = "";
+			if (content.error) {
+				d_class += " ui-state-error";
+			}
 			$("body").append(
-					'<div class="ev-windows ui-widget-content" id="' + id
-							+ '" title="' + content.title + '"><p>'
-							+ content.text + '</p></div>');
+					'<div class="ev-windows ui-widget-content" id="' + id + '" title="' + content.title + '"><p>' + content.text + '</p></div>');
+
 			$("#" + id).dialog({
+				dialogClass : d_class,
 				stack : ".ev-windows",
 				height : size.y,
 				width : size.x,
@@ -355,7 +311,13 @@ var ev = {
 				modal : mod,
 				buttons : button
 			});
-			$('#' + id).parent().find('a[role="button"]')
+			$container = $('#' + id).parent();
+			if (content.error) {
+				$container.find('div:eq(0)').addClass('ui-state-error').prepend('<span class="ui-icon ui-icon-alert" style="float:left;"></span> ');
+				$container.find('div.ui-dialog-buttonpane').removeClass('ui-widget-content');
+			}
+			$container
+					.find('a[role="button"]')
 					.before(
 							'<a href="#" class="ui-corner-all" id="minus'
 									+ id
@@ -368,15 +330,7 @@ var ev = {
 				$("#" + this.id).removeClass("ui-state-hover");
 			});
 			$("#minus" + id).click(ev.togglewin);
-			$("[title]:not(.context-menu div)").tooltip({
-				offset : [ -10, 0 ],
-				delay : 1,
-				predelay : 400
-			}).dynamic({
-				bottom : {
-					direction : 'down'
-				}
-			});
+			$("[title]:not(.context-menu div):not(.notooltip)").tooltip();
 			ev.flagicon[id] = false;
 			this[content.title + "open"] = true;
 		}
@@ -385,11 +339,10 @@ var ev = {
 	togglewin : function() {
 		id = this.id.substr(5);
 		if (ev.cache.width == undefined) {
-			ev.cache.width=[];
+			ev.cache.width = [];
 		}
 		if (ev.flagicon[id]) {// amplio la finestra
-			$('#' + id ).parent().css("width",
-					ev.cache.width[id]);
+			$('#' + id).parent().css("width", ev.cache.width[id]);
 			$("#" + id).dialog("option", "draggable", true);
 			$("#" + id).show();
 			$("#" + id).dialog("option", "position", 'center');
@@ -403,30 +356,29 @@ var ev = {
 						temp = {
 							icon : ev.togglewin,
 							id : "minus" + wid
-						}
+						};
 						temp.icon();
 					}
 				}
-				ev.request(module + '/index/refresh?vid=' + id.substring(2),
-						'post', {
-							ajax : 1
-						});
+				ev.request(module + '/index/refresh?vid=' + id.substring(2), 'post', {
+					ajax : 1
+				});
 			}
 		} else {// riduco ad icona
 			$("#" + id).dialog("option", "draggable", false);
-			$w=$('#' + id )
-			$win =$w.parent();
+			$w = $('#' + id);
+			$win = $w.parent();
 			ev.cache.width[id] = $win.css("width");
-			$win.css("width",200);
+			$win.css("width", 200);
 			$win.css('height', 'auto');
 			$w.hide();
-			for (i = 1; ev.iconstak[i]; i++);
+			for (i = 1; ev.iconstak[i]; i++)
+				;
 			if (i > 6)
 				p = i % 6;
 			else
 				p = i;
-			$w.dialog("option", "position",
-					[ 206 * (p - 1), 'bottom' ]);
+			$w.dialog("option", "position", [ 206 * (p - 1), 'bottom' ]);
 			ev.iconstak[i] = true;
 			ev.flagicon[id] = i;
 		}
@@ -454,9 +406,10 @@ var ev = {
 			username : form.find('#username').val(),
 			password : form.find('#password').val()
 		};
-		ev.request('login', 'post', data, function(rep) {
-			// if (rep.type==1) ;//ev.user=rep.data.user;
-		});
+		ev.request('login', 'post', data/*
+										 * , function(rep) { // if (rep.type==1)
+										 * ;//ev.user=rep.data.user; }
+										 */);
 		return false;
 	},
 	logout : function() {
@@ -464,42 +417,93 @@ var ev = {
 			location.reload();
 		});
 	},
-	changeNameVillage : function(vid) {
-		if (this.flagName) {
-			this.flagName = false;
-			n = $("#nameVillage" + vid).text();
-			$("#nameVillage" + vid)
-					.html(
-							'<form style="display:inline;" id="nameform"><input id="nameInput" size="10" value="'
-									+ n + '" /></form>');
-			$("#nameform").submit(
-					function() {
-						n = $("#nameInput").val();
-						$("#nameVillage" + vid).text(n);
-						data = {
-							id : vid,
-							name : n,
-							ajax : 1
-						};
-						ev.request(module + "/profile/changenamevillage",
-								"post", data, function(data) {
-									if (data.data == true)
-										$(document).trigger("quest", 1);
-								});
-						ev.flagName = true;
+	// registrazione civiltà
+	village : {
+		template : '',
+		init : function() {
+			$.ajax({
+				url : path + '/' + module + '/village',
+				success : function(data) {
+					ev.village.template = data;
+				}
+			});
+		},
+		changeName : function(vid) {
+			if (ev.flagName) {
+				ev.flagName = false;
+				n = $("#nameVillage" + vid).text();
+				$("#nameVillage" + vid).html(
+						'<form style="display:inline;" id="nameform"><input id="nameInput" size="10" value="' + n + '" /></form>');
+				$("#nameform").submit(function() {
+					n = $("#nameInput").val();
+					$("#nameVillage" + vid).text(n);
+					data = {
+						id : vid,
+						name : n,
+						ajax : 1
+					};
+					ev.request(module + "/profile/changenamevillage", "post", data, function(data) {
+						if (data.data == true)
+							$(document).trigger("quest", 1);
 					});
-			/*
-			 * $("#nameInput").keydown(function(e) { e.stopPropagation(); });
-			 */
+					ev.flagName = true;
+				});
+			}
+		},
+		open : function(vid) {
+			c = ev.map.getCoordFromId(vid);
+			ev.map.centre = [ c.x, c.y ];
+			ev.map.shift();
+			content = {};
+			content.text = this.template.replace(/\{vid\}/gi, vid);
+			content.title = ev.map.village[vid].name;
+			content.text = content.text.replace(/\{name\}/gi, content.title);
+			ev.focus.id = vid;
+			ev.windows({
+				x : 1000,
+				y : 740
+			}, 'centre', content);
+			$.contextMenu({
+				items:ev.menubuilding,
+				selector:'.building:not(.empty)',
+				theme : 'human'
+			});
+			$("div.drag").draggable({
+				revert : "invalid",
+				helper : "clone",
+				cursor : "move"
+			});
+			$("div.empty").droppable({
+				accept : ".drag",
+				hoverClass: "draghover",
+				drop : function(event, ui) {
+					$item = ui.draggable;
+					c = $item.attr("class");
+					$item.fadeOut(function() {
+						$(event.target).removeClass("empty");
+						$(event.target).addClass(c);
+						$('img', event.target).attr('title', $('img', $item).attr('title'));
+					});
+					// $item.appendTo($('#pannel'));
+					m = $(event.target).attr("class").match(/pos(\d+)/);
+					t = $item.find(".Btype").val();
+					ev.request(module + '/building/build/type/' + t + '/pos/' + m[1] /*+ '/tokenB/' + ev.token.tokenB*/, 'post', {
+						ajax : 1
+					});
+				}
+			});
+			$('#nameVillage'+vid).dblclick(function(){ev.village.changeName(vid);});
+			ev.request('s1/village/focus', 'post', {'vid':vid,ajax:1});
 		}
 	},
-	// registrazione civiltà
 	createciv : function() {
 		ev.request(module + "/index/createciv", "post", {
 			server : module,
 			name : $("#name").val(),
 			agg : $("#agg").val(),
-			sector : $('input[name$="sector"]').val()
+			sector : $('input[name="sector"]:checked').val(),
+			cx : $('#cx').val(),
+			cy : $('#cy').val()
 		});
 	},
 	subscrive : function(cid) {
@@ -551,132 +555,67 @@ var ev = {
 	},
 	// map object
 	map : {
+		pos : {
+			top : 0,
+			left : 0
+		},
+		prev : {
+			top : 0,
+			left : 0
+		},
 		village : new Array(),
 		size : [ 24, 18, 50 ],
+		move : false,
+		timeout : 300,
 		zoom : 0,
 		centre : [ 0, 0 ],
-		//init : [],
-		limit:[],
-		esclude:[ 0, 1, 2, 3, 4, 
-		          24, 25, 26, 27, 28, 
-		          48, 49, 50, 51, 52],
-		/*TtoY : function(t) {
-			return t / ev.map.size[2] + (ev.map.init[1]) + ev.map.size[1];
-		},
-		YtoT : function(y) {
-			return (y - (ev.map.init[1]) - ev.map.size[1]) * ev.map.size[2];
-		},
-		LtoX : function(l) {
-			return l / (-ev.map.size[2]) + (ev.map.init[0]) - ev.map.size[0];
-		},
-		XtoL : function(x) {
-			return (x - (ev.map.init[0]) + ev.map.size[0]) * (-ev.map.size[2]);
-		},*/
-		// cerca nel vettore villaggi i villaggi disponibili
-		position : function(x, y, callback) {
-			x=parseInt(x);
-			y=parseInt(y);
-			if ((Math.abs(x) <= ev.max[0]) && (Math.abs(y) <= ev.max[1])) { //non sei fuori dai limiti
-				z = true;// controllo esistenza dati nel vettore cache
-				rx = parseInt(ev.map.size[0] / 2);//raggio di visuale
-				ry = parseInt(ev.map.size[1] / 2);
-				for (var i in ev.map.limit) {//ogni settore mappato ha un min e max per ascissa e ordinata
-					lim=ev.map.limit[i];
-					if ((lim.x.max>(x+rx))&&(lim.x.min<x-rx)&&(lim.y.max>(y+ry))&&(lim.y.min<y-ry)) {
-						z=false;
-						break;
-					}
+		focus : {},
+		data : [],
+		limit : [],
+		esclude : [ 0, 1, 2, 3, 4, 24, 25, 26, 27, 28, 48, 49, 50, 51, 52 ],
+		goRender : 0,
+		init : function() {
+			$.ajax({
+				url : path + "/common/images/map/" + module + ".json",
+				dataType : "json",
+				success : function(data) {
+					ev.map.data = data.layers[0].data;
+					ev.map.goRender++;
+					ev.map.render();
 				}
-				if (z) { // richiesta dei dati mancanti
-					ev.request(module + "/map/getvettorvillage", "post", {
-						'x' : [ x-rx-ev.map.size[0], x*1+rx+ev.map.size[0] ],
-						'y' : [ y-ry-ev.map.size[0], y*1+ry+ev.map.size[0] ],
-						ajax : 1
-					}, function(rep,req) {
-						for (i = 0; i < rep.data.village.length; i++) {
-							a = rep.data.village[i].x;
-							b = rep.data.village[i].y;
-							try {
-								ev.map.village[a][b] = rep.data.village[i];
-							} catch (err) {
-								ev.map.village[a] = new Array();
-								ev.map.village[a][b] = rep.data.village[i];
-							}
-						}
-						v=req.data.match(/=(-*\d+)/g);
-						ev.map.limit.push({
-							x:{
-								min:parseInt(v[0].substr(1)),
-								max:parseInt(v[1].substr(1))
-							},
-							y:{
-								min:parseInt(v[2].substr(1)),
-								max:parseInt(v[3].substr(1))
-							}
-						});
-						ev.map.changetable(x, y);
-						if (callback)
-							callback({'x':x,'y':y});
-					});
-				} else {
-					ev.map.changetable(x, y);
-					if (callback)
-						callback({'x':x,'y':y});
+			});
+			$.ajax({
+				url : path + "/" + module + "/map",
+				dataType : "json",
+				success : function(data) {
+					ev.map.village = data;
+					ev.map.goRender++;
+					ev.map.render();
 				}
+			});
+		},
+		render : function() {
+			if (this.goRender > 1) {
+				this.shift();
+				this.goRender = 0;
 			}
 		},
-		changetable : function(x, y) {
-			rx = parseInt(ev.map.size[0] / 2);
-			ry = parseInt(ev.map.size[1] / 2);
-			map=$('#map');
-			for (j = (y * 1 - ry * 1 + ev.map.size[1] * 1), k = 1; j >= (y * 1 - ry * 1); j--, k++) {
-				for (i = (x * 1 - rx * 1), z = 1; i <= (x * 1 - rx * 1 + ev.map.size[0] * 1); i++, z++) {
-					square=map.find('#map_village_' + z + '_' + k);
-					if ((Math.abs(i) <= ev.max[0])
-							&& (Math.abs(j) <= ev.max[1])) {
-						
-						if (this.village[i][j].type) {
-							square.children().removeClass().addClass('village'+this.village[i][j].type);
-							own="";
-							if (this.village[i][j].civ_id==ev.civ.civ_id) own='own';
-							square.children()
-								.children()
-								.removeClass()
-								.addClass(own);
-						}
-						else square.children().removeClass().children().removeClass();
-						square.removeClass('area0 area1 area2 area3 area4 area5').addClass('area'+this.village[i][j].zone);
-					} else {
-						square.removeClass('area0 area1 area2 area3 area4 area5').addClass('area5');
-						try {
-							ev.map.village[i][j] = {
-								name : ev.lang.sea,
-								civ_name : '-',
-								ally : '-',
-								prod1_bonus : '-',
-								prod2_bonus : '-',
-								prod3_bonus : '-'
-							};
-						} catch (e) {
-							ev.map.village[i] = new Array();
-							ev.map.village[i][j] = {name : ev.lang.sea,
-									civ_name : '-',
-									ally : '-',
-									prod1_bonus : '-',
-									prod2_bonus : '-',
-									prod3_bonus : '-'};
-						}
-					}
-					$('#map_village_' + z + '_' + k).data('coords',{x:i,y:j});
-				}
-			}
-			ev.map.centre = [ x, y ];
-			location.hash = "#" + x + "|" + y;
+		getCoordFromId : function(id) {
+			id = parseInt(id);
+			x = id % ev.max[0] - parseInt(ev.max[0] / 2);
+			y = parseInt(ev.max[1] / 2) - parseInt(id / ev.max[0]);
+			return {
+				'x' : x,
+				'y' : y
+			};
+		},
+		getIdFromCoord : function(x, y) {
+			id = ev.max[0] * (parseInt(ev.max[1] / 2) - y) + x * 1 + parseInt(ev.max[0] / 2);
+			return id;
 		},
 		hide_village_info : function() {
 			// ev.map.canhide=true;
-			location.hash = location.hash
-					.substring(0, location.hash.length - 1);
+			location.hash = location.hash.substring(0, location.hash.length - 1);
 		},
 		load_detail : function() {
 			text = location.hash;
@@ -686,90 +625,135 @@ var ev = {
 			ev.map.get_village_info(x + ":" + y);
 		},
 		arrow : function(direction) {
+			if ((direction == "continue") && this.move) {
+				direction = ev.map.move;
+			} else {
+				ev.map.timeout = 300;
+			}
+
 			switch (direction) {
 			case 'up':
-				x = ev.map.centre[0];
-				y = ev.map.centre[1] * 1 + 1 * 1;
+				ev.map.centre[1]++;
+				this.move = direction;
 				break;
 			case 'down':
-				x = ev.map.centre[0];
-				y = ev.map.centre[1] * 1 - 1 * 1;
+				ev.map.centre[1]--;
+				this.move = direction;
 				break;
 			case 'right':
-				x = ev.map.centre[0] * 1 + 1 * 1;
-				y = ev.map.centre[1];
+				ev.map.centre[0]++;
+				this.move = direction;
 				break;
 			case 'left':
-				x = ev.map.centre[0] * 1 - 1 * 1;
-				y = ev.map.centre[1];
+				ev.map.centre[0]--;
+				this.move = direction;
+				break;
+			case 'stop':
+				ev.map.move = false;
 				break;
 			}
-			this.position(x, y);
-		},
-		get_village_info : function(coord) {
-			x = coord.x;
-			y = coord.y;
-			location.hash = "#" + x + "|" + y + "@";
-			try {
-				village = ev.map.village[x][y]
-			} catch (e) {
-				ev.map.position(x, y, function() {
-					ev.map.get_village_info(coord);
-				});
-				return;
+
+			if (this.move) {
+				setTimeout(function() {
+					ev.map.arrow('continue');
+				}, ev.map.timeout);
+				if (ev.map.timeout > 50)
+					ev.map.timeout -= 50;
+				ev.map.shift();
 			}
-			if (ev.map.village[x][y].civ_id == ev.civ.civ_id) {
-				ev.request(module + '/index/village/?vid='
-						+ ev.map.village[x][y].id, "post", {
-					ajax : 1
-				});
+
+		},
+		get_village_info : function(i, j,coords) {
+
+			if (ev.ondrag) {
+				ev.ondrag = false;
+				return false;
+			}
+			if (coords) {
+				x=i;y=j;
+			}
+			else {
+				c = this.getCoord(i, j);
+				x = c.x;
+				y = c.y;
+			}
+			
+			id = this.getIdFromCoord(x, y);
+			location.hash = "#" + x + "|" + y + "@";
+			if (ev.map.village[id]) {
+				cid = ev.map.village[id].civ_id;
+				civ_name = ev.map.village[id].civ_name;
+				civ_ally = ev.map.village[id].civ_ally;
+				ally = ev.map.village[id].ally;
+				busy_pop = ev.map.village[id].busy_pop;
+				prod1_bonus = ev.map.village[id].prod1_bonus;
+				prod2_bonus = ev.map.village[id].prod2_bonus;
+				prod3_bonus = ev.map.village[id].prod3_bonus;
+				name = ev.map.village[id].name;
 			} else {
-				text = '<div>' + ev.lang.village1
-						+ ' <a class="civ" href="#civ'
-						+ ev.map.village[x][y].civ_id
-						+ '" onclick="ev.request(module+\'/profile/index/cid/'
-						+ ev.map.village[x][y].civ_id
-						+ '\',\'post\',{ajax:1});">'
-						+ ev.map.village[x][y].civ_name + '</a><div>';
-				text += '<div>' + ev.lang.village2
-						+ ' <a class="ally" href="#ally'
-						+ ev.map.village[x][y].civ_ally + '">'
-						+ ev.map.village[x][y].ally + '</a></div>';
-				text += '<div>' + ev.lang.village3 + ': '
-						+ ev.map.village[x][y].busy_pop + '</div>';
-				text += '<div>' + ev.lang.village4 + ': '
-						+ ev.map.village[x][y].prod1_bonus + '% '
-						+ ev.map.village[x][y].prod2_bonus + '% '
-						+ ev.map.village[x][y].prod3_bonus + '%</div>';
-				text += '<div><a href="#sendTroop'
-						+ ev.map.village[x][y].id
-						+ '" onclick="ev.request(\''
-						+ module
-						+ '/movements/send\', \'post\', {type:\'attack\',ajax:1,vid:'
-						+ ev.map.village[x][y].id + '});">' + ev.lang.village5
-						+ '</a></div>';
+				cid = 0;
+				civ_name = '-';
+				civ_ally = '-';
+				ally = '-';
+				busy_pop = 0;
+				prod1_bonus = '-';
+				prod2_bonus = '-';
+				prod3_bonus = '-';
+				name = ev.lang.valley;
+			}
+			if ((this.village[id]) && (this.village[id].civ_id == ev.civ.civ_id)) {
+				ev.village.open(id);
+			} else {
+				text = '<div>' + ev.lang.village1 + ' <a class="civ" href="#civ' + cid + '" onclick="ev.request(module+\'/profile/index/cid/' + cid
+						+ '\',\'post\',{ajax:1});">' + civ_name + '</a><div>';
+				text += '<div>' + ev.lang.village2 + ' <a class="ally" href="#ally' + civ_ally + '">' + ally + '</a></div>';
+				text += '<div>' + ev.lang.village3 + ': ' + busy_pop + '</div>';
+				text += '<div>' + ev.lang.village4 + ': ' + prod1_bonus + '% ' + prod2_bonus + '% ' + prod3_bonus + '%</div>';
+				if (ev.civ.civ_id) {// @todo add more option
+					text += '<div><a href="#sendTroop' + id + '" onclick="ev.request(\'' + module
+							+ '/movements/send\', \'post\', {type:\'attack\',ajax:1,vid:' + id + '});">' + ev.lang.village5 + '</a></div>';
+				} else {
+					if (!ev.map.village[id])
+						text += '<div><button onclick="$(\'input[name=sector]:eq(5)\').attr(\'checked\',true);$(\'#cx\').val(ev.map.focus.x);$(\'#cy\').val(ev.map.focus.y);$(\'#modalwindows\').dialog(\'open\')">'
+								+ ev.lang.select + '</button></div>';
+				}
 				ev.windows({
 					h : 300,
 					w : 400
-				}, "center",
-						{
-							title : ev.map.village[x][y].name + '(' + x + '|'
-									+ y + ')',
-							'text' : text
-						}, false, false, ev.map.hide_village_info);
+				}, "center", {
+					title : name + '(' + x + '|' + y + ')',
+					'text' : text
+				}, false, false, ev.map.hide_village_info);
+				this.focus = c;
 			}
+
 		},
-		details : function(coord, n) {
-			x = coord.x;
-			y = coord.y;
-			$("#village_name").html(
-					this.village[x][y].name + ' (' + x + '|' + y + ')');
-			$("#village_player").html(this.village[x][y].civ_name);
-			$("#village_ally").html(this.village[x][y].ally);
-			$("#village_bonus").html(
-					this.village[x][y].prod1_bonus + "% "
-							+ this.village[x][y].prod2_bonus + "% "
-							+ this.village[x][y].prod3_bonus + "%");
+		getCoord : function(i, j) {
+			l = this.centre[0] - Math.round(this.size[0] / 2);
+			t = this.centre[1] - Math.round(this.size[1] / 2);
+			return {
+				x : l + i,
+				y : t - j - 2 + parseInt(this.size[1])
+			};
+		},
+		details : function(i, j, n) {
+			c = this.getCoord(i, j);
+			x = c.x;
+			y = c.y;
+			id = this.getIdFromCoord(x, y);
+			if (this.village[id]) {
+				$("#village_name").html(this.village[id].name + ' (' + x + '|' + y + ')');
+				$("#village_player").html(this.village[id].civ_name);
+				$("#village_ally").html(this.village[id].ally);
+				$("#village_bonus").html(
+						this.village[id].prod1_bonus + "% " + this.village[id].prod2_bonus + "% " + this.village[id].prod3_bonus + "%");
+
+			} else {
+				$("#village_name").html(ev.lang['valley'] + ' (' + x + '|' + y + ')');
+				$("#village_player").html("");
+				$("#village_ally").html('');
+				$("#village_bonus").html('');
+			}
 			bool = false;
 			// console.log(n);
 			for ( var k in this.esclude) {
@@ -786,6 +770,44 @@ var ev = {
 		hide_map_details : function() {
 			// if (ev.map.canhide)
 			$("#map_details").hide();
+		},
+		shift : function() {// area 56
+			t = new Date();
+			before = t.getTime();
+			map = $('.map');
+			for ( var j = 0, n = 0; j < (ev.map.size[1]); j++) {
+				for ( var i = 0; i < ev.map.size[0]; i++, n++) {
+					c = ev.map.getCoord(i, j);
+					id = ev.map.getIdFromCoord(c.x, c.y);
+					prev_class = map.eq(n).attr('class');
+					zoom = prev_class.match(/zoom-\d+/g);
+					if ((Math.abs(c.x) < (ev.max[0] / 2)) && (Math.abs(c.y) < (ev.max[1] / 2))) {
+						map.eq(n).attr('class', 'map ' + zoom + ' area-' + (ev.map.data[id] - 1));
+						village = map.eq(n).children();
+						village.attr('class', zoom);
+						own = village.children();
+						own.attr('class', zoom);
+						if (this.village[id]) {
+							village.addClass('area-26');
+							if (ev.civ.civ_id == this.village[id].civ_id)
+								own.addClass('area-23');
+							else {
+								// @todo add ally or enemy own
+								own.addClass('map-null');
+							}
+						} else {
+							village.addClass('map-null');
+							own.addClass('map-null');
+						}
+					} else
+						// @todo creare una mappa sferica create a spheric map
+						map.eq(n).attr('class', 'map ' + zoom + ' area-56');
+					// own area-23
+				}
+			}
+			location.hash = this.centre[0] + '|' + this.centre[1];
+			t = new Date();
+			console.log('map shift exsecution time: ', (t.getTime() - before), " ms ");
 		}
 	},
 	troops : {
@@ -814,9 +836,7 @@ var ev = {
 			});
 			function checkin($item) {
 				$item.fadeOut(function() {
-					var $list = $("ul", $('#' + id)).length ? $("ul", $('#'
-							+ id)) : $("<ul class='troops ui-helper-reset'/>")
-							.appendTo($('#' + id));
+					var $list = $("ul", $('#' + id)).length ? $("ul", $('#' + id)) : $("<ul class='troops ui-helper-reset'/>").appendTo($('#' + id));
 					ev.troops.addtroops($item.find('input.id_troop').val());
 					$item.appendTo($list).fadeIn();
 				});
@@ -962,10 +982,7 @@ var ev = {
 		}
 	},
 	changeimg : function(ogg) {
-		$(ogg).css(
-				'background',
-				'url(' + path + '/common/images/troops/t' + ogg.value
-						+ '.gif) no-repeat');
+		$(ogg).css('background', 'url(' + path + '/common/images/troops/t' + ogg.value + '.gif) no-repeat');
 	},
 	colony : function(menuItem, menu) {
 		coord = $(this).attr('alt');
@@ -1029,7 +1046,7 @@ var ev = {
 	bugreport : function() {
 		this.windows({
 			x : 400,
-			y : 600
+			y : "auto"
 		}, "centre", ev.bugcontent);
 	},
 	bugcontent : {
@@ -1039,7 +1056,7 @@ var ev = {
 	tag : new Array(),
 	addtag : function(tag) {
 		tag = tag.replace(" ", "");
-		bool = false
+		bool = false;
 		for (i = 0; (i < this.tag.length) && (!bool); i++)
 			if (tag == this.tag[i])
 				bool = true;
@@ -1089,28 +1106,27 @@ var ev = {
 		});
 	},
 	build : {
-		upgrade : function() {
-			c = $(this).attr("class");
+		pop:0,
+		flagpop:false,
+		upgrade : function(obj) {
+			c = obj.$trigger.attr("class");
 			m = c.match(/pos([\d]{1,2})/);
-			ev.request(module + "/building/upgrade/tokenB/" + ev.token.tokenB
-					+ "/pos/" + m[1], "post", {
+			ev.request(module + "/building/upgrade/pos/" + m[1], "post", {
 				ajax : "true"
 			});
 		},
-		destroy : function() {
-			c = $(this).attr("class");
+		destroy : function(obj) {
+			c = obj.$trigger.attr("class");
 			m = c.match(/pos([\d]{1,2})/);
-			ev.request(module + "/building/destroy/tokenB/" + ev.token.tokenB
-					+ "/pos/" + m[1], "post", {
+			ev.request(module + "/building/destroy/tokenB/" + ev.token.tokenB + "/pos/" + m[1], "post", {
 				ajax : "true"
 			});
 		},
 		deleteQueue : function(eid) {
-			ev.request(module + "/index/delqueue/tokenB/" + ev.token.tokenB,
-					"post", {
-						id : eid,
-						ajax : "true"
-					});
+			ev.request(module + "/index/delqueue/", "post", {
+				id : eid,
+				ajax : "true"
+			});
 		}
 	},
 	report : {
@@ -1195,17 +1211,19 @@ var ev = {
 		}
 	},
 	statserver : function(server) {
+		$('server').removeClass('offline');
 		for (i = 0; server[i]; i++) {
 			this.request(server[i] + '/stats', 'post', {
 				ajax : 1
-			}, function(data) {
-				$('#n_civ' + data.server).text(data.N_civ);
-				if (data.offline)
-					$('#button' + data.server).addClass('offline');
-				$.ajax({
-					url : path + '/' + data.server + '/processing',
-					timeout : 5000
-				});
+			}, function(reponse) {
+				// $('#n_civ' + data.server).text(data.N_civ);
+				if (reponse.data.offline)
+					$('#button' + reponse.data.server).addClass('offline');
+
+			});
+			$.ajax({
+				url : path + '/' + server[i] + '/processing',
+				timeout : 5000
 			});
 		}
 	}

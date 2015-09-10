@@ -28,7 +28,7 @@ class image
         }
         else {
             $str.='pop.gif';
-            $name = "popolazione";
+            $name = "POP";
         }
         $str.='" alt="[' . $t->_($name) . ']" title="' . $t->_($name) . '" width="16" height="16" />';
         return $str;

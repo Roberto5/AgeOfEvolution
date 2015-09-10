@@ -52,10 +52,8 @@ WHERE `civ`='" . $cid . "' AND IF( EXISTS ( SELECT `id` FROM `" .
     }
     static function addtoreport ($id, $info)
     {
-        Zend_Registry::get("log")->debug($info);
         $row = self::getDefaultAdapter()->fetchRow(
         "SELECT * FROM `" . REPORT_TABLE . "` WHERE `id`='$id'");
-        Zend_Registry::get("log")->debug($row);
         $data = unserialize($row['data']);
         $data['infround'][] = $info;
         $data['supatk'] = $info['supa'];

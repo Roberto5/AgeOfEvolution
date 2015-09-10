@@ -1,157 +1,214 @@
 <?php
 /**
  * map
- * 
+ *
  * @author pagliaccio
- * @version 
+ * @version
  */
 require_once 'Zend/Db/Table/Abstract.php';
 class Model_map extends Zend_Db_Table_Abstract
 {
-    /**
-     * The default table name 
-     */
-    protected $_name = 'map';
-    private $t;
-    /**
-     * 
-     * @var Model_civilta
-     */
-    private $civ;
-    private $log;
-    function __construct ()
-    {
-        $this->t = Zend_Registry::get("translate");
-        $this->log = Zend_Registry::get("log");
-        $this->civ=Model_civilta::getInstance();
-    }
-    /**
-     * restituisce una matrice con le caratteristiche del villaggio
-     * @param int $centX
-     * @param int $centY
-     * @param int $rx
-     * @param int $ry
-     * @param int $cache
-     * @return Array 
-     */
-    function getVillageArray ($centX = 0, $centY = 0, $rx = 3, $ry = 3,$cache=0)
-    {
-        $rows = $this->getDefaultAdapter()->fetchAll(
-        "SELECT `" . MAP_TABLE . "`.`id`,`" . MAP_TABLE . "`.`civ_id`,`" . MAP_TABLE . "`.`name`,
-        	`" . MAP_TABLE . "`.`capital`,`" . MAP_TABLE . "`.`type`,`" . MAP_TABLE . "`.`busy_pop`,
-        	`" . MAP_TABLE . "`.`x`,`" . MAP_TABLE . "`.`y`,`" . MAP_TABLE . "`.`zone`,
-        	`" . MAP_TABLE . "`.`prod1_bonus`,`" . MAP_TABLE . "`.`prod2_bonus`,`" . MAP_TABLE . "`.`prod3_bonus`, 
-        	`" . CIV_TABLE ."`.`civ_name`, `" . CIV_TABLE . "`.`civ_age`,`" . CIV_TABLE . "`.`civ_ally`,
-        		(SELECT `name` 
-        			FROM `" . ALLY_TABLE . "` 
-        			WHERE `" .
-         ALLY_TABLE . "`.`id` =`" . CIV_TABLE . "`.`civ_ally` 
-        		) AS `ally` 
-        		FROM `" .
-         MAP_TABLE . "`,`" . CIV_TABLE . "` WHERE `x` >= '" . ($centX - $rx-$cache) .
-         "' AND `x` <= '" . ($centX + $rx+$cache) . "' AND `y` >= '" . ($centY - $ry-$cache) .
-         "' AND `y` <= '" . ($centY + $ry+$cache) . "' AND `" . MAP_TABLE .
-         "`.`civ_id`=`" . CIV_TABLE . "`.`civ_id`");
-        for ($i = 0; $rows[$i]; $i ++) {
-        	if ((abs($rows[$i]["x"]-$centX)<=$rx)&&((abs($rows[$i]["y"]-$centY)<=$ry)))
-            	$map['focus'][$rows[$i]["x"]][$rows[$i]["y"]] = $rows[$i];
-            $map['cache'][$rows[$i]["x"]][$rows[$i]["y"]] = $rows[$i];
-        }
-        return $map;
-    }
-    /**
-     * genera una tabella html del villaggi
-     * @param $dim
-     * @param $h
-     * @param $w
-     * @return string
-     */
-    function getMapTable ($dim, $h = 18, $w = 24)
-    {
-        //$base = Zend_Controller_Front::getInstance()->getBaseUrl();
-        //$base.='/'.Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
-        
-        $gap=0;$n=0;
-        for($j=1;$j<=$h;$j++) {
-            for ($i=1;$i<=$w;$i++) {
-            	$table.='<div style="position:relative;left:'.(($i-1)*$dim).'px;top:'.($gap+($j-1)*$dim).'px;" 
-            				class="map_village zoom-'.$dim.'" id="map_village_' . $i .
-                 '_'.$j.'" onmouseover="ev.map.details($(this).data(\'coords\'),'.$n++.');" 
-            				onmouseout="ev.map.hide_map_details();" 
-            				onclick="if (!ev.drag) ev.map.get_village_info($(this).data(\'coords\')); else ev.drag=false;" alt="'.$x.'|'.$y.'" ><div><!--vilage--><div><!--flag--></div></div></div>';
-            	$gap-=50;
-            }
-        }
-        return $table;
-    }
-    /**
-     * ritorna l'id del dio che influenza la zona
-     * @param int coordinata x
-     * @param int coordinata y
-     * @return int
-     */
-    static function getZone ($x, $y)
-    {
-        if (($x > 400) || ($x < - 400) || ($y > 400) || ($y < - 400))
-            $zone = 5;
-        else
-            $zone = Zend_Db_Table::getDefaultAdapter()->fetchOne(
-            "SELECT `zone` FROM `" . MAP_TABLE . "` WHERE `x`='" . $x .
-             "' AND `y`='" . $y . "'");
-        return ($zone ? $zone : "0");
-    }
-    /**
-     * genera una macchia, disegnando angolo per angolo un raggio che aumenta o 
-     * diminuisce in maniera casuale
-     * @param unknown_type $zone
-     * @param unknown_type $rad
-     * @param unknown_type $cx
-     * @param unknown_type $cy
-     */
-    static function generateZone ($zone, $rad, $cx, $cy)
-    {
-        //$co = array();
-        //controllo macchia dentro la mappa
-        if ((abs($cx) > (MAX_X - $rad))) {
-            $cx = (MAX_X - $rad) * ($cx / abs($cx));
-        }
-        if ((abs($cy) > (MAX_Y - $rad))) {
-            $cy = (MAX_Y - $rad) * ($cy / abs($cy));
-        }
-        $gap = 1; //massima differenza di raggio da un grado all'altro
-        $radt = rand($rad / 2, $rad); //genero il raggio ad angolo 0
-        $rad0 = $radt;
-        for ($a = 0; $a <= 360; $a ++) { // ciglo angolo
-            //differenza tra l'angolo a zero gradi e quello precedente (diviso il gap)
-            $dif = intval(($rad0 - $radt) / $gap);
-            if ($a < (360 - abs($dif))) {
-                // se la differenza tra l'angolo a 0° e quello precedente
-                // tolta all'angolo giro è maggiore dell'angolo attuale
-                // possiamo aumentare o diminuire il raggio in maniera casuale
-                if (rand(0, 1) &&
-                 ($radt < $rad + $gap) || ($radt < ($rad / 2) + $gap))
-                    // aumento il raggio se viene sorteggiato e se nn sforo il raggio massimo
-                    // oppure se il raggio è minore del raggio minimo
-                    $radt += rand(0, 
-                    $gap);
-                else
-                    $radt -= rand(0, $gap);
-            } else {
-                //altrimenti dobbiamo ritornare all raggio 0°
-                if ($dif < 0)
-                    $radt --;
-                elseif ($dif > 0)
-                    $radt ++;
-            }
-            // disegnamo il raggio
-            for ($r = 0; $r < $radt; $r ++) {
-                $x = round(cos(deg2rad($a)) * $r) + $cx;
-                $y = round(sin(deg2rad($a)) * $r) + $cy;
-                //Zend_Db_Table::getDefaultAdapter()->delete("temp",array("x='$x'","y='$y'"));
-                //Zend_Db_Table::getDefaultAdapter()->insert("temp", array('x'=>$x,'y'=>$y,'zone'=>$zone));
-                $co[$x][$y] = $zone;
-            }
-        }
-        return $co;
-    }
+	private $t;
+	/**
+	 *
+	 * @var Model_civilta
+	 */
+	//private $civ;
+	private $log;
+	//private $map;
+	//public $city;
+	static private $instance;
+	function __construct ()
+	{
+		$this->_name=SERVER.'_data_map';
+		$this->_primary='id';
+		$this->t = Zend_Registry::get("translate");
+		$this->log = Zend_Registry::get("log");
+		//$this->civ=Model_civilta::getInstance();
+		parent::__construct();
+		$this->getDefaultAdapter()->setFetchMode(Zend_Db::FETCH_ASSOC);
+		//$this->city=$this->fetchAll();
+		//$this->map=json_decode(file_get_contents(MAP_FILE));
+		self::$instance=$this;
+	}
+	/**
+	 * @return Model_map
+	 */
+	static function getInstance() {
+		if (self::$instance) return self::$instance;
+		else return new Model_map();
+	}
+	/**
+	 * understandig id sistem
+	 * es map 5x5
+	 * y/x 0  1  2  3  4
+	 * 0   00 01 02 03 04
+	 * 1   05 06 07 08 09
+	 * 2   10 11 12 13 14
+	 * 3   15 16 17 18 19
+	 * 4   20 21 22 23 24
+	  
+	 * @param int $id
+	 * @return array
+	 */
+	function getCoordFromId($id) {
+		$id=intval($id);
+		$x=$id%MAX_X-intval(MAX_X/2);
+		$y=intval(MAX_Y/2)-intval($id/MAX_X);
+		return array('x'=>$x,'y'=>$y);
+	}
+	/**
+	 *
+	 * @param int $x
+	 * @param int $y
+	 * @return int
+	 */
+	function getIdFromCoord($x,$y) {
+		$id=MAX_X*(intval(MAX_Y/2)-$y)+($x+intval(MAX_X/2));
+		return $id;
+	}
+	/**
+
+	* @return Array
+	*/
+	function getVillageArray()
+	{
+		if (!isset($this->city)) {
+			$this->city=array();
+			$rows=$this->fetchAll()->toArray();
+			foreach ($rows as $value) {
+				$this->city[$value['id']]=$value;
+			}
+		}
+		return $this->city;
+	}
+	/**
+	 * area 0 100 100 100 max 300
+	 * area 1 150 150 150 max 450 (+-50%)
+	 * area 2 125 200 125 max 450
+	 * area 3 125 125 200 max 450
+	 * area 4 200 125 125 max 450
+	 *
+	 * zona 1-3-13-15 area 1 al 25%
+	 * zona 2-7-9-14 area 1 al 50%
+	 * zona 19-20-25-26 area 1 al 75%
+	 * zona 8 area 1 al 100%
+	 * zona 4-6-16-18 area 2 al 25%
+	 * zona 5-10-12-17 area 2 al 50%
+	 * zona 22-23-28-29 area 2 al 75%
+	 * zona 11 area 2 al 100%
+	 * zona 31-33-43-45 area 3 al 25%
+	 * zona 32-37-39-44 area 3 al 50%
+	 * zona 49-50-55-56 area 3 al 75%
+	 * zona 38 area 3 al 100%
+	 * zona 34-36-46-48 area 4 al 25%
+	 * zona 35-40-42-47 area 4 al 50%
+	 * zona 52-53-58-59 area 4 al 75%
+	 * zona 41 area 4 al 100%
+	 * zona 21 area 0
+	 * 57
+	 * 24-27-30-51-54-60
+	 */
+	function calcbonus($area) {
+		switch ($area) {
+			case 1:
+			case 3:
+			case 13:
+			case 15:$bonus=$this->area(1,25);
+			break;
+			case 2:
+			case 7:
+			case 9:
+			case 14:$bonus=$this->area(1,50);
+			break;
+			case 19:
+			case 20:
+			case 25:
+			case 26:$bonus=$this->area(1,75);
+			break;
+			case 8:$bonus=$this->area(1,100);
+			break;
+			case 4:
+			case 6:
+			case 16:
+			case 18:$bonus=$this->area(2,25);
+			break;
+			case 5:
+			case 10:
+			case 12:
+			case 17:$bonus=$this->area(2,50);
+			break;
+			case 22:
+			case 23:
+			case 28:
+			case 29:$bonus=$this->area(2,75);
+			break;
+			case 11:$bonus=$this->area(2,100);
+			break;
+			case 31:
+			case 33:
+			case 43:
+			case 45:$bonus=$this->area(3,25);
+			break;
+			case 32:
+			case 37:
+			case 39:
+			case 44:$bonus=$this->area(3,50);
+			break;
+			case 49:
+			case 50:
+			case 55:
+			case 56:$bonus=$this->area(3,75);
+			break;
+			case 38:$bonus=$this->area(3,100);
+			break;
+			case 34:
+			case 36:
+			case 46:
+			case 48:$bonus=$this->area(4,25);
+			break;
+			case 35:
+			case 42:
+			case 40:
+			case 47:$bonus=$this->area(4,50);
+			break;
+			case 52:
+			case 53:
+			case 58:
+			case 59:$bonus=$this->area(4,75);
+			break;
+			case 41:$bonus=$this->area(4,100);
+			break;
+			/*case :
+			case :
+			case :
+			case :$bonus=$this->area();
+			break;*/
+			default:
+				$bonus=array('100','100','100');
+				break;
+		}
+		return $bonus;
+	}
+	function area($t,$v) {
+		switch ($t) {
+			case 2:
+			$n=1;
+			break;
+			case 3:
+				$n=2;
+				break;
+			case 4:
+				$n=0;
+			break;
+		}
+		$this->log->debug($t,'t');
+		$this->log->debug($n,'n');
+		for ($i = 0; $i < 3; $i++) {
+			if ($t==1) $bonus[i] = rand(100, 100+$v);
+			elseif ($i==$n) $bonus[$i]=rand(150, 150+$v);
+			else $bonus[$i]=rand(75, 125);
+		}
+		return $bonus;
+	}
 }
