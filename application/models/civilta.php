@@ -116,11 +116,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 			$this->ev = $event;
 			$this->t = Zend_Registry::get("translate");
 			$this->log = Zend_Registry::get("log");
-			/*if ($db) $this->setDefaultAdapter($db);
-			 else $this->setDefaultAdapter(Zend_Db_Table::getDefaultAdapter());
-			*/
 			$this->map = new Model_map();
-
 			$this->status = (int) $cid['status'];
 			$this->uid = (int) $cid['user_id'];
 			if ($this->status)
@@ -159,7 +155,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 				$bool=array_key_exists($cid['current_village'], $this->village_list);
 				if ($bool)
 					$this->currentVillage = (int) $cid['current_village'];
-				else { //  se non c'e imposto il current_village con il primo pianeta della lista
+				else { //  se non c'e imposto il current_village con il primo villaggio della lista
 					$array = array_values($this->village_list);
 					$this->currentVillage = (int) $array[0]['id'];
 					$this->changeCurrentVillage($this->currentVillage);
@@ -309,6 +305,11 @@ class Model_civilta extends Zend_Db_Table_Abstract
 			}
 		}
 	}
+	/**
+	 * 
+	 * refresh the page with new dara
+	 * @param unknown_type $option
+	 */
 	function refresh ($option = array('order'=>false,'queue'=>false))
 	{
 		//aggiorno la coda costruzioni
@@ -503,15 +504,18 @@ class Model_civilta extends Zend_Db_Table_Abstract
 			$status = 3;
 		else
 			$status = 1;
-		// @aggiungere limiti iscrizioni
 		$db = Zend_Db_Table::getDefaultAdapter();
-		$db->query(
+		$n= $db->fetchOne("SELECT count(*) FROM `" . RELATION_USER_CIV_TABLE . "` where `civ_id`='$civ' AND `status`IN (3,2)");
+		if ($n<4) {
+			$db->query(
 				"INSERT INTO " . RELATION_USER_CIV_TABLE . "
 				SET `user_id`='" . $id . "' ,
 				`server`='" . SERVER . "' ,
 				`civ_id`='" . $civ . "' ,
 				`status`='" . $status . "'");
-		return true;
+			return true;
+		}
+		else return false;
 	}
 	/**
 	 * restituisce le risorse
@@ -531,7 +535,6 @@ class Model_civilta extends Zend_Db_Table_Abstract
 	{
 		global $Building_Array;
 		global $Troops_Array;
-		//$this->aggProd();
 		if ($add) {
 			for ($i = 0; $i < 4; $i ++) {
 				$trans[$i] = - $trans[$i];

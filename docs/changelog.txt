@@ -1,0 +1,4 @@
+	modified:   application/models/civilta.php
+added 4 sharer limit
+	docs/changelog.txt
+add this file
