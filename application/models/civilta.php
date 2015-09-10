@@ -15,7 +15,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 	 */
 	public $refresh;
 	/**
-	 * utente in attesa o sharer o proprietario
+	 * utente in attesa o sharer o proprietario OWNER 3 SHARER 2 WAIT 1);
 	 * @var int
 	 */
 	public $status = 0;
@@ -36,6 +36,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 	public $village = null;
 	public $village_list = null;
 	public $queue = null;
+	// @todo supporto multilingua
 	private static $ages = array('Preistorica', 'Antica', 'Medioevale',
 			'Industriale', 'Moderna', 'Futura');
 	static $nameResource = array(array('pietra', 'cibo', 'legno'),

@@ -118,11 +118,11 @@ class Model_building extends Zend_Db_Table_Abstract
         }
         if ($storage == 0) {
             if ($storagetype == STORAGE1) {
-                $storage = storage1::$capacity[0];
+                $storage = storage1::$capacity;
             } elseif ($storagetype == STORAGE2) {
-                $storage = storage2::$capacity[0];
+                $storage = storage2::$capacity;
             } else {
-                $storage = house::$capacity[0];
+                $storage = house::$capacity;
             }
         }
         return $storage;

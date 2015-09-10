@@ -24,11 +24,8 @@ class Model_map extends Zend_Db_Table_Abstract
 		$this->_primary='id';
 		$this->t = Zend_Registry::get("translate");
 		$this->log = Zend_Registry::get("log");
-		//$this->civ=Model_civilta::getInstance();
 		parent::__construct();
 		$this->getDefaultAdapter()->setFetchMode(Zend_Db::FETCH_ASSOC);
-		//$this->city=$this->fetchAll();
-		//$this->map=json_decode(file_get_contents(MAP_FILE));
 		self::$instance=$this;
 	}
 	/**
