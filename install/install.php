@@ -100,7 +100,7 @@ try {
 	//$text=file_get_contents('../application/configs/application.ini');
 	$text=str_replace('"APPLICATION_PATH', 'APPLICATION_PATH "', $text);
 	file_put_contents('../application/configs/application.ini', $text);
-	chmod('../application/configs/application.ini', 'u+rw,g+rw');
+	chmod('../application/configs/application.ini', '660');
 	echo json_encode(array('bool'=>true,'text'=>$text));
 }
 catch (Exception $e) {

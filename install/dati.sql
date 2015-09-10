@@ -45,8 +45,8 @@ INSERT INTO `site_users` (`ID`, `username`, `password`, `email`, `active`, `code
 -- Dump dei dati per la tabella `s1_map`
 --
 
-INSERT INTO `s1_map` (`id`, `civ_id`, `name`, `capital`, `type`, `pop`, `busy_pop`, `resource_1`, `resource_2`, `resource_3`, `production_1`, `production_2`, `production_3`, `agg`, `aggPop`, `order_n`, `defence`, `prod1_bonus`, `prod2_bonus`, `prod3_bonus`) VALUES
-(5100, 0, '[CENTRALMARKET]', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 100, 100, 100);
+INSERT INTO `s1_map` (`id`, `civ_id`, `name`, `capital`, `type`, `pop`, `resource_1`, `resource_2`, `resource_3`, `production_1`, `production_2`, `production_3`, `agg`, `aggPop`, `order_n`, `defence`, `prod1_bonus`, `prod2_bonus`, `prod3_bonus`) VALUES
+(5100, 0, '[CENTRALMARKET]', 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 100, 100, 100);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

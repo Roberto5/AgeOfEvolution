@@ -569,7 +569,7 @@ CREATE TABLE `temp` (
 --
 DROP TABLE IF EXISTS `s1_data_map`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `s1_data_map` AS select `s1_map`.`id` AS `id`,`s1_map`.`civ_id` AS `civ_id`,`s1_map`.`name` AS `name`,`s1_map`.`capital` AS `capital`,`s1_map`.`type` AS `type`,`s1_map`.`prod1_bonus` AS `prod1_bonus`,`s1_map`.`prod2_bonus` AS `prod2_bonus`,`s1_map`.`prod3_bonus` AS `prod3_bonus`,`s1_civ`.`civ_name` AS `civ_name`,`s1_civ`.`civ_age` AS `civ_age`,`s1_civ`.`civ_ally` AS `civ_ally`,(select `s1_ally`.`name` from `s1_ally` where (`s1_ally`.`id` = `s1_civ`.`civ_ally`)) AS `ally`,(select sum(`s1_building`.`pop`) from `s1_building` where (`s1_building`.`village_id` = `s1_map`.`id`)) AS `busypop` from (`s1_map` join `s1_civ`) where (`s1_map`.`civ_id` = `s1_civ`.`civ_id`);
+CREATE VIEW `s1_data_map` AS select `s1_map`.`id` AS `id`,`s1_map`.`civ_id` AS `civ_id`,`s1_map`.`name` AS `name`,`s1_map`.`capital` AS `capital`,`s1_map`.`type` AS `type`,`s1_map`.`prod1_bonus` AS `prod1_bonus`,`s1_map`.`prod2_bonus` AS `prod2_bonus`,`s1_map`.`prod3_bonus` AS `prod3_bonus`,`s1_civ`.`civ_name` AS `civ_name`,`s1_civ`.`civ_age` AS `civ_age`,`s1_civ`.`civ_ally` AS `civ_ally`,(select `s1_ally`.`name` from `s1_ally` where (`s1_ally`.`id` = `s1_civ`.`civ_ally`)) AS `ally`,(select sum(`s1_building`.`pop`) from `s1_building` where (`s1_building`.`village_id` = `s1_map`.`id`)) AS `busypop` from (`s1_map` join `s1_civ`) where (`s1_map`.`civ_id` = `s1_civ`.`civ_id`);
 
 --
 -- Limiti per le tabelle scaricate
