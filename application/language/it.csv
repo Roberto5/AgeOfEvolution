@@ -20,6 +20,7 @@ CIVONSERVER@Civilt&agrave; presenti
 CLOSE@Chiudi
 COLO@Colonizzazioni
 CONTACT@Contattaci
+COORDNOTFOUND@Coordinate non trovate
 COST@Costo
 CREATE@Crea
 CREATECIV@Crea una nuova civilt&agrave;
@@ -93,6 +94,7 @@ STORAGE@Immagazzinamento
 STORAGE_DES@Aumenta la capacità di immagazzinamento.
 SUCCESS@login eseguito con successo
 TARGET@Obbiettivo
+TYLE_EMPTY@Zona vuota
 TOTALUSER@Utenti totali
 The two given tokens do not match@I due campi non coincidono
 TRAIN@Addestra

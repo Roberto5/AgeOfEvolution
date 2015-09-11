@@ -134,12 +134,20 @@ class S1_IndexController extends Zend_Controller_Action
             	case 6: 
             		break;
             	default:$coord = Model_civilta::randomcoord($cx[$sector], $cy[$sector]);
+            	if ($coord) {
             		$x=$coord['x'];$y=$coord['y'];
+            	}
+            		
             		break;
             };
-            Model_civilta::addVillage($x, $y, $id, 1);
+            if ($coord) {
+            	Model_civilta::addVillage($x, $y, $id, 1);
                 $risposta = $this->_t->_('REG_SUCCESS');
             Model_civilta::subscrive($id, $auth->getIdentity()->user_id);
+            }
+            $error=true;
+        	$risposta = "[COORDNOTFOUND]";
+            
         } else {
         	$error=true;
         	$risposta = "";

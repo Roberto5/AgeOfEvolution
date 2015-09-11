@@ -40,6 +40,8 @@ class Model_village extends Zend_Db_Table_Abstract
         	$this->data[$value['id']]['busy_pop']=$busy;
         	$this->busy[$value['id']]=$busy;
         	//Zend_Registry::get('log')->debug($this->data[$value['id']],'data village creatin');
+        	$area=json_decode(file_get_contents(MAP_FILE),true);
+        	$this->data[$value['id']]['zone']=Model_map::getzone($area['layers'][0]['data'][$value['id']]);
         }
     }
     /**

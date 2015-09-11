@@ -1,6 +1,6 @@
 <?php
 class master1 // Generale
-{
+{// 0 not in zone, 1 in zone
 	static $prod_bonus = array('0' => array(0,5,5,5), '1' => array(0,25,25,25)); // array(null,%prod1,%prod2,%prod3)
 	static $troops_bonus = array('0' => array(0,0,0), '1' => array(5,5,5)); // array(%atk,%hpatk,%hpdef)
 }

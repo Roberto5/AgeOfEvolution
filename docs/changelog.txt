@@ -1,4 +1,17 @@
 	modified:   application/models/civilta.php
-added 4 sharer limit
-	docs/changelog.txt
-add this file
+code clean, bug fix, new funcion for management updare of resource.
+	modified:   includes/gods.php
+add comment
+	modified:   application/modules/s1/controllers/IndexController.php
+management of error
+	modified:   application/models/map.php
+add function get zone
+	modified:   application/models/village.php
+add zone params
+	modified:   application/modules/s1/controllers/IndexController.php
+bugfix random coords. if function not found coords, display a error
+	modified:   application/language/en.csv
+	modified:   application/language/it.csv
+	modified:   docs/changelog.txt
+
+	

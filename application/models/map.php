@@ -79,6 +79,77 @@ class Model_map extends Zend_Db_Table_Abstract
 		}
 		return $this->city;
 	}
+	static function getzone($area) {
+		switch ($area) {
+			case 1:
+			case 3:
+			case 13:
+			case 15:
+			case 2:
+			case 7:
+			case 9:
+			case 14:
+			case 19:
+			case 20:
+			case 25:
+			case 26:
+			case 8:$zone=1;
+			break;
+			case 4:
+			case 6:
+			case 16:
+			case 18:
+			break;
+			case 5:
+			case 10:
+			case 12:
+			case 17:
+			break;
+			case 22:
+			case 23:
+			case 28:
+			case 29:
+			case 11:$zone=2;
+			break;
+			case 31:
+			case 33:
+			case 43:
+			case 45:
+			case 32:
+			case 37:
+			case 39:
+			case 44:
+			case 49:
+			case 50:
+			case 55:
+			case 56:
+			case 38:$zone=3;
+			break;
+			case 34:
+			case 36:
+			case 46:
+			case 48:
+			case 35:
+			case 42:
+			case 40:
+			case 47:
+			case 52:
+			case 53:
+			case 58:
+			case 59:
+			case 41:$zone=4;
+			break;
+			/*case :
+			case :
+			case :
+			case :$bonus=$this->area();
+			break;*/
+			default:
+				$zone=0;
+				break;
+		}
+		return $zone;
+	}
 	/**
 	 * area 0 100 100 100 max 300
 	 * area 1 150 150 150 max 450 (+-50%)

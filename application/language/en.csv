@@ -20,6 +20,7 @@ CIVONSERVER@Civilization on server
 CLOSE@Close
 COLO@Colonizzations
 CONTACT@Contact us
+COORDNOTFOUND@Coordinates not found
 COST@Cost
 CREATE@Create
 CREATECIV@Create a new civilization
@@ -92,6 +93,7 @@ STORAGE@Storage
 STORAGE_DES@Increase the storage capacity.
 SUCCESS@login success
 TARGET@Target
+TYLE_EMPTY@Tyle empty
 TOTALUSER@Total users
 TRAIN@Train
 USERNAME@Username :
