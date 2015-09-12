@@ -132,6 +132,9 @@ button {
 .researchbn {
     background-image: url('PATH/common/images/Futura/researchbn.png');
 }
+.uc {
+	background-image: url('PATH/common/images/Futura/inbuilding.png');
+}
 /*navpad*/
 .arrow_up {
     background-image: url('PATH/common/images/Futura/up.png');

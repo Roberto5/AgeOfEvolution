@@ -154,7 +154,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 				$bool = false;
 				$bool=array_key_exists($cid['current_village'], $this->village_list);
 				if ($bool)
-					$this->currentVillage = (int) $cid['current_village'];
+				$this->currentVillage = (int) $cid['current_village'];
 				else { //  se non c'e imposto il current_village con il primo villaggio della lista
 					$array = array_values($this->village_list);
 					$this->currentVillage = (int) $array[0]['id'];
@@ -306,7 +306,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 		}
 	}
 	/**
-	 * 
+	 *
 	 * refresh the page with new dara
 	 * @param unknown_type $option
 	 */
@@ -551,7 +551,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 		$param['master']=$this->data['master'];	
 		$param['currentVillage']= $this->currentVillage;	
 		$param['zone']=$this->village_list[$now]['zone'];
-		$param['aggPop']=$this->village->data[$this->currentVillage]['aggPop'];	
+		$param['aggPop']=$this->village->data[$this->currentVillage]['aggPop'];
 		$param['pop']=$this->village->data[$this->currentVillage]['pop'];
 		$param['resource_1']=$this->village->data[$this->currentVillage]['resource_1'];
 		$param['resource_2']=$this->village->data[$this->currentVillage]['resource_2'];
@@ -560,7 +560,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 		$param['production_2']=$this->village->data[$this->currentVillag]['production_2'];
 		$param['production_3']=$this->village->data[$this->currentVillag]['production_3'];
 		$param['Age']=$this->getAge();
-		
+
 		self::updateResource($param,$trans,$add);
 		//*****out***
 		$this->poptroop=$param['poptroop'];
@@ -575,7 +575,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 		$this->village->data[$this->currentVillage]['pop']=$param['pop'];
 		$this->village->data[$this->currentVillage]['defence']=$param['defence'];
 		$this->village->data[$this->currentVillage]['aggPop']=$param['aggPop'];
-		
+
 		$this->village->write();
 	}
 	/**
@@ -610,7 +610,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 	{
 		$bool = false;
 		$db = Zend_Db_Table::getDefaultAdapter();
-		
+
 		$res = $db->fetchRow(
 				"SELECT * FROM `" . SERVER . "_map` WHERE `id`='$id'");
 		$civ = $db->fetchRow(
@@ -622,6 +622,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 				"','" . PROD3 . "') ORDER BY `pos`");
 		$prod = array(0, 0, 0, 0);
 		foreach ($build as $key => $value) {
+			//@todo tenere conto della popolazione occupata
 			switch ($value['type']) {
 				case PROD1:
 					$prod[1] += prod1::$prod;
@@ -660,7 +661,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 	 */
 	static function addVillage ($x, $y, $civ_id, $cap = 0, $type = 0, $name = 'NEWVIL')
 	{
-		
+
 		if ((is_string($y))&&($y=="id")) $vid=$x;
 		else $vid=Model_map::getInstance()->getIdFromCoord($x, $y);
 		$area=json_decode(file_get_contents(MAP_FILE),true);
@@ -899,7 +900,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 		return Model_civilta::$nameResource[$age][$res];
 	}
 	/**
-	 * 
+	 *
 	 * update resource
 	 * @param Array $param
 	 * @param Array $trans
@@ -1026,7 +1027,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 	{
 		global $Troops_Array;
 		$param=array();
-		$res = self::getDefaultAdapter()->fetchRow(
+		$res = Zend_Db_Table::getDefaultAdapter()->fetchRow(
 				"SELECT * FROM `" . SERVER . "_map` WHERE `id`='" . $id . "'");
 		$param['agg']=$res['agg'];
 		$param['resource_1']=$res['resource_1'];
@@ -1036,14 +1037,14 @@ class Model_civilta extends Zend_Db_Table_Abstract
 		$param['production_2']=$res['production_2'];
 		$param['production_3']=$res['production_3'];
 		$param['CapTot']=array(Model_civilta::getStorageById($id),Model_civilta::getStorageById($id, STORAGE2));
-		$param['troopers_now'] = self::getDefaultAdapter()->fetchAll(
+		$param['troopers_now'] = Zend_Db_Table::getDefaultAdapter()->fetchAll(
 				"SELECT * FROM `" . TROOPERS . "`
 				WHERE `civ_id`='" . $res['civ_id'] . "'
 				AND `village_now`='" . $id . "'
 				AND `village_prev`='" . $id . "'
 				ORDER BY `trooper_id`
 				");
-		$param['my_troopers'] = self::getDefaultAdapter()->fetchAll(
+		$param['my_troopers'] = Zend_Db_Table::getDefaultAdapter()->fetchAll(
 				"SELECT `" . TROOPERS . "`.*,
 				`" . SERVER . "_map`.`name`
 				FROM `" . TROOPERS . "`,`" . SERVER . "_map`
@@ -1051,13 +1052,13 @@ class Model_civilta extends Zend_Db_Table_Abstract
 				AND `village_now`!='" . $id . "'
 				AND `village_now`=`" . SERVER . "_map`.`id`
 				ORDER BY `village_now`,`trooper_id`");
-		$param['queue'] = self::getDefaultAdapter()->fetchAll(
+		$param['queue'] = Zend_Db_Table::getDefaultAdapter()->fetchAll(
 				"SELECT * FROM `" . EVENTS_TABLE .
 				"` WHERE `type`='1' AND `params`LIKE'%\"village_id\";i:" . $id .
 				"%' ORDER BY `time`,`id` ASC");
 		$param['house'] = Model_civilta::getStorageById($id, HOUSE);
 		$param['busy_pop'] =$res['busy_pop'];
-		$param['other_troopers'] = self::getDefaultAdapter()->fetchAll(
+		$param['other_troopers'] = Zend_Db_Table::getDefaultAdapter()->fetchAll(
 				"SELECT `" . TROOPERS . "`.*,
 				`" . SERVER . "_map`.`name`
 				FROM `" . TROOPERS . "`,`" . SERVER . "_map`
@@ -1065,52 +1066,52 @@ class Model_civilta extends Zend_Db_Table_Abstract
 				AND `village_now`='" . $id . "'
 				AND `village_prev`=`" . SERVER . "_map`.`id`
 				ORDER BY `village_prev`,`trooper_id`");
-		$param['aggPop']=$res['aggPop'];	
+		$param['aggPop']=$res['aggPop'];
 		$param['pop']=$res['pop'];
 		$param['currentVillage']=$id;
 		$build = Zend_Db_Table::getDefaultAdapter()->fetchAll(
 				"SELECT * FROM `" . SERVER . "_building` WHERE `village_id`='" .
 				$param['village_id'] . "'");
 		$param['busy_pop']=0;
-        foreach ($build as $v) {
-        	$param['busy_pop']+=$v['pop'];	
-        }
-        $area=json_decode(file_get_contents(MAP_FILE),true);
-        $param['zone']=Model_map::getzone($area['layers'][0]['data'][$value['id']]);
-        $civ=self::getDefaultAdapter()->fetchRow("SELECT * FROM `".CIV_TABLE."` WHERE `civ_id`='".$res['civ_id']."'");
-        $param['master']=$civ['master'];
+		foreach ($build as $v) {
+			$param['busy_pop']+=$v['pop'];
+		}
+		$area=json_decode(file_get_contents(MAP_FILE),true);
+		$param['zone']=Model_map::getzone($area['layers'][0]['data'][$value['id']]);
+		$civ=Zend_Db_Table::getDefaultAdapter()->fetchRow("SELECT * FROM `".CIV_TABLE."` WHERE `civ_id`='".$res['civ_id']."'");
+		$param['master']=$civ['master'];
 		$param['Age']=$civ['civ_age'];
 		
 		self::updateResource($param,$trans,$add);
-		
-		
-		self::getDefaultAdapter()->query(
+
+
+		Zend_Db_Table::getDefaultAdapter()->query(
 				"UPDATE `" . SERVER . "_map`  SET `resource_1`='" . $param['resource_1'] .
 				"' , `resource_2`='" . $param['resource_2'] . "' , `resource_3`='" .
 				$param['resource_3'] . "' , `agg`='" . $param['agg'] . "' , `aggPop`='".
 				$param['aggPop']."' , `pop`='".$param['pop']."' WHERE `id`='" . $id .
 				"'");
 		/*****out***
-		$this->poptroop=$param['poptroop'];
-		$this->popc=$param['popc'];
-		$this->poptroop= $param['poptroop'];
-		$this->village->data[$this->currentVillage]['busy_pop'] = $param['busy_pop'];
-		$this->village->negativ=$param['negativ']=0;
-		$this->village->data[$this->currentVillage]['agg']=$param['agg'];
-		$this->village->data[$this->currentVillage]['resource_1']=$param['resource_1'];
-		$this->village->data[$this->currentVillage]['resource_2']=$param['resource_2'];
-		$this->village->data[$this->currentVillage]['resource_3']=$param['resource_3'];
-		$this->village->data[$this->currentVillage]['pop']=$param['pop'];
-		$this->village->data[$this->currentVillage]['defence']=$param['defence'];
-		$this->village->data[$this->currentVillage]['aggPop']=$param['aggPop'];
-		
-		
-		/********************************************
-		
-		
-		
-		
-				*/
+		 $this->poptroop=$param['poptroop'];
+		 $this->popc=$param['popc'];
+		 $this->poptroop= $param['poptroop'];
+		 $this->village->data[$this->currentVillage]['busy_pop'] = $param['busy_pop'];
+		 $this->village->negativ=$param['negativ']=0;
+		 $this->village->data[$this->currentVillage]['agg']=$param['agg'];
+		 $this->village->data[$this->currentVillage]['resource_1']=$param['resource_1'];
+		 $this->village->data[$this->currentVillage]['resource_2']=$param['resource_2'];
+		 $this->village->data[$this->currentVillage]['resource_3']=$param['resource_3'];
+		 $this->village->data[$this->currentVillage]['pop']=$param['pop'];
+		 $this->village->data[$this->currentVillage]['defence']=$param['defence'];
+		 $this->village->data[$this->currentVillage]['aggPop']=$param['aggPop'];
+
+
+		 /********************************************
+
+
+
+
+		 */
 		return array($param['resource_1'], $param['resource_2'], $param['resource_3']);
 	}
 	/**
@@ -1125,7 +1126,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 		$build = Zend_Db_Table::getDefaultAdapter()->fetchAll(
 				"SELECT * FROM `" . SERVER . "_building` WHERE `village_id`='" . $id .
 				"' AND `type`='" . $storagetype . "'");
-		$civ=self::getAdapter()->fetchOne("SELECT `civ_id` FROM `" . SERVER . "_map` WHERE `id`='$id'");
+		$civ=Zend_Db_Table::getDefaultAdapter()->fetchOne("SELECT `civ_id` FROM `" . SERVER . "_map` WHERE `id`='$id'");
 		$res=new Model_research($civ);
 		$storage = 0;
 		for ($i = 0; $build[$i]; $i ++) {

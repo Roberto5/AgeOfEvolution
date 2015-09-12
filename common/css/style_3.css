@@ -146,6 +146,9 @@ button {
 .researchbn {
     background-image: url('PATH/common/images/Medievale/researchbn.png');
 }
+.uc {
+	background-image: url('PATH/common/images/Medievale/inbuilding.png');
+}
 /*navpad*/
 .arrow_up {
     background-image: url('PATH/common/images/Medievale/up.png');

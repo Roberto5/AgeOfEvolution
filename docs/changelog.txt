@@ -1,17 +1,21 @@
-	modified:   application/models/civilta.php
-code clean, bug fix, new funcion for management updare of resource.
-	modified:   includes/gods.php
-add comment
-	modified:   application/modules/s1/controllers/IndexController.php
-management of error
-	modified:   application/models/map.php
-add function get zone
-	modified:   application/models/village.php
-add zone params
-	modified:   application/modules/s1/controllers/IndexController.php
-bugfix random coords. if function not found coords, display a error
-	modified:   application/language/en.csv
-	modified:   application/language/it.csv
-	modified:   docs/changelog.txt
+bugfix, DB edit!
 
-	
+	modified:   application/models/civilta.php
+	modified:   application/models/village.php
+	modified:   application/modules/s1/controllers/ProcessingController.php
+bugfix creash on event processor
+	new file:   common/images/Antica/inbuilding.png
+	new file:   common/images/Futura/inbuilding.png
+	new file:   common/images/Industriale/inbuilding.png
+	new file:   common/images/Medievale/inbuilding.png
+	new file:   common/images/Moderna/inbuilding.png
+	new file:   common/images/Preistorica/inbuilding.png
+	modified:   common/css/style_1.css
+	modified:   common/css/style_2.css
+	modified:   common/css/style_3.css
+	modified:   common/css/style_4.css
+	modified:   common/css/style_5.css
+	modified:   common/css/style_6.css
+add image for under construction w.i.p @todo make a more beatiful and implement this
+	modified:   install/struttura.sql
+add build data

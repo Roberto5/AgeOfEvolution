@@ -142,6 +142,9 @@ button {
 .barrackbn {
     background-image: url('PATH/common/images/Preistorica/barrackbn.png');
 }
+.uc {
+	background-image: url('PATH/common/images/Preistorica/inbuilding.png');
+}
 /*navpad*/
 .arrow_up {
     background-image: url('PATH/common/images/Preistorica/up.png');

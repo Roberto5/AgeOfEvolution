@@ -137,6 +137,9 @@ button {
 .researchbn {
     background-image: url('PATH/common/images/Moderna/researchbn.png');
 }
+.uc {
+	background-image: url('PATH/common/images/Moderna/inbuilding.png');
+}
 /*navpad*/
 .arrow_up {
     background-image: url('PATH/common/images/Moderna/up.png');

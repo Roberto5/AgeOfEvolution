@@ -70,15 +70,15 @@ CREATE TABLE `s1_ally_permissions` (
 -- Struttura della tabella `s1_building`
 --
 
-DROP TABLE IF EXISTS `s1_building`;
-CREATE TABLE `s1_building` (
+CREATE TABLE IF NOT EXISTS `s1_building` (
   `village_id` int(5) NOT NULL,
   `type` int(2) NOT NULL,
-  `liv` int(2) NOT NULL,
+  `built` tinyint(1) NOT NULL DEFAULT '0',
   `pos` int(2) NOT NULL,
-  `pop` int(9) NOT NULL,
+  `pop` int(9) NOT NULL
   PRIMARY KEY (`village_id`,`pos`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 
 -- --------------------------------------------------------
 

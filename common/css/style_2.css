@@ -139,6 +139,9 @@ button {
 .researchbn {
     background-image: url('PATH/common/images/Antica/researchbn.png');
 }
+.uc {
+	background-image: url('PATH/common/images/Antica/inbuilding.png');
+}
 /*navpad*/
 .arrow_up {
     background-image: url('PATH/common/images/Antica/up.png');

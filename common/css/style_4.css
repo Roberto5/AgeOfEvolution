@@ -165,6 +165,9 @@ button {
 .researchbn {
     background-image: url('PATH/common/images/Industriale/researchbn.png');
 }
+.uc {
+	background-image: url('PATH/common/images/Industriale/inbuilding.png');
+}
 /*navpad*/
 .arrow_up {
     background-image: url('PATH/common/images/Industriale/up.png');

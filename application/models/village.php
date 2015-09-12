@@ -115,6 +115,7 @@ class Model_village extends Zend_Db_Table_Abstract
         if (! $id)
             $id = $this->id;
         unset($this->data[$id]['busy_pop']);
+        unset($this->data[$id]['zone']);
         $this->update($this->data[$id],"`id`='$id'");
     }
 }

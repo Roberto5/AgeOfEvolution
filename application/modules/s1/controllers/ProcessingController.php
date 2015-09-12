@@ -8,11 +8,6 @@ class S1_ProcessingController extends Zend_Controller_Action
     private $p;
     /**
      * 
-     * @var Zend_Db_Adapter_Abstract
-     */
-    //private $_db;
-    /**
-     * 
      * @var int
      */
     private $now;
@@ -50,9 +45,7 @@ class S1_ProcessingController extends Zend_Controller_Action
                         $et = time();
                         $this->_log->info("processo eventi in corso...");
                         for ($i = 0; $this->events[$i]; $i ++) {
-                            /**
-                             * aggiungere eventi
-                             */
+                            // aggiungere eventi
                             $bool = false;
                             $this->i = $i;
                             $this->time = $this->events[$i]['time'];
