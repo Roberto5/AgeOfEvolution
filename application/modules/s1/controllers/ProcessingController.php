@@ -187,15 +187,6 @@ class S1_ProcessingController extends Zend_Controller_Action
              $this->_log->build("capitale spostata in ". $param['village_id']);
             $this->_db->query("UPDATE `".SERVER."_map` SET `capital`='1' WHERE `id`='" . $param['village_id'] . "'");   
 		}
-        if ($dif_pop != 0) { // aggiorno statistiche
-            $this->_db->query(
-            "UPDATE `" . SERVER . "_map` SET `busy_pop`=`busy_pop`+'$dif_pop' 
-           	WHERE `id`='" .$param['village_id'] . "'");
-            $this->_db->query(
-            "UPDATE `" . CIV_TABLE .
-             "` SET `civ_pop`=`civ_pop`+'$dif_pop' WHERE `civ_id`='" .
-             $civ['civ_id'] . "'");
-        }
         $this->_log->build(
         "costruzione in posizione " . $param['pos'] . " aumentata nel villaggio " .
          $param['village_id']);
@@ -619,12 +610,8 @@ class S1_ProcessingController extends Zend_Controller_Action
     function destroyEvent ($param)
     {
         $param = unserialize($param);
-        $this->_db->query(
-        "UPDATE `" . SERVER . "_map` SET `busy_pop`=`busy_pop`-'" . $param['pop'] .
-         "' WHERE `id`='" . $param['village_id'] . "'");
-        $this->_db->query(
-        "UPDATE `" . CIV_TABLE . "` SET `civ_pop`=`civ_pop`-'" . $param['pop'] .
-         "' WHERE `civ_id`='" . $param['civ_id'] . "'");
+        Model_civilta::aggResourceById($param['village_id']);
+        Model_civilta::aggProd($param['village_id']);
         $this->_db->delete(SERVER.'_building', 
         "`pos`='" . $param['pos'] . "' AND `village_id`='" . $param['village_id'] .
          "'");

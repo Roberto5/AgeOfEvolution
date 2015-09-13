@@ -172,6 +172,29 @@ CREATE TABLE `s1_map` (
   KEY `civ_id` (`civ_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
+CREATE TRIGGER `pop_delete_sum` AFTER DELETE ON `s1_map`
+ FOR EACH ROW UPDATE `s1_civ` SET `s1_civ`.`civ_pop` = `s1_civ`.`civ_pop` - OLD.pop
+WHERE `s1_civ`.`civ_id`=OLD.civ_id
+//
+DELIMITER ;
+DELIMITER //
+CREATE TRIGGER `pop_insert_sum` AFTER INSERT ON `s1_map`
+ FOR EACH ROW UPDATE `s1_civ` SET `s1_civ`.`civ_pop` = `s1_civ`.`civ_pop` + NEW.pop
+WHERE `s1_civ`.`civ_id`=NEW.civ_id
+//
+DELIMITER ;
+DELIMITER //
+CREATE TRIGGER `pop_update_sum` AFTER UPDATE ON `s1_map`
+ FOR EACH ROW begin
+UPDATE `s1_civ` SET `s1_civ`.`civ_pop` = `s1_civ`.`civ_pop` - OLD.pop
+WHERE `s1_civ`.`civ_id`=OLD.civ_id;
+UPDATE `s1_civ` SET `s1_civ`.`civ_pop` = `s1_civ`.`civ_pop` + NEW.pop
+WHERE `s1_civ`.`civ_id`=NEW.civ_id;
+end
+//
+DELIMITER ;
+
+
 -- --------------------------------------------------------
 
 --

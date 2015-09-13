@@ -373,7 +373,7 @@ class Model_civilta extends Zend_Db_Table_Abstract
 			foreach ($this->village->building[$this->currentVillage]->data as $key => $value) {
 				$title = Model_building::$name[$this->getAge()][$value['type']];
 				$this->refresh->addBuilding($key, $Building_Array[$value['type'] - 1],
-						$title);
+						$title,($value['built']?true:false));
 			}
 			//aggiorno i movimenti truppa
 			$move = array();

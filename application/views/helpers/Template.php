@@ -273,6 +273,12 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
             $r = $name;
         return $r;
     }
+    /**
+     * link di una civiltà
+     * @param int $id
+     * @param String $name
+     * @param bool $link
+     */
     public function civ ($id, $name = "", $link = true)
     {
         if ($name)
@@ -320,6 +326,12 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
             $r = $name;
         return $r;
     }
+    /**
+     * genera il link ad un user
+     * @param int $id
+     * @param String $name
+     * @param bool $link
+     */
     public function user($id,$name="",$link=true) {
     	if ($name)
             $this->username[$id] = $name;
@@ -415,6 +427,13 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
         $html .= '</div>';
         return $html;
     }
+    /**
+     * 
+     * genera una coda
+     * @param Array $queue
+     * @param bool $order sort aray before display
+     * @param bool $destroy
+     */
     function queue ($queue=array(),$order=false,$destroy=false)
     {
     	
@@ -430,7 +449,7 @@ class Zend_View_Helper_template extends Zend_View_Helper_Abstract
              * il browser in un continuo ricaricamento se l'event procesor non
              * ha processato l'evento.
              */
-            if ($count <= 0)
+            if ($count < 0)
                 $count = "00:00:0?";
                  //**************************************
             $param = unserialize($value['params']);

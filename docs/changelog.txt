@@ -1,21 +1,13 @@
-bugfix, DB edit!
-
+DB edit!! add trigegr for update civ pop, bugfix and implement diplay image for under construction building
+	modified:   application/views/helpers/Template.php
+code cleaning
 	modified:   application/models/civilta.php
-	modified:   application/models/village.php
+	modified:   application/models/refresh.php
+	modified:   common/js/evolution.js
+add image under construct when building is under construct
 	modified:   application/modules/s1/controllers/ProcessingController.php
-bugfix creash on event processor
-	new file:   common/images/Antica/inbuilding.png
-	new file:   common/images/Futura/inbuilding.png
-	new file:   common/images/Industriale/inbuilding.png
-	new file:   common/images/Medievale/inbuilding.png
-	new file:   common/images/Moderna/inbuilding.png
-	new file:   common/images/Preistorica/inbuilding.png
-	modified:   common/css/style_1.css
-	modified:   common/css/style_2.css
-	modified:   common/css/style_3.css
-	modified:   common/css/style_4.css
-	modified:   common/css/style_5.css
-	modified:   common/css/style_6.css
-add image for under construction w.i.p @todo make a more beatiful and implement this
+bugfix
 	modified:   install/struttura.sql
-add build data
+add trigger for update civ pop
+	modified:   application/language/en.csv
+	modified:   application/language/it.csv

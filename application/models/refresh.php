@@ -135,13 +135,13 @@ class Model_refresh {
 	 * @param String $type
 	 * @param String $title
 	 */
-	function addBuilding($pos,$type="",$title="") {
+	function addBuilding($pos,$type="",$title="",$built=TRUE) {
 		if (is_array($pos)) {
 			foreach ($pos as $key => $value) {
 				$this->building[$key]=$value;
 			}
 		}
-		else $this->building[$pos]=array('type'=>$type,'title'=>$title);
+		else $this->building[$pos]=array('type'=>$type,'title'=>$title,'built'=>$built);
 		self::$instance=$this;
 	}
 }

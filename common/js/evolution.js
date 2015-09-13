@@ -127,10 +127,11 @@ var ev = {
 						// $('div.building.pos3 img')
 						b = data.update.building;
 						// $('div.building').addClass("empty");
-						for (i = 0; i < ev.totpos; i++) {
+						for (i = 0; i <= ev.totpos; i++) {
 							if (b[i]) {
 								place = $('#cv' + ev.focus.id + ' div.building.pos' + i);
-								place.attr("class","building pos"+i+" "+b[i].type);
+								if  (b[i].built) place.attr("class","building pos"+i+" "+b[i].type);
+								else place.attr("class","building pos"+i+" uc");
 								/*dat = place.data('events');
 								if ((dat) && (!dat.contextmenu)) {
 									place.contextMenu(ev.menubuilding, {
@@ -465,7 +466,7 @@ var ev = {
 			}, 'centre', content);
 			$.contextMenu({
 				items:ev.menubuilding,
-				selector:'.building:not(.empty)',
+				selector:'.building:not(.empty):not(.uc):not(.drag)',
 				theme : 'human'
 			});
 			$("div.drag").draggable({
